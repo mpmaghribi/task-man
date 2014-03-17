@@ -1,6 +1,8 @@
 <?php $this->load->view("taskman_header_page") ?>
 <body class="login-body">
-
+    <div id="mini-notification">
+        <p>Your password has been sent to your email. Please check it in your email.</p>
+    </div>
     <div class="container">
 
         <form class="form-signin" action="<?php echo site_url() ?>">
@@ -28,8 +30,8 @@
 
             </div>
             `</form>
-            <!-- Modal -->
-            <form class="form-signin" action="<?php echo site_url() ?>">
+        <!-- Modal -->
+        <form class="form-signin" action="<?php echo site_url() ?>/login">
             <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -44,13 +46,13 @@
                         </div>
                         <div class="modal-footer">
                             <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
-                            <button class="btn btn-success" type="button">Submit</button>
+                            <button class="btn btn-success" type="submit">Submit</button>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- modal -->
-            </form>
+        </form>
     </div>
     <?php
     $this->load->view("taskman_footer_page")?>

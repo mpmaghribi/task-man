@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class login extends CI_Controller {
+class profil extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -14,7 +14,7 @@ class login extends CI_Controller {
 //        $query = "lala";
 //        $query = $this->db->query('SELECT id, nama, asal FROM mahasiswa');
 
-        $this->load->view('login/taskman_login_page');
+        $this->load->view('profil/taskman_profil_page');
     }
 
 }

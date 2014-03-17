@@ -11,6 +11,7 @@
     <title>Dashboard</title>
 
     <link href="<?php echo base_url()?>/assets/bs3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo base_url()?>/assets/css/bootstrap-reset.css" rel="stylesheet">
     <link href="<?php echo base_url()?>/assets/js/jquery-ui/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
     <link href="<?php echo base_url()?>/assets/css/bootstrap-reset.css" rel="stylesheet">
     <link href="<?php echo base_url()?>/assets/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -24,14 +25,7 @@
     <link href="<?php echo base_url()?>/assets/css/style.css" rel="stylesheet">
     <link href="<?php echo base_url()?>/assets/css/style-responsive.css" rel="stylesheet"/>
    
-    <!--Login Style-->
-    <!--Core CSS -->
-    <link href="bs3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-reset.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
-
-    <!-- Custom styles for this template -->
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/style-responsive.css" rel="stylesheet" />
-    <!--End of login style-->
+    <!--Notification style-->
+    <link rel="stylesheet" href="<?php echo base_url()?>/assets/css/notification.css">
+    <!--End of notification style-->
 </head>

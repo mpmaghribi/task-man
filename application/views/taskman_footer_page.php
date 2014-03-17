@@ -1,8 +1,16 @@
 <!--Core js-->
 <script src="<?php echo base_url()?>/assets/js/jquery.js"></script>
+<!--Notification script-->
+    <script src="<?php echo base_url()?>/assets/js/miniNotification.js"></script>
+    <script>
+      $(function() {
+        $('#mini-notification').miniNotification();
+      });
+    </script>
+    <!--End of notification script-->
 <script src="<?php echo base_url()?>/assets/js/jquery-ui/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="<?php echo base_url()?>/assets/bs3/js/bootstrap.min.js"></script>
-<script src="<?php echo base_url()?>/assets/js/jquery.dcjqaccordion.2.7.js"></script>
+<script class="include" src="<?php echo base_url()?>/assets/js/jquery.dcjqaccordion.2.7.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jquery.scrollTo.min.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jquery.nicescroll.js"></script>
@@ -38,11 +46,49 @@
 <!--common script init for all pages-->
 <script src="<?php echo base_url()?>/assets/js/scripts.js"></script>
 <!--script for this page-->
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&AMP;sensor=false"></script>
+<script>
 
-<!--Login Script-->
- <!--Core js-->
-    <script src="js/jquery.js"></script>
-    <script src="bs3/js/bootstrap.min.js"></script>
-<!--End of login script-->
+    //google map
+    function initialize() {
+        var myLatlng = new google.maps.LatLng(-37.815207, 144.963937);
+        var mapOptions = {
+            zoom: 15,
+            scrollwheel: false,
+            center: myLatlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            title: 'Hello World!'
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+$('.contact-map').click(function(){
+
+    //google map in tab click initialize
+    function initialize() {
+        var myLatlng = new google.maps.LatLng(-37.815207, 144.963937);
+        var mapOptions = {
+            zoom: 15,
+            scrollwheel: false,
+            center: myLatlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            title: 'Hello World!'
+        });
+    }
+    google.maps.event.addDomListener(window, 'click', initialize);
+});
+
+</script>
+
 </body>
 </html>
