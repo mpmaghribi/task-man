@@ -14,7 +14,10 @@
 | path to your installation.
 |
 */
-$config['base_url']	= '';
+$config['base_url'] = (isset($_SERVER['HTTPS']) &&$_SERVER['HTTPS']=="on") ? "https":"http"."://".$_SERVER['HTTP_HOST'];
+$config['base_url'].=str_replace(basename($_SERVER["SCRIPT_NAME"]), "", $_SERVER["SCRIPT_NAME"]);
+//$config['base_url'] = "http://localhost2/freelanceSimulation/TA";
+$config['site_url']     = $config['base_url'].'index.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -224,7 +227,7 @@ $config['cache_path'] = '';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = '1234';
 
 /*
 |--------------------------------------------------------------------------
@@ -279,7 +282,7 @@ $config['cookie_secure']	= FALSE;
 | COOKIE data is encountered
 |
 */
-$config['global_xss_filtering'] = FALSE;
+$config['global_xss_filtering'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
