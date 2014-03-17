@@ -11,9 +11,6 @@ class profil extends CI_Controller {
     }
 
     public function index() {
-//        $query = "lala";
-//        $query = $this->db->query('SELECT id, nama, asal FROM mahasiswa');
-
         $this->load->view('profil/taskman_profil_page');
     }
 

@@ -4,7 +4,7 @@
         <div class="leftside-navigation">
             <ul class="sidebar-menu" id="nav-accordion">
                 <li>
-                    <a class="active" href="<?php echo site_url()?>">
+                    <a class="active" href="<?php echo site_url() ?>">
                         <i class="fa fa-dashboard"></i>
                         <span>Dashboard</span>
                     </a>
@@ -15,7 +15,7 @@
                         <span>Akun Saya</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="<?php echo site_url()?>/profil">Akun</a></li>
+                        <li><a href="<?php echo site_url() ?>/profil">Akun</a></li>
                         <li><a href="responsive_table.html">Daftar Pekerjaan</a></li>
                         <li><a href="dynamic_table.html">Detail Pekerjaan</a></li>
                     </ul>
@@ -26,9 +26,9 @@
                         <span>User Manajemen</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="form_component.html">Daftar Akun Baru</a></li>
+                        <li><a href="<?php echo base_url() . "index.php/user/tambah" ?>">Daftar Akun Baru</a></li>
                         <li><a href="advanced_form.html">Tambah Akun Baru</a></li>
-                        <li><a href="form_wizard.html">Daftar Karyawan Saya</a></li>
+                        <li><a href="<?php echo base_url() . "index.php/user/list_karyawan" ?>">Daftar Karyawan Saya</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
@@ -58,7 +58,7 @@
                                 <span>Tambahkan Pekerjaan</span>
                             </a>
                             <ul class="sub">
-                                <li><a href="#">Isi Data Pekerjaan</a></li>
+                                <li><a href="<?php echo base_url()."index.php/pekerjaan/tambah_pekerjaan"?>">Isi Data Pekerjaan</a></li>
                                 <li><a href="#">Penerima Pekerjaan</a></li>
                             </ul>
                         </li>
