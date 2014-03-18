@@ -4,7 +4,8 @@
 <div class="brand">
 
     <a href="<?php echo site_url()?>" class="logo">
-        <img src="<?php echo base_url()?>/assets/images/logo.png" alt="">
+<!--        <img src="<?php echo base_url()?>/assets/images/logo.png" alt="">-->
+        Task<br>Management
     </a>
     <div class="sidebar-toggle-box">
         <div class="fa fa-bars"></div>
@@ -29,8 +30,21 @@
                     <a href="#">
                         <div class="task-info clearfix">
                             <div class="desc pull-left">
-                                <h5>Target Sell</h5>
-                                <p>25% , Deadline  12 June’13</p>
+                                <h5>Task 1</h5>
+                                <p>25% , Deadline  12 June’14</p>
+                            </div>
+                            <span class="notification-pie-chart pull-right" data-percent="25">
+                            <span class="percent"></span>
+                            </span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="task-info clearfix">
+                            <div class="desc pull-left">
+                                <h5>Task 2</h5>
+                                <p>45% , Deadline  12 June’14</p>
                             </div>
                                     <span class="notification-pie-chart pull-right" data-percent="45">
                             <span class="percent"></span>
@@ -42,10 +56,10 @@
                     <a href="#">
                         <div class="task-info clearfix">
                             <div class="desc pull-left">
-                                <h5>Product Delivery</h5>
-                                <p>45% , Deadline  12 June’13</p>
+                                <h5>Task 3</h5>
+                                <p>87% , Deadline  12 June’14</p>
                             </div>
-                                    <span class="notification-pie-chart pull-right" data-percent="78">
+                                    <span class="notification-pie-chart pull-right" data-percent="87">
                             <span class="percent"></span>
                             </span>
                         </div>
@@ -55,23 +69,10 @@
                     <a href="#">
                         <div class="task-info clearfix">
                             <div class="desc pull-left">
-                                <h5>Payment collection</h5>
-                                <p>87% , Deadline  12 June’13</p>
+                                <h5>Task 4</h5>
+                                <p>33% , Deadline 12 June’15</p>
                             </div>
-                                    <span class="notification-pie-chart pull-right" data-percent="60">
-                            <span class="percent"></span>
-                            </span>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="task-info clearfix">
-                            <div class="desc pull-left">
-                                <h5>Target Sell</h5>
-                                <p>33% , Deadline  12 June’13</p>
-                            </div>
-                                    <span class="notification-pie-chart pull-right" data-percent="90">
+                                    <span class="notification-pie-chart pull-right" data-percent="33">
                             <span class="percent"></span>
                             </span>
                         </div>
@@ -85,7 +86,7 @@
         </li>
         <!-- settings end -->
         <!-- inbox dropdown start-->
-        <li id="header_inbox_bar" class="dropdown">
+<!--        <li id="header_inbox_bar" class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                 <i class="fa fa-envelope-o"></i>
                 <span class="badge bg-important">4</span>
@@ -146,7 +147,7 @@
                     <a href="#">See all messages</a>
                 </li>
             </ul>
-        </li>
+        </li>-->
         <!-- inbox dropdown end -->
         <!-- notification dropdown start-->
         <li id="header_notification_bar" class="dropdown">
@@ -163,7 +164,7 @@
                     <div class="alert alert-info clearfix">
                         <span class="alert-icon"><i class="fa fa-bolt"></i></span>
                         <div class="noti-info">
-                            <a href="#"> Server #1 overloaded.</a>
+                            <a href="#"> March 2014. You have tasks which is not completed.</a>
                         </div>
                     </div>
                 </li>
@@ -171,7 +172,7 @@
                     <div class="alert alert-danger clearfix">
                         <span class="alert-icon"><i class="fa fa-bolt"></i></span>
                         <div class="noti-info">
-                            <a href="#"> Server #2 overloaded.</a>
+                            <a href="#"> Februari 2014. You have tasks which is not completed.</a>
                         </div>
                     </div>
                 </li>
@@ -179,7 +180,7 @@
                     <div class="alert alert-success clearfix">
                         <span class="alert-icon"><i class="fa fa-bolt"></i></span>
                         <div class="noti-info">
-                            <a href="#"> Server #3 overloaded.</a>
+                            <a href="#"> January 2014. You have tasks which is not completed.</a>
                         </div>
                     </div>
                 </li>
@@ -200,7 +201,7 @@
         <li class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                 <img alt="" src="<?php echo base_url()?>/assets/images/avatar1_small.jpg">
-                <span class="username">Mohammad Oktri Raditya</span>
+                <span class="username">Mohammad Zarkasi</span>
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu extended logout">
@@ -211,9 +212,9 @@
         </li>
         <!-- user login dropdown end -->
         <li>
-            <div class="toggle-right-box">
+<!--            <div class="toggle-right-box">
                 <div class="fa fa-bars"></div>
-            </div>
+            </div>-->
         </li>
     </ul>
     <!--search & user info end-->

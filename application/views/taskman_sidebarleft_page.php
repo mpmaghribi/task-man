@@ -16,8 +16,6 @@
                     </a>
                     <ul class="sub">
                         <li><a href="<?php echo site_url() ?>/profil">Akun</a></li>
-                        <li><a href="responsive_table.html">Daftar Pekerjaan</a></li>
-                        <li><a href="dynamic_table.html">Detail Pekerjaan</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
@@ -27,7 +25,6 @@
                     </a>
                     <ul class="sub">
                         <li><a href="<?php echo base_url() . "index.php/user/tambah" ?>">Daftar Akun Baru</a></li>
-                        <li><a href="advanced_form.html">Tambah Akun Baru</a></li>
                         <li><a href="<?php echo base_url() . "index.php/user/list_karyawan" ?>">Daftar Karyawan Saya</a></li>
                     </ul>
                 </li>
@@ -44,11 +41,6 @@
                             </a>
                             <ul class="sub">
                                 <li><a href="#">Daftar Pekerjaan</a></li>
-                                <li><a href="#">Group By Upcoming, Ongoing, Completed Task</a></li>
-                                <li><a href="#">Progress Tiap Pekerjaan</a></li>
-                                <li><a href="#">Link ke Detail Pekerjaan</a></li>
-                                <li><a href="#">Ubah Status Pekerjaan</a></li>
-                                <li><a href="#">Progress Pekerjaan</a></li>
                                 <li><a href="#">Pekerjaan Baru</a></li>
                             </ul>
                         </li>

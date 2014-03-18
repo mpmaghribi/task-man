@@ -1,8 +1,8 @@
 <?php $this->load->view("taskman_header_page") ?>
 <body class="login-body">
-    <div id="mini-notification">
+<!--    <div id="mini-notification">
         <p>Your password has been sent to your email. Please check it in your email.</p>
-    </div>
+    </div>-->
     <div class="container">
 
         <form class="form-signin" action="<?php echo site_url() ?>">
