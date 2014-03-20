@@ -40,7 +40,7 @@
                                 <span>Pekerjaan Saya</span>
                             </a>
                             <ul class="sub">
-                                <li><a href="#">Daftar Pekerjaan</a></li>
+                                <li><a href="<?php echo site_url()?>/pekerjaan/list_pekerjaan">Daftar Pekerjaan</a></li>
                                 <li><a href="#">Pekerjaan Baru</a></li>
                             </ul>
                         </li>

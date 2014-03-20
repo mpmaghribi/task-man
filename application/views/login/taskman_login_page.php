@@ -1,16 +1,23 @@
 <?php $this->load->view("taskman_header_page") ?>
 <body class="login-body">
-<!--    <div id="mini-notification">
+    <?php if ($this->session->flashdata('status') == 2){?>
+    <div id="mini-notification">
         <p>Your password has been sent to your email. Please check it in your email.</p>
-    </div>-->
+    </div>
+    <?php }
+    else if ($this->session->flashdata('status') == -1){?>
+    <div id="mini-notification">
+        <p>Sorry. It looks like you type the wrong password or username. Please, try again.</p>
+    </div>
+    <?php }?>
     <div class="container">
 
-        <form class="form-signin" action="<?php echo site_url() ?>">
+        <form method="POST" class="form-signin" action="<?php echo site_url() ?>/login/authentication">
             <h2 class="form-signin-heading">sign in now</h2>
             <div class="login-wrap">
                 <div class="user-login-info">
-                    <input type="text" class="form-control" placeholder="User ID" autofocus>
-                    <input type="password" class="form-control" placeholder="Password">
+                    <input type="text" name="username" class="form-control" placeholder="User ID" autofocus>
+                    <input type="password" name="password" class="form-control" placeholder="Password">
                 </div>
                 <label class="checkbox">
                     <input type="checkbox" value="remember-me"> Remember me
