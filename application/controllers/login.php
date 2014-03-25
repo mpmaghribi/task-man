@@ -7,7 +7,7 @@ class login extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        
+
         //$this->load->database();
     }
 
@@ -17,15 +17,14 @@ class login extends CI_Controller {
 
         $this->load->view('login/taskman_login_page');
     }
-    
-    public function authentication()
-    {
+
+    public function authentication() {
         $username = $this->input->post('username');
         $password = $this->input->post('password');
-        
-        $result = $this->taskman_repository->sp_login_sistem($username, $password);
-        
-        if ($result[0]->kode == 1){
+
+        $result = $this->taskman_repository->sp_login_sistem($username, md5($password));
+
+        if ($result[0]->kode == 1) {
             $session_data = array(
                 'user_nip' => $result[0]->nip,
                 'user_email' => $result[0]->email,
@@ -34,16 +33,13 @@ class login extends CI_Controller {
             );
             $this->session->set_userdata($session_data);
             redirect('home');
-        }
-        else
-        {
+        } else {
             $this->session->set_flashdata('status', -1);
             redirect('login');
         }
     }
-    
-    public function logout()
-    {
+
+    public function logout() {
         $session_data = array(
             'user_nip' => "",
             'user_email' => "",
@@ -58,4 +54,3 @@ class login extends CI_Controller {
     }
 
 }
-

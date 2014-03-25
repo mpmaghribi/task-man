@@ -1,25 +1,25 @@
 <?php $this->load->view("taskman_header_page") ?>
 <body class="login-body">
-    <?php if ($this->session->flashdata('status') == 2){?>
-    <div id="mini-notification">
-        <p>Your password has been sent to your email. Please check it in your email.</p>
-    </div>
-    <?php }
-    else if ($this->session->flashdata('status') == -1){?>
-    <div id="mini-notification">
-        <p>Sorry. It looks like you type the wrong password or username. Please, try again.</p>
-    </div>
-    <?php }
-    else if ($this->session->flashdata('status') == 1){?>
-    <div id="mini-notification">
-        <p>Our system detect that your email has been registered.</p>
-    </div>
-     <?php }
-    else if ($this->session->flashdata('status') == 4){?>
-    <div id="mini-notification">
-        <p>You are not allowed to see this page without login. Please, login first.</p>
-    </div>
-    <?php }?>
+    <?php if ($this->session->flashdata('status') == 2) { ?>
+        <div id="mini-notification">
+            <p>Your password has been sent to your email. Please check it in your email.</p>
+        </div>
+    <?php } else if ($this->session->flashdata('status') == -1) {
+        ?>
+        <div id="mini-notification">
+            <p>Sorry. It looks like you type the wrong password or username. Please, try again.</p>
+        </div>
+    <?php } else if ($this->session->flashdata('status') == 1) {
+        ?>
+        <div id="mini-notification">
+            <p>Our system detect that your email has been registered.</p>
+        </div>
+    <?php } else if ($this->session->flashdata('status') == 4) {
+        ?>
+        <div id="mini-notification">
+            <p>You are not allowed to see this page without login. Please, login first.</p>
+        </div>
+    <?php } ?>
     <div class="container">
 
         <form method="POST" class="form-signin" action="<?php echo site_url() ?>/login/authentication">
@@ -40,7 +40,7 @@
 
                 <div class="registration">
                     Don't have an account yet?
-                    <a class="" href="<?php echo site_url()?>/registration">
+                    <a class="" href="<?php echo site_url() ?>/registration">
                         Create an account
                     </a>
                 </div>
