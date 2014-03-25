@@ -17,14 +17,18 @@ var Script = function () {
                     required: true,
                     minlength: 2
                 },
-                password: {
+                fullname: {
+                    required: true,
+                    minlength: 2
+                },
+                userpassword: {
                     required: true,
                     minlength: 5
                 },
-                confirm_password: {
+                confirmuserpassword: {
                     required: true,
                     minlength: 5,
-                    equalTo: "#password"
+                    equalTo: "#userpassword"
                 },
                 email: {
                     required: true,
@@ -43,11 +47,15 @@ var Script = function () {
                     required: "Please enter a username",
                     minlength: "Your username must consist of at least 2 characters"
                 },
-                password: {
+                fullname: {
+                    required: "Please enter your full name",
+                    minlength: "Your name must consist of at least 2 characters"
+                },
+                userpassword: {
                     required: "Please provide a password",
                     minlength: "Your password must be at least 5 characters long"
                 },
-                confirm_password: {
+                confirmuserpassword: {
                     required: "Please provide a password",
                     minlength: "Your password must be at least 5 characters long",
                     equalTo: "Please enter the same password as above"

@@ -9,6 +9,16 @@
     <div id="mini-notification">
         <p>Sorry. It looks like you type the wrong password or username. Please, try again.</p>
     </div>
+    <?php }
+    else if ($this->session->flashdata('status') == 1){?>
+    <div id="mini-notification">
+        <p>Our system detect that your email has been registered.</p>
+    </div>
+     <?php }
+    else if ($this->session->flashdata('status') == 4){?>
+    <div id="mini-notification">
+        <p>You are not allowed to see this page without login. Please, login first.</p>
+    </div>
     <?php }?>
     <div class="container">
 
@@ -30,7 +40,7 @@
 
                 <div class="registration">
                     Don't have an account yet?
-                    <a class="" href="registration.html">
+                    <a class="" href="<?php echo site_url()?>/registration">
                         Create an account
                     </a>
                 </div>

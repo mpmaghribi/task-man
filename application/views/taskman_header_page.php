@@ -28,4 +28,9 @@
     <!--Notification style-->
     <link rel="stylesheet" href="<?php echo base_url()?>/assets/css/notification.css">
     <!--End of notification style-->
+    <link rel="stylesheet" href="<?php echo base_url()?>/assets/css/bootstrap-switch.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>/assets/js/jquery-multi-select/css/multi-select.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>/assets/js/jquery-tags-input/jquery.tagsinput.css" />
+
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>/assets/js/select2/select2.css" />
 </head>

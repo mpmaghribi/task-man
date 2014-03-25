@@ -43,8 +43,24 @@
 <script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.growraf.js"></script>
 <script src="<?php echo base_url()?>/assets/js/dashboard.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jquery.customSelect.min.js" ></script>
+
+<script src="<?php echo base_url()?>/assets/js/bootstrap-switch.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>/assets/js/fuelux/js/spinner.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>/assets/js/jquery-multi-select/js/jquery.multi-select.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>/assets/js/jquery-multi-select/js/jquery.quicksearch.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>/assets/js/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+<script src="<?php echo base_url()?>assets/js/jquery-tags-input/jquery.tagsinput.js"></script>
+<script src="<?php echo base_url()?>assets/js/select2/select2.js"></script>
+<script src="<?php echo base_url()?>assets/js/select-init.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>assets/js/jquery.validate.min.js"></script>
 <!--common script init for all pages-->
-<script src="<?php echo base_url()?>/assets/js/scripts.js"></script>
+<script src="<?php echo base_url()?>assets/js/scripts.js"></script>
+
+<script src="<?php echo base_url()?>assets/js/toggle-init.js"></script>
+
+<script src="<?php echo base_url()?>assets/js/advanced-form.js"></script>
+
+<script src="<?php echo base_url()?>assets/js/validation-init.js"></script>
 <!--script for this page-->
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&AMP;sensor=false"></script>
 <script>
@@ -89,6 +105,5 @@ $('.contact-map').click(function(){
 });
 
 </script>
-
 </body>
 </html>

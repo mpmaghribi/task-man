@@ -25,13 +25,36 @@ class login extends CI_Controller {
         
         $result = $this->taskman_repository->sp_login_sistem($username, $password);
         
-        if ($result[0]->hasil == 1)
+        if ($result[0]->kode == 1){
+            $session_data = array(
+                'user_nip' => $result[0]->nip,
+                'user_email' => $result[0]->email,
+                'user_nama' => $result[0]->nama,
+                'is_login' => TRUE
+            );
+            $this->session->set_userdata($session_data);
             redirect('home');
+        }
         else
         {
             $this->session->set_flashdata('status', -1);
             redirect('login');
         }
+    }
+    
+    public function logout()
+    {
+        $session_data = array(
+            'user_nip' => "",
+            'user_email' => "",
+            'user_nama' => "",
+            //'user_pwd' => "",
+            'is_login' => FALSE,
+            'admin' => FALSE
+        );
+        $this->session->sess_destroy();
+        $this->session->unset_userdata($session_data);
+        redirect('login');
     }
 
 }

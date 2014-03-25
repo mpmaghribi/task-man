@@ -13,8 +13,15 @@ class home extends CI_Controller {
     public function index() {
 //        $query = "lala";
 //        $query = $this->db->query('SELECT id, nama, asal FROM mahasiswa');
-
-        $this->load->view('homepage/taskman_home_page');
+        if ($this->session->userdata('is_login') == true)
+        {
+            $this->load->view('homepage/taskman_home_page');
+        }
+        else
+        {
+            $this->session->set_flashdata('status',4);
+            redirect('login');
+        }
     }
 
 }

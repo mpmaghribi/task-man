@@ -4,7 +4,7 @@
         <div class="leftside-navigation">
             <ul class="sidebar-menu" id="nav-accordion">
                 <li>
-                    <a class="active" href="<?php echo site_url() ?>">
+                    <a class="active" href="<?php echo site_url() ?>/home">
                         <i class="fa fa-dashboard"></i>
                         <span>Dashboard</span>
                     </a>
@@ -85,7 +85,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="javascript:;">
+                    <a href="<?php echo site_url()?>/login/logout">
                         <i class="fa fa-angle-double-right"></i>
                         <span>Log Out</span>
                     </a>
