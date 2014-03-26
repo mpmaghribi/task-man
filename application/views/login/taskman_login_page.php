@@ -30,7 +30,7 @@
                     <input type="password" name="password" class="form-control" placeholder="Password">
                 </div>
                 <label class="checkbox">
-                    <input type="checkbox" value="remember-me"> Remember me
+                    <input type="checkbox" name="rememberme" value="remember-me"> Remember me
                     <span class="pull-right">
                         <a data-toggle="modal" href="#myModal"> Forgot Password?</a>
 

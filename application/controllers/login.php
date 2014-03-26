@@ -7,34 +7,106 @@ class login extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-
+        //$this->load->helper('cookie');
         //$this->load->database();
     }
 
     public function index() {
-//        $query = "lala";
-//        $query = $this->db->query('SELECT id, nama, asal FROM mahasiswa');
-
+        if ($this->check_session_and_cookie() == 1) {
+            redirect('home');
+            echo "redirect";
+            exit();
+        }
         $this->load->view('login/taskman_login_page');
+    }
+
+    private function check_session_and_cookie() {
+        //$usernamecookie = $this->input->cookie("cookie_user", TRUE);
+        //$passwordcookie = $this->input->cookie("cookie_password", TRUE);
+        $usernamecookie = get_cookie("cookie_user");
+        $passwordcookie = get_cookie("cookie_password");
+        $username = $this->session->userdata("user_nip");
+        $password = $this->session->userdata("user_password");
+        if (strlen($username) > 0 && strlen($password) > 0) {
+            if ($this->authenticate($username, $password) == 1) {
+                echo "login by session";
+                return 1;
+            } else {
+                if (strlen($usernamecookie) > 0 && strlen($passwordcookie) > 0) {
+                    if ($this->authenticate($usernamecookie, $passwordcookie) == 1) {
+                        echo "login by cookie";
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
+
+    private function authenticate($username, $password) {
+        $rememberme = $this->input->post("rememberme");
+        $result = $this->taskman_repository->sp_login_sistem($username, $password);
+        //var_dump($result);
+        if ($result["kode"] == 1) {
+            $session_data = array(
+                'user_nip' => $result["nip"],
+                'user_email' => $result["email"],
+                'user_nama' => $result["nama"],
+                'is_login' => TRUE,
+                'user_password' => $password
+            );
+            $this->session->set_userdata($session_data);
+            if ($rememberme == "remember-me") {
+                $cookie = array(
+                    'name' => 'cookie_user',
+                    'value' => $username,
+                    'expire' => 86500,
+                    'domain' => site_url(),
+                    'path' => '/',
+                    'secure' => TRUE
+                );
+                set_cookie($cookie);
+                $cookie = array(
+                    'name' => 'cookie_password',
+                    'value' => $password,
+                    'expire' => 86500,
+                    'domain' => site_url(),
+                    'path' => '/',
+                    'secure' => TRUE
+                );
+                set_cookie($cookie);
+            }
+            return 1;
+        }
+        $session_data = array(
+            'user_nip' => "",
+            'user_email' => "",
+            'user_nama' => "",
+            //'user_pwd' => "",
+            'is_login' => FALSE,
+            'admin' => FALSE
+        );
+        delete_cookie("cookie_user");
+        delete_cookie("cookie_password");
+        $this->session->sess_destroy();
+        $this->session->unset_userdata($session_data);
+        return 0;
     }
 
     public function authentication() {
         $username = $this->input->post('username');
         $password = $this->input->post('password');
 
-        $result = $this->taskman_repository->sp_login_sistem($username, md5($password));
+        //echo "$username $password $rememberme";
+        //$result = $this->taskman_repository->sp_login_sistem($username, $password);
 
-        if ($result[0]->kode == 1) {
-            $session_data = array(
-                'user_nip' => $result[0]->nip,
-                'user_email' => $result[0]->email,
-                'user_nama' => $result[0]->nama,
-                'is_login' => TRUE
-            );
-            $this->session->set_userdata($session_data);
+        if ($this->authenticate($username, $password) == 1) {
+            echo "home";
             redirect('home');
         } else {
             $this->session->set_flashdata('status', -1);
+            echo "login";
             redirect('login');
         }
     }
@@ -48,6 +120,8 @@ class login extends CI_Controller {
             'is_login' => FALSE,
             'admin' => FALSE
         );
+        delete_cookie("cookie_user");
+        delete_cookie("cookie_password");
         $this->session->sess_destroy();
         $this->session->unset_userdata($session_data);
         redirect('login');
