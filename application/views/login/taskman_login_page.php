@@ -48,7 +48,7 @@
             </div>
             `</form>
         <!-- Modal -->
-        <form class="form-signin" action="<?php echo site_url() ?>/login">
+        <form class="form-signin" method="POST" action="<?php echo site_url() ?>/registration/forgot_password">
             <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -58,7 +58,7 @@
                         </div>
                         <div class="modal-body">
                             <p>Enter your e-mail address below to reset your password.</p>
-                            <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+                            <input type="text" name="email_user" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
 
                         </div>
                         <div class="modal-footer">
