@@ -62,5 +62,8 @@ class profil extends CI_Controller {
             redirect('login');
         }
     }
+    public function ubah_password(){
+        echo json_encode(array("status"=>"OK"));
+    }
 
 }

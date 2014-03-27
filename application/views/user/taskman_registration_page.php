@@ -16,7 +16,7 @@
                 <h2 class="form-signin-heading">registration now</h2>
                 <div class="login-wrap">
                     <p>Enter your personal details below</p>
-                    <input required id="fullname" name="fullname" type="text" class="form-control" placeholder="Full Name" autofocus>
+                    <input id="fullname" name="fullname" type="text" class="form-control" placeholder="Full Name" autofocus>
                     <div class="radios">
                         <label class="label_radio col-lg-6 col-sm-6" for="jabatan-01">
                             <input name="jabatan[]" id="jabatan-01" value="1" type="radio" checked /> Staff

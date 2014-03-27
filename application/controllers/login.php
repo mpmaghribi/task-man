@@ -19,6 +19,7 @@ class login extends CI_Controller {
         }
         $this->load->view('login/taskman_login_page');
     }
+
     private function check_session_and_cookie() {
         //$usernamecookie = $this->input->cookie("cookie_user", TRUE);
         //$passwordcookie = $this->input->cookie("cookie_password", TRUE);
@@ -42,18 +43,64 @@ class login extends CI_Controller {
         return 0;
     }
 
+    private function authenticate($username, $password) {
+        $rememberme = $this->input->post("rememberme");
+        $result = $this->taskman_repository->sp_login_sistem($username, $password);
+        //var_dump($result);
+        if ($result["kode"] == 1) {
+            $session_data = array(
+                'user_nip' => $result["nip"],
+                'user_email' => $result["email"],
+                'user_nama' => $result["nama"],
+                'is_login' => TRUE,
+                'user_password' => $password
+            );
+            $this->session->set_userdata($session_data);
+            if ($rememberme == "remember-me") {
+                $cookie = array(
+                    'name' => 'cookie_user',
+                    'value' => $username,
+                    'expire' => 86500,
+                    'domain' => site_url(),
+                    'path' => '/',
+                    'secure' => TRUE
+                );
+                set_cookie($cookie);
+                $cookie = array(
+                    'name' => 'cookie_password',
+                    'value' => $password,
+                    'expire' => 86500,
+                    'domain' => site_url(),
+                    'path' => '/',
+                    'secure' => TRUE
+                );
+                set_cookie($cookie);
+            }
+            return 1;
+        }
+        $session_data = array(
+            'user_nip' => "",
+            'user_email' => "",
+            'user_nama' => "",
+            //'user_pwd' => "",
+            'is_login' => FALSE,
+            'admin' => FALSE
+        );
+        delete_cookie("cookie_user");
+        delete_cookie("cookie_password");
+        $this->session->sess_destroy();
+        $this->session->unset_userdata($session_data);
+        return 0;
+    }
+
     public function authentication() {
         $username = $this->input->post('username');
         $password = $this->input->post('password');
 
-
-        $result = $this->taskman_repository->sp_login_sistem($username, md5($password));
-
         //echo "$username $password $rememberme";
         //$result = $this->taskman_repository->sp_login_sistem($username, $password);
 
-
-        if ($result[0]->kode == 1) {
+        if ($this->authenticate($username, $password) == 1) {
             echo "home";
             redirect('home');
         } else {
@@ -72,6 +119,8 @@ class login extends CI_Controller {
             'is_login' => FALSE,
             'admin' => FALSE
         );
+        delete_cookie("cookie_user");
+        delete_cookie("cookie_password");
         $this->session->sess_destroy();
         $this->session->unset_userdata($session_data);
         redirect('login');

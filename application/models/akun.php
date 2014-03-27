@@ -16,7 +16,6 @@ class akun extends CI_Model {
         }
         return array("error"=>"not found");
     }
-
 }
 
 ?>

@@ -137,22 +137,22 @@
                                                 <input type="submit" class="btn btn-info" value="Simpan"/>
                                             </div>
                                             <div class="col-sm-1">
-                                                <a href="#myModal-1" data-toggle="modal" class="btn btn-warning">
+                                                <a href="#modal_ubah_password" data-toggle="modal" class="btn btn-warning">
                                                     Ubah Password
                                                 </a>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
-                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal-1" class="modal fade">
+                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="modal_ubah_password" class="modal fade">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                                                <button aria-hidden="true" data-dismiss="modal" class="close" id="modal_ubah_password_close" type="button">×</button>
                                                 <h4 class="modal-title">Ubah Password</h4>
                                             </div>
                                             <div class="modal-body">
-                                                <form class="form-horizontal" role="form" onsubmit="return ubahPassword();" action="<?php echo site_url()."/akun/ubah_password"?>">
+                                                <form class="form-horizontal" role="form" action="<?php echo site_url() . "/profil/ubah_password" ?>" id="form_ubah_password" method="post">
                                                     <div class="form-group">
                                                         <label for="inputEmail1" class="col-lg-3 col-sm-2 control-label">Password Lama</label>
                                                         <div class="col-lg-9">
@@ -178,7 +178,6 @@
                                                     </div>
                                                 </form>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -466,9 +465,22 @@
         <!--common script init for all pages-->
         <script src="<?php echo base_url() ?>/assets/js/scripts.js"></script>
         <script>
-            function ubahPassword(){
-                return false;
-            }
+            $("#form_ubah_password").submit(function() { // catch the form's submit event
+                $.ajax({// create an AJAX call...
+                    data: $(this).serialize(), // get the form data
+                    type: $(this).attr('method'), // GET or POST
+                    url: $(this).attr('action'), // the file to call
+                    success: function(response) { // on success..
+                        var json = jQuery.parseJSON(response);
+                        //alert(json);
+                        if(json.status==="OK"){
+                            //alert("OK");
+                            $("#modal_ubah_password_close").click();
+                        }
+                    }
+                });
+                return false; // cancel original event to prevent form submitting
+            });
         </script>
     </body>
 </html>

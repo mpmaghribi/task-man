@@ -1,6 +1,5 @@
 <!--Core js-->
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-2.0.3.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="<?php echo base_url()?>/assets/js/jquery.js"></script>
 <!--Notification script-->
     <script src="<?php echo base_url()?>/assets/js/miniNotification.js"></script>
     <script>
@@ -36,12 +35,12 @@
 <script src="<?php echo base_url()?>/assets/js/morris-chart/morris.js"></script>
 <script src="<?php echo base_url()?>/assets/js/morris-chart/raphael-min.js"></script>
 <!--jQuery Flot Chart-->
-<!--<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.js"></script>-->
-<!--<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.tooltip.min.js"></script>
+<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.js"></script>
+<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.tooltip.min.js"></script>
 <script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.resize.js"></script>
 <script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.pie.resize.js"></script>
 <script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.animator.min.js"></script>
-<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.growraf.js"></script>-->
+<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.growraf.js"></script>
 <script src="<?php echo base_url()?>/assets/js/dashboard.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jquery.customSelect.min.js" ></script>
 
@@ -53,7 +52,6 @@
 <script src="<?php echo base_url()?>assets/js/jquery-tags-input/jquery.tagsinput.js"></script>
 <script src="<?php echo base_url()?>assets/js/select2/select2.js"></script>
 <script src="<?php echo base_url()?>assets/js/select-init.js"></script>
-
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/jquery.validate.min.js"></script>
 <!--common script init for all pages-->
 <script src="<?php echo base_url()?>assets/js/scripts.js"></script>
