@@ -14,7 +14,7 @@ class login extends CI_Controller {
     public function index() {
         if ($this->check_session_and_cookie() == 1) {
             redirect('home');
-            echo "redirect";
+            //echo "redirect";
             exit();
         }
         $this->load->view('login/taskman_login_page');
@@ -23,25 +23,24 @@ class login extends CI_Controller {
     private function check_session_and_cookie() {
         //$usernamecookie = $this->input->cookie("cookie_user", TRUE);
         //$passwordcookie = $this->input->cookie("cookie_password", TRUE);
-        $usernamecookie = get_cookie("cookie_user");
-        $passwordcookie = get_cookie("cookie_password");
+        //$usernamecookie = get_cookie("cookie_user");
+        //$passwordcookie = get_cookie("cookie_password");
         $username = $this->session->userdata("user_nip");
         $password = $this->session->userdata("user_password");
         if (strlen($username) > 0 && strlen($password) > 0) {
             if ($this->authenticate($username, $password) == 1) {
-                echo "login by session";
+                //echo "login by session";
                 return 1;
             } else {
-                if (strlen($usernamecookie) > 0 && strlen($passwordcookie) > 0) {
-                    if ($this->authenticate($usernamecookie, $passwordcookie) == 1) {
-                        echo "login by cookie";
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                }
+                //if (strlen($usernamecookie) > 0 && strlen($passwordcookie) > 0) {
+                    //if ($this->authenticate($usernamecookie, $passwordcookie) == 1) {
+                        //echo "login by cookie";
+                        //return 1;
+                    //}
+                //}
             }
         }
+        return 0;
     }
 
     private function authenticate($username, $password) {

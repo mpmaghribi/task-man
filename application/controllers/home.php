@@ -19,12 +19,12 @@ class home extends CI_Controller {
         $password = $this->session->userdata("user_password");
         if (strlen($username) > 0 && strlen($password) > 0) {
             if ($this->authenticate($username, $password) == 1) {
-                echo "login by session";
+                //echo "login by session";
                 return 1;
             } else {
                 if (strlen($usernamecookie) > 0 && strlen($passwordcookie) > 0) {
                     if ($this->authenticate($usernamecookie, $passwordcookie) == 1) {
-                        echo "login by cookie";
+                        //echo "login by cookie";
                         return 1;
                     } else {
                         return 0;
