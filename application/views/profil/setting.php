@@ -21,7 +21,7 @@
         <!-- Custom styles for this template -->
         <link href="<?php echo base_url() ?>assets/css/style.css" rel="stylesheet">
         <link href="<?php echo base_url() ?>assets/css/style-responsive.css" rel="stylesheet" />
-
+        <link href="<?php echo base_url() ?>assets/css/notifit.css" rel="stylesheet"/>
         <!-- Just for debugging purposes. Don't actually copy this line! -->
         <!--[if lt IE 9]>
         <script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -55,7 +55,7 @@
                                 </header>
 
                                 <div class="panel-body">
-                                    <form class="form-horizontal bucket-form" method="post">
+                                    <form class="form-horizontal bucket-form" method="post" action="<?php echo base_url(); ?>/profil/ubah_profil" id="form_update_profil" onsubmit="">
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">NIP</label>
                                             <div class="col-sm-6">
@@ -80,13 +80,13 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Tempat Lahir</label>
                                             <div class="col-sm-6">
-                                                <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir"/>
+                                                <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" value="<?php echo $akun->tempat_lahir; ?>"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Tanggal Lahir</label>
                                             <div class="col-sm-6">
-                                                <input type="text" class="form-control" name="tanggal_lahir" id="tanggal_lahir"/>
+                                                <input type="text" class="form-control" name="tanggal_lahir" id="tanggal_lahir" value="<?php echo $akun->tgl_lahir; ?>"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -122,22 +122,35 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Departemen</label>
                                             <div class="col-sm-6">
-                                                <input type="text" class="form-control" name="departemen" id="departemen"/>
+                                                <!--input type="text" class="form-control" name="departemen" id="departemen" value="<?php echo $akun->id_departemen; ?>"/-->
+                                                <select name="departemen" class="form-control input-sm m-bot15">
+                                                    <?php foreach ($departemen as $d){?>
+                                                    <option value="<?php echo $d->id_departemen; ?>" <?php echo $d->id_departemen == $akun->id_departemen ? 'selected' : ''; ?>><?php echo $d->nama_departemen; ?></option>
+                                                    <?php }?>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Jabatan</label>
                                             <div class="col-sm-6">
-                                                <input type="text" class="form-control" name="jabatan" id="jabatan"/>
+                                                <!--input type="text" class="form-control" name="jabatan" id="jabatan" value="<?php echo $akun->id_jabatan; ?>"/-->
+                                                <select name="jabatan" class="form-control input-sm m-bot15">
+                                                    <?php foreach ($jabatan as $j){?>
+                                                    <option value="<?php echo $j->id_jabatan; ?>" <?php echo $j->id_jabatan == $akun->id_jabatan ? 'selected' : ''; ?>><?php echo $j->nama_jabatan; ?></option>
+                                                    <?php }?>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label"></label>
                                             <div class="col-sm-1">
                                                 <input type="submit" class="btn btn-info" value="Simpan"/>
+                                                <!--a href="#modal_ubah_profil" data-toggle="modal" class="btn btn-warning" id="submit_update_profil">
+                                                    Simpan
+                                                </a-->
                                             </div>
                                             <div class="col-sm-1">
-                                                <a href="#modal_ubah_password" data-toggle="modal" class="btn btn-warning">
+                                                <a href="#modal_ubah_password" data-toggle="modal" class="btn btn-warning" id="tombol_ubah_password" onclick="reset_field_password()">
                                                     Ubah Password
                                                 </a>
                                             </div>
@@ -156,19 +169,19 @@
                                                     <div class="form-group">
                                                         <label for="inputEmail1" class="col-lg-3 col-sm-2 control-label">Password Lama</label>
                                                         <div class="col-lg-9">
-                                                            <input type="email" class="form-control" id="inputEmail4" placeholder="Password Lama">
+                                                            <input type="password" class="form-control" id="inputPasswordLama" placeholder="Password Lama" name="password_lama">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputPassword1" class="col-lg-3 col-sm-2 control-label">Password Baru</label>
                                                         <div class="col-lg-9">
-                                                            <input type="password" class="form-control" id="inputPassword4" placeholder="Password Baru">
+                                                            <input type="password" class="form-control" id="inputPasswordBaru" placeholder="Password Baru" name="password_baru">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputPassword2" class="col-lg-3 col-sm-2 control-label">Ulangi Password Baru</label>
                                                         <div class="col-lg-9">
-                                                            <input type="password" class="form-control" id="inputPassword4" placeholder="Password Baru">
+                                                            <input type="password" class="form-control" id="inputPasswordBaruLagi" placeholder="Password Baru" name="password_baru_2">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -177,6 +190,19 @@
                                                         </div>
                                                     </div>
                                                 </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="modal_ubah_profil" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button aria-hidden="true" data-dismiss="modal" class="close" id="modal_ubah_profil_close" type="button">×</button>
+                                                <h4 class="modal-title">Ubdah Profil Berhasil</h4>
+                                            </div>
+                                            <div class="modal-body">
+
                                             </div>
                                         </div>
                                     </div>
@@ -451,6 +477,7 @@
         <script src="<?php echo base_url() ?>/assets/js/jquery.scrollTo.min.js"></script>
         <script src="<?php echo base_url() ?>/assets/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.js"></script>
         <script src="<?php echo base_url() ?>/assets/js/jquery.nicescroll.js"></script>
+        <script src="<?php echo base_url() ?>/assets/js/jquery-ui-1.9.2.custom.min.js"></script>
         <!--Easy Pie Chart-->
         <script src="<?php echo base_url() ?>/assets/js/easypiechart/jquery.easypiechart.js"></script>
         <!--Sparkline Chart-->
@@ -464,7 +491,28 @@
 
         <!--common script init for all pages-->
         <script src="<?php echo base_url() ?>/assets/js/scripts.js"></script>
+        <script src="<?php echo base_url() ?>/assets/js/notifit.js"></script>
         <script>
+            $("#form_update_profil").submit(function() { // catch the form's submit event
+                $.ajax({// create an AJAX call...
+                    data: $(this).serialize(), // get the form data
+                    type: $(this).attr('method'), // GET or POST
+                    url: $(this).attr('action'), // the file to call
+                    success: function(response) { // on success..
+                        var json = jQuery.parseJSON(response);
+                        alert(response);
+                        if (json.status === "OK") {
+                            notif({
+                                msg: "Update Profil Sukses!",
+                                position: "center",
+                                time: 1000
+                            });
+                            alert("ok");
+                        }
+                    }
+                });
+                return false; // cancel original event to prevent form submitting
+            });
             $("#form_ubah_password").submit(function() { // catch the form's submit event
                 $.ajax({// create an AJAX call...
                     data: $(this).serialize(), // get the form data
@@ -472,18 +520,23 @@
                     url: $(this).attr('action'), // the file to call
                     success: function(response) { // on success..
                         var json = jQuery.parseJSON(response);
-                        //alert(json);
-                        if(json.status==="OK"){
-                            //alert("OK");
+                        //alert(response);
+                        if (json.status === "OK") {
                             $("#modal_ubah_password_close").click();
                         }
                     }
                 });
                 return false; // cancel original event to prevent form submitting
             });
+            $("#tanggal_lahir").datepicker();
+            function reset_field_password(){
+                $('#inputPasswordLama').val('');
+                $('#inputPasswordBaru').val('');
+                $('#inputPasswordBaruLagi').val('');
+            };
         </script>
     </body>
 </html>
 <?php
-//var_dump ($akun);
+//var_dump ($departemen);
 ?>
