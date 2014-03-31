@@ -51,13 +51,13 @@
                                 <div class="panel-body profile-information">
                                     <div class="col-lg-6">
                                         <div class="panel-body">
-                                            <form>
+                                            <form action="<?php echo site_url() ?>pekerjaan/tambah_pekerjaan_db">
                                                 <table class="table general-table">
                                                     <tr>
                                                         <td>Nama Pekerjaan</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><input class="form-control" type="text"/></td>
+                                                        <td><input name="nama_pkj" class="form-control" type="text"/></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Deskripsi Pekerjaan</td>
@@ -65,20 +65,26 @@
                                                     <tr>
                                                         <td>
 <!--                                                            <input class="form-control" type="text"/>-->
-                                                            <textarea class="form-control"></textarea>
+                                                            <textarea name="deskripsi_pkj" class="form-control"></textarea>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td>Deadline</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><input class="form-control" type="text"/></td>
+                                                        <td><input name="tgl_selesai_pkj" class="form-control" type="text"/></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Penerima Pekerjaan</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><input class="form-control" type="text"/></td>
+                                                        <td>
+                                                            <select id="departemen" name="jabatan" class="form-control m-bot15">
+                                                                <option value="">Pilih Departemen</option>    
+                                                                <option value="1">Teknologi Informasi</option>
+                                                                <option value="2">Departemen A</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                 </table>
                                                 <input type="submit" class="btn btn-lg btn-login btn-block" value="Submit"/>

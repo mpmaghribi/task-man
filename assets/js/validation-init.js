@@ -11,6 +11,12 @@ var Script = function () {
         // validate signup form on keyup and submit
         $("#signupForm").validate({
             rules: {
+                nama_pkj: "required",
+                deskripsi_pkj: "required",
+                tgl_mulai_pkj: "required",
+                tgl_selesai_pkj: "required",
+                sifat_pkj: "required",
+                prioritas: "required",
                 firstname: "required",
                 lastname: "required",
                 username: {
@@ -33,6 +39,31 @@ var Script = function () {
                 email: {
                     required: true,
                     email: true
+                },
+                religion: {
+                    required: true                    
+                },
+                homephone: {
+                    required: true,
+                    number: true,
+                    digits: true
+                },
+                mobilephone: {
+                    required: true,
+                    number: true,
+                    digits: true
+                },
+                address: {
+                    required: true
+                },
+                jabatan: {
+                    required: true
+                },
+                departemen: {
+                    required: true
+                },
+                'gender[]': {
+                    required: true
                 },
                 topic: {
                     required: "#newsletter:checked",

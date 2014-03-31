@@ -35,41 +35,31 @@
                     </a>
                     <ul class="sub">
                         <li class="sub-menu">
-                            <a href="javascript:;">
+                            <a href="<?php echo site_url()?>/pekerjaan/karyawan">
                                 <i class="fa fa-book"></i>
                                 <span>Pekerjaan Saya</span>
                             </a>
-                            <ul class="sub">
-                                <li><a href="<?php echo site_url()?>/pekerjaan/list_pekerjaan">Daftar Pekerjaan</a></li>
-                                <li><a href="#">Pekerjaan Baru</a></li>
-                            </ul>
+<!--                            <ul class="sub">
+                                <li><a href="<?php echo site_url()?>/pekerjaan/list_pekerjaan">List Pekerjaan</a></li>
+                            </ul>-->
                         </li>
-                        <li class="sub-menu">
-                            <a href="javascript:;">
-                                <i class="fa fa-book"></i>
-                                <span>Tambahkan Pekerjaan</span>
-                            </a>
-                            <ul class="sub">
-                                <li><a href="<?php echo base_url()."index.php/pekerjaan/tambah_pekerjaan"?>">Isi Data Pekerjaan</a></li>
-                                <li><a href="#">Penerima Pekerjaan</a></li>
-                            </ul>
-                        </li>
-                        <li class="sub-menu">
+<!--                        <li class="sub-menu">
                             <a href="javascript:;">
                                 <i class="fa fa-book"></i>
                                 <span>Pekerjaan Karyawan</span>
                             </a>
                             <ul class="sub">
+                                <li><a href="<?php echo base_url()."index.php/pekerjaan/karyawan"?>">List Pekerjaan</a></li>
                                 <li><a href="#">Penilaian Kinerja</a></li>
                                 <li><a href="#">Grafik Kinerja Karyawan</a></li>
                             </ul>
-                        </li>
-                        <li class="sub-menu">
+                        </li>-->
+<!--                        <li class="sub-menu">
                             <a href="javascript:;">
                                 <i class="fa fa-book"></i>
                                 <span>Usulan Pekerjaan</span>
                             </a>
-                        </li>
+                        </li>-->
                     </ul>
                 </li>
                 <li class="sub-menu">

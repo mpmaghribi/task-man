@@ -37,7 +37,7 @@ class registration extends CI_Controller {
         $nip = $this->input->post("usernip");
         $userpassword = $this->input->post('userpassword');
         if ($nama != NULL && $jabatan!= NULL && $email!= NULL && $agama!= NULL && $homephone != NULL && $mobilephone != NULL && $address!= NULL && $gender!= NULL && $nip!= NULL && $userpassword!= NULL && $departemen != NULL){
-            $result = $this->taskman_repository->sp_register_sistem($nama,$jabatan,$email,$agama,$homephone,$mobilephone,$address,$gender,$nip,$userpassword,$departemen);
+            $result = $this->taskman_repository->sp_register_sistem($nama,$jabatan,$email,$agama,$homephone,$mobilephone,$address,$gender,$nip,sha1($userpassword),$departemen);
             $kode = $result[0]->kode;
             $this->session->set_flashdata('status',$kode);
             if ($kode == 1)

@@ -1,6 +1,5 @@
 <!--Core js-->
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-2.0.3.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-migrate-1.2.1.min.js"></script>
+
 <!--Notification script-->
     <script src="<?php echo base_url()?>/assets/js/miniNotification.js"></script>
     <script>
@@ -26,6 +25,7 @@
 <script src="<?php echo base_url()?>/assets/js/jvector-map/jquery-jvectormap-1.2.2.min.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jvector-map/jquery-jvectormap-us-lcc-en.js"></script>
 <script src="<?php echo base_url()?>/assets/js/gauge/gauge.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>/assets/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 <!--clock init-->
 <script src="<?php echo base_url()?>/assets/js/css3clock/js/css3clock.js"></script>
 <!--Easy Pie Chart-->
@@ -45,7 +45,7 @@
 <script src="<?php echo base_url()?>/assets/js/dashboard.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jquery.customSelect.min.js" ></script>
 
-<script src="<?php echo base_url()?>/assets/js/bootstrap-switch.js"></script>
+<!--<script src="<?php echo base_url()?>/assets/js/bootstrap-switch.js"></script>-->
 <script type="text/javascript" src="<?php echo base_url()?>/assets/js/fuelux/js/spinner.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>/assets/js/jquery-multi-select/js/jquery.multi-select.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>/assets/js/jquery-multi-select/js/jquery.quicksearch.js"></script>
@@ -53,16 +53,18 @@
 <script src="<?php echo base_url()?>assets/js/jquery-tags-input/jquery.tagsinput.js"></script>
 <script src="<?php echo base_url()?>assets/js/select2/select2.js"></script>
 <script src="<?php echo base_url()?>assets/js/select-init.js"></script>
-
-<script type="text/javascript" src="<?php echo base_url()?>assets/js/jquery.validate.min.js"></script>
+<script src="<?php echo base_url()?>assets/js/iCheck/jquery.icheck.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>assets/js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>assets/js/jquery.validate.js"></script>
 <!--common script init for all pages-->
 <script src="<?php echo base_url()?>assets/js/scripts.js"></script>
-
-<script src="<?php echo base_url()?>assets/js/toggle-init.js"></script>
-
 <script src="<?php echo base_url()?>assets/js/advanced-form.js"></script>
-
 <script src="<?php echo base_url()?>assets/js/validation-init.js"></script>
+<!--icheck init -->
+<script src="<?php echo base_url()?>assets/js/icheck-init.js"></script>
+
+<!--<script src="<?php echo base_url()?>assets/js/toggle-init.js"></script>-->
+
 <!--script for this page-->
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&AMP;sensor=false"></script>
 <script>
