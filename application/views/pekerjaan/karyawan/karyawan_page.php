@@ -246,7 +246,7 @@
                                                             </td>
                                                             <td class="hidden-phone"><?php echo $value->nama_pekerjaan?></td>
                                                             <td> <?php echo date("d M Y", strtotime($value->tgl_mulai))?> -  <?php echo date("d M Y", strtotime($value->tgl_selesai))?></td>
-                                                            <td>Mohammad Zarkasi</td>
+                                                            <td><?php echo $this->session->userdata('user_nama')?></td>
                                                             <td><span class="label label-danger label-mini"><?php echo $value->status_pekerjaan?></span></td>
                                                             <td>
                                                                 <div class="progress progress-striped progress-xs">
@@ -256,7 +256,7 @@
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                            <?php }?>
+                                                            <?php $i++;}?>
                                                         <?php }?>
 
                                                     </tbody>

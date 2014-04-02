@@ -30,18 +30,18 @@
                     <input type="password" name="password" class="form-control" placeholder="Password">
                 </div>
                 <label class="checkbox">
-                    <input type="checkbox" name="rememberme" value="remember-me"> Remember me
+<!--                    <input type="checkbox" name="rememberme" value="remember-me"> Remember me-->
                     <span class="pull-right">
-                        <a data-toggle="modal" href="#myModal"> Forgot Password?</a>
+                        <a data-toggle="modal" href="#myModal"> Lupa Password?</a>
 
                     </span>
                 </label>
                 <button class="btn btn-lg btn-login btn-block" type="submit">Sign in</button>
 
                 <div class="registration">
-                    Don't have an account yet?
+                    Tidak punya akun ?
                     <a class="" href="<?php echo site_url() ?>/registration">
-                        Create an account
+                        Silahkan hubungi Admin
                     </a>
                 </div>
 
@@ -54,15 +54,15 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">Forgot Password ?</h4>
+                            <h4 class="modal-title">Lupa Password ?</h4>
                         </div>
                         <div class="modal-body">
-                            <p>Enter your e-mail address below to reset your password.</p>
+                            <p>Masukkan email anda untuk mereset password anda.</p>
                             <input type="text" name="email_user" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
 
                         </div>
                         <div class="modal-footer">
-                            <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+                            <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
                             <button class="btn btn-success" type="submit">Submit</button>
                         </div>
                     </div>

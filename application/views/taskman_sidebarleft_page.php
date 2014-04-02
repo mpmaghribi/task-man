@@ -18,7 +18,7 @@
                         <li><a href="<?php echo site_url() ?>/profil">Akun</a></li>
                     </ul>
                 </li>
-                <li class="sub-menu">
+<!--                <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-users"></i>
                         <span>User Manajemen</span>
@@ -27,7 +27,7 @@
                         <li><a href="<?php echo base_url() . "index.php/user/tambah" ?>">Daftar Akun Baru</a></li>
                         <li><a href="<?php echo base_url() . "index.php/user/list_karyawan" ?>">Daftar Karyawan Saya</a></li>
                     </ul>
-                </li>
+                </li>-->
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>

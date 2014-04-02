@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="profile-desk">
-                                            <h1>David Rojormillan</h1>
+                                            <h1><?php echo $this->session->userdata('user_nama')?></h1>
                                             <span class="text-muted">Product Manager</span>
                                             <p>
                                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean porttitor vestibulum imperdiet. Ut auctor accumsan erat, a vulputate metus tristique non. Aliquam aliquam vel orci quis sagittis.
@@ -63,7 +63,7 @@
                                             <a href="#" class="btn btn-primary">View Profile</a>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+<!--                                    <div class="col-md-3">
                                         <div class="profile-statistics">
                                             <h1>1240</h1>
                                             <p>This Week Sales</p>
@@ -87,7 +87,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </section>
                         </div>
@@ -103,16 +103,6 @@
                                         <li>
                                             <a data-toggle="tab" href="#job-history">
                                                 Job History
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a data-toggle="tab" href="#contacts" class="contact-map">
-                                                Contacts
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a data-toggle="tab" href="#settings">
-                                                Settings
                                             </a>
                                         </li>
                                     </ul>

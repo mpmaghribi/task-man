@@ -77,7 +77,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+<!--                                        <div class="form-group">
                                             <label class="col-sm-3 control-label">Tempat Lahir</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" value="<?php echo $akun->tempat_lahir; ?>"/>
@@ -88,7 +88,7 @@
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control" name="tanggal_lahir" id="tanggal_lahir" value="<?php echo $akun->tgl_lahir; ?>"/>
                                             </div>
-                                        </div>
+                                        </div>-->
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Alamat</label>
                                             <div class="col-sm-6">
