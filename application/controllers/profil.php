@@ -40,6 +40,7 @@ class profil extends CI_Controller {
         $result = $this->taskman_repository->sp_login_sistem($username, $password);
 //var_dump($result);
         if ($result["kode"] == 1) {
+            $this->session->set_userdata(array('user_jabatan' => strtolower($result["nama_jabatan"])));
             return 1;
         }
         return 0;
@@ -73,7 +74,8 @@ class profil extends CI_Controller {
         $password_baru = pg_escape_string($this->input->post("password_baru"));
         $password_baru_2 = pg_escape_string($this->input->post("password_baru_2"));
         $nip = pg_escape_string($this->session->userdata("user_nip"));
-        if ($this->akun->ubah_password($nip, $password_lama, $password_baru, $password_baru_2) == 1) {
+        
+        if (strlen($password_baru)>0&&$this->akun->ubah_password($nip, $password_lama, $password_baru, $password_baru_2) == 1) {
             $this->session->set_userdata(array("user_password"=>$password_baru));
             echo json_encode(array("status" => "OK"));
         }else{

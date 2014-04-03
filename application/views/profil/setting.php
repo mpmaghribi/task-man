@@ -86,7 +86,8 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">Tanggal Lahir</label>
                                             <div class="col-sm-6">
-                                                <input type="text" class="form-control" name="tanggal_lahir" id="tanggal_lahir" value="<?php echo $akun->tgl_lahir; ?>"/>
+                                                <!--input type="text" class="form-control" name="tanggal_lahir" id="tanggal_lahir" value="<?php echo $akun->tgl_lahir; ?>"/-->
+                                                <input class="form-control form-control-inline input-medium default-date-picker"  size="16" type="text" value="<?php echo $akun->tgl_lahir; ?>" name="tanggal_lahir" id="tanggal_lahir" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -124,9 +125,9 @@
                                             <div class="col-sm-6">
                                                 <!--input type="text" class="form-control" name="departemen" id="departemen" value="<?php echo $akun->id_departemen; ?>"/-->
                                                 <select name="departemen" class="form-control input-sm m-bot15">
-                                                    <?php foreach ($departemen as $d){?>
-                                                    <option value="<?php echo $d->id_departemen; ?>" <?php echo $d->id_departemen == $akun->id_departemen ? 'selected' : ''; ?>><?php echo $d->nama_departemen; ?></option>
-                                                    <?php }?>
+                                                    <?php foreach ($departemen as $d) { ?>
+                                                        <option value="<?php echo $d->id_departemen; ?>" <?php echo $d->id_departemen == $akun->id_departemen ? 'selected' : ''; ?>><?php echo $d->nama_departemen; ?></option>
+                                                    <?php } ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -135,9 +136,9 @@
                                             <div class="col-sm-6">
                                                 <!--input type="text" class="form-control" name="jabatan" id="jabatan" value="<?php echo $akun->id_jabatan; ?>"/-->
                                                 <select name="jabatan" class="form-control input-sm m-bot15">
-                                                    <?php foreach ($jabatan as $j){?>
-                                                    <option value="<?php echo $j->id_jabatan; ?>" <?php echo $j->id_jabatan == $akun->id_jabatan ? 'selected' : ''; ?>><?php echo $j->nama_jabatan; ?></option>
-                                                    <?php }?>
+                                                    <?php foreach ($jabatan as $j) { ?>
+                                                        <option value="<?php echo $j->id_jabatan; ?>" <?php echo $j->id_jabatan == $akun->id_jabatan ? 'selected' : ''; ?>><?php echo $j->nama_jabatan; ?></option>
+                                                    <?php } ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -157,7 +158,7 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="modal_ubah_password" class="modal fade">
+                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="modal_ubah_password" class="modal fade" autocomplete="off">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -165,28 +166,37 @@
                                                 <h4 class="modal-title">Ubah Password</h4>
                                             </div>
                                             <div class="modal-body">
-                                                <form class="form-horizontal" role="form" action="<?php echo site_url() . "/profil/ubah_password" ?>" id="form_ubah_password" method="post">
+                                                <form class="form-horizontal" role="form" action="<?php echo site_url() . "/profil/ubah_password" ?>" id="form_ubah_password" method="post" autocomplete="off">
                                                     <div class="form-group">
                                                         <label for="inputEmail1" class="col-lg-3 col-sm-2 control-label">Password Lama</label>
                                                         <div class="col-lg-9">
-                                                            <input type="password" class="form-control" id="inputPasswordLama" placeholder="Password Lama" name="password_lama">
+                                                            <input type="password" class="form-control" id="password_lama" placeholder="Password Lama" name="password_lama">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputPassword1" class="col-lg-3 col-sm-2 control-label">Password Baru</label>
                                                         <div class="col-lg-9">
-                                                            <input type="password" class="form-control" id="inputPasswordBaru" placeholder="Password Baru" name="password_baru">
+                                                            <input type="password" class="form-control" id="password_baru" placeholder="Password Baru" name="password_baru">
+                                                            <label class="error" for="password_baru" style="display: none" id="password_baru_error">
+                                                                Harap mengisi password baru
+                                                            </label>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputPassword2" class="col-lg-3 col-sm-2 control-label">Ulangi Password Baru</label>
                                                         <div class="col-lg-9">
-                                                            <input type="password" class="form-control" id="inputPasswordBaruLagi" placeholder="Password Baru" name="password_baru_2">
+                                                            <input type="password" class="form-control" id="password_baru_2" placeholder="Password Baru" name="password_baru_2">
+                                                            <label class="error" for="password_baru_2" style="display: none" id="password_baru_2_error">
+                                                                Harap mengisi lagi password baru
+                                                            </label>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="col-lg-offset-3 col-lg-10">
-                                                            <button type="submit" class="btn btn-default">Ubah</button>
+                                                            <button type="submit" class="btn btn-default" id="submit_ubah_password">Ubah</button>
+                                                            <label class="error" for="submit_ubah_password" style="display: none" id="submit_ubah_password_error">
+                                                                Gagal mengubah password, coba lagi
+                                                            </label>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -492,48 +502,68 @@
         <!--common script init for all pages-->
         <script src="<?php echo base_url() ?>/assets/js/scripts.js"></script>
         <script src="<?php echo base_url() ?>/assets/js/notifit.js"></script>
+        <script type="text/javascript" src="<?php echo base_url() ?>/assets/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        <script type="text/javascript" src="<?php echo base_url() ?>/assets/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
         <script>
-            $("#form_update_profil").submit(function() { // catch the form's submit event
-                $.ajax({// create an AJAX call...
-                    data: $(this).serialize(), // get the form data
-                    type: $(this).attr('method'), // GET or POST
-                    url: $(this).attr('action'), // the file to call
-                    success: function(response) { // on success..
-                        var json = jQuery.parseJSON(response);
-                        alert(response);
-                        if (json.status === "OK") {
-                            notif({
-                                msg: "Update Profil Sukses!",
-                                position: "center",
-                                time: 1000
-                            });
-                            //alert("ok");
-                        }
-                    }
-                });
-                return false; // cancel original event to prevent form submitting
-            });
-            $("#form_ubah_password").submit(function() { // catch the form's submit event
-                $.ajax({// create an AJAX call...
-                    data: $(this).serialize(), // get the form data
-                    type: $(this).attr('method'), // GET or POST
-                    url: $(this).attr('action'), // the file to call
-                    success: function(response) { // on success..
-                        var json = jQuery.parseJSON(response);
-                        //alert(response);
-                        if (json.status === "OK") {
-                            $("#modal_ubah_password_close").click();
-                        }
-                    }
-                });
-                return false; // cancel original event to prevent form submitting
-            });
-            $("#tanggal_lahir").datepicker();
-            function reset_field_password(){
-                $('#inputPasswordLama').val('');
-                $('#inputPasswordBaru').val('');
-                $('#inputPasswordBaruLagi').val('');
-            };
+                                                    $("#form_update_profil").submit(function() { // catch the form's submit event
+                                                        //var keputusan = false;
+                                                        $.ajax({// create an AJAX call...
+                                                            data: $(this).serialize(), // get the form data
+                                                            type: $(this).attr('method'), // GET or POST
+                                                            url: $(this).attr('action'), // the file to call
+                                                            success: function(response) { // on success..
+                                                                var json = jQuery.parseJSON(response);
+                                                                //alert(response);
+                                                                if (json.status === "OK") {
+                                                                    //alert("ok");
+                                                                    //keputusan= true;
+                                                                    window.location = "<?php echo site_url() ?>/profil";
+                                                                }
+                                                            }
+                                                        });
+                                                        return false;
+                                                        //return keputusan; // cancel original event to prevent form submitting
+                                                    });
+                                                    $("#form_ubah_password").submit(function() { // catch the form's submit event
+                                                        $('#password_baru_error').css("display", "none");
+                                                        $('#password_baru_2_error').css("display", "none");
+                                                        $('#submit_ubah_password_error').css("display","none");
+                                                        if ($('#password_baru').val().length === 0) {
+                                                            $('#password_baru_error').css("display", "block");
+                                                        } else if ($('#password_baru_2').val().length === 0) {
+                                                            $('#password_baru_2_error').css("display", "block");
+                                                            $('#password_baru_2_error').text("harap mengisi lagi password baru")
+                                                        } else if ($('#password_baru').val() !== $('#password_baru_2').val()) {
+                                                            $('#password_baru_2_error').css("display", "block");
+                                                            $('#password_baru_2_error').text("masukkan lagi password baru yang sama")
+                                                        } else {
+                                                            $.ajax({// create an AJAX call...
+                                                                data: $(this).serialize(), // get the form data
+                                                                type: $(this).attr('method'), // GET or POST
+                                                                url: $(this).attr('action'), // the file to call
+                                                                success: function(response) { // on success..
+                                                                    var json = jQuery.parseJSON(response);
+                                                                    //alert(response);
+                                                                    if (json.status === "OK") {
+                                                                        $("#modal_ubah_password_close").click();
+                                                                    }else{
+                                                                        $('#submit_ubah_password_error').css("display","block");
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                        return false; // cancel original event to prevent form submitting
+                                                    });
+                                                    //$("#tanggal_lahir").datepicker();
+                                                    function reset_field_password() {
+                                                        $('#password_lama').val('');
+                                                        $('#password_baru').val('');
+                                                        $('#password_baru_2').val('');
+                                                        $('#password_baru_error').css("display", "none");
+                                                        $('#password_baru_2_error').css("display", "none");
+                                                        $('#submit_ubah_password_error').css("display","none");
+                                                    }
+                                                    
         </script>
     </body>
 </html>

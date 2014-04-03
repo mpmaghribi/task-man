@@ -33,10 +33,10 @@ class login extends CI_Controller {
                 return 1;
             } else {
                 //if (strlen($usernamecookie) > 0 && strlen($passwordcookie) > 0) {
-                    //if ($this->authenticate($usernamecookie, $passwordcookie) == 1) {
-                        //echo "login by cookie";
-                        //return 1;
-                    //}
+                //if ($this->authenticate($usernamecookie, $passwordcookie) == 1) {
+                //echo "login by cookie";
+                //return 1;
+                //}
                 //}
             }
         }
@@ -53,7 +53,8 @@ class login extends CI_Controller {
                 'user_email' => $result["email"],
                 'user_nama' => $result["nama"],
                 'is_login' => TRUE,
-                'user_password' => $password
+                'user_password' => $password,
+                'user_jabatan' => strtolower($result["jabatan"])
             );
             $this->session->set_userdata($session_data);
             if ($rememberme == "remember-me") {

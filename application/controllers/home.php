@@ -38,6 +38,7 @@ class home extends CI_Controller {
         $result = $this->taskman_repository->sp_login_sistem($username, $password);
         //var_dump($result);
         if ($result["kode"] == 1) {
+            $this->session->set_userdata(array('user_jabatan' => strtolower($result["nama_jabatan"])));
             return 1;
         }
         return 0;
