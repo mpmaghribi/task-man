@@ -68,6 +68,7 @@
                         <span>Rekap Pekerjaan</span>
                     </a>
                     <ul class="sub">
+                        <li><a href="<?php echo site_url()?>/pekerjaan/list_pekerjaan">Semua</a></li>
                         <li><a href="#">Per Periode</a></li>
                         <li><a href="#">Per Status</a></li>
                         <li><a href="#">Filter Lainnya</a></li>
