@@ -43,45 +43,71 @@ class pekerjaan extends CI_Controller {
     }
 
     public function index() {
-        $this->load->view('pekerjaan/tambah_pekerjaan');
+        if ($this->check_session_and_cookie() == 1) {
+            $this->load->view('pekerjaan/tambah_pekerjaan');
+        } else {
+            $this->session->set_flashdata('status', 4);
+            redirect("login");
+        }
     }
 
     public function karyawan() {
-        $result = $this->taskman_repository->sp_view_pekerjaan();
-        $data['pkj_karyawan'] = $result;
-        $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
+        if ($this->check_session_and_cookie() == 1) {
+            $result = $this->taskman_repository->sp_view_pekerjaan();
+            $data['pkj_karyawan'] = $result;
+            $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
+        } else {
+            $this->session->set_flashdata('status', 4);
+            redirect("login");
+        }
     }
-public function usulan_pekerjaan2() {
-        $sifat_pkj = $this->input->post('sifat_pkj');
-        $parent_pkj = 0; //$this->input->post('parent_pkj');
-        $nama_pkj = $this->input->post('nama_pkj');
-        $deskripsi_pkj = $this->input->post('deskripsi_pkj');
-        $tgl_mulai_pkj = $this->input->post('tgl_mulai_pkj');
-        $tgl_selesai_pkj = $this->input->post('tgl_selesai_pkj');
-        $prioritas = $this->input->post('prioritas');
-        $status_pkj = '2'; //$this->input->post('status_pkj');
-        $asal_pkj = 'task management'; //$this->input->post('asal_pkj');
-        $this->load->model("pekerjaan_model");
-        $result = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
 
-        //redirect('pekerjaan/karyawan');
+    public function usulan_pekerjaan2() {
+        if ($this->check_session_and_cookie() == 1) {
+            $sifat_pkj = $this->input->post('sifat_pkj');
+            $parent_pkj = 0; //$this->input->post('parent_pkj');
+            $nama_pkj = $this->input->post('nama_pkj');
+            $deskripsi_pkj = $this->input->post('deskripsi_pkj');
+            $tgl_mulai_pkj = $this->input->post('tgl_mulai_pkj');
+            $tgl_selesai_pkj = $this->input->post('tgl_selesai_pkj');
+            $prioritas = $this->input->post('prioritas');
+            $status_pkj = '2'; //$this->input->post('status_pkj');
+            $asal_pkj = 'task management'; //$this->input->post('asal_pkj');
+            $this->load->model("pekerjaan_model");
+            $result = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
+
+            //redirect('pekerjaan/karyawan');
+        } else {
+            $this->session->set_flashdata('status', 4);
+            redirect("login");
+        }
     }
+
     public function usulan_pekerjaan() {
-        $sifat_pkj = $this->input->post('sifat_pkj');
-        $parent_pkj = 0; //$this->input->post('parent_pkj');
-        $nama_pkj = $this->input->post('nama_pkj');
-        $deskripsi_pkj = $this->input->post('deskripsi_pkj');
-        $tgl_mulai_pkj = $this->input->post('tgl_mulai_pkj');
-        $tgl_selesai_pkj = $this->input->post('tgl_selesai_pkj');
-        $prioritas = $this->input->post('prioritas');
-        $status_pkj = '1'; //$this->input->post('status_pkj');
-        $asal_pkj = 'task management'; //$this->input->post('asal_pkj');
-        $result = $this->taskman_repository->sp_tambah_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
-        //var_dump($result);
-        //echo $result[0]->kode;
-        $id_pekerjaan_baru = $result[0]->kode;
-        $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $this->session->userdata("user_id"));
-        redirect('pekerjaan/karyawan');
+        if ($this->check_session_and_cookie() == 1) {
+            $sifat_pkj = $this->input->post('sifat_pkj');
+            $parent_pkj = 0; //$this->input->post('parent_pkj');
+            $nama_pkj = $this->input->post('nama_pkj');
+            $deskripsi_pkj = $this->input->post('deskripsi_pkj');
+            $tgl_mulai_pkj = $this->input->post('tgl_mulai_pkj');
+            $tgl_selesai_pkj = $this->input->post('tgl_selesai_pkj');
+            $prioritas = $this->input->post('prioritas');
+            $status_pkj = '1'; //$this->input->post('status_pkj');
+            $asal_pkj = 'task management'; //$this->input->post('asal_pkj');
+            $result = $this->taskman_repository->sp_tambah_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
+            //var_dump($result);
+            //echo $result[0]->kode;
+            $id_pekerjaan_baru = $result[0]->kode;
+            if ($id_pekerjaan_baru >= 0) {
+                $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $this->session->userdata("user_id"));
+            }else{
+                
+            }
+            redirect('pekerjaan/karyawan');
+        } else {
+            $this->session->set_flashdata('status', 4);
+            redirect("login");
+        }
     }
 
     public function assign_pekerjaan() {
