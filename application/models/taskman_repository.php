@@ -59,10 +59,18 @@ class taskman_repository extends CI_Model {
             '$status_pkj',
             '$asal_pkj',
             '$prioritas') as (kode integer)";
+        //echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }
-    
+    public function sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $id_akun){
+        $query = "select * from function_tambah_detil_pekerjaan('$id_pekerjaan_baru','$id_akun') as (kode integer)";
+        //echo $query;
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+
+
     public function sp_view_pekerjaan() {
         $query = "SELECT * from pekerjaan";
         $query = $this->db->query($query);

@@ -46,20 +46,6 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td><a href="#">1</a></td>
-                                                            <td class="hidden-phone">Melakukan rekap daftar pasien yang pindah kamar.</td>
-                                                            <td>1 April 2015 </td>
-                                                            <td>Mohammad Zarkasi </td>
-                                                            <td><span class="label label-info label-mini">Due</span></td>
-                                                            <td>
-                                                                <div class="progress progress-striped progress-xs">
-                                                                    <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-success">
-                                                                        <span class="sr-only">40% Complete (success)</span>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
                                                         <?php if (isset($pkj_karyawan)) { ?>
                                                             <?php $i = 1;
                                                             foreach ($pkj_karyawan as $value) { ?>
@@ -92,7 +78,7 @@
                                     </div>
                                     <div id="TambahPekerjaan" class="tab-pane">
                                         <div class="form">
-                                            <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>pekerjaan/usulan_pekerjaan">
+                                            <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                     <div class="col-lg-6">
