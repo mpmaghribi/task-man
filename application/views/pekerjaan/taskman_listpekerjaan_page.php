@@ -128,6 +128,7 @@
                                     </table>
                                 </div>
                             </section>
+                            
                             <!--earning graph start-->
 
                             <!--earning graph end-->

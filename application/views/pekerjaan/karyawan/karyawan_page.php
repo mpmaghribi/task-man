@@ -66,6 +66,12 @@
                                                                             </div>
                                                                         </div>
                                                                     </td>
+                                                                    <td>
+                                                                        <form method="POST" action="<?php echo site_url()?>/pekerjaan/deskripsi_pekerjaan">
+                                                                            <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
+                                                                            <button type="submit" class="btn btn-success"><i class="fa fa-eye"></i> View </button>
+                                                                        </form>
+                                                                    </td>
                                                                 </tr>
                                                                 <?php $i++;
                                                             } ?>
@@ -136,6 +142,15 @@
                         </section>
                     </div>
                 </div>
+                <script>
+                    $(function(){
+                       $('#nama_pkj').click(function(e){
+                           e.preventDefault();
+                           $('#deskripsi_pkj').show();
+                           $('#deskripsi_pkj2').load('<?php echo site_url()?>pekerjaan/deskripsi_pekerjaan');
+                       }); 
+                    });
+                </script>
                 <!-- page end-->
             </section>
         </section>
