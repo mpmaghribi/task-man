@@ -100,7 +100,7 @@ class pekerjaan extends CI_Controller {
             $id_pekerjaan_baru = $result[0]->kode;
             if ($id_pekerjaan_baru >= 0) {
                 $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $this->session->userdata("user_id"));
-            }else{
+            } else {
                 
             }
             redirect('pekerjaan/karyawan');
@@ -125,22 +125,20 @@ class pekerjaan extends CI_Controller {
             redirect("login");
         }
     }
-    
-    public function deskripsi_pekerjaan()
-    {
+
+    public function deskripsi_pekerjaan() {
         if ($this->check_session_and_cookie() == 1) {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
             $id_detail_pkj = $this->input->post('id_detail_pkj');
             $is_isi_komentar = $this->input->post('is_isi_komentar');
             $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
-            if (isset ($is_isi_komentar))
-            {
-                if ($is_isi_komentar == TRUE){
+            if (isset($is_isi_komentar)) {
+                if ($is_isi_komentar == TRUE) {
                     $isi_komentar = $this->input->post('komentar_pkj');
                     $id_akun = $this->session->userdata('user_id');
                     $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
-               }
+                }
             }
             $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
             $data["id_pkj"] = $id_detail_pkj;
@@ -150,9 +148,8 @@ class pekerjaan extends CI_Controller {
             redirect("login");
         }
     }
-    
-    public function komentar_pekerjaan()
-    {
+
+    public function komentar_pekerjaan() {
         if ($this->check_session_and_cookie() == 1) {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
@@ -160,7 +157,17 @@ class pekerjaan extends CI_Controller {
             $isi_komentar = $this->input->post('komentar_pkj');
             $id_akun = $this->session->userdata('user_id');
             $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
-            
+        } else {
+            $this->session->set_flashdata('status', 4);
+            redirect("login");
+        }
+    }
+
+    public function lihat_usulan() {
+        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+            $this->load->model("pekerjaan_model");
+            $data["list_usulan"]=$this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
+            $this->load->view("pekerjaan/lihat_usulan_pekerjaan_page",$data);
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");

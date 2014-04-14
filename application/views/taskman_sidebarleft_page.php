@@ -24,8 +24,6 @@
                         <span>User Manajemen</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="<?php echo base_url() . "index.php/user/tambah" ?>">Daftar Akun Baru</a></li>
-                        <li><a href="<?php echo base_url() . "index.php/user/list_karyawan" ?>">Daftar Karyawan Saya</a></li>
                     </ul>
                 </li>-->
                 <li class="sub-menu">
@@ -39,10 +37,15 @@
                                 <i class="fa fa-book"></i>
                                 <span>Pekerjaan Saya</span>
                             </a>
-<!--                            <ul class="sub">
-                                <li><a href="<?php echo site_url()?>/pekerjaan/list_pekerjaan">List Pekerjaan</a></li>
-                            </ul>-->
                         </li>
+                        <?php if($this->session->userdata("user_jabatan")=="manager"){?>
+                        <li class="sub-menu">
+                            <a href="<?php echo site_url(); ?>/pekerjaan/lihat_usulan">
+                                <i class="fa fa-book"></i>
+                                <span>Usulan Pekerjaan</span>
+                            </a>
+                        </li>
+                        <?php } ?>
 <!--                        <li class="sub-menu">
                             <a href="javascript:;">
                                 <i class="fa fa-book"></i>

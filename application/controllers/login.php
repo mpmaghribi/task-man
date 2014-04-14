@@ -55,7 +55,8 @@ class login extends CI_Controller {
                 'is_login' => TRUE,
                 'user_password' => $password,
                 'user_jabatan' => strtolower($result["nama_jabatan"]),
-                "user_id"=> $result["id_akun"]
+                "user_id"=> $result["id_akun"],
+                "user_departemen"=>$result["id_departemen"]
             );
             $this->session->set_userdata($session_data);
             if ($rememberme == "remember-me") {
