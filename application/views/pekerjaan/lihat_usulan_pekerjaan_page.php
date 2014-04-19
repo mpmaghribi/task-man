@@ -36,6 +36,7 @@ and open the template in the editor.
                                                 <th>Assign To</th>
                                                 <th>Status</th>
                                                 <th></th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -50,15 +51,15 @@ and open the template in the editor.
                                                         <td><?php echo $usulan->nama_pekerjaan; ?></td>
                                                         <td><?php echo $usulan->tgl_mulai . " - " . $usulan->tgl_selesai; ?></td>
                                                         <td><?php echo $usulan->nama; ?></td>
-                                                        <td><?php if ($usulan->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($usulan->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
+                                                        <td id="td_flag_<?php echo $usulan->id_pekerjaan; ?>"><?php if ($usulan->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($usulan->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
                                                         <td>
                                                             <form method="POST" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
                                                                 <input type="hidden" name="id_detail_pkj" value="<?php echo $usulan->id_pekerjaan ?>"/>
                                                                 <button type="submit" class="btn btn-success"><i class="fa fa-eye"></i> View </button>
                                                             </form>
                                                         </td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-default"><i class="fa fa-eye"></i> OK </button>
+                                                        <td id="td<?php echo $usulan->id_pekerjaan; ?>">
+                                                            <button id="validasi<?php echo $usulan->id_pekerjaan; ?>" type="button" class="btn btn-default" onclick="validasi(<?php echo $usulan->id_pekerjaan; ?>);"><i class="fa fa-eye"> OK</i> </button>
                                                         </td>
                                                     </tr>
                                                     <?php
@@ -73,13 +74,24 @@ and open the template in the editor.
                     </div>
                 </div>
                 <script>
-                    $(function() {
-                        $('#komentar').click(function(e) {
-                            e.preventDefault();
-                            $('#box_komentar').show();
-                            //$('#deskripsi_pkj2').load('<?php echo site_url() ?>pekerjaan/deskripsi_pekerjaan');
+                    function validasi(id_pekerjaan) {
+                        //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+                        $.ajax({// create an AJAX call...
+                            data: "id_pekerjaan="+id_pekerjaan, // get the form data
+                            type: "POST", // GET or POST
+                            url: "<?php echo site_url();?>/pekerjaan/validasi_usulan", // the file to call
+                            success: function(response) { // on success..
+                                var json = jQuery.parseJSON(response);
+                                //alert(response);
+                                if (json.status === "OK") {
+                                    $("#validasi"+id_pekerjaan).css("display","none");
+                                    $('#td_flag_'+id_pekerjaan).html("<span class=\"label label-success label-mini\">Aprroved</span>");
+                                } else {
+                                    alert("validasi gagal, " + json.reason);
+                                }
+                            }
                         });
-                    });
+                    }
                 </script>
                 <!-- page end-->
             </section>
@@ -339,31 +351,6 @@ and open the template in the editor.
 
     </section>
     <script type="text/javascript">
-        $(function() {
-            var nowTemp = new Date();
-            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-            var checkin = $('.dpd1').datepicker({
-                format: 'dd-mm-yyyy',
-                onRender: function(date) {
-                    return date.valueOf() < now.valueOf() ? 'disabled' : '';
-                }
-            }).on('changeDate', function(ev) {
-                if (ev.date.valueOf() > checkout.date.valueOf()) {
-                    var newDate = new Date(ev.date)
-                    newDate.setDate(newDate.getDate() + 1);
-                    checkout.setValue(newDate);
-                }
-                checkin.hide();
-                $('.dpd2')[0].focus();
-            }).data('datepicker');
-            var checkout = $('.dpd2').datepicker({
-                format: 'dd-mm-yyyy',
-                onRender: function(date) {
-                    return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
-                }
-            }).on('changeDate', function(ev) {
-                checkout.hide();
-            }).data('datepicker');
-        });
+
     </script>
     <?php $this->load->view("taskman_footer_page") ?>

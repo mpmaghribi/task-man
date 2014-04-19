@@ -51,10 +51,18 @@ class pekerjaan_model extends CI_Model {
                 "from detil_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun " .
                 "inner join departemen on departemen.id_departemen=akun.id_departemen " .
                 "inner join pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan " .
-                "where departemen.id_departemen=".$id_departemen;
+                "where pekerjaan.flag_usulan='1' and departemen.id_departemen=" . $id_departemen;
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
+    }
+
+    public function validasi_pekerjaan($id_pekerjaan) {
+        $query = "update pekerjaan set flag_usulan=2 where id_pekerjaan=" . pg_escape_string($id_pekerjaan);
+        if ($this->db->query($query)){
+            return 1;
+        }
+        return 0;
     }
 
 }

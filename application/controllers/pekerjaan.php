@@ -166,11 +166,24 @@ class pekerjaan extends CI_Controller {
     public function lihat_usulan() {
         if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
-            $data["list_usulan"]=$this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
-            $this->load->view("pekerjaan/lihat_usulan_pekerjaan_page",$data);
+            $data["list_usulan"] = $this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
+            $this->load->view("pekerjaan/lihat_usulan_pekerjaan_page", $data);
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");
+        }
+    }
+
+    public function validasi_usulan() {
+        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+            $id_pekerjaan = $this->input->post("id_pekerjaan");
+            $this->load->model("pekerjaan_model");
+            if ($this->pekerjaan_model->validasi_pekerjaan($id_pekerjaan) == 1)
+                echo json_encode(array("status" => "OK"));
+            else
+                echo json_encode(array("status" => "FAILED", "reason" => "failed to update"));
+        } else {
+            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
         }
     }
 
