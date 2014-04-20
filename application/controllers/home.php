@@ -37,6 +37,7 @@ class home extends CI_Controller {
     private function authenticate($username, $password) {
         $result = $this->taskman_repository->sp_login_sistem($username, $password);
         if ($result["kode"] == 1) {
+            
             $this->session->set_userdata(array('user_jabatan' => strtolower($result["nama_jabatan"])));
             return 1;
         }
@@ -45,11 +46,19 @@ class home extends CI_Controller {
 
     public function index() {
         if ($this->check_session_and_cookie() == 1) {
+            
             $this->load->view('homepage/taskman_home_page');
         } else {
             $this->session->set_flashdata('status', 4);
             redirect('login');
         }
+    }
+    
+    public function recent_activity()
+    {
+        $data['activity'] = $this->taskman_repository->sp_recent_activity();
+        
+        $this->load->view('recent_activity_page',$data);
     }
 
 }

@@ -2,26 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/xampp/htdocs/task_man/application/views/taskman_header_page.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/views/taskman_sidebarleft_page.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/views/taskman_header2_page.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/assets/js/dashboard.js</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/config/database.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/controllers/pekerjaan.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/views/homepage/taskman_home_page.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/models/akun.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/controllers/registration.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/controllers/home.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/models/taskman_repository.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/config/autoload.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/views/taskman_footer_page.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/views/profil/taskman_profil_page.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/config/config.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/views/pekerjaan/taskman_listpekerjaan_page.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/controllers/login.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/controllers/profil.php</file>
-            <file>file:/C:/xampp/htdocs/task_man/application/views/login/taskman_login_page.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

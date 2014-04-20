@@ -212,9 +212,9 @@
             </li>
             <!-- user login dropdown end -->
             <li>
-                <!--            <div class="toggle-right-box">
+                            <div class="toggle-right-box">
                                 <div class="fa fa-bars"></div>
-                            </div>-->
+                            </div>
             </li>
         </ul>
         <!--search & user info end-->

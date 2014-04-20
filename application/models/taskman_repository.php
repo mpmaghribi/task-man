@@ -77,4 +77,18 @@ class taskman_repository extends CI_Model {
         return $query->result();
     }
 
+    public function sp_recent_activity() {
+        $query = "SELECT * from activity inner join akun on akun.id_akun = activity.id_akun order by activity.tanggal_activity DESC";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    
+    public function sp_insert_activity($id_akun, $id_detil, $nama_pkj, $deskripsi_pkj) {
+        $query ="insert into activity (id_akun, id_detil_pekerjaan,"
+                . "nama_activity, deskripsi_activity, tanggal_activity)"
+                . " values ('$id_akun', '$id_detil', '$nama_pkj', "
+                . "'$deskripsi_pkj', 'now()');"; 
+        $query = $this->db->query($query);
+        return 1;
+    }
 }
