@@ -47,18 +47,20 @@
                                                     </thead>
                                                     <tbody>
                                                         <?php if (isset($pkj_karyawan)) { ?>
-                                                            <?php $i = 1;
-                                                            foreach ($pkj_karyawan as $value) { ?>
+                                                            <?php
+                                                            $i = 1;
+                                                            foreach ($pkj_karyawan as $value) {
+                                                                ?>
                                                                 <tr>
                                                                     <td>
                                                                         <a href="#">
-        <?php echo $i; ?>
+                                                                            <?php echo $i; ?>
                                                                         </a>
                                                                     </td>
                                                                     <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                                     <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
                                                                     <td><?php echo $this->session->userdata('user_nama') ?></td>
-                                                                    <td><?php if ($value->flag_usulan== 1) {?><span class="label label-danger label-mini"><?php echo 'Not Aprroved';?></span><?php }else if ($value->flag_usulan== 2) {?><span class="label label-success label-mini"><?php echo 'Aprroved';?></span><?php } else {?><span class="label label-info label-mini"><?php echo 'On Progress';?></span><?php }?></td>
+                                                                    <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
                                                                     <td>
                                                                         <div class="progress progress-striped progress-xs">
                                                                             <div style="width: 0%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-warning">
@@ -67,15 +69,17 @@
                                                                         </div>
                                                                     </td>
                                                                     <td>
-                                                                        <form method="POST" action="<?php echo site_url()?>/pekerjaan/deskripsi_pekerjaan">
+                                                                        <form method="POST" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
                                                                             <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
                                                                             <button type="submit" class="btn btn-success"><i class="fa fa-eye"></i> View </button>
                                                                         </form>
                                                                     </td>
                                                                 </tr>
-                                                                <?php $i++;
-                                                            } ?>
-<?php } ?>
+                                                                <?php
+                                                                $i++;
+                                                            }
+                                                            ?>
+                                                        <?php } ?>
 
                                                     </tbody>
                                                 </table>
@@ -143,12 +147,12 @@
                     </div>
                 </div>
                 <script>
-                    $(function(){
-                       $('#nama_pkj').click(function(e){
-                           e.preventDefault();
-                           $('#deskripsi_pkj').show();
-                           $('#deskripsi_pkj2').load('<?php echo site_url()?>pekerjaan/deskripsi_pekerjaan');
-                       }); 
+                    $(function() {
+                        $('#nama_pkj').click(function(e) {
+                            e.preventDefault();
+                            $('#deskripsi_pkj').show();
+                            $('#deskripsi_pkj2').load('<?php echo site_url() ?>pekerjaan/deskripsi_pekerjaan');
+                        });
                     });
                 </script>
                 <!-- page end-->
@@ -156,7 +160,7 @@
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-        <?php $this->load->view('taskman_rightbar_page')?>
+        <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
@@ -188,4 +192,4 @@
             }).data('datepicker');
         });
     </script>
-<?php $this->load->view("taskman_footer_page") ?>
+    <?php $this->load->view("taskman_footer_page") ?>
