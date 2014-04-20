@@ -63,7 +63,7 @@ class pekerjaan extends CI_Controller {
     }
 
     public function usulan_pekerjaan2() {
-        if ($this->check_session_and_cookie() == 1) {
+        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan")=="manager") {
             $sifat_pkj = $this->input->post('sifat_pkj');
             $parent_pkj = 0; //$this->input->post('parent_pkj');
             $nama_pkj = $this->input->post('nama_pkj');

@@ -51,6 +51,7 @@
 <script type="text/javascript" src="<?php echo base_url()?>/assets/js/jquery-multi-select/js/jquery.quicksearch.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>/assets/js/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
 <script src="<?php echo base_url()?>assets/js/jquery-tags-input/jquery.tagsinput.js"></script>
+
 <script src="<?php echo base_url()?>assets/js/select2/select2.js"></script>
 <script src="<?php echo base_url()?>assets/js/select-init.js"></script>
 <script src="<?php echo base_url()?>assets/js/iCheck/jquery.icheck.js"></script>

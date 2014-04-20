@@ -24,10 +24,10 @@
                                     <li class="">
                                         <a data-toggle="tab" href="#TambahPekerjaan">Tambah Pekerjaan</a>
                                     </li>
-                                    <?php if($this->session->userdata("user_jabatan")=="managert"){ ?>
-                                    <li class="">
-                                        <a data-toggle="tab" href="#TambahPekerjaanStaff">Pekerjaan Staff</a>
-                                    </li>
+                                    <?php if ($this->session->userdata("user_jabatan") == "managert") { ?>
+                                        <li class="">
+                                            <a data-toggle="tab" href="#TambahPekerjaanStaff">Pekerjaan Staff</a>
+                                        </li>
                                     <?php } ?>
                                 </ul>
                             </header>
@@ -93,14 +93,15 @@
                                     </div>
                                     <div id="TambahPekerjaan" class="tab-pane">
                                         <div class="form">
-                                            <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan<?php echo $this->session->userdata("user_jabatan")=="manager"?"2":""; ?>">
-                                                <?php if($this->session->userdata("user_jabatan")=="manager"){?>
-                                                <div class="form-group ">
-                                                    <label for="nama_pkj" class="control-label col-lg-3">Staff</label>
-                                                    <div class="col-lg-6">
-                                                        <input class="tags" id="tags_1" name="staff" type="text" />
+                                            <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan<?php echo $this->session->userdata("user_jabatan") == "manager" ? "2" : ""; ?>">
+                                                <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
+                                                    <div class="form-group ">
+                                                        <label for="staff" class="control-label col-lg-3">Staff</label>
+                                                        <div class="col-lg-6">
+                                                            <input id="autostaff" class="form-control" class="tags" value="" type="text" />
+                                                            <input type="hidden" value="" name="staff" id="staff"/>
+                                                        </div>
                                                     </div>
-                                                </div>
                                                 <?php } ?>
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
@@ -261,3 +262,65 @@
         });
     </script>
     <?php $this->load->view("taskman_footer_page") ?>
+    <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
+        <script>
+            var availableTags = [];
+            var tags_id = [];
+            function split(val) {
+                return val.split(/,\s*/);
+            }
+            function extractLast(term) {
+                return split(term).pop();
+            }
+            //autostaff
+            $("#autostaff")
+                    // don't navigate away from the field on tab when selecting an item
+                    .bind("keydown", function(event) {
+                        if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
+                            event.preventDefault();
+                        }
+                    })
+                    .autocomplete({
+                        minLength: 0,
+                        source: function(request, response) {
+                            // delegate back to autocomplete, but extract the last term
+                            response($.ui.autocomplete.filter(availableTags, extractLast(request.term)));
+                            //alert(extractLast(request.term));
+                        },
+                        focus: function() {
+                            // prevent value inserted on focus
+                            return false;
+                        },
+                        select: function(event, ui) {
+                            var terms = split(this.value);
+                            // remove the current input
+                            terms.pop();
+                            // add the selected item
+                            terms.push(ui.item.value);
+                            // add placeholder to get the comma-and-space at the end
+                            terms.push("");
+                            this.value = terms.join(", ");
+                            return false;
+                        }
+                    });
+            $.ajax({// create an AJAX call...
+                data: "", // get the form data
+                type: "GET", // GET or POST
+                url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+                    //alert(response);
+                    if (json.status === "OK") {
+                        //$("#modal_ubah_password_close").click();
+                        var jumlah_data = json.data.length;
+                        for(var i=0;i<jumlah_data;i++){
+                            availableTags[i] = json.data[i]["nama"];
+                            tags_id[i]=json.data[i]["id"];
+                        }
+                    } else {
+                        //$('#submit_ubah_password_error').css("display", "block");
+                    }
+                }
+            });
+        </script>
+    <?php } ?>

@@ -21,7 +21,6 @@
         <link href="<?php echo base_url() ?>/assets/js/jvector-map/jquery-jvectormap-1.2.2.css" rel="stylesheet">
         <link href="<?php echo base_url() ?>/assets/css/clndr.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/js/bootstrap-datepicker/css/datepicker.css" />
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/js/jquery-tags-input/jquery.tagsinput.css" />
         <!--icheck-->
         <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
         <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/red.css" rel="stylesheet">
