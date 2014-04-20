@@ -75,7 +75,6 @@ class pekerjaan extends CI_Controller {
             $asal_pkj = 'task management'; //$this->input->post('asal_pkj');
             $this->load->model("pekerjaan_model");
             $result = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
-
             //redirect('pekerjaan/karyawan');
         } else {
             $this->session->set_flashdata('status', 4);

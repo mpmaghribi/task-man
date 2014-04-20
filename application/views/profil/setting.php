@@ -43,12 +43,15 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <?php if(isset($akun->tempat_lahir)){?>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Tempat Lahir</label>
                                         <div class="col-sm-6">
                                             <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" value="<?php echo $akun->tempat_lahir; ?>"/>
                                         </div>
                                     </div>
+                                    <?php }
+                                    if (isset($akun->tanggal_lahir)){ ?>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Tanggal Lahir</label>
                                         <div class="col-sm-6">
@@ -56,6 +59,7 @@
                                             <input class="form-control form-control-inline input-medium default-date-picker"  size="16" type="text" value="<?php echo $akun->tgl_lahir; ?>" name="tanggal_lahir" id="tanggal_lahir" />
                                         </div>
                                     </div>
+                                    <?php } ?>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Alamat</label>
                                         <div class="col-sm-6">

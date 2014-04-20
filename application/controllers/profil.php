@@ -97,6 +97,12 @@ class profil extends CI_Controller {
             $update["email"] = pg_escape_string($this->input->post("email"));
             $update["id_departemen"] = pg_escape_string($this->input->post("departemen"));
             $update["id_jabatan"] = pg_escape_string($this->input->post("jabatan"));
+            $jumlah = count($update);
+            foreach ($update as $id => $val){
+                if(strlen($val)==0){
+                    unset($update[$id]);
+                }
+            }
             $nip = pg_escape_string($this->session->userdata("user_nip"));
             if ($this->akun->update($nip, $update) == 1) {
                 echo json_encode(array("status" => "OK"));

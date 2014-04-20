@@ -24,6 +24,11 @@
                                     <li class="">
                                         <a data-toggle="tab" href="#TambahPekerjaan">Tambah Pekerjaan</a>
                                     </li>
+                                    <?php if($this->session->userdata("user_jabatan")=="managert"){ ?>
+                                    <li class="">
+                                        <a data-toggle="tab" href="#TambahPekerjaanStaff">Pekerjaan Staff</a>
+                                    </li>
+                                    <?php } ?>
                                 </ul>
                             </header>
                             <div class="panel-body">
@@ -87,6 +92,69 @@
                                         </section>
                                     </div>
                                     <div id="TambahPekerjaan" class="tab-pane">
+                                        <div class="form">
+                                            <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan<?php echo $this->session->userdata("user_jabatan")=="manager"?"2":""; ?>">
+                                                <?php if($this->session->userdata("user_jabatan")=="manager"){?>
+                                                <div class="form-group ">
+                                                    <label for="nama_pkj" class="control-label col-lg-3">Staff</label>
+                                                    <div class="col-lg-6">
+                                                        <input class="tags" id="tags_1" name="staff" type="text" />
+                                                    </div>
+                                                </div>
+                                                <?php } ?>
+                                                <div class="form-group ">
+                                                    <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="sifat_pkj" class="form-control m-bot15">
+                                                            <option value="">--Pekerjaan--</option>    
+                                                            <option value="1">Personal</option>
+                                                            <option value="2">Umum</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <input class=" form-control" id="firstname" name="nama_pkj" type="text" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
+                                                    <div class="col-lg-6">
+                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="deadline" class="control-label col-lg-3">Deadline</label>
+                                                    <div class="col-lg-6 ">
+                                                        <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
+                                                            <input id="d" readonly type="text" class="form-control dpd1" value="" name="tgl_mulai_pkj">
+                                                            <span class="input-group-addon">Sampai</span>
+                                                            <input readonly type="text" class="form-control dpd2" value="" name="tgl_selesai_pkj">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="prioritas" class="form-control m-bot15">
+                                                            <option value="">--Prioritas--</option>    
+                                                            <option value="1">Urgent</option>
+                                                            <option value="2">Tinggi</option>
+                                                            <option value="3">Sedang</option>
+                                                            <option value="4">Rendah</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-lg-offset-3 col-lg-6">
+                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="TambahPekerjaanStaff" class="tab-pane">
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group ">
