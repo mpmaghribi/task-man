@@ -6,8 +6,9 @@ class pekerjaan_model extends CI_Model {
         parent::__construct();
     }
 
-    public function list_pekerjaan() {
-        $query = "select detil_pekerjaan.*, pekerjaan.nama_pekerjaan, pekerjaan.tgl_selesai, akun.nama from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun order by tglasli_mulai desc";
+    public function list_pekerjaan($id_akun) {
+        $id_akun = pg_escape_string($id_akun);
+        $query = "select detil_pekerjaan.*, pekerjaan.nama_pekerjaan, pekerjaan.tgl_selesai, akun.nama from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun where akun.id_akun=$id_akun order by tglasli_mulai desc";
         $query = $this->db->query($query);
         return $query->result();
     }

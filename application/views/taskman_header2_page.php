@@ -20,11 +20,11 @@
             <li class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                     <i class="fa fa-tasks"></i>
-                    <span class="badge bg-success">8</span>
+                    <span class="badge bg-success" id="jumlah_pending_task">8</span>
                 </a>
-                <ul class="dropdown-menu extended tasks-bar">
+                <ul class="dropdown-menu extended tasks-bar" id="bagian_pending_task">
                     <li>
-                        <p class="">You have 8 pending tasks</p>
+                        <p class="" id="keterangan_jumlah_pending_task">keterangan_jumlah_pending_task</p>
                     </li>
                     <li>
                         <a href="#">
@@ -212,12 +212,56 @@
             </li>
             <!-- user login dropdown end -->
             <li>
-                            <div class="toggle-right-box">
+                <!--            <div class="toggle-right-box">
                                 <div class="fa fa-bars"></div>
-                            </div>
+                            </div>-->
             </li>
         </ul>
         <!--search & user info end-->
     </div>
 </header>
 <!--header end-->
+<script>
+    function req_notifikasi() {
+
+    }
+    function req_pending_task() {
+        $.ajax({// create an AJAX call...
+            data: "", // get the form data
+            type: "GET", // GET or POST
+            url: "<?php echo site_url(); ?>/pekerjaan/req_pending_task", // the file to call
+            success: function(response) { // on success..
+                var json = jQuery.parseJSON(response);
+                //alert(response);
+                if (json.status === "OK") {
+                    //alert("ok1");
+                    var html = "";
+                    var jumlah_data = json.status.length;
+                    //id="bagian_pending_task">
+                    html = "<li><p class=\"\">Anda memiliki " + jumlah_data + " pending task</p></li>";
+                    for (var i = 0; i < jumlah_data; i++) {
+                        html += "<li>" +
+                                "<a href = \"#\" >" +
+                                "<div class = \"task-info clearfix\" >" +
+                                "<div class = \"desc pull-left\" >" +
+                                "<h5>"+json.data[i]["nama_pekerjaan"]+"</h5>" +
+                                "<p >"+ json.data[i]["progress"] +"% , "+ json.data[i]["tgl_selesai"] +" </p>" +
+                                "</div>" +
+                                "<span class = \"notification-pie-chart pull-right\" data-percent = \""+ json.data[i]["progress"] +"\" >" +
+                                "<span class = \"percent\" > </span>" +
+                                "</span>" +
+                                "</div>" +
+                                "</a>" +
+                                "</li>";
+                    }
+                    $("#bagian_pending_task").html(html);
+                    $("#jumlah_pending_task").html(jumlah_data);
+                    alert("ok");
+                } else {
+                    alert("failed, " + json.reason);
+                }
+            }
+        });
+    }
+    req_pending_task();
+</script>

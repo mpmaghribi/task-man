@@ -65,6 +65,13 @@ and open the template in the editor.
                                                     <?php
                                                 }
                                             }
+                                            if ($counter == 0) {
+                                                ?>
+                                                    <tr>
+                                                        <td colspan="7" style="text-align: center">Tidak ada pekerjaan yang diusulkan</td>
+                                                    </tr>
+                                                <?php
+                                            }
                                             ?>
                                         </tbody>
                                     </table>
@@ -77,15 +84,15 @@ and open the template in the editor.
                     function validasi(id_pekerjaan) {
                         //alert("pekerjaan yg divalidasi " + id_pekerjaan);
                         $.ajax({// create an AJAX call...
-                            data: "id_pekerjaan="+id_pekerjaan, // get the form data
+                            data: "id_pekerjaan=" + id_pekerjaan, // get the form data
                             type: "POST", // GET or POST
-                            url: "<?php echo site_url();?>/pekerjaan/validasi_usulan", // the file to call
+                            url: "<?php echo site_url(); ?>/pekerjaan/validasi_usulan", // the file to call
                             success: function(response) { // on success..
                                 var json = jQuery.parseJSON(response);
                                 //alert(response);
                                 if (json.status === "OK") {
-                                    $("#validasi"+id_pekerjaan).css("display","none");
-                                    $('#td_flag_'+id_pekerjaan).html("<span class=\"label label-success label-mini\">Aprroved</span>");
+                                    $("#validasi" + id_pekerjaan).css("display", "none");
+                                    $('#td_flag_' + id_pekerjaan).html("<span class=\"label label-success label-mini\">Aprroved</span>");
                                 } else {
                                     alert("validasi gagal, " + json.reason);
                                 }

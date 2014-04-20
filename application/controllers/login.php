@@ -104,12 +104,11 @@ class login extends CI_Controller {
         //$result = $this->taskman_repository->sp_login_sistem($username, $password);
 
         if ($this->authenticate($username, $password) == 1) {
-            $r = $this->taskman_repository->sp_insert_activity($this->session->userdata('user_id'), 1, "login","baru saja login");
-            echo "home";
+            //echo "home";
             redirect('home');
         } else {
             $this->session->set_flashdata('status', -1);
-            echo "login";
+            //echo "login";
             redirect('login');
         }
     }

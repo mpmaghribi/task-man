@@ -186,6 +186,15 @@ class pekerjaan extends CI_Controller {
             echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
         }
     }
+    public function req_pending_task(){
+        if ($this->check_session_and_cookie() == 1) {
+            $this->load->model("pekerjaan_model");
+            $list_pekerjaan = $this->pekerjaan_model->list_pekerjaan($this->session->userdata("user_id"));
+            echo json_encode(array("status" => "OK", "data" => $list_pekerjaan));
+        } else {
+            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
+        }
+    }
 
 }
 
