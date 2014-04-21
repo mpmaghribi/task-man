@@ -57,7 +57,8 @@ class user extends CI_Controller {
 
     public function my_staff() {
         if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan")=="manager") {
-            $staff="";
+            $this->load->model("akun");
+            $staff=$this->akun->my_staff($this->session->userdata("user_id"));
             echo json_encode(array("status"=>"OK", "data"=>$staff));
         } else {
             echo json_encode(array("status"=>"FAILED", "reason"=>"mbuh"));

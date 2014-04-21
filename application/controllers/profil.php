@@ -9,7 +9,7 @@ class profil extends CI_Controller {
         parent::__construct();
         $this->load->model('akun');
         $this->load->model('departemen');
-        $this->load->model('jabatan');
+        $this->load->model('jabatan_model');
     }
 
     private function check_session_and_cookie() {
@@ -60,7 +60,7 @@ class profil extends CI_Controller {
         if ($this->check_session_and_cookie() == 1) {
             $kirim = array();
             $kirim["akun"] = $this->akun->get_akun($this->session->userdata("user_nip"));
-            $kirim["jabatan"] = $this->jabatan->semua();
+            $kirim["jabatan"] = $this->jabatan_model->semua();
             $kirim["departemen"]=$this->departemen->semua();
             $this->load->view('profil/setting', $kirim);
         } else {

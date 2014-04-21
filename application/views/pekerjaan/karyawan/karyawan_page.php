@@ -24,11 +24,6 @@
                                     <li class="">
                                         <a data-toggle="tab" href="#TambahPekerjaan">Tambah Pekerjaan</a>
                                     </li>
-                                    <?php if ($this->session->userdata("user_jabatan") == "managert") { ?>
-                                        <li class="">
-                                            <a data-toggle="tab" href="#TambahPekerjaanStaff">Pekerjaan Staff</a>
-                                        </li>
-                                    <?php } ?>
                                 </ul>
                             </header>
                             <div class="panel-body">
@@ -93,7 +88,7 @@
                                     </div>
                                     <div id="TambahPekerjaan" class="tab-pane">
                                         <div class="form">
-                                            <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan<?php echo $this->session->userdata("user_jabatan") == "manager" ? "2" : ""; ?>">
+                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan<?php echo $this->session->userdata("user_jabatan") == "manager" ? "2" : ""; ?>">
                                                 <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
                                                     <div class="form-group ">
                                                         <label for="staff" class="control-label col-lg-3">Staff</label>
@@ -155,61 +150,7 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div id="TambahPekerjaanStaff" class="tab-pane">
-                                        <div class="form">
-                                            <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan">
-                                                <div class="form-group ">
-                                                    <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
-                                                    <div class="col-lg-6">
-                                                        <select name="sifat_pkj" class="form-control m-bot15">
-                                                            <option value="">--Pekerjaan--</option>    
-                                                            <option value="1">Personal</option>
-                                                            <option value="2">Umum</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
-                                                    <div class="col-lg-6">
-                                                        <input class=" form-control" id="firstname" name="nama_pkj" type="text" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
-                                                    <div class="col-lg-6">
-                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="deadline" class="control-label col-lg-3">Deadline</label>
-                                                    <div class="col-lg-6 ">
-                                                        <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                                                            <input id="d" readonly type="text" class="form-control dpd1" value="" name="tgl_mulai_pkj">
-                                                            <span class="input-group-addon">Sampai</span>
-                                                            <input readonly type="text" class="form-control dpd2" value="" name="tgl_selesai_pkj">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
-                                                    <div class="col-lg-6">
-                                                        <select name="prioritas" class="form-control m-bot15">
-                                                            <option value="">--Prioritas--</option>    
-                                                            <option value="1">Urgent</option>
-                                                            <option value="2">Tinggi</option>
-                                                            <option value="3">Sedang</option>
-                                                            <option value="4">Rendah</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-lg-offset-3 col-lg-6">
-                                                        <button class="btn btn-primary" type="submit">Save</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </section>
@@ -266,6 +207,7 @@
         <script>
             var availableTags = [];
             var tags_id = [];
+            var nip=[];
             function split(val) {
                 return val.split(/,\s*/);
             }
@@ -303,6 +245,24 @@
                             return false;
                         }
                     });
+            $("#form_tambah_pekerjaan").submit(function() {
+                var nama_nama = $("#autostaff").val();
+                var nama2 = nama_nama.split(", ");
+                var panjang = nama2.length;
+                var jumlah_staff = nip.length;
+                var list_nip="";
+                var pemisah="";
+                for(var i=0;i<panjang;i++){
+                    for(var j=0;j<jumlah_staff;j++){
+                        if(nama2[i]===availableTags[j]){
+                            list_nip+=pemisah+nip[j];
+                            pemisah="::"
+                        }
+                    }
+                }
+                $("#staff").val(list_nip);
+                
+            });
             $.ajax({// create an AJAX call...
                 data: "", // get the form data
                 type: "GET", // GET or POST
@@ -313,9 +273,10 @@
                     if (json.status === "OK") {
                         //$("#modal_ubah_password_close").click();
                         var jumlah_data = json.data.length;
-                        for(var i=0;i<jumlah_data;i++){
+                        for (var i = 0; i < jumlah_data; i++) {
                             availableTags[i] = json.data[i]["nama"];
-                            tags_id[i]=json.data[i]["id"];
+                            tags_id[i] = json.data[i]["id_akun"];
+                            nip[i]=json.data[i]["nip"];
                         }
                     } else {
                         //$('#submit_ubah_password_error').css("display", "block");
