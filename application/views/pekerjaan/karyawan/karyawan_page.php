@@ -250,18 +250,15 @@
                 var nama2 = nama_nama.split(", ");
                 var panjang = nama2.length;
                 var jumlah_staff = nip.length;
-                var list_nip="";
-                var pemisah="";
+                var list_nip="::";
                 for(var i=0;i<panjang;i++){
                     for(var j=0;j<jumlah_staff;j++){
-                        if(nama2[i]===availableTags[j]){
-                            list_nip+=pemisah+nip[j];
-                            pemisah="::"
+                        if(nama2[i]===availableTags[j] && list_nip.indexOf("::"+nip[j]+"::")===-1){
+                            list_nip+=nip[j]+"::";
                         }
                     }
                 }
                 $("#staff").val(list_nip);
-                
             });
             $.ajax({// create an AJAX call...
                 data: "", // get the form data

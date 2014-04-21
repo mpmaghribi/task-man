@@ -14,6 +14,15 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj) {
+        $sifat_pkj = pg_escape_string($sifat_pkj);
+        $deskripsi_pkj = pg_escape_string($deskripsi_pkj);
+        $prioritas = pg_escape_string($prioritas);
+        $status_pkj = pg_escape_string($status_pkj);
+        $asal_pkj = pg_escape_string($asal_pkj);
+        $parent_pkj = pg_escape_string($parent_pkj);
+        $tgl_mulai_pkj = pg_escape_string($tgl_mulai_pkj);
+        $tgl_selesai_pkj = pg_escape_string($tgl_selesai_pkj);
+        $nama_pkj = pg_escape_string($nama_pkj);
         $query1 = "insert into pekerjaan (id_sifat_pekerjaan, parent_pekerjaan, "
                 . "nama_pekerjaan, deskripsi_pekerjaan, tgl_mulai, tgl_selesai, asal_pekerjaan, "
                 . "level_prioritas, flag_usulan)"
@@ -22,10 +31,20 @@ class pekerjaan_model extends CI_Model {
                 . "'$asal_pkj','$prioritas', '$status_pkj');";
         $query2 = $this->db->query($query1);
         if ($query2 === true) {
-            
+            $query1 = "select currval('tbl_pekerjaan_id') as id_baru";
+            $query2 = $this->db->query($query1);
+            //return $query2->result()[0]->id_baru;
+            foreach ($query2->result() as $row){
+                return $row->id_baru;
+            }
         }
         //echo $query1;
-        return 1;
+        return NULL;
+    }
+    public function tambah_detil_pekerjaan($id_akun, $id_pekerjaan) {
+        $query = "insert into detil_pekerjaan(id_akun, id_pekerjaan, skor, progress) values ('$id_akun', '$id_pekerjaan',0,0)";
+        $query=$this->db->query($query);
+        
     }
 
     public function sp_deskripsi_pekerjaan($id_detail_pkj) {
@@ -60,7 +79,7 @@ class pekerjaan_model extends CI_Model {
 
     public function validasi_pekerjaan($id_pekerjaan) {
         $query = "update pekerjaan set flag_usulan=2 where id_pekerjaan=" . pg_escape_string($id_pekerjaan);
-        if ($this->db->query($query)){
+        if ($this->db->query($query)) {
             return 1;
         }
         return 0;

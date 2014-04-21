@@ -20,64 +20,10 @@
             <li class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                     <i class="fa fa-tasks"></i>
-                    <span class="badge bg-success" id="jumlah_pending_task">8</span>
+                    <span class="badge bg-success" id="jumlah_pending_task"></span>
                 </a>
                 <ul class="dropdown-menu extended tasks-bar" id="bagian_pending_task">
-                    <li>
-                        <p class="" id="keterangan_jumlah_pending_task">keterangan_jumlah_pending_task</p>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="task-info clearfix">
-                                <div class="desc pull-left">
-                                    <h5>Task 1</h5>
-                                    <p>25% , Deadline  12 June’14</p>
-                                </div>
-                                <span class="notification-pie-chart pull-right" data-percent="25">
-                                    <span class="percent"></span>
-                                </span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="task-info clearfix">
-                                <div class="desc pull-left">
-                                    <h5>Task 2</h5>
-                                    <p>45% , Deadline  12 June’14</p>
-                                </div>
-                                <span class="notification-pie-chart pull-right" data-percent="45">
-                                    <span class="percent"></span>
-                                </span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="task-info clearfix">
-                                <div class="desc pull-left">
-                                    <h5>Task 3</h5>
-                                    <p>87% , Deadline  12 June’14</p>
-                                </div>
-                                <span class="notification-pie-chart pull-right" data-percent="87">
-                                    <span class="percent"></span>
-                                </span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="task-info clearfix">
-                                <div class="desc pull-left">
-                                    <h5>Task 4</h5>
-                                    <p>33% , Deadline 12 June’15</p>
-                                </div>
-                                <span class="notification-pie-chart pull-right" data-percent="33">
-                                    <span class="percent"></span>
-                                </span>
-                            </div>
-                        </a>
-                    </li>
+                    
 
                     <li class="external">
                         <a href="#">See All Tasks</a>

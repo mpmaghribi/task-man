@@ -16,6 +16,16 @@ class akun extends CI_Model {
         }
         return array("error" => "not found");
     }
+    public function get_id_akun($nip) {
+        $nip=  pg_escape_string($nip);
+        $query = "select id_akun from akun where nip='$nip'";
+        $query = $this->db->query($query);
+        if($query->num_rows()==0)
+            return NULL;
+        foreach ($query->result() as $row){
+            return $row->id_akun;
+        }
+    }
 
     public function update($nip, $updatedata) {
         $this->db->where("nip", $nip);

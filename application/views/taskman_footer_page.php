@@ -67,7 +67,7 @@
 <!--<script src="<?php echo base_url()?>assets/js/toggle-init.js"></script>-->
 
 <!--script for this page-->
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&AMP;sensor=false"></script>
+<!--script src="https://maps.googleapis.com/maps/api/js?v=3.exp&AMP;sensor=false"></script-->
 <script>
     function req_notifikasi() {
 
@@ -83,7 +83,7 @@
                 if (json.status === "OK") {
                     //alert("ok1");
                     var html = "";
-                    var jumlah_data = json.status.length;
+                    var jumlah_data = json.data.length;
                     //id="bagian_pending_task">
                     html = "<li><p class=\"\">Anda memiliki " + jumlah_data + " pending task</p></li>";
                     for (var i = 0; i < jumlah_data; i++) {
@@ -105,7 +105,7 @@
                     $("#jumlah_pending_task").html(jumlah_data);
                     //alert("ok");
                 } else {
-                    alert("failed, " + json.reason);
+                    //alert("failed, " + json.reason);
                 }
             }
         });

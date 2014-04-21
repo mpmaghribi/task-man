@@ -63,7 +63,7 @@ class pekerjaan extends CI_Controller {
     }
 
     public function usulan_pekerjaan2() {
-        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan")=="manager") {
+        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $sifat_pkj = $this->input->post('sifat_pkj');
             $parent_pkj = 0; //$this->input->post('parent_pkj');
             $nama_pkj = $this->input->post('nama_pkj');
@@ -73,9 +73,23 @@ class pekerjaan extends CI_Controller {
             $prioritas = $this->input->post('prioritas');
             $status_pkj = '2'; //$this->input->post('status_pkj');
             $asal_pkj = 'task management'; //$this->input->post('asal_pkj');
+            $list_staff = $this->input->post("staff");
+            $staff = explode("::", $list_staff);
+            $this->load->model("akun");
             $this->load->model("pekerjaan_model");
-            $result = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
-            //redirect('pekerjaan/karyawan');
+            $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
+            if ($id_pekerjaan != NULL) {
+                foreach ($staff as $index => $val) {
+                    if (strlen($val) == 0)
+                        continue;
+                    $id_akun = $this->akun->get_id_akun($val);
+                    if ($id_akun == NULL)
+                        continue;
+                    $this->pekerjaan_model->tambah_detil_pekerjaan($id_akun, $id_pekerjaan);
+                    //echo "id akun $id_akun mendapat pekerjaan $id_pekerjaan <br/>";
+                }
+            }
+            redirect('pekerjaan/karyawan');
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");
@@ -94,8 +108,6 @@ class pekerjaan extends CI_Controller {
             $status_pkj = '1'; //$this->input->post('status_pkj');
             $asal_pkj = 'task management'; //$this->input->post('asal_pkj');
             $result = $this->taskman_repository->sp_tambah_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
-            //var_dump($result);
-            //echo $result[0]->kode;
             $id_pekerjaan_baru = $result[0]->kode;
             if ($id_pekerjaan_baru >= 0) {
                 $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $this->session->userdata("user_id"));
@@ -185,7 +197,8 @@ class pekerjaan extends CI_Controller {
             echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
         }
     }
-    public function req_pending_task(){
+
+    public function req_pending_task() {
         if ($this->check_session_and_cookie() == 1) {
             $this->load->model("pekerjaan_model");
             $list_pekerjaan = $this->pekerjaan_model->list_pekerjaan($this->session->userdata("user_id"));
