@@ -121,9 +121,6 @@ class pekerjaan extends CI_Controller {
         }
     }
 
-    public function assign_pekerjaan() {
-        
-    }
 
     public function list_pekerjaan() {
         if ($this->check_session_and_cookie() == 1) {
@@ -141,8 +138,8 @@ class pekerjaan extends CI_Controller {
         if ($this->check_session_and_cookie() == 1) {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
-            $id_detail_pkj = $this->input->post('id_detail_pkj');
-            $is_isi_komentar = $this->input->post('is_isi_komentar');
+            $id_detail_pkj = $this->input->get('id_detail_pkj');
+            $is_isi_komentar = $this->input->get('is_isi_komentar');
             $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
             $data["display"] = "none";
             if (isset($is_isi_komentar)) {

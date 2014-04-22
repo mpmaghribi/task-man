@@ -85,10 +85,10 @@
                     var html = "";
                     var jumlah_data = json.data.length;
                     //id="bagian_pending_task">
-                    html = "<li><p class=\"\">Anda memiliki " + jumlah_data + " pending task</p></li>";
+                    html = "<li><p class=\"\">Anda Memiliki " + jumlah_data + " Pending Task</p></li>";
                     for (var i = 0; i < jumlah_data; i++) {
                         html += "<li>" +
-                                "<a href = \"#\" >" +
+                                "<a href =\"<?php echo site_url(); ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj="+json.data[i]["id_pekerjaan"]+ "\" >" +
                                 "<div class = \"task-info clearfix\" >" +
                                 "<div class = \"desc pull-left\" >" +
                                 "<h5>"+json.data[i]["nama_pekerjaan"]+"</h5>" +
@@ -101,6 +101,7 @@
                                 "</a>" +
                                 "</li>";
                     }
+                    html+="<li class=\"external\"><a href=\"<?php echo site_url(); ?>/pekerjaan/karyawan\">Lihat Semua Task</a></li>";
                     $("#bagian_pending_task").html(html);
                     $("#jumlah_pending_task").html(jumlah_data);
                     //alert("ok");
