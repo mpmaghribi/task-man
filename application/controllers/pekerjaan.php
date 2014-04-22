@@ -151,7 +151,7 @@ class pekerjaan extends CI_Controller {
                     $id_akun = $this->session->userdata('user_id');
                     $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
                     $data["display"] = "block";
-                    
+                    $r = $this->taskman_repository->sp_insert_activity($id_akun, 0, "Komentar", "baru saja memberikan komentar");
                 }
             }
             $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
@@ -193,7 +193,7 @@ class pekerjaan extends CI_Controller {
             $id_pekerjaan = $this->input->post("id_pekerjaan");
             $this->load->model("pekerjaan_model");
             if ($this->pekerjaan_model->validasi_pekerjaan($id_pekerjaan) == 1){
-                $result = $this->taskman_repository->sp_insert_activity($this->session->userdata('user_id'),1, "Validasi Pekerjaan Staff", "Sudah melakukan validasi terhadap usulan pekerjaan dari staffnya");
+                $result = $this->taskman_repository->sp_insert_activity($this->session->userdata('user_id'),0, "Validasi Pekerjaan Staff", "Sudah melakukan validasi terhadap usulan pekerjaan dari staffnya");
                 echo json_encode(array("status" => "OK"));
             }else
                 echo json_encode(array("status" => "FAILED", "reason" => "failed to update"));
