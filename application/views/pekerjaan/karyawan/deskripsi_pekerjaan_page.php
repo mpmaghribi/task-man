@@ -49,8 +49,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                <div id="box_komentar" style="display: none;">
-                                    
+                                <div id="box_komentar" style="display: <?php echo $display?>;">
                                     <div class="form">
                                         <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
                                             <input type="hidden" name="is_isi_komentar" value="true"/>

@@ -144,11 +144,14 @@ class pekerjaan extends CI_Controller {
             $id_detail_pkj = $this->input->post('id_detail_pkj');
             $is_isi_komentar = $this->input->post('is_isi_komentar');
             $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
+            $data["display"] = "none";
             if (isset($is_isi_komentar)) {
                 if ($is_isi_komentar == TRUE) {
                     $isi_komentar = $this->input->post('komentar_pkj');
                     $id_akun = $this->session->userdata('user_id');
                     $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
+                    $data["display"] = "block";
+                    
                 }
             }
             $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
@@ -189,9 +192,10 @@ class pekerjaan extends CI_Controller {
         if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $id_pekerjaan = $this->input->post("id_pekerjaan");
             $this->load->model("pekerjaan_model");
-            if ($this->pekerjaan_model->validasi_pekerjaan($id_pekerjaan) == 1)
+            if ($this->pekerjaan_model->validasi_pekerjaan($id_pekerjaan) == 1){
+                $result = $this->taskman_repository->sp_insert_activity($this->session->userdata('user_id'),1, "Validasi Pekerjaan Staff", "Sudah melakukan validasi terhadap usulan pekerjaan dari staffnya");
                 echo json_encode(array("status" => "OK"));
-            else
+            }else
                 echo json_encode(array("status" => "FAILED", "reason" => "failed to update"));
         } else {
             echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));

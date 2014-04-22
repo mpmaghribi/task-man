@@ -105,6 +105,7 @@ class login extends CI_Controller {
 
         if ($this->authenticate($username, $password) == 1) {
             //echo "home";
+            $result = $this->taskman_repository->sp_insert_activity($this->session->userdata('user_id'),1, "Login", "baru saja login");
             redirect('home');
         } else {
             $this->session->set_flashdata('status', -1);
@@ -126,6 +127,7 @@ class login extends CI_Controller {
         delete_cookie("cookie_password");
         $this->session->sess_destroy();
         $this->session->unset_userdata($session_data);
+        $result = $this->taskman_repository->sp_insert_activity($this->session->userdata('user_id'),1, "Logout", "baru saja logout");
         redirect('login');
     }
 

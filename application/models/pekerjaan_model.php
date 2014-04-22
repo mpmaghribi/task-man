@@ -56,7 +56,7 @@ class pekerjaan_model extends CI_Model {
     public function sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar) {
         $query = "insert into komentar (id_akun, id_pekerjaan, isi_komentar) values ('" . $id_akun . "','" . $id_detail_pkj . "','" . $isi_komentar . "');";
         $query = $this->db->query($query);
-        return 1;
+       
     }
 
     public function sp_lihat_komentar_pekerjaan($id_detail_pkj) {
