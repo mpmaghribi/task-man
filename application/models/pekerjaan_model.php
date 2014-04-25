@@ -34,17 +34,17 @@ class pekerjaan_model extends CI_Model {
             $query1 = "select currval('tbl_pekerjaan_id') as id_baru";
             $query2 = $this->db->query($query1);
             //return $query2->result()[0]->id_baru;
-            foreach ($query2->result() as $row){
+            foreach ($query2->result() as $row) {
                 return $row->id_baru;
             }
         }
         //echo $query1;
         return NULL;
     }
+
     public function tambah_detil_pekerjaan($id_akun, $id_pekerjaan) {
         $query = "insert into detil_pekerjaan(id_akun, id_pekerjaan, skor, progress) values ('$id_akun', '$id_pekerjaan',0,0)";
-        $query=$this->db->query($query);
-        
+        $query = $this->db->query($query);
     }
 
     public function sp_deskripsi_pekerjaan($id_detail_pkj) {
@@ -56,7 +56,6 @@ class pekerjaan_model extends CI_Model {
     public function sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar) {
         $query = "insert into komentar (id_akun, id_pekerjaan, isi_komentar) values ('" . $id_akun . "','" . $id_detail_pkj . "','" . $isi_komentar . "');";
         $query = $this->db->query($query);
-       
     }
 
     public function sp_lihat_komentar_pekerjaan($id_detail_pkj) {
@@ -83,6 +82,40 @@ class pekerjaan_model extends CI_Model {
             return 1;
         }
         return 0;
+    }
+
+    /*
+     * query pekerjaan yang pernah dan sedang dikerjakan oleh staff pada suatu departemen
+     */
+
+    public function list_pekerjaan_staff($id_departemen) {
+        if ($id_departemen != NULL && strlen($id_departemen) > 0) {
+            $this->load->model("jabatan_model");
+            $id_jabatan_staff = $this->jabatan_model->get_id_jabatan("staff");
+            if ($id_jabatan_staff == NULL) {
+                return NULL;
+            }
+            $query = "select pekerjaan.* from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan="
+                    . "detil_pekerjaan.id_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun"
+                    . " inner join departemen on departemen.id_departemen=akun.id_departemen where akun."
+                    . "id_jabatan=$id_jabatan_staff and akun.id_departemen=$id_departemen";
+            //echo $query;
+            return $this->db->query($query)->result();
+        }
+        return NULL;
+    }
+
+    public function staff_progress($id_pekerjaan) {
+        if ($id_pekerjaan == NULL || strlen($id_pekerjaan) == 0) {
+            return NULL;
+        }
+        $this->load->model("jabatan_model");
+        $id_jabatan_staff = $this->jabatan_model->get_id_jabatan("staff");
+        $query = "select detil_pekerjaan.progress, detil_pekerjaan.skor, akun.nama from detil_pekerjaan"
+                . " inner join akun on akun.id_akun=detil_pekerjaan.id_akun where "
+                . "akun.id_jabatan=$id_jabatan_staff and detil_pekerjaan.id_pekerjaan=$id_pekerjaan and akun.id_departemen=" . $this->session->userdata("user_departemen");
+        //echo $query;
+        return $this->db->query($query)->result();
     }
 
 }

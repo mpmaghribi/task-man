@@ -58,15 +58,15 @@ class akun extends CI_Model {
             echo "akun not found";
             return NULL;
         }
-        $id_departemen = NULL;
-        foreach ($query->result() as $row) {
+        $id_departemen = $this->session->userdata("user_departemen");
+        /* ($query->result() as $row) {
             $id_departemen = $row->id_departemen;
             break;
         }
         if ($id_departemen == NULL) {
             echo "departemen not found";
             return NULL;
-        }
+        }*/
         $this->load->model("jabatan_model");
         $id_jabatan = $this->jabatan_model->get_id_jabatan("staff");
         if ($id_jabatan == NULL){

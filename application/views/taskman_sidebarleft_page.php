@@ -48,7 +48,7 @@
                         <li class="sub-menu">
                             <a href="<?php echo site_url(); ?>/pekerjaan/pekerjaan_staff">
                                 <i class="fa fa-book"></i>
-                                <span>Pekerjaan Karyawan</span>
+                                <span>Pekerjaan Staff</span>
                             </a>
                         </li>
                         <?php } ?>

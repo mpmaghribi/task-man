@@ -208,16 +208,39 @@ class pekerjaan extends CI_Controller {
             echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
         }
     }/*
-     * fungsi untuk menampilkan daftar pekerjaan yang dimiliki staff yang dibawahi
+     * fungsi untuk menampilkan daftar pekerjaan yang dimiliki staff yang dibawahi,
      */
     public function pekerjaan_staff() {
         if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
-            
-            $this->load->view("pekerjaan/lihat_usulan_pekerjaan_page", $data);
+            $data=array();
+            $data["list_pekerjaan_staff"]=$this->pekerjaan_model->list_pekerjaan_staff($this->session->userdata("user_departemen"));
+            //var_dump($data);
+            $this->load->view("pekerjaan/lihat_daftar_pekerjaan_staff_page", $data);
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");
+        }
+    }
+    /*
+     * mencari staff-staff yang mengerjakan pekerjaan beserta progress masing-masing staff tersebut
+     */
+    public function get_staff_progress() {
+        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+            $this->load->model("pekerjaan_model");
+            $id_pekerjaan = pg_escape_string($this->input->get("id_pekerjaan"));
+            $query = $this->pekerjaan_model->staff_progress($id_pekerjaan);
+            if($query==NULL){
+                echo json_encode(array("status"=>"FAILED", "reason"=>"gagal"));
+                exit();
+            }
+            $hasil=array();
+            foreach ($query as $row){
+                $hasil[] = array("skor"=>$row->skor,"progress"=>$row->progress,"nama"=>$row->nama);
+            }
+            echo json_encode(array("status"=>"OK","data"=>$hasil));
+        } else {
+            echo json_encode(array("status"=>"FAILED", "reason"=>"gagal"));
         }
     }
 
