@@ -207,6 +207,18 @@ class pekerjaan extends CI_Controller {
         } else {
             echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
         }
+    }/*
+     * fungsi untuk menampilkan daftar pekerjaan yang dimiliki staff yang dibawahi
+     */
+    public function pekerjaan_staff() {
+        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+            $this->load->model("pekerjaan_model");
+            
+            $this->load->view("pekerjaan/lihat_usulan_pekerjaan_page", $data);
+        } else {
+            $this->session->set_flashdata('status', 4);
+            redirect("login");
+        }
     }
 
 }

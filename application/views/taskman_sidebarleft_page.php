@@ -45,6 +45,12 @@
                                 <span>Usulan Pekerjaan</span>
                             </a>
                         </li>
+                        <li class="sub-menu">
+                            <a href="<?php echo site_url(); ?>/pekerjaan/pekerjaan_staff">
+                                <i class="fa fa-book"></i>
+                                <span>Pekerjaan Karyawan</span>
+                            </a>
+                        </li>
                         <?php } ?>
 <!--                        <li class="sub-menu">
                             <a href="javascript:;">
