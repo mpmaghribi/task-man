@@ -212,14 +212,23 @@ class pekerjaan extends CI_Controller {
      */
     public function pekerjaan_staff() {
         if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
-            $this->load->model("pekerjaan_model");
+            //$this->load->model("pekerjaan_model");
             $data=array();
-            $data["list_pekerjaan_staff"]=$this->pekerjaan_model->list_pekerjaan_staff($this->session->userdata("user_departemen"));
+            //$data["list_pekerjaan_staff"]=$this->pekerjaan_model->list_pekerjaan_staff($this->session->userdata("user_departemen"));
             //var_dump($data);
             $this->load->view("pekerjaan/lihat_daftar_pekerjaan_staff_page", $data);
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");
+        }
+    }
+    public function data_pekerjaan_staff(){
+        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+            $this->load->model("pekerjaan_model");
+            $data_pekerjaan_staff=$this->pekerjaan_model->list_pekerjaan_staff($this->session->userdata("user_departemen"));
+            echo json_encode(array("status"=>"OK","data"=>$data_pekerjaan_staff));
+        } else {
+            echo json_encode(array("status"=>"FAILED", "reason"=>"gagal"));
         }
     }
     /*

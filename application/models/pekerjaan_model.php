@@ -95,10 +95,10 @@ class pekerjaan_model extends CI_Model {
             if ($id_jabatan_staff == NULL) {
                 return NULL;
             }
-            $query = "select pekerjaan.* from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan="
+            $query = "select pekerjaan.*,detil_pekerjaan.progress, akun.nama from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan="
                     . "detil_pekerjaan.id_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun"
                     . " inner join departemen on departemen.id_departemen=akun.id_departemen where akun."
-                    . "id_jabatan=$id_jabatan_staff and akun.id_departemen=$id_departemen";
+                    . "id_jabatan=$id_jabatan_staff and akun.id_departemen=$id_departemen order by pekerjaan.id_pekerjaan";
             //echo $query;
             return $this->db->query($query)->result();
         }
@@ -113,7 +113,9 @@ class pekerjaan_model extends CI_Model {
         $id_jabatan_staff = $this->jabatan_model->get_id_jabatan("staff");
         $query = "select detil_pekerjaan.progress, detil_pekerjaan.skor, akun.nama from detil_pekerjaan"
                 . " inner join akun on akun.id_akun=detil_pekerjaan.id_akun where "
-                . "akun.id_jabatan=$id_jabatan_staff and detil_pekerjaan.id_pekerjaan=$id_pekerjaan and akun.id_departemen=" . $this->session->userdata("user_departemen");
+                . "akun.id_jabatan=$id_jabatan_staff and detil_pekerjaan.id_pekerjaan=$id_pekerjaan "
+                . "and akun.id_departemen=" . $this->session->userdata("user_departemen") 
+                .                 " order by pekerjaan.id_pekerjaan";
         //echo $query;
         return $this->db->query($query)->result();
     }
