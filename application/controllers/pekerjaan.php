@@ -121,7 +121,6 @@ class pekerjaan extends CI_Controller {
         }
     }
 
-
     public function list_pekerjaan() {
         if ($this->check_session_and_cookie() == 1) {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
@@ -189,10 +188,10 @@ class pekerjaan extends CI_Controller {
         if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $id_pekerjaan = $this->input->post("id_pekerjaan");
             $this->load->model("pekerjaan_model");
-            if ($this->pekerjaan_model->validasi_pekerjaan($id_pekerjaan) == 1){
-                $result = $this->taskman_repository->sp_insert_activity($this->session->userdata('user_id'),0, "Validasi Pekerjaan Staff", "Sudah melakukan validasi terhadap usulan pekerjaan dari staffnya");
+            if ($this->pekerjaan_model->validasi_pekerjaan($id_pekerjaan) == 1) {
+                $result = $this->taskman_repository->sp_insert_activity($this->session->userdata('user_id'), 0, "Validasi Pekerjaan Staff", "Sudah melakukan validasi terhadap usulan pekerjaan dari staffnya");
                 echo json_encode(array("status" => "OK"));
-            }else
+            } else
                 echo json_encode(array("status" => "FAILED", "reason" => "failed to update"));
         } else {
             echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
@@ -207,49 +206,32 @@ class pekerjaan extends CI_Controller {
         } else {
             echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
         }
-    }/*
-     * fungsi untuk menampilkan daftar pekerjaan yang dimiliki staff yang dibawahi,
+    }
+
+    /*
+     * fungsi untuk menampilkan halaman daftar pekerjaan yang dimiliki staff yang dibawahi,
      */
+
     public function pekerjaan_staff() {
         if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
-            //$this->load->model("pekerjaan_model");
-            $data=array();
-            //$data["list_pekerjaan_staff"]=$this->pekerjaan_model->list_pekerjaan_staff($this->session->userdata("user_departemen"));
-            //var_dump($data);
-            $this->load->view("pekerjaan/lihat_daftar_pekerjaan_staff_page", $data);
+            $this->load->view("pekerjaan/lihat_daftar_pekerjaan_staff_page");
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");
         }
     }
-    public function data_pekerjaan_staff(){
-        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
-            $this->load->model("pekerjaan_model");
-            $data_pekerjaan_staff=$this->pekerjaan_model->list_pekerjaan_staff($this->session->userdata("user_departemen"));
-            echo json_encode(array("status"=>"OK","data"=>$data_pekerjaan_staff));
-        } else {
-            echo json_encode(array("status"=>"FAILED", "reason"=>"gagal"));
-        }
-    }
+
     /*
-     * mencari staff-staff yang mengerjakan pekerjaan beserta progress masing-masing staff tersebut
+     * fungsi untuk data daftar pekerjaan yang dimiliki staff yang dibawahi,
      */
-    public function get_staff_progress() {
+
+    public function data_pekerjaan_staff() {
         if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
-            $id_pekerjaan = pg_escape_string($this->input->get("id_pekerjaan"));
-            $query = $this->pekerjaan_model->staff_progress($id_pekerjaan);
-            if($query==NULL){
-                echo json_encode(array("status"=>"FAILED", "reason"=>"gagal"));
-                exit();
-            }
-            $hasil=array();
-            foreach ($query as $row){
-                $hasil[] = array("skor"=>$row->skor,"progress"=>$row->progress,"nama"=>$row->nama);
-            }
-            echo json_encode(array("status"=>"OK","data"=>$hasil));
+            $data_pekerjaan_staff = $this->pekerjaan_model->list_pekerjaan_staff($this->session->userdata("user_departemen"));
+            echo json_encode(array("status" => "OK", "data" => $data_pekerjaan_staff));
         } else {
-            echo json_encode(array("status"=>"FAILED", "reason"=>"gagal"));
+            echo json_encode(array("status" => "FAILED", "reason" => "gagal"));
         }
     }
 

@@ -35,17 +35,10 @@
 <!--Morris Chart-->
 <script src="<?php echo base_url()?>/assets/js/morris-chart/morris.js"></script>
 <script src="<?php echo base_url()?>/assets/js/morris-chart/raphael-min.js"></script>
-<!--jQuery Flot Chart-->
-<!--<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.js"></script>-->
-<!--<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.tooltip.min.js"></script>
-<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.resize.js"></script>
-<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.pie.resize.js"></script>
-<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.animator.min.js"></script>
-<script src="<?php echo base_url()?>/assets/js/flot-chart/jquery.flot.growraf.js"></script>-->
+
 <script src="<?php echo base_url()?>/assets/js/dashboard.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jquery.customSelect.min.js" ></script>
 
-<!--<script src="<?php echo base_url()?>/assets/js/bootstrap-switch.js"></script>-->
 <script type="text/javascript" src="<?php echo base_url()?>/assets/js/fuelux/js/spinner.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>/assets/js/jquery-multi-select/js/jquery.multi-select.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>/assets/js/jquery-multi-select/js/jquery.quicksearch.js"></script>
@@ -64,10 +57,7 @@
 <!--icheck init -->
 <script src="<?php echo base_url()?>assets/js/icheck-init.js"></script>
 
-<!--<script src="<?php echo base_url()?>assets/js/toggle-init.js"></script>-->
 
-<!--script for this page-->
-<!--script src="https://maps.googleapis.com/maps/api/js?v=3.exp&AMP;sensor=false"></script-->
 <script>
     function req_notifikasi() {
 

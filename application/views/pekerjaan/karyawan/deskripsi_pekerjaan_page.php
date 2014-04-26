@@ -28,44 +28,59 @@
                             <div class="panel-body">
                                 <div class="form">
                                     <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan">
-
-                                            <div class="form-group ">
-                                                <label for="komentar_pkj" class="control-label col-lg-3"></label>
-                                                <div class="col-lg-6">
-                                                    <?php if (isset($deskripsi_pekerjaan)) { ?>
-                                    <?php
-                                    foreach ($deskripsi_pekerjaan as $value) {
-                                        echo $value->deskripsi_pekerjaan;
-                                    }
-                                    ?>
-                                <?php } ?>
-                                                </div>
+                                        <div class="form-group ">
+                                            <?php if($this->session->userdata("user_jabatan")=="manager"){?>
+                                            <table class="table  table-hover general-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th> No</th>
+                                                            <th class="hidden-phone">Pekerjaan</th>
+                                                            <th>Deadline</th>
+                                                            <th>Assign To</th>
+                                                            <th>Status</th>
+                                                            <th>Progress</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                            </table>
+                                            <?php } ?>
+                                            <label for="komentar_pkj" class="control-label col-lg-3"></label>
+                                            <div class="col-lg-6">
+                                                <?php if (isset($deskripsi_pekerjaan)) { ?>
+                                                    <?php
+                                                    foreach ($deskripsi_pekerjaan as $value) {
+                                                        echo $value->deskripsi_pekerjaan;
+                                                    }
+                                                    ?>
+                                                <?php } ?>
                                             </div>
+                                        </div>
 
-                                            <div class="form-group">
-                                                <div class="col-lg-offset-3 col-lg-6">
-                                                    <button id="komentar" class="btn btn-primary" type="submit">Lihat Komentar</button>
-                                                </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <button id="komentar" class="btn btn-primary" type="submit">Lihat Komentar</button>
                                             </div>
-                                        </form>
-                                    </div>
-                                <div id="box_komentar" style="display: <?php echo $display?>;">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="box_komentar" style="display: <?php echo $display ?>;">
                                     <div class="form">
                                         <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
                                             <input type="hidden" name="is_isi_komentar" value="true"/>
-                                            <input type="hidden" name="id_detail_pkj" value="<?php echo $id_pkj?>"/>
+                                            <input type="hidden" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
                                             <div class="form-group">
                                                 <label class="control-label col-lg-3"></label>
-                                             
+
                                                 <div class="col-lg-6">
-                                
-                                    <?php
-                                    foreach ($lihat_komentar_pekerjaan as $value) {?>
-                                                    <div class="well">
-                                        <h4><?php echo $value->nama;?></h4>
-                                        <?php echo $value->isi_komentar;?>
-                                        </div>
-                                <?php } ?>
+
+                                                    <?php foreach ($lihat_komentar_pekerjaan as $value) { ?>
+                                                        <div class="well">
+                                                            <h4><?php echo $value->nama; ?></h4>
+                                                            <?php echo $value->isi_komentar; ?>
+                                                        </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                             <div class="form-group ">
@@ -101,7 +116,7 @@
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-       <?php $this->load->view('taskman_rightbar_page')?>
+        <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
