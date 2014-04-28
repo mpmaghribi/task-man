@@ -126,11 +126,23 @@ class pekerjaan extends CI_Controller {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
             $data["list_pekerjaan"] = $this->pekerjaan_model->list_pekerjaan();
-            
+
             $this->load->view('pekerjaan/taskman_listpekerjaan_page', $data);
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");
+        }
+    }
+
+    public function req_pending_task() {
+        if ($this->check_session_and_cookie() == 1) {
+            $this->load->model("pekerjaan_model");
+            $list_pekerjaan = $this->pekerjaan_model->list_pending_task($this->session->userdata("user_id"));
+            echo json_encode(array("status" => "OK", "data" => $list_pekerjaan));
+            //return true;
+        } else {
+            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
+            //return false;
         }
     }
 
@@ -139,6 +151,10 @@ class pekerjaan extends CI_Controller {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
             $id_detail_pkj = $this->input->get('id_detail_pkj');
+            if ($this->input->get("sumber") == "notifikasi") {
+                $this->baca_pending_task($id_detail_pkj);
+            }
+
             $is_isi_komentar = $this->input->get('is_isi_komentar');
             $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
             $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
@@ -200,16 +216,6 @@ class pekerjaan extends CI_Controller {
         }
     }
 
-    public function req_pending_task() {
-        if ($this->check_session_and_cookie() == 1) {
-            $this->load->model("pekerjaan_model");
-            $list_pekerjaan = $this->pekerjaan_model->list_pekerjaan($this->session->userdata("user_id"));
-            echo json_encode(array("status" => "OK", "data" => $list_pekerjaan));
-        } else {
-            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
-        }
-    }
-
     /*
      * fungsi untuk menampilkan halaman daftar pekerjaan yang dimiliki staff yang dibawahi,
      */
@@ -234,6 +240,16 @@ class pekerjaan extends CI_Controller {
             echo json_encode(array("status" => "OK", "data" => $data_pekerjaan_staff));
         } else {
             echo json_encode(array("status" => "FAILED", "reason" => "gagal"));
+        }
+    }
+
+    private function baca_pending_task($id_pekerjaan) {
+        if ($this->check_session_and_cookie() == 1) {
+            $this->load->model("pekerjaan_model");
+            $this->pekerjaan_model->baca_pending_task(pg_escape_string($id_pekerjaan), $this->session->userdata("user_id"));
+            return true;
+        } else {
+            return false;
         }
     }
 

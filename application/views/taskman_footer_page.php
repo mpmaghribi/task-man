@@ -81,7 +81,7 @@
                     html = "<li><p class=\"\">Anda Memiliki " + jumlah_data + " Pending Task</p></li>";
                     for (var i = 0; i < jumlah_data; i++) {
                         html += "<li>" +
-                                "<a href =\"<?php echo site_url(); ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj="+json.data[i]["id_pekerjaan"]+ "\" >" +
+                                "<a href =\"<?php echo site_url(); ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj="+json.data[i]["id_pekerjaan"]+ "&sumber=notifikasi\">" +
                                 "<div class = \"task-info clearfix\" >" +
                                 "<div class = \"desc pull-left\" >" +
                                 "<h5>"+json.data[i]["nama_pekerjaan"]+"</h5>" +

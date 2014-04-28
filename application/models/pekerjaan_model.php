@@ -8,7 +8,23 @@ class pekerjaan_model extends CI_Model {
 
     public function list_pekerjaan($id_akun) {
         $id_akun = pg_escape_string($id_akun);
-        $query = "select detil_pekerjaan.*, pekerjaan.nama_pekerjaan, pekerjaan.tgl_selesai, akun.nama from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun where akun.id_akun=$id_akun order by tglasli_mulai desc";
+        $query = "select detil_pekerjaan.*, pekerjaan.nama_pekerjaan, pekerjaan.tgl_selesai,"
+                . " akun.nama from detil_pekerjaan inner join pekerjaan on "
+                . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan inner join akun "
+                . "on akun.id_akun=detil_pekerjaan.id_akun where akun.id_akun=$id_akun "
+                . "order by tglasli_mulai desc";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+
+    public function list_pending_task($id_akun) {
+        $id_akun = pg_escape_string($id_akun);
+        $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan,"
+                . "detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_akun, detil_pekerjaan.progress "
+                . "from detil_pekerjaan inner join pekerjaan on "
+                . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan inner join akun "
+                . "on akun.id_akun=detil_pekerjaan.id_akun where akun.id_akun=$id_akun "
+                . "and tgl_read is null";
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -52,7 +68,7 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
-    
+
     public function sp_listassign_pekerjaan($id_detail_pkj) {
         $query = "select * from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan inner join akun on akun.id_akun = detil_pekerjaan.id_akun where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
         $query = $this->db->query($query);
@@ -120,10 +136,19 @@ class pekerjaan_model extends CI_Model {
         $query = "select detil_pekerjaan.progress, detil_pekerjaan.skor, akun.nama from detil_pekerjaan"
                 . " inner join akun on akun.id_akun=detil_pekerjaan.id_akun where "
                 . "akun.id_jabatan=$id_jabatan_staff and detil_pekerjaan.id_pekerjaan=$id_pekerjaan "
-                . "and akun.id_departemen=" . $this->session->userdata("user_departemen") 
-                .                 " order by pekerjaan.id_pekerjaan";
+                . "and akun.id_departemen=" . $this->session->userdata("user_departemen")
+                . " order by pekerjaan.id_pekerjaan";
         //echo $query;
         return $this->db->query($query)->result();
+    }
+
+    public function baca_pending_task($id_pekerjaan, $id_user) {
+        if ($id_pekerjaan != NULL && $id_user != NULL && strlen($id_pekerjaan) > 0 &&
+                strlen($id_user) > 0) {
+            $query = "update detil_pekerjaan set tgl_read=now() where id_akun=$id_user and "
+                    . "id_pekerjaan=$id_pekerjaan";
+            $this->db->query($query);
+        }
     }
 
 }
