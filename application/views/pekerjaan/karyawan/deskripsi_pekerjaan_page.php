@@ -101,35 +101,13 @@
                     <div class="col-md-12">
                         <section class="panel">
                             <header class="panel-heading">
-                                Pekerjaan: <?php if (isset($deskripsi_pekerjaan)) { ?>
-                                    <?php
-                                    foreach ($deskripsi_pekerjaan as $value) {
-                                        echo $value->nama_pekerjaan;
-                                    }
-                                    ?>
-                                <?php } ?> 
+                                
                             </header>
                             <div class="panel-body">
                                 <div class="form">
                                     <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan">
                                         <div class="form-group ">
-                                            <?php if($this->session->userdata("user_jabatan")=="manager"){?>
-                                            <table class="table  table-hover general-table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th> No</th>
-                                                            <th class="hidden-phone">Pekerjaan</th>
-                                                            <th>Deadline</th>
-                                                            <th>Assign To</th>
-                                                            <th>Status</th>
-                                                            <th>Progress</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        
-                                                    </tbody>
-                                            </table>
-                                            <?php } ?>
+                                            
                                             <label for="komentar_pkj" class="control-label col-lg-3"></label>
                                             <div class="col-lg-6">
                                                 <?php if (isset($deskripsi_pekerjaan)) { ?>
