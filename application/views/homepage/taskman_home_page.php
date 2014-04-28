@@ -92,7 +92,7 @@
                                                                         </div>
                                                                     </td>
                                                                     <td>
-                                                                        <form method="POST" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
+                                                                        <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
                                                                             <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
                                                                             <button type="submit" class="btn btn-success"><i class="fa fa-eye"></i> View </button>
                                                                         </form>
