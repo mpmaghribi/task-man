@@ -65,7 +65,7 @@
                                                             <th>Deadline</th>
                                                             <th>Assign To</th>
                                                             <th>Status</th>
-                                                            <th>Progress</th>
+<!--                                                            <th>Progress</th>-->
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -84,21 +84,21 @@
                                                                     <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
                                                                     <td><?php echo $this->session->userdata('user_nama') ?></td>
                                                                     <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
-                                                                    <td>
+<!--                                                                    <td>
                                                                         <div class="progress progress-striped progress-xs">
                                                                             <div style="width: 0%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-warning">
                                                                                 <span class="sr-only">0% Complete (success)</span>
                                                                             </div>
                                                                         </div>
-                                                                    </td>
+                                                                    </td>-->
                                                                     <td>
                                                                         <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
                                                                             <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
-                                                                            <button type="submit" class="btn btn-success"><i class="fa fa-eye"></i> View </button>
+                                                                            <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
                                                                         </form>
                                                                     </td>
                                                                     <td>
-                                                                            <button type="submit" class="btn btn-success"><i class="fa fa-tasks"></i> Kerjakan </button>
+                                                                            <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-tasks"></i> Kerjakan </button>
                                                                     </td>
                                                                 </tr>
                                                                 <?php

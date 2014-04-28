@@ -126,6 +126,7 @@ class pekerjaan extends CI_Controller {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
             $data["list_pekerjaan"] = $this->pekerjaan_model->list_pekerjaan();
+            
             $this->load->view('pekerjaan/taskman_listpekerjaan_page', $data);
         } else {
             $this->session->set_flashdata('status', 4);

@@ -80,7 +80,13 @@
                                                         <tr>
                                                             <td><?php echo $i;?></td>
                                                             <td><?php echo $value->nama;?></td>
-                                                            <td><?php echo $value->progress;?></td>
+                                                            <td>
+                                                                <div class="progress progress-striped progress-xs">
+                                                                            <div style="width: <?php echo $value->progress;?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress;?>" role="progressbar" class="progress-bar progress-bar-warning">
+                                                                                <span class="sr-only"><?php echo $value->progress;?>% Complete (success)</span>
+                                                                            </div>
+                                                                        </div>
+                                                            </td>
                                                         </tr>
                                                     <?php $i++; }
                                                     ?>
