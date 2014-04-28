@@ -96,6 +96,8 @@
                     }
                     html+="<li class=\"external\"><a href=\"<?php echo site_url(); ?>/pekerjaan/karyawan\">Lihat Semua Task</a></li>";
                     $("#bagian_pending_task").html(html);
+                    if(jumlah_data==0)
+                        jumlah_data="";
                     $("#jumlah_pending_task").html(jumlah_data);
                     //alert("ok");
                 } else {
