@@ -140,7 +140,7 @@ class pekerjaan_model extends CI_Model {
         if($id_pekerjaan!=NULL && $id_user!=NULL && strlen($id_pekerjaan)>0 &&
                 strlen($id_user)>0){
             $query = "update detil_pekerjaan set tgl_read=now() where id_akun=$id_user and "
-                    . "id_pekerjaan=$id_pekerjaan";
+                    . "id_pekerjaan=$id_pekerjaan and tgl_read is null";
             $this->db->query($query);
         }
     }
