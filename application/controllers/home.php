@@ -46,8 +46,10 @@ class home extends CI_Controller {
 
     public function index() {
         if ($this->check_session_and_cookie() == 1) {
-            
-            $this->load->view('homepage/taskman_home_page');
+            //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
+            $result = $this->taskman_repository->sp_view_pekerjaan();
+            $data['pkj_karyawan'] = $result;
+            $this->load->view('homepage/taskman_home_page',$data);
         } else {
             $this->session->set_flashdata('status', 4);
             redirect('login');
