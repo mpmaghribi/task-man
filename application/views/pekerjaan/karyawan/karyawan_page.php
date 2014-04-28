@@ -21,10 +21,10 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#ListPekerjaan">List Pekerjaan</a>
                                     </li>
-                                    <?php if(true){?>
-                                    <li class="">
-                                        <a data-toggle="tab" href="#AssignPekerjaan">Assign Pekerjaan</a>
-                                    </li>
+                                    <?php if (true) { ?>
+                                        <li class="">
+                                            <a data-toggle="tab" href="#assignPekerjaan">Assign Pekerjaan</a>
+                                        </li>
                                     <?php } ?>
                                     <li class="">
                                         <a data-toggle="tab" href="#TambahPekerjaan">Tambah Pekerjaan</a>
@@ -66,10 +66,10 @@
                                                                     <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
                                                                     <td><?php echo $this->session->userdata('user_nama') ?></td>
                                                                     <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
-<!--                                                                    <td>
+        <!--                                                                    <td>
                                                                         <div class="progress progress-striped progress-xs">
-                                                                            <div style="width: <?php echo $value->progress;?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress;?>" role="progressbar" class="progress-bar progress-bar-warning">
-                                                                                <span class="sr-only"><?php echo $value->progress;?>% Complete (success)</span>
+                                                                            <div style="width: <?php echo $value->progress; ?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress; ?>" role="progressbar" class="progress-bar progress-bar-warning">
+                                                                                <span class="sr-only"><?php echo $value->progress; ?>% Complete (success)</span>
                                                                             </div>
                                                                         </div>
                                                                     </td>-->
@@ -91,76 +91,79 @@
                                             </div>
                                         </section>
                                     </div>
-                                    <?php if(true){?>
-                                    <div id="AssignPekerjaan" class="tab-pane">
-                                        <div class="form">
-                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan2">
-                                                
+                                    <?php if (true) { ?>
+                                        <div id="assignPekerjaan" class="tab-pane">
+                                            <div class="form">
+                                                <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan2">
+
                                                     <div class="form-group ">
                                                         <label for="staff" class="control-label col-lg-3">Staff</label>
                                                         <div class="col-lg-6">
-                                                            <input id="autostaff" class="form-control" class="tags" value="" type="text" />
+                                                            <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff">
+                                                                Tambah Staff
+                                                            </a>
+                                                            <!--input id="autostaff" class="form-control" class="tags" value="" type="text" /-->
                                                             <input type="hidden" value="" name="staff" id="staff"/>
                                                         </div>
                                                     </div>
-                                                
-                                                <div class="form-group ">
-                                                    <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
-                                                    <div class="col-lg-6">
-                                                        <select name="sifat_pkj" class="form-control m-bot15">
-                                                            <option value="">--Pekerjaan--</option>    
-                                                            <option value="1">Personal</option>
-                                                            <option value="2">Umum</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
-                                                    <div class="col-lg-6">
-                                                        <input class=" form-control" id="firstname" name="nama_pkj" type="text" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
-                                                    <div class="col-lg-6">
-                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="deadline" class="control-label col-lg-3">Deadline</label>
-                                                    <div class="col-lg-6 ">
-                                                        <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                                                            <input id="d" readonly type="text" class="form-control dpd1" value="" name="tgl_mulai_pkj">
-                                                            <span class="input-group-addon">Sampai</span>
-                                                            <input readonly type="text" class="form-control dpd2" value="" name="tgl_selesai_pkj">
+
+                                                    <div class="form-group ">
+                                                        <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
+                                                        <div class="col-lg-6">
+                                                            <select name="sifat_pkj" class="form-control m-bot15">
+                                                                <option value="">--Pekerjaan--</option>    
+                                                                <option value="1">Personal</option>
+                                                                <option value="2">Umum</option>
+                                                            </select>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
-                                                    <div class="col-lg-6">
-                                                        <select name="prioritas" class="form-control m-bot15">
-                                                            <option value="">--Prioritas--</option>    
-                                                            <option value="1">Urgent</option>
-                                                            <option value="2">Tinggi</option>
-                                                            <option value="3">Sedang</option>
-                                                            <option value="4">Rendah</option>
-                                                        </select>
+                                                    <div class="form-group ">
+                                                        <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
+                                                        <div class="col-lg-6">
+                                                            <input class=" form-control" id="firstname" name="nama_pkj" type="text" />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-lg-offset-3 col-lg-6">
-                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                                    <div class="form-group ">
+                                                        <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
+                                                        <div class="col-lg-6">
+                                                            <textarea class="form-control" name="deskripsi_pkj" rows="12"></textarea>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </form>
+                                                    <div class="form-group ">
+                                                        <label for="deadline" class="control-label col-lg-3">Deadline</label>
+                                                        <div class="col-lg-6 ">
+                                                            <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
+                                                                <input id="d" readonly type="text" class="form-control dpd1" value="" name="tgl_mulai_pkj">
+                                                                <span class="input-group-addon">Sampai</span>
+                                                                <input readonly type="text" class="form-control dpd2" value="" name="tgl_selesai_pkj">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group ">
+                                                        <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
+                                                        <div class="col-lg-6">
+                                                            <select name="prioritas" class="form-control m-bot15">
+                                                                <option value="">--Prioritas--</option>    
+                                                                <option value="1">Urgent</option>
+                                                                <option value="2">Tinggi</option>
+                                                                <option value="3">Sedang</option>
+                                                                <option value="4">Rendah</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-lg-offset-3 col-lg-6">
+                                                            <button class="btn btn-primary" type="submit">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>
                                     <?php } ?>
                                     <div id="TambahPekerjaan" class="tab-pane">
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan">
-                                                
+
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                     <div class="col-lg-6">
@@ -213,7 +216,25 @@
                                             </form>
                                         </div>
                                     </div>
-                                    
+                                   <div class="modal fade" id="modalTambahStaff" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title">Modal Tittle</h4>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            Body goes here...
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+                                            <button class="btn btn-success" type="button">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                                 </div>
                             </div>
                         </section>
@@ -270,7 +291,7 @@
         <script>
             var availableTags = [];
             var tags_id = [];
-            var nip=[];
+            var nip = [];
             function split(val) {
                 return val.split(/,\s*/);
             }
@@ -313,11 +334,11 @@
                 var nama2 = nama_nama.split(", ");
                 var panjang = nama2.length;
                 var jumlah_staff = nip.length;
-                var list_nip="::";
-                for(var i=0;i<panjang;i++){
-                    for(var j=0;j<jumlah_staff;j++){
-                        if(nama2[i]===availableTags[j] && list_nip.indexOf("::"+nip[j]+"::")===-1){
-                            list_nip+=nip[j]+"::";
+                var list_nip = "::";
+                for (var i = 0; i < panjang; i++) {
+                    for (var j = 0; j < jumlah_staff; j++) {
+                        if (nama2[i] === availableTags[j] && list_nip.indexOf("::" + nip[j] + "::") === -1) {
+                            list_nip += nip[j] + "::";
                         }
                     }
                 }
@@ -336,7 +357,7 @@
                         for (var i = 0; i < jumlah_data; i++) {
                             availableTags[i] = json.data[i]["nama"];
                             tags_id[i] = json.data[i]["id_akun"];
-                            nip[i]=json.data[i]["nip"];
+                            nip[i] = json.data[i]["nip"];
                         }
                     } else {
                         //$('#submit_ubah_password_error').css("display", "block");
