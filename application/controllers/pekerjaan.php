@@ -265,7 +265,10 @@ class pekerjaan extends CI_Controller {
     
     public function progress() {
         if ($this->check_session_and_cookie() == 1) {
-            $this->load->view("pekerjaan/progress/progress_pekerjaan_page");
+            $id_detail_pkj = $this->input->get('id_detail_pkj');
+            $this->load->model("pekerjaan_model");
+            $data["progress_pekerjaan"] = $this->pekerjaan_model->sp_progress_pekerjaan($id_detail_pkj);
+            $this->load->view("pekerjaan/progress/progress_pekerjaan_page",$data);
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");

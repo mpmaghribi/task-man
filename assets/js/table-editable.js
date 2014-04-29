@@ -46,6 +46,25 @@ var EditableTable = function () {
                 oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 4, false);
                 oTable.fnDraw();
             }
+            
+            function savetodb(ndata)
+            {
+                $.ajax({// create an AJAX call...
+                            data: "id_pekerjaan=" + id_pekerjaan, // get the form data
+                            type: "POST", // GET or POST
+                            url: "<?php echo site_url(); ?>/pekerjaan/validasi_usulan", // the file to call
+                            success: function(response) { // on success..
+                                var json = jQuery.parseJSON(response);
+                                //alert(response);
+                                if (json.status === "OK") {
+                                    $("#td_tabel_usulan_pekerjaan_validasi_" + id_pekerjaan).css("display", "none");
+                                    $('#td_tabel_usulan_pekerjaan_status_' + id_pekerjaan).html("<span class=\"label label-success label-mini\">Aprroved</span>");
+                                } else {
+                                    alert("validasi gagal, " + json.reason);
+                                }
+                            }
+                        });
+            }
 
 //            var oTable = $('#editable-sample').dataTable({
 //                "aLengthMenu": [
@@ -136,6 +155,7 @@ var EditableTable = function () {
                     /* Editing this row and want to save it */
                     saveRow(oTable, nEditing);
                     nEditing = null;
+                    
                     alert("Updated! Do not forget to do some ajax to sync with backend :)");
                 } else {
                     /* No edit in progress - let's start one */

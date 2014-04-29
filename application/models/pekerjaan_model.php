@@ -70,7 +70,7 @@ class pekerjaan_model extends CI_Model {
     }
         
     public function sp_progress_pekerjaan($id_detail_pkj) {
-        $query = "select * from pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
+        $query = "select * from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan inner join akun on akun.id_akun = detil_pekerjaan.id_akun where pekerjaan.id_pekerjaan = " . $id_detail_pkj . " and akun.id_akun = ".$this->session->userdata('user_id').";";
         $query = $this->db->query($query);
         return $query->result();
     }

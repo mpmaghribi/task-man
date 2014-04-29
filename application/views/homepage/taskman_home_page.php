@@ -103,6 +103,13 @@
                                                                             <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-tasks"></i> Progress </button>
                                                                         </form>
                                                                     </td>
+                                                                    
+                                                                    <td>
+                                                                            <form method="get" action="<?php echo site_url() ?>/pekerjaan/progress">
+                                                                            <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
+                                                                            <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-tasks"></i> Upload File </button>
+                                                                        </form>
+                                                                    </td>s
                                                                 </tr>
                                                                 <?php
                                                                 $i++;
