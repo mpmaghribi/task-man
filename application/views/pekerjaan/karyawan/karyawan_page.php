@@ -99,7 +99,7 @@
                                                     <div class="form-group ">
                                                         <label for="staff" class="control-label col-lg-3">Staff</label>
                                                         <div class="col-lg-6">
-                                                            <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff">
+                                                            <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="query_staff();">
                                                                 Tambah Staff
                                                             </a>
                                                             <!--input id="autostaff" class="form-control" class="tags" value="" type="text" /-->
@@ -216,25 +216,36 @@
                                             </form>
                                         </div>
                                     </div>
-                                   <div class="modal fade" id="modalTambahStaff" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title">Modal Tittle</h4>
-                                        </div>
-                                        <div class="modal-body">
-
-                                            Body goes here...
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
-                                            <button class="btn btn-success" type="button">Save changes</button>
+                                    <div class="modal fade" id="modalTambahStaff" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" style="width: 1000px">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="tombol_tutup">&times;</button>
+                                                    <h4 class="modal-title">Tambahkan Staff</h4>
+                                                </div>
+                                                <div class="modal-body" id="tambahkan_staff_body">
+                                                    <table id="tabel_list_enroll_staff" class="table table-hover general-table">
+                                                        <thead id="tabel_list_enroll_staff_head">
+                                                            <tr id="tabel_list_enroll_staff_head">
+                                                                <th>No</th>
+                                                                <th>NIP</th>
+                                                                <th>Departemen</th>
+                                                                <th>Nama</th>
+                                                                <th>Beban Pekerjaan</th>
+                                                                <th>Enroll</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tabel_list_enroll_staff_body">                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+                                                    <button class="btn btn-success" type="button" onclick="pilih_staff_ok()">Save changes</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
                                 </div>
                             </div>
                         </section>
@@ -289,80 +300,56 @@
     <?php $this->load->view("taskman_footer_page") ?>
     <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
         <script>
-            var availableTags = [];
-            var tags_id = [];
-            var nip = [];
-            function split(val) {
-                return val.split(/,\s*/);
-            }
-            function extractLast(term) {
-                return split(term).pop();
-            }
-            //autostaff
-            $("#autostaff")
-                    // don't navigate away from the field on tab when selecting an item
-                    .bind("keydown", function(event) {
-                        if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
-                            event.preventDefault();
-                        }
-                    })
-                    .autocomplete({
-                        minLength: 0,
-                        source: function(request, response) {
-                            // delegate back to autocomplete, but extract the last term
-                            response($.ui.autocomplete.filter(availableTags, extractLast(request.term)));
-                            //alert(extractLast(request.term));
-                        },
-                        focus: function() {
-                            // prevent value inserted on focus
-                            return false;
-                        },
-                        select: function(event, ui) {
-                            var terms = split(this.value);
-                            // remove the current input
-                            terms.pop();
-                            // add the selected item
-                            terms.push(ui.item.value);
-                            // add placeholder to get the comma-and-space at the end
-                            terms.push("");
-                            this.value = terms.join(", ");
-                            return false;
+            var list_nip = [];
+            var list_nama = [];
+            var list_departemen = [];
+            var list_id = [];
+            function query_staff() {
+                var tubuh = $("#tabel_list_enroll_staff_body");
+                //alert("query staff"+tubuh.html().trim().length);
+                if (tubuh.html().trim().length === 0) {
+                    $.ajax({// create an AJAX call...
+                        data: "", // get the form data
+                        type: "GET", // GET or POST
+                        url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
+                        success: function(response) { // on success..
+                            var json = jQuery.parseJSON(response);
+                            //alert(response);
+                            if (json.status === "OK") {
+                                var jumlah_data = json.data.length;
+                                for (var i = 0; i < jumlah_data; i++) {
+                                    var id = json.data[i]["id_akun"];
+                                    list_nip[i] = json.data[i]['nip'];
+                                    list_nama[i] = json.data[i]['nama'];
+                                    list_departemen[i] = json.data[i]['nama_departemen'];
+                                    list_id[i] = id;
+                                    tubuh.append('<tr id="tabel_list_enroll_staff_row_' + id + '"></tr>');
+                                    var row = $('#tabel_list_enroll_staff_row_' + id);
+                                    row.append('<td>' + (1 + i) + '</td>');
+                                    row.append('<td>' + json.data[i]['nip'] + '</td>');
+                                    row.append('<td>' + json.data[i]['nama_departemen'] + '</td>');
+                                    row.append('<td>' + json.data[i]['nama'] + '</td>');
+                                    row.append('<td>0</td>');
+                                    row.append('<td><input type="checkbox" id="enroll_' + id + '" name="enroll_' + id + '"/></td>');
+                                    //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
+                                }
+                            } else {
+
+                            }
                         }
                     });
-            $("#form_tambah_pekerjaan2").submit(function() {
-                var nama_nama = $("#autostaff").val();
-                var nama2 = nama_nama.split(", ");
-                var panjang = nama2.length;
-                var jumlah_staff = nip.length;
-                var list_nip = "::";
-                for (var i = 0; i < panjang; i++) {
-                    for (var j = 0; j < jumlah_staff; j++) {
-                        if (nama2[i] === availableTags[j] && list_nip.indexOf("::" + nip[j] + "::") === -1) {
-                            list_nip += nip[j] + "::";
-                        }
+                }
+            }
+            function pilih_staff_ok() {
+                var jumlah_data = list_id.length;
+                var staf =$('#staff');
+                staf.val('::');
+                for (var i = 0; i < jumlah_data; i++) {
+                    if($('#enroll_'+list_id[i]).attr('checked')) {
+                        staf.val(staf.val()+list_id[i]+'::');
                     }
                 }
-                $("#staff").val(list_nip);
-            });
-            $.ajax({// create an AJAX call...
-                data: "", // get the form data
-                type: "GET", // GET or POST
-                url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
-                success: function(response) { // on success..
-                    var json = jQuery.parseJSON(response);
-                    //alert(response);
-                    if (json.status === "OK") {
-                        //$("#modal_ubah_password_close").click();
-                        var jumlah_data = json.data.length;
-                        for (var i = 0; i < jumlah_data; i++) {
-                            availableTags[i] = json.data[i]["nama"];
-                            tags_id[i] = json.data[i]["id_akun"];
-                            nip[i] = json.data[i]["nip"];
-                        }
-                    } else {
-                        //$('#submit_ubah_password_error').css("display", "block");
-                    }
-                }
-            });
+                $('#tombol_tutup').click();
+            }
         </script>
     <?php } ?>

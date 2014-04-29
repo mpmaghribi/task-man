@@ -73,7 +73,9 @@ class akun extends CI_Model {
             echo "id jabatan not found";
             return NULL;
         }
-        $query = "select id_akun, nip, nama from akun where id_departemen=$id_departemen and id_jabatan=$id_jabatan";
+        $query = "select id_akun, nip, nama, departemen.nama_departemen from akun inner join departemen on "
+                . "departemen.id_departemen = akun.id_departemen where departemen.id_departemen=$id_departemen"
+                . " and id_jabatan=$id_jabatan";
         $query=$this->db->query($query);
         return $query->result();
     }

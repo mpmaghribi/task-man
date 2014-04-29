@@ -62,28 +62,25 @@ class pekerjaan_model extends CI_Model {
         $query = "insert into detil_pekerjaan(id_akun, id_pekerjaan, skor, progress) values ('$id_akun', '$id_pekerjaan',0,0)";
         $query = $this->db->query($query);
     }
-    
+
     public function sp_deskripsi_pekerjaan($id_detail_pkj) {
         $query = "select * from pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
         $query = $this->db->query($query);
         return $query->result();
     }
-        
+
     public function sp_progress_pekerjaan($id_detail_pkj) {
-        $query = "select * from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan inner join akun on akun.id_akun = detil_pekerjaan.id_akun where pekerjaan.id_pekerjaan = " . $id_detail_pkj . " and akun.id_akun = ".$this->session->userdata('user_id').";";
+        $query = "select * from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan inner join akun on akun.id_akun = detil_pekerjaan.id_akun where pekerjaan.id_pekerjaan = " . $id_detail_pkj . " and akun.id_akun = " . $this->session->userdata('user_id') . ";";
         $query = $this->db->query($query);
         return $query->result();
     }
-    
+
     public function sp_updateprogress_pekerjaan($data, $id_detail_pkj) {
-        $query = "update detil_pekerjaan set progress =".$data." where id_detil_pekerjaan =".$id_detail_pkj;
-        
-        if ($this->db->query($query))
-        {
+        $query = "update detil_pekerjaan set progress =" . $data . " where id_detil_pekerjaan =" . $id_detail_pkj;
+        if ($this->db->query($query)) {
             return 1;
         }
-            return 0;
-        
+        return 0;
     }
 
     public function sp_listassign_pekerjaan($id_detail_pkj) {
@@ -106,7 +103,7 @@ class pekerjaan_model extends CI_Model {
     public function get_list_usulan_pekerjaan($id_departemen) {
         $this->load->model("jabatan_model");
         $id_jabatan_staff = $this->jabatan_model->get_id_jabatan("staff");
-        if($id_jabatan_staff==NULL || strlen($id_jabatan_staff)==0)
+        if ($id_jabatan_staff == NULL || strlen($id_jabatan_staff) == 0)
             return NULL;
         $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan, pekerjaan.tgl_mulai," .
                 "pekerjaan.tgl_selesai, akun.nama, pekerjaan.flag_usulan, pekerjaan.id_pekerjaan " .

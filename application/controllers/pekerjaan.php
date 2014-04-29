@@ -274,20 +274,19 @@ class pekerjaan extends CI_Controller {
             redirect("login");
         }
     }
-    
-    public function update_progress() {
+     public function update_progress() {
         if ($this->check_session_and_cookie() == 1) {
             $id_detail_pkj = $this->input->post('id_detail_pkj');
             $data = $this->input->post('data_baru');
             $this->load->model("pekerjaan_model");
             $result = $this->pekerjaan_model->sp_updateprogress_pekerjaan($data, $id_detail_pkj);
-            
+           
             if ($result == 1)
                 $status = array('status'=>'OK');
             else
                $status = array('status'=>'NotOK');
-            
-            echo json_encode($status); 
+           
+            echo json_encode($status);
             //$this->load->view("pekerjaan/progress/progress_pekerjaan_page",$data);
         } else {
             $this->session->set_flashdata('status', 4);
