@@ -61,6 +61,8 @@
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/data-tables/DT_bootstrap.js"></script>
 
 <script src="<?php echo base_url()?>assets/js/dynamic_table_init.js"></script>
+
+
 <script>
     function req_notifikasi() {
 

@@ -262,6 +262,15 @@ class pekerjaan extends CI_Controller {
             return false;
         }
     }
+    
+    public function progress() {
+        if ($this->check_session_and_cookie() == 1) {
+            $this->load->view("pekerjaan/progress/progress_pekerjaan_page");
+        } else {
+            $this->session->set_flashdata('status', 4);
+            redirect("login");
+        }
+    }
 }
 
 ?>

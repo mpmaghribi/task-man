@@ -62,8 +62,14 @@ class pekerjaan_model extends CI_Model {
         $query = "insert into detil_pekerjaan(id_akun, id_pekerjaan, skor, progress) values ('$id_akun', '$id_pekerjaan',0,0)";
         $query = $this->db->query($query);
     }
-
+    
     public function sp_deskripsi_pekerjaan($id_detail_pkj) {
+        $query = "select * from pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+        
+    public function sp_progress_pekerjaan($id_detail_pkj) {
         $query = "select * from pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
         $query = $this->db->query($query);
         return $query->result();

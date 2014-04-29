@@ -10,8 +10,8 @@
 
         <title>Dashboard</title>
         <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.11.0.min.js"></script>
-<!--        <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-2.0.3.min.js"></script>
-        <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-migrate-1.2.1.min.js"></script>-->
+<!--        <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-2.0.3.min.js"></script>-->
+        <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 
         <link href="<?php echo base_url() ?>/assets/bs3/css/bootstrap.css" rel="stylesheet">
         <link href="<?php echo base_url() ?>/assets/css/bootstrap-reset.css" rel="stylesheet">
