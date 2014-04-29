@@ -20,6 +20,7 @@
                                     <table class="table table-striped table-hover table-bordered" id="editable-sample">
                                 <thead>
                                 <tr>
+                                    <th style="display: none">id</th>
                                     <th>Nama Pegawai</th>
                                     <th>Pekerjaan</th>
                                     <th>Deadline</th>
@@ -33,10 +34,17 @@
                                                     <?php $i = 1;
                                                     foreach ($progress_pekerjaan as $value) {?>
                                                         <tr class="">
+                                                            <td style="display: none"><?php echo $value->id_detil_pekerjaan?></td>
                                     <td><?php echo $value->nama?></td>
                                     <td><?php echo $value->nama_pekerjaan?></td>
                                     <td class="center"><?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                    <td class="center"><?php echo $value->progress?></td>
+                                    <td>
+                                                                <div class="progress progress-striped progress-xs">
+                                                                            <div style="width: <?php echo $value->progress;?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress;?>" role="progressbar" class="progress-bar progress-bar-warning">
+                                                                                <span class="sr-only"><?php echo $value->progress;?>% Complete (success)</span>
+                                                                            </div>
+                                                                        </div>
+                                                            </td>
                                     <td><a class="edit" href="javascript:;">Edit</a></td>
                                     <td><a class="delete" href="javascript:;">Delete</a></td>
                                 </tr>
@@ -54,12 +62,12 @@
                 </section>
             </section>
             <!--script for this page only-->
-<script src="<?php echo base_url()?>assets/js/table-editable.js"></script>
+<script src="<?php echo base_url()?>assets/js/table-editable-progress.js"></script>
 
 <!-- END JAVASCRIPTS -->
 <script>
     jQuery(document).ready(function() {
-        EditableTable.init();
+        EditableTableProgress.init();
     });
 </script>
             <!--main content end-->

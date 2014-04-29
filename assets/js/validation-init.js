@@ -7,6 +7,15 @@ var Script = function () {
     $().ready(function() {
         // validate the comment form when it is submitted
         $("#commentForm").validate();
+        
+         $("#id_progress").validate({
+             rules:{
+                 progress_val:{
+                     required: true,
+                     max: 100
+                 }
+             }
+         });
 
         // validate signup form on keyup and submit
         $("#signupForm").validate({

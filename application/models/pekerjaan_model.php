@@ -74,6 +74,17 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
+    
+    public function sp_updateprogress_pekerjaan($data, $id_detail_pkj) {
+        $query = "update detil_pekerjaan set progress =".$data." where id_detil_pekerjaan =".$id_detail_pkj;
+        
+        if ($this->db->query($query))
+        {
+            return 1;
+        }
+            return 0;
+        
+    }
 
     public function sp_listassign_pekerjaan($id_detail_pkj) {
         $query = "select * from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan inner join akun on akun.id_akun = detil_pekerjaan.id_akun where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
