@@ -107,17 +107,14 @@
                                 isi += ", ";
                             }
                             $("#td_tabel_pekerjaan_staff_nama_staff_" + id_pekerjaan).html(isi + json.data[i]["nama"]);
-                            var status = $("#td_tabel_pekerjaan_staff_status_" + id_pekerjaan).html();
-                            if(status.length>0)
-                                status+="<br/><br/>";
+                            var status = "";//$("#td_tabel_pekerjaan_staff_status_" + id_pekerjaan).html();
+                            
                             status+="<span class=\"label label-";
                             if (json.data[i]["flag_usulan"] === "1")
                                 status += "danger label-mini\">Not Approved";
-                            else if(json.data[i]["progress"]==="0")
+                            else 
                                 status += "success label-mini\">Approved";
-                            else if(json.data[i]["progress"]<100)
-                                status+="primary label-mini\">On Going";
-                            else status+="info label-mini\">Finished";
+                            
                             status += "</span>";
                             $("#td_tabel_pekerjaan_staff_status_" + id_pekerjaan).html(status);
                             var pemisah = "style=\"margin-top:5px\"";

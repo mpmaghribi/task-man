@@ -151,9 +151,9 @@ class pekerjaan extends CI_Controller {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
             $id_detail_pkj = $this->input->get('id_detail_pkj');
-            if ($this->input->get("sumber") == "notifikasi") {
+            //if ($this->input->get("sumber") == "notifikasi") {
                 $this->baca_pending_task($id_detail_pkj);
-            }
+            //}
 
             $is_isi_komentar = $this->input->get('is_isi_komentar');
             $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
@@ -194,11 +194,21 @@ class pekerjaan extends CI_Controller {
     public function lihat_usulan() {
         if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
-            $data["list_usulan"] = $this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
-            $this->load->view("pekerjaan/lihat_usulan_pekerjaan_page", $data);
+            //$data["list_usulan"] = $this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
+            $this->load->view("pekerjaan/lihat_usulan_pekerjaan_page");
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");
+        }
+    }
+    public function get_usulan_pekerjaan() {
+        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+            $this->load->model("pekerjaan_model");
+            $data = $this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
+            
+                echo json_encode(array("status" => "OK", "data"=>$data));
+        } else {
+            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
         }
     }
 
@@ -252,7 +262,6 @@ class pekerjaan extends CI_Controller {
             return false;
         }
     }
-
 }
 
 ?>

@@ -87,12 +87,16 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function get_list_usulan_pekerjaan($id_departemen) {
+        $this->load->model("jabatan_model");
+        $id_jabatan_staff = $this->jabatan_model->get_id_jabatan("staff");
+        if($id_jabatan_staff==NULL || strlen($id_jabatan_staff)==0)
+            return NULL;
         $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan, pekerjaan.tgl_mulai," .
                 "pekerjaan.tgl_selesai, akun.nama, pekerjaan.flag_usulan, pekerjaan.id_pekerjaan " .
                 "from detil_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun " .
                 "inner join departemen on departemen.id_departemen=akun.id_departemen " .
                 "inner join pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan " .
-                "where pekerjaan.flag_usulan='1' and departemen.id_departemen=" . $id_departemen;
+                "where pekerjaan.flag_usulan='1' and akun.id_jabatan=$id_jabatan_staff and departemen.id_departemen=" . $id_departemen;
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
@@ -146,7 +150,7 @@ class pekerjaan_model extends CI_Model {
         if ($id_pekerjaan != NULL && $id_user != NULL && strlen($id_pekerjaan) > 0 &&
                 strlen($id_user) > 0) {
             $query = "update detil_pekerjaan set tgl_read=now() where id_akun=$id_user and "
-                    . "id_pekerjaan=$id_pekerjaan";
+                    . "id_pekerjaan=$id_pekerjaan and tgl_read is null";
             $this->db->query($query);
         }
     }
