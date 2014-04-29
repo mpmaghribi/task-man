@@ -75,20 +75,27 @@ class pekerjaan extends CI_Controller {
             $asal_pkj = 'task management'; //$this->input->post('asal_pkj');
             $list_staff = $this->input->post("staff");
             $staff = explode("::", $list_staff);
+            //var_dump($staff);
             $this->load->model("akun");
             $this->load->model("pekerjaan_model");
             $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
             if ($id_pekerjaan != NULL) {
-                foreach ($staff as $index => $val) {
-                    if (strlen($val) == 0)
+                foreach ($staff as $index => $val) {//val itu nip
+                    if (strlen($val) == 0){
                         continue;
+                    }
+                    //echo "id akun akan dikenai pekerjaan $val ";
                     $id_akun = $this->akun->get_id_akun($val);
-                    if ($id_akun == NULL)
+                    if ($id_akun == NULL){
+                        //echo "id akun tidak valid ";
                         continue;
+                    }
+                    //echo "akun valid ";
                     $this->pekerjaan_model->tambah_detil_pekerjaan($id_akun, $id_pekerjaan);
                     //echo "id akun $id_akun mendapat pekerjaan $id_pekerjaan <br/>";
                 }
             }
+            //else echo 'id pekerjaan null';
             redirect('pekerjaan/karyawan');
         } else {
             $this->session->set_flashdata('status', 4);

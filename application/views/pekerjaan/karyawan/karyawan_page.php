@@ -99,6 +99,17 @@
                                                     <div class="form-group ">
                                                         <label for="staff" class="control-label col-lg-3">Staff</label>
                                                         <div class="col-lg-6">
+                                                            <div id="span_list_assign_staff">
+                                                                <div>
+                                                                    <span><a class="btn btn-primary" href="#" onclick="hapus_staff();">Hapus</a></span>
+                                                                    <span style="margin-left: 5px">Oktri</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span><a class="btn btn-primary" href="#" onclick="hapus_staff();">Hapus</a></span>
+                                                                    <span>Oktri</span>
+                                                                </div>
+                                                            </div>
+
                                                             <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="query_staff();">
                                                                 Tambah Staff
                                                             </a>
@@ -248,6 +259,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </section>
                     </div>
                 </div>
@@ -303,7 +315,7 @@
             var list_nip = [];
             var list_nama = [];
             var list_departemen = [];
-            var list_id = [];
+            //var list_id = [];
             function query_staff() {
                 var tubuh = $("#tabel_list_enroll_staff_body");
                 //alert("query staff"+tubuh.html().trim().length);
@@ -318,11 +330,13 @@
                             if (json.status === "OK") {
                                 var jumlah_data = json.data.length;
                                 for (var i = 0; i < jumlah_data; i++) {
-                                    var id = json.data[i]["id_akun"];
+                                    //var id = json.data[i]["id_akun"];
                                     list_nip[i] = json.data[i]['nip'];
                                     list_nama[i] = json.data[i]['nama'];
                                     list_departemen[i] = json.data[i]['nama_departemen'];
-                                    list_id[i] = id;
+                                    //list_id[i] = json.data[i]["id_akun"];
+                                    var id=list_nip[i];
+                                    
                                     tubuh.append('<tr id="tabel_list_enroll_staff_row_' + id + '"></tr>');
                                     var row = $('#tabel_list_enroll_staff_row_' + id);
                                     row.append('<td>' + (1 + i) + '</td>');
@@ -333,23 +347,40 @@
                                     row.append('<td><input type="checkbox" id="enroll_' + id + '" name="enroll_' + id + '"/></td>');
                                     //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
                                 }
+
                             } else {
 
                             }
                         }
                     });
                 }
+                var jumlah_staff = list_nip.length;
+                for (var i = 0; i < jumlah_staff; i++) {
+                    $('#enroll_' + list_nip[i]).attr('checked', false);
+                }
+                var assigned = $('#staff').val().split('::');
+                var jumlah_assigned = assigned.length;
+                for (var i = 0; i < jumlah_assigned; i++) {
+                    if (assigned[i].length > 0)
+                        $('#enroll_' + assigned[i]).attr('checked', true);
+                }
             }
             function pilih_staff_ok() {
-                var jumlah_data = list_id.length;
-                var staf =$('#staff');
+                var jumlah_data = list_nip.length;
+                var staf = $('#staff');
                 staf.val('::');
+                $('#span_list_assign_staff').html('');
                 for (var i = 0; i < jumlah_data; i++) {
-                    if($('#enroll_'+list_id[i]).attr('checked')) {
-                        staf.val(staf.val()+list_id[i]+'::');
+                    if ($('#enroll_' + list_nip[i]).attr('checked')) {
+                        staf.val(staf.val() + list_nip[i] + '::');
+                        $('#span_list_assign_staff').append('<div id="div_staff_' + list_nip[i] + '"><span><a class="btn btn-primary btn-xs" href="#" onclick="hapus_staff(' + list_nip[i] + ');">Hapus</a></span><span style="margin-left: 5px">' + list_nama[i] + '</span></div>');
                     }
                 }
                 $('#tombol_tutup').click();
+            }
+            function hapus_staff(id_staff) {
+                $('#div_staff_' + id_staff).remove();
+                $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
             }
         </script>
     <?php } ?>
