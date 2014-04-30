@@ -66,13 +66,7 @@
                                                                     <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
                                                                     <td><?php echo $this->session->userdata('user_nama') ?></td>
                                                                     <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
-        <!--                                                                    <td>
-                                                                        <div class="progress progress-striped progress-xs">
-                                                                            <div style="width: <?php echo $value->progress; ?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress; ?>" role="progressbar" class="progress-bar progress-bar-warning">
-                                                                                <span class="sr-only"><?php echo $value->progress; ?>% Complete (success)</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>-->
+        
                                                                     <td>
                                                                         <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
                                                                             <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
@@ -100,14 +94,7 @@
                                                         <label for="staff" class="control-label col-lg-3">Staff</label>
                                                         <div class="col-lg-6">
                                                             <div id="span_list_assign_staff">
-                                                                <div>
-                                                                    <span><a class="btn btn-primary" href="#" onclick="hapus_staff();">Hapus</a></span>
-                                                                    <span style="margin-left: 5px">Oktri</span>
-                                                                </div>
-                                                                <div>
-                                                                    <span><a class="btn btn-primary" href="#" onclick="hapus_staff();">Hapus</a></span>
-                                                                    <span>Oktri</span>
-                                                                </div>
+                                                                
                                                             </div>
 
                                                             <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="query_staff();">
@@ -242,7 +229,6 @@
                                                                 <th>NIP</th>
                                                                 <th>Departemen</th>
                                                                 <th>Nama</th>
-                                                                <th>Beban Pekerjaan</th>
                                                                 <th>Enroll</th>
                                                             </tr>
                                                         </thead>
@@ -343,7 +329,7 @@
                                     row.append('<td>' + json.data[i]['nip'] + '</td>');
                                     row.append('<td>' + json.data[i]['nama_departemen'] + '</td>');
                                     row.append('<td>' + json.data[i]['nama'] + '</td>');
-                                    row.append('<td>0</td>');
+                                    //row.append('<td>0</td>');
                                     row.append('<td><input type="checkbox" id="enroll_' + id + '" name="enroll_' + id + '"/></td>');
                                     //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
                                 }

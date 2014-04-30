@@ -135,7 +135,7 @@ class pekerjaan_model extends CI_Model {
             if ($id_jabatan_staff == NULL) {
                 return NULL;
             }
-            $query = "select pekerjaan.*,detil_pekerjaan.progress, akun.nama from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan="
+            $query = "select pekerjaan.*,detil_pekerjaan.progress, akun.nama, detil_pekerjaan.tgl_read, now() as sekarang from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan="
                     . "detil_pekerjaan.id_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun"
                     . " inner join departemen on departemen.id_departemen=akun.id_departemen where akun."
                     . "id_jabatan=$id_jabatan_staff and akun.id_departemen=$id_departemen order by pekerjaan.id_pekerjaan";
@@ -165,6 +165,10 @@ class pekerjaan_model extends CI_Model {
                 strlen($id_user) > 0) {
             $query = "update detil_pekerjaan set tgl_read=now() where id_akun=$id_user and "
                     . "id_pekerjaan=$id_pekerjaan and tgl_read is null";
+            $query="update detil_pekerjaan set tgl_read=now() from pekerjaan where id_akun=$id_user "
+                    . "and pekerjaan.id_pekerjaan=$id_pekerjaan and tgl_read is null and "
+                    . "pekerjaan.flag_usulan='2' and pekerjaan.id_pekerjaan = "
+                    . "detil_pekerjaan.id_pekerjaan";
             $this->db->query($query);
         }
     }

@@ -89,6 +89,9 @@
                             /* mengecek apakah element dengan id xxx telah ada pada halaman*/
                             if ($("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).length > 0) {
                             } else {/* element dengan id xxx belum ada pada halaman*/
+                                /*
+                                 * menambahkan row baru tentang suatu pekerjaan
+                                 */
                                 $("#tabel_pekerjaan_staff").append("<tr id=\"tr_tabel_pekerjaan_staff_" + id_pekerjaan + "\"></tr>");
                                 $("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).append("<td id=\"td_tabel_pekerjaan_staff_nomor_" + id_pekerjaan + "\">" + nomor_baris + "</td>");
                                 $("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).append("<td id=\"td_tabel_pekerjaan_staff_nama_pekerjaan_" + id_pekerjaan + "\"></td>");
@@ -100,23 +103,60 @@
                                 $("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).append("<td id=\"td_tabel_pekerjaan_staff_validasi_" + id_pekerjaan + "\"></td>");
                                 nomor_baris++;
                             }
+                            /*
+                             * mengisi data tiap row
+                             */
+
+                            /*mengisi nama pekerjaan */
                             $("#td_tabel_pekerjaan_staff_nama_pekerjaan_" + id_pekerjaan).html(json.data[i]["nama_pekerjaan"]);
+
+                            /*mengisi deadline*/
                             $("#td_tabel_pekerjaan_staff_deadline_" + id_pekerjaan).html(json.data[i]["tgl_mulai"] + " - " + json.data[i]["tgl_selesai"]);
+
+                            /*mengisi list orang yang mengerjakan suatu pekerjaan*/
                             var isi = $("#td_tabel_pekerjaan_staff_nama_staff_" + id_pekerjaan).html();
                             if (isi.length > 0) {
                                 isi += ", ";
                             }
                             $("#td_tabel_pekerjaan_staff_nama_staff_" + id_pekerjaan).html(isi + json.data[i]["nama"]);
-                            var status = "";//$("#td_tabel_pekerjaan_staff_status_" + id_pekerjaan).html();
-                            
-                            status+="<span class=\"label label-";
-                            if (json.data[i]["flag_usulan"] === "1")
+
+                            /*mengisi status pengerjaan pekerjaan*/
+                            var status = "";
+                            status += "<span class=\"label label-";
+                            if (json.data[i]["flag_usulan"] === "1") {
                                 status += "danger label-mini\">Not Approved";
-                            else 
-                                status += "success label-mini\">Approved";
-                            
+                            }
+                            else if (json.data[i]["flag_usulan"] === "2") {
+                                //status += "success label-mini\">Approved";
+                                var sekarang = json.data[i]["sekarang"];
+                                /*if (json.data[i]["tgl_read"] === null) {
+                                 status += "success label-mini\">Belum Dibaca";
+                                 }
+                                 else {*/
+
+                                if (sekarang <= json.data[i]["tgl_selesai"]) {
+                                    if (json.data[i]["tgl_read"] === null) {
+                                        status += "success label-mini\">Belum Dibaca";
+                                    }
+                                    else {
+                                        if (json.data[i]["progress"] === "0") {
+                                            status += "success label-mini\">Sudah Dibaca";
+                                        } else if (json.data[i]["progress"] === "100") {
+                                            status += "success label-mini\">Selesai";
+                                        } else {
+                                            status += "success label-mini\">Dikerjakan";
+                                        }
+                                    }
+                                }
+                                else if (json.data[i]["progress"] !== "100") {
+                                    status += "success label-mini\">Terlambat";
+                                }
+                                /*}*/
+                            }
                             status += "</span>";
                             $("#td_tabel_pekerjaan_staff_status_" + id_pekerjaan).html(status);
+
+                            /*mengisi progress*/
                             var pemisah = "style=\"margin-top:5px\"";
                             isi = $("#td_tabel_pekerjaan_staff_progress_" + id_pekerjaan).html();
                             if (isi.length > 0) {
@@ -129,12 +169,16 @@
                                     "</div>";
                             //alert(progress);
                             $("#td_tabel_pekerjaan_staff_progress_" + id_pekerjaan).html(isi + progress);
+
+                            /*tombol view*/
                             $("#td_tabel_pekerjaan_staff_view_" + id_pekerjaan).html("<form method=\"get\" action=\"<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan\">" +
                                     "<input type=\"hidden\" name=\"id_detail_pkj\" value=\"" + id_pekerjaan + "\"/>" +
                                     "<button type=\"submit\" class=\"btn btn-success btn-xs\"><i class=\"fa fa-eye\"></i> View </button>" +
                                     "</form>");
+
+                            /*tombol validasi pekerjaan yg berstatus diajukan*/
                             if (json.data[i]["flag_usulan"] === "1") {
-                                $("#td_tabel_pekerjaan_staff_validasi_" + id_pekerjaan).html("<button id=\"validasi"+id_pekerjaan+"\" type=\"button\" class=\"btn btn-default btn-xs\" onclick=\"validasi("+id_pekerjaan+")\"><i class=\"fa fa-eye\"> OK</i> </button>");
+                                $("#td_tabel_pekerjaan_staff_validasi_" + id_pekerjaan).html("<button id=\"validasi" + id_pekerjaan + "\" type=\"button\" class=\"btn btn-default btn-xs\" onclick=\"validasi(" + id_pekerjaan + ")\"><i class=\"fa fa-eye\"> OK</i> </button>");
                             }
                         }
                     } else {
