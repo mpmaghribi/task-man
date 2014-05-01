@@ -66,7 +66,7 @@
                                                                     <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
                                                                     <td><?php echo $this->session->userdata('user_nama') ?></td>
                                                                     <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
-        
+
                                                                     <td>
                                                                         <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
                                                                             <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
@@ -88,13 +88,13 @@
                                     <?php if (true) { ?>
                                         <div id="assignPekerjaan" class="tab-pane">
                                             <div class="form">
-                                                <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan2">
+                                                <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan2" enctype="multipart/form-data">
 
                                                     <div class="form-group ">
                                                         <label for="staff" class="control-label col-lg-3">Staff</label>
                                                         <div class="col-lg-6">
                                                             <div id="span_list_assign_staff">
-                                                                
+
                                                             </div>
 
                                                             <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="query_staff();">
@@ -149,18 +149,26 @@
                                                             </select>
                                                         </div>
                                                     </div>
+                                                    <div class="form-group ">
+                                                        <label for="prioritas" class="control-label col-lg-3">File</label>
+                                                        <div class="col-lg-6">
+                                                            <div id="list_file_upload_assign">
+                                                            </div>
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                        </div>
+                                                    </div>
                                                     <div class="form-group">
                                                         <div class="col-lg-offset-3 col-lg-6">
                                                             <button class="btn btn-primary" type="submit">Save</button>
                                                         </div>
                                                     </div>
                                                 </form>
-                                            </div>
+                                            </div>                                            
                                         </div>
                                     <?php } ?>
                                     <div id="TambahPekerjaan" class="tab-pane">
                                         <div class="form">
-                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan">
+                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan" enctype="multipart/form-data">
 
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
@@ -204,6 +212,14 @@
                                                             <option value="3">Sedang</option>
                                                             <option value="4">Rendah</option>
                                                         </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">File</label>
+                                                    <div class="col-lg-6">
+                                                        <div id="list_file_upload_usul">
+                                                        </div>
+                                                        <input type="file" multiple="" name="berkas[]" id="pilih_berkas_usul"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -321,8 +337,8 @@
                                     list_nama[i] = json.data[i]['nama'];
                                     list_departemen[i] = json.data[i]['nama_departemen'];
                                     //list_id[i] = json.data[i]["id_akun"];
-                                    var id=list_nip[i];
-                                    
+                                    var id = list_nip[i];
+
                                     tubuh.append('<tr id="tabel_list_enroll_staff_row_' + id + '"></tr>');
                                     var row = $('#tabel_list_enroll_staff_row_' + id);
                                     row.append('<td>' + (1 + i) + '</td>');
@@ -370,3 +386,40 @@
             }
         </script>
     <?php } ?>
+    <script>
+        $('#pilih_berkas_usul').change(function() {
+            var pilih_berkas = document.getElementById('pilih_berkas_usul');
+            var files = pilih_berkas.files;
+            populate_file('list_file_upload_usul', files);
+        });
+        $('#pilih_berkas_assign').change(function() {
+            var pilih_berkas = document.getElementById('pilih_berkas_assign');
+            var files = pilih_berkas.files;
+            populate_file('list_file_upload_assign', files);
+
+        });
+        function populate_file(div_id, files) {
+            $('#' + div_id).html('');
+            var jumlah_file = files.length;
+            for (var i = 0; i < jumlah_file; i++) {
+                //$('#'+div_id).append('<div id="' + div_id + '_file_' + i + '"><span><a class="btn btn-primary btn-xs" href="#" onclick="return hapus_file(\'pilih_berkas_assign\',\'' + div_id + '_file_' + i + '\',\'' + files[i].name + '\');">Hapus</a></span><span style="margin-left: 5px">' + files[i].name + '</span></div>');
+                $('#' + div_id).append(files[i].name + "<br/>");
+            }
+        }
+        function hapus_file(file_input_id, div_id, value) {
+            var element = document.getElementById(file_input_id);
+            //var files = element.files;
+            for (var i = element.files.length - 1; i >= 0; i--) {
+                if (element.files[i].name === value) {
+                    alert('mencoba mengahpus ' + value);
+                    element.files.splice(i, 1);
+                    console.log(element.files);
+                    alert('mengahpus ' + value);
+                    populate_file(div_id, element.files)
+                    break;
+                }
+            }
+            return false;
+        }
+    </script>
+    

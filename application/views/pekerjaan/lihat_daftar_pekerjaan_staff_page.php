@@ -124,7 +124,7 @@
                             var status = "";
                             status += "<span class=\"label label-";
                             if (json.data[i]["flag_usulan"] === "1") {
-                                status += "danger label-mini\">Not Approved";
+                                status += "default label-mini\">Not Approved";
                             }
                             else if (json.data[i]["flag_usulan"] === "2") {
                                 //status += "success label-mini\">Approved";
@@ -136,20 +136,20 @@
 
                                 if (sekarang <= json.data[i]["tgl_selesai"]) {
                                     if (json.data[i]["tgl_read"] === null) {
-                                        status += "success label-mini\">Belum Dibaca";
+                                        status += "primary label-mini\">Belum Dibaca";
                                     }
                                     else {
                                         if (json.data[i]["progress"] === "0") {
-                                            status += "success label-mini\">Sudah Dibaca";
+                                            status += "info label-mini\">Sudah Dibaca";
                                         } else if (json.data[i]["progress"] === "100") {
                                             status += "success label-mini\">Selesai";
                                         } else {
-                                            status += "success label-mini\">Dikerjakan";
+                                            status += "inverse label-mini\">Dikerjakan";
                                         }
                                     }
                                 }
                                 else if (json.data[i]["progress"] !== "100") {
-                                    status += "success label-mini\">Terlambat";
+                                    status += "danger label-mini\">Terlambat";
                                 }
                                 /*}*/
                             }

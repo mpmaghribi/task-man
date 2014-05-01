@@ -78,15 +78,16 @@ class pekerjaan extends CI_Controller {
             //var_dump($staff);
             $this->load->model("akun");
             $this->load->model("pekerjaan_model");
+            //var_dump($staff);
             $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
             if ($id_pekerjaan != NULL) {
                 foreach ($staff as $index => $val) {//val itu nip
-                    if (strlen($val) == 0){
+                    if (strlen($val) == 0) {
                         continue;
                     }
                     //echo "id akun akan dikenai pekerjaan $val ";
                     $id_akun = $this->akun->get_id_akun($val);
-                    if ($id_akun == NULL){
+                    if ($id_akun == NULL) {
                         //echo "id akun tidak valid ";
                         continue;
                     }
@@ -95,11 +96,44 @@ class pekerjaan extends CI_Controller {
                     //echo "id akun $id_akun mendapat pekerjaan $id_pekerjaan <br/>";
                 }
             }
-            //else echo 'id pekerjaan null';
+            $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
+            $this->load->library('upload');
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+            //echo "path = $path<br/>";
+            if (isset($_FILES["berkas"])) {
+                $files = $_FILES["berkas"];
+                $this->upload_file($files, $path, $id_pekerjaan);
+            }
+
             redirect('pekerjaan/karyawan');
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");
+        }
+    }
+
+    public function upload_file($files, $path, $id_pekerjaan) {
+        $this->load->model("berkas_model");
+        $jumlah_file = count($files["name"]);
+        for ($i = 0; $i < $jumlah_file; $i++) {
+            if ($files["tmp_name"][$i] != "") {
+                $filename = $files["name"][$i];
+                $new_file_path = $path . $filename;
+                $e = explode('.', $filename);
+                $ext = '.' . end($e);
+                $filename = str_replace($ext, '', $filename);
+                $c = 1;
+                while (file_exists($new_file_path)) {
+                    $new_file_path = $path . $filename . $c . $ext;
+                    $c++;
+                }
+                if (move_uploaded_file($files["tmp_name"][$i], $new_file_path)) {
+                    $this->berkas_model->upload_file(
+                            $this->session->userdata('user_id'), $new_file_path, $id_pekerjaan);
+                }
+            }
         }
     }
 
@@ -118,6 +152,15 @@ class pekerjaan extends CI_Controller {
             $id_pekerjaan_baru = $result[0]->kode;
             if ($id_pekerjaan_baru >= 0) {
                 $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $this->session->userdata("user_id"));
+                if (isset($_FILES["berkas"])) {
+                    $path = './uploads/pekerjaan/' . $id_pekerjaan_baru . '/';
+                    $this->load->library('upload');
+                    if (!file_exists($path)) {
+                        mkdir($path, 0777, true);
+                    }
+                    $files = $_FILES["berkas"];
+                    $this->upload_file($files, $path, $id_pekerjaan_baru);
+                }
             } else {
                 
             }
@@ -159,7 +202,7 @@ class pekerjaan extends CI_Controller {
             $this->load->model("pekerjaan_model");
             $id_detail_pkj = $this->input->get('id_detail_pkj');
             //if ($this->input->get("sumber") == "notifikasi") {
-                $this->baca_pending_task($id_detail_pkj);
+            $this->baca_pending_task($id_detail_pkj);
             //}
 
             $is_isi_komentar = $this->input->get('is_isi_komentar');
@@ -208,12 +251,13 @@ class pekerjaan extends CI_Controller {
             redirect("login");
         }
     }
+
     public function get_usulan_pekerjaan() {
         if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
             $data = $this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
-            
-                echo json_encode(array("status" => "OK", "data"=>$data));
+
+            echo json_encode(array("status" => "OK", "data" => $data));
         } else {
             echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
         }
@@ -269,30 +313,31 @@ class pekerjaan extends CI_Controller {
             return false;
         }
     }
-    
+
     public function progress() {
         if ($this->check_session_and_cookie() == 1) {
             $id_detail_pkj = $this->input->get('id_detail_pkj');
             $this->load->model("pekerjaan_model");
             $data["progress_pekerjaan"] = $this->pekerjaan_model->sp_progress_pekerjaan($id_detail_pkj);
-            $this->load->view("pekerjaan/progress/progress_pekerjaan_page",$data);
+            $this->load->view("pekerjaan/progress/progress_pekerjaan_page", $data);
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");
         }
     }
-     public function update_progress() {
+
+    public function update_progress() {
         if ($this->check_session_and_cookie() == 1) {
             $id_detail_pkj = $this->input->post('id_detail_pkj');
             $data = $this->input->post('data_baru');
             $this->load->model("pekerjaan_model");
             $result = $this->pekerjaan_model->sp_updateprogress_pekerjaan($data, $id_detail_pkj);
-           
+
             if ($result == 1)
-                $status = array('status'=>'OK');
+                $status = array('status' => 'OK');
             else
-               $status = array('status'=>'NotOK');
-           
+                $status = array('status' => 'NotOK');
+
             echo json_encode($status);
             //$this->load->view("pekerjaan/progress/progress_pekerjaan_page",$data);
         } else {
@@ -300,6 +345,7 @@ class pekerjaan extends CI_Controller {
             redirect("login");
         }
     }
+
 }
 
 ?>
