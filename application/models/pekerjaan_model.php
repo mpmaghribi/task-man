@@ -20,11 +20,12 @@ class pekerjaan_model extends CI_Model {
     public function list_pending_task($id_akun) {
         $id_akun = pg_escape_string($id_akun);
         $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan,"
-                . "detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_akun, detil_pekerjaan.progress "
-                . "from detil_pekerjaan inner join pekerjaan on "
+                . "detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_akun, detil_pekerjaan.progress, "
+                . "pekerjaan.tgl_selesai from detil_pekerjaan inner join pekerjaan on "
                 . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan inner join akun "
                 . "on akun.id_akun=detil_pekerjaan.id_akun where akun.id_akun=$id_akun "
-                . "and tgl_read is null";
+                . "and progress<100";
+        //echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }

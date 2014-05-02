@@ -205,13 +205,13 @@ class pekerjaan extends CI_Controller {
             $this->baca_pending_task($id_detail_pkj);
             //}
 
-            $is_isi_komentar = $this->input->get('is_isi_komentar');
+            $is_isi_komentar = $this->input->post('is_isi_komentar');
             $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
             $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
             $data["display"] = "none";
             if (isset($is_isi_komentar)) {
                 if ($is_isi_komentar == TRUE) {
-                    $isi_komentar = $this->input->get('komentar_pkj');
+                    $isi_komentar = $this->input->post('komentar_pkj');
                     $id_akun = $this->session->userdata('user_id');
                     $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
                     $data["display"] = "block";
@@ -221,6 +221,7 @@ class pekerjaan extends CI_Controller {
             $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
             $data["id_pkj"] = $id_detail_pkj;
             $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
+            //redirect("pekerjaan/karyawan/deskripsi_pekerjaan_page?id_detail_pkj=".$id_detail_pkj);
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");

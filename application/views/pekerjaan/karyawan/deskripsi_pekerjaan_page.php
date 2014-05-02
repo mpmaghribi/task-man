@@ -129,7 +129,7 @@
                                 </div>
                                 <div id="box_komentar" style="display: <?php echo $display ?>;">
                                     <div class="form">
-                                        <form class="cmxform form-horizontal " id="signupForm" method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
+                                        <form class="cmxform form-horizontal " id="signupForm" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
                                             <input type="hidden" name="is_isi_komentar" value="true"/>
                                             <input type="hidden" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
                                             <div class="form-group">
