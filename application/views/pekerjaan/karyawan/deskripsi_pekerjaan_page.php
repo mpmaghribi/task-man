@@ -13,110 +13,140 @@
             <section class="wrapper">
                 <!-- page start-->
                 <div class="row">
+                    <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
+                        <div class="col-md-12">
+                            <section class="panel">
+                                <header class="panel-heading">Aksi
+                                    <span class="tools pull-right">
+                                        <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                    </span>
+                                </header>
+                                <div class="panel-body">
+                                    <div class="btn-group btn-group-lg">
+                                        <a class="btn btn-success" href="#">Validasi</a>
+                                        <a class="btn btn-info" href="#">Edit</a>
+                                        <a class="btn btn-danger" href="#">Batalkan</a>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    <?php } ?>
                     <div class="col-md-6">
-                         <section class="panel">
-                        <header class="panel-heading">
-                            <?php if (isset($deskripsi_pekerjaan)) { ?>
+                        <section class="panel">
+                            <header class="panel-heading">
+                                <?php if (isset($deskripsi_pekerjaan)) { ?>
                                     <?php
                                     foreach ($deskripsi_pekerjaan as $value) {
                                         echo $value->nama_pekerjaan;
                                     }
                                     ?>
                                 <?php } ?> 
-                            <span class="tools pull-right">
-                                <a href="javascript:;" class="fa fa-chevron-down"></a>
-                             </span>
-                        </header>
-                        <div class="panel-body">
-                            <table class="table table-striped table-hover table-condensed">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Jenis Pekerjaan</th>
-                                    <th>Deadline</th>
-                                    <th>File Pendukung</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (isset($deskripsi_pekerjaan)) { ?>
-                                                    <?php $i = 1;
-                                                    foreach ($deskripsi_pekerjaan as $value) {?>
-                                                        <tr>
-                                                            <td><?php echo $i;?></td>
-                                                            <td><?php echo $value->nama_sifat_pekerjaan;?></td>
-                                                            <td><?php echo date("d M Y", strtotime($value->tgl_mulai)); echo " - ";echo date("d M Y", strtotime($value->tgl_selesai));?></td>
-                                                            
-                                                            <td>file</td>
-                                                        </tr>
-                                                    <?php $i++;}
-                                                    ?>
-                                                <?php } ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
+                                <span class="tools pull-right">
+                                    <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                </span>
+                            </header>
+                            <div class="panel-body">
+                                <table class="table table-striped table-hover table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Jenis Pekerjaan</th>
+                                            <th>Deadline</th>
+                                            <th>File Pendukung</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        if (isset($deskripsi_pekerjaan)) {
+                                            $i = 1;
+                                            foreach ($deskripsi_pekerjaan as $value) {
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $i; ?></td>
+                                                    <td><?php echo $value->nama_sifat_pekerjaan; ?></td>
+                                                    <td><?php
+                                                        echo date("d M Y", strtotime($value->tgl_mulai));
+                                                        echo " - ";
+                                                        echo date("d M Y", strtotime($value->tgl_selesai));
+                                                        ?></td>
+
+                                                    <td>file</td>
+                                                </tr>
+                                                <?php
+                                                $i++;
+                                            }
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
                     </div>
                     <div class="col-md-6">
                         <section class="panel">
-                        <header class="panel-heading">
-                            Anggota Tim
-                            <span class="tools pull-right">
-                                <a href="javascript:;" class="fa fa-chevron-down"></a>
-                             </span>
-                        </header>
-                        <div class="panel-body">
-                            <table class="table table-striped table-hover table-condensed">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nama</th>
-                                    <th>Progress</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (isset($listassign_pekerjaan)) { ?>
-                                                    <?php $i = 1;
-                                                    foreach ($listassign_pekerjaan as $value) {?>
-                                                        <tr>
-                                                            <td><?php echo $i;?></td>
-                                                            <td><?php echo $value->nama;?></td>
-                                                            <td>
-                                                                <div class="progress progress-striped progress-xs">
-                                                                            <div style="width: <?php echo $value->progress;?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress;?>" role="progressbar" class="progress-bar progress-bar-warning">
-                                                                                <span class="sr-only"><?php echo $value->progress;?>% Complete (success)</span>
-                                                                            </div>
-                                                                        </div>
-                                                            </td>
-                                                        </tr>
-                                                    <?php $i++; }
-                                                    ?>
-                                                <?php } ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
+                            <header class="panel-heading">
+                                Anggota Tim
+                                <span class="tools pull-right">
+                                    <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                </span>
+                            </header>
+                            <div class="panel-body">
+                                <table class="table table-striped table-hover table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nama</th>
+                                            <th>Progress</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        if (isset($listassign_pekerjaan)) {
+                                            $i = 1;
+                                            foreach ($listassign_pekerjaan as $value) {
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $i; ?></td>
+                                                    <td><?php echo $value->nama; ?></td>
+                                                    <td>
+                                                        <div class="progress progress-striped progress-xs">
+                                                            <div style="width: <?php echo $value->progress; ?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress; ?>" role="progressbar" class="progress-bar progress-bar-warning">
+                                                                <span class="sr-only"><?php echo $value->progress; ?>% Complete (success)</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                                $i++;
+                                            }
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
                         <section class="panel">
                             <header class="panel-heading">
-                                
+
                             </header>
                             <div class="panel-body">
                                 <div class="form">
                                     <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan">
                                         <div class="form-group ">
-                                            
+
                                             <label for="komentar_pkj" class="control-label col-lg-3"></label>
                                             <div class="col-lg-6">
                                                 <?php if (isset($deskripsi_pekerjaan)) { ?>
-                                                    <?php
-                                                    foreach ($deskripsi_pekerjaan as $value) {?>
-                                                       <h3><?php echo $value->deskripsi_pekerjaan;?></h3> 
-                                                    <?php }
-                                                    ?>
-                                                <?php } ?>
+                                                    <?php foreach ($deskripsi_pekerjaan as $value) { ?>
+                                                        <h3><?php echo $value->deskripsi_pekerjaan; ?></h3> 
+                                                        <?php
+                                                    }
+                                                }
+                                                ?>
                                             </div>
                                         </div>
 
@@ -127,16 +157,14 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div id="box_komentar" style="display: <?php echo $display ?>;">
+                                <div id="box_komentar" style="display: <?php echo $display ?>">
                                     <div class="form">
                                         <form class="cmxform form-horizontal " id="signupForm" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
                                             <input type="hidden" name="is_isi_komentar" value="true"/>
                                             <input type="hidden" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
                                             <div class="form-group">
                                                 <label class="control-label col-lg-3"></label>
-
                                                 <div class="col-lg-6">
-
                                                     <?php foreach ($lihat_komentar_pekerjaan as $value) { ?>
                                                         <div class="well">
                                                             <h4><?php echo $value->nama; ?></h4>
