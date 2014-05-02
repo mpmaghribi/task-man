@@ -85,7 +85,7 @@
                                             </div>
                                         </section>
                                     </div>
-                                    <?php if (true) { ?>
+                                    <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
                                         <div id="assignPekerjaan" class="tab-pane">
                                             <div class="form">
                                                 <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan2" enctype="multipart/form-data">
@@ -196,9 +196,9 @@
                                                     <label for="deadline" class="control-label col-lg-3">Deadline</label>
                                                     <div class="col-lg-6 ">
                                                         <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                                                            <input id="d" readonly type="text" class="form-control dpd1" value="" name="tgl_mulai_pkj">
+                                                            <input id="dd" readonly type="text" class="form-control dpd3" value="" name="tgl_mulai_pkj">
                                                             <span class="input-group-addon">Sampai</span>
-                                                            <input readonly type="text" class="form-control dpd2" value="" name="tgl_selesai_pkj">
+                                                            <input readonly type="text" class="form-control dpd4" value="" name="tgl_selesai_pkj">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -308,6 +308,29 @@
                 }
             }).on('changeDate', function(ev) {
                 checkout.hide();
+            }).data('datepicker');
+            
+            var checkin2 = $('.dpd3').datepicker({
+                format: 'dd-mm-yyyy',
+                onRender: function(date) {
+                    return date.valueOf() < now.valueOf() ? 'disabled' : '';
+                }
+            }).on('changeDate', function(ev) {
+                if (ev.date.valueOf() > checkout2.date.valueOf()) {
+                    var newDate = new Date(ev.date)
+                    newDate.setDate(newDate.getDate() + 1);
+                    checkout2.setValue(newDate);
+                }
+                checkin2.hide();
+                $('.dpd4')[0].focus();
+            }).data('datepicker');
+            var checkout2 = $('.dpd4').datepicker({
+                format: 'dd-mm-yyyy',
+                onRender: function(date) {
+                    return date.valueOf() <= checkin2.date.valueOf() ? 'disabled' : '';
+                }
+            }).on('changeDate', function(ev) {
+                checkout2.hide();
             }).data('datepicker');
         });
     </script>
