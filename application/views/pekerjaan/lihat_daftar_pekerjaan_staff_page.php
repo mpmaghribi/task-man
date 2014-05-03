@@ -124,7 +124,12 @@
                             var status = "";
                             status += "<span class=\"label label-";
                             if (json.data[i]["flag_usulan"] === "1") {
-                                status += "default label-mini\">Not Approved";
+                                status += "default label-mini\">";
+                                if(json.data[i]["status"]===null || json.data[i]["status"].trim().length===0){
+                                            status+="Not Approved";
+                                        }else{
+                                            status+=json.data[i]["status"];
+                                        }
                             }
                             else if (json.data[i]["flag_usulan"] === "2") {
                                 //status += "success label-mini\">Approved";
@@ -136,15 +141,35 @@
 
                                 if (sekarang <= json.data[i]["tgl_selesai"]) {
                                     if (json.data[i]["tgl_read"] === null) {
-                                        status += "primary label-mini\">Belum Dibaca";
+                                        status += "primary label-mini\">";
+                                        if (json.data[i]["status"] === null || json.data[i]["status"].trim().length === 0) {
+                                            status += "Belum Dibaca";
+                                        } else {
+                                            status += json.data[i]["status"];
+                                        }
                                     }
                                     else {
                                         if (json.data[i]["progress"] === "0") {
-                                            status += "info label-mini\">Sudah Dibaca";
+                                            status += "info label-mini\">";
+                                            if (json.data[i]["status"] === null || json.data[i]["status"].trim().length === 0) {
+                                                status += "Sudah Dibaca";
+                                            } else {
+                                                status += json.data[i]["status"];
+                                            }
                                         } else if (json.data[i]["progress"] === "100") {
-                                            status += "success label-mini\">Selesai";
+                                            status += "success label-mini\">";
+                                            if (json.data[i]["status"] === null || json.data[i]["status"].trim().length === 0) {
+                                                status += "Selesai";
+                                            } else {
+                                                status += json.data[i]["status"];
+                                            }
                                         } else {
-                                            status += "inverse label-mini\">Dikerjakan";
+                                            status += "inverse label-mini\">";
+                                            if(json.data[i]["status"]===null || json.data[i]["status"].trim().length===0){
+                                            status+="Dikerjakan";
+                                        }else{
+                                            status+=json.data[i]["status"];
+                                        }
                                         }
                                     }
                                 }

@@ -136,7 +136,7 @@ class pekerjaan_model extends CI_Model {
             if ($id_jabatan_staff == NULL) {
                 return NULL;
             }
-            $query = "select pekerjaan.*,detil_pekerjaan.progress, akun.nama, detil_pekerjaan.tgl_read, now() "
+            $query = "select pekerjaan.*,detil_pekerjaan.progress,detil_pekerjaan.status, akun.nama, detil_pekerjaan.tgl_read, now() "
                     . "as sekarang from pekerjaan left outer join detil_pekerjaan on pekerjaan.id_pekerjaan="
                     . "detil_pekerjaan.id_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun"
                     . " where akun."
