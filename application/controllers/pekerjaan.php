@@ -44,7 +44,7 @@ class pekerjaan extends CI_Controller {
 
     public function index() {
         if ($this->check_session_and_cookie() == 1) {
-            $this->load->view('pekerjaan/tambah_pekerjaan');
+            redirect(base_url() . 'pekerjaan/karyawan');
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");
@@ -176,7 +176,6 @@ class pekerjaan extends CI_Controller {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
             $data["list_pekerjaan"] = $this->pekerjaan_model->list_pekerjaan();
-
             $this->load->view('pekerjaan/taskman_listpekerjaan_page', $data);
         } else {
             $this->session->set_flashdata('status', 4);
@@ -201,10 +200,15 @@ class pekerjaan extends CI_Controller {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
             $id_detail_pkj = $this->input->get('id_detail_pkj');
-            //if ($this->input->get("sumber") == "notifikasi") {
-            $this->baca_pending_task($id_detail_pkj);
-            //}
+            if ($id_detail_pkj == NULL || strlen($id_detail_pkj) == 0) {
+                redirect(base_url() . "pekerjaan/karyawan");
+                exit(0);
+            }
 
+            /* mengupdate status pekerjaan dilihat dan tanggal read jika pekerjaan itu belum pernah
+             * dibaca
+             */
+            $this->baca_pending_task($id_detail_pkj);
             $is_isi_komentar = $this->input->post('is_isi_komentar');
             $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
             $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
@@ -327,6 +331,17 @@ class pekerjaan extends CI_Controller {
         }
     }
 
+    public function get_status_usulan() {
+        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+            $this->load->model("pekerjaan_model");
+            $id_pekerjaan = pg_escape_string($this->input->get("id_pekerjaan"));
+            $status_usulan = $this->pekerjaan_model->get_status_usulan($id_pekerjaan);
+            echo json_encode(array("status" => "OK", "data" => $status_usulan));
+        } else {
+            echo json_encode(array("status" => "FAILED", "reason" => "gagal"));
+        }
+    }
+
     public function update_progress() {
         if ($this->check_session_and_cookie() == 1) {
             $id_detail_pkj = $this->input->post('id_detail_pkj');
@@ -341,6 +356,26 @@ class pekerjaan extends CI_Controller {
 
             echo json_encode($status);
             //$this->load->view("pekerjaan/progress/progress_pekerjaan_page",$data);
+        } else {
+            $this->session->set_flashdata('status', 4);
+            redirect("login");
+        }
+    }
+
+    public function edit() {
+        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+            $this->load->model("pekerjaan_model");
+            $this->load->model("berkas_model");
+            $id_pekerjaan = pg_escape_string($this->input->get('id_pekerjaan'));
+            if ($id_pekerjaan == NULL || strlen($id_pekerjaan) == 0) {
+                redirect(base_url() . "pekerjaan/karyawan");
+                exit(0);
+            }
+            $data = array();
+            $data["pekerjaan"]=$this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
+            $data["detail_pekerjaan"]=$this->pekerjaan_model->get_detil_of_pekerjaan($id_pekerjaan);
+            $data["berkas"]=$this->berkas_model->get_berkas_of_pekerjaan($id_pekerjaan);
+            $this->load->view("pekerjaan/edit_pekerjaan_page",$data);
         } else {
             $this->session->set_flashdata('status', 4);
             redirect("login");

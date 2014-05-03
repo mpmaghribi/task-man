@@ -19,5 +19,12 @@ class berkas_model extends CI_Model {
         //echo $query;
         $this->db->query($query);
     }
+    public function get_berkas_of_pekerjaan($id_pekerjaan) {
+        if($id_pekerjaan==NULL||  strlen($id_pekerjaan)==0)
+            return NULL;
+        $query = "select * from file where id_pekerjaan=$id_pekerjaan";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
 }
 ?>

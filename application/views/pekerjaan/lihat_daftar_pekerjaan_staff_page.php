@@ -1,4 +1,3 @@
-
 <?php $this->load->view("taskman_header_page") ?> 
 <body>
 
@@ -125,11 +124,11 @@
                             status += "<span class=\"label label-";
                             if (json.data[i]["flag_usulan"] === "1") {
                                 status += "default label-mini\">";
-                                if(json.data[i]["status"]===null || json.data[i]["status"].trim().length===0){
-                                            status+="Not Approved";
-                                        }else{
-                                            status+=json.data[i]["status"];
-                                        }
+                                if (json.data[i]["status"] === null || json.data[i]["status"].trim().length === 0) {
+                                    status += "Not Approved";
+                                } else {
+                                    status += json.data[i]["status"];
+                                }
                             }
                             else if (json.data[i]["flag_usulan"] === "2") {
                                 //status += "success label-mini\">Approved";
@@ -165,11 +164,11 @@
                                             }
                                         } else {
                                             status += "inverse label-mini\">";
-                                            if(json.data[i]["status"]===null || json.data[i]["status"].trim().length===0){
-                                            status+="Dikerjakan";
-                                        }else{
-                                            status+=json.data[i]["status"];
-                                        }
+                                            if (json.data[i]["status"] === null || json.data[i]["status"].trim().length === 0) {
+                                                status += "Dikerjakan";
+                                            } else {
+                                                status += json.data[i]["status"];
+                                            }
                                         }
                                     }
                                 }
