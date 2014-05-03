@@ -19,6 +19,10 @@ class login extends CI_Controller {
         }
         $this->load->view('login/taskman_login_page');
     }
+    
+    public function tesdb() {
+        echo 'tes';
+    }
 
     private function check_session_and_cookie() {
         //$usernamecookie = $this->input->cookie("cookie_user", TRUE);
