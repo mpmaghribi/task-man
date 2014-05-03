@@ -28,11 +28,23 @@
                                                     <label for="staff" class="control-label col-lg-3">Staff</label>
                                                     <div class="col-lg-6">
                                                         <div id="span_list_assign_staff">
+                                                            <?php foreach ($detail_pekerjaan as $d) { ?>
+                                                                <div id="div_staff_<?php echo $d->nip; ?>">
+                                                                    <span>
+                                                                        <a class="btn btn-primary btn-xs" onclick="hapus_staff(<?php echo $d->nip; ?>);" href="#">Hapus</a>
+                                                                    </span>
+                                                                    <span style="margin-left: 0px">
+                                                                        <?php echo $d->nama; ?>
+                                                                    </span>
+                                                                </div>
+                                                            <?php } ?>
                                                         </div>
-                                                        <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="query_staff();">
-                                                            Tambah Staff
-                                                        </a>
-                                                        <input type="hidden" value="" name="staff" id="staff"/>
+                                                        <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="query_staff();">Tambah Staff</a>
+                                                        <input type="hidden" value="::<?php
+                                                        foreach ($detail_pekerjaan as $d) {
+                                                            echo $d->nip . '::';
+                                                        }
+                                                        ?>" name="staff" id="staff"/>
                                                     </div>
                                                 </div>
 
@@ -40,22 +52,21 @@
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                     <div class="col-lg-6">
                                                         <select name="sifat_pkj" class="form-control m-bot15">
-                                                            <option value="">--Pekerjaan--</option>    
-                                                            <option value="1">Personal</option>
-                                                            <option value="2">Umum</option>
+                                                            <option value="1" <?php if($pekerjaan[0]->id_sifat_pekerjaan=='1')echo 'selected'; ?>>Personal</option>
+                                                            <option value="2" <?php if($pekerjaan[0]->id_sifat_pekerjaan=='2')echo 'selected'; ?>>Umum</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
                                                     <div class="col-lg-6">
-                                                        <input class=" form-control" id="firstname" name="nama_pkj" type="text" />
+                                                        <input class=" form-control" id="firstname" name="nama_pkj" type="text" value="<?php echo $pekerjaan[0]->nama_pekerjaan; ?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
                                                     <div class="col-lg-6">
-                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"></textarea>
+                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"><?php echo $pekerjaan[0]->deskripsi_pekerjaan;?></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
@@ -72,11 +83,10 @@
                                                     <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
                                                     <div class="col-lg-6">
                                                         <select name="prioritas" class="form-control m-bot15">
-                                                            <option value="">--Prioritas--</option>    
-                                                            <option value="1">Urgent</option>
-                                                            <option value="2">Tinggi</option>
-                                                            <option value="3">Sedang</option>
-                                                            <option value="4">Rendah</option>
+                                                            <option value="1" <?php if($pekerjaan[0]->level_prioritas=='1')echo "selected"; ?>>Urgent</option>
+                                                            <option value="2" <?php if($pekerjaan[0]->level_prioritas=='2')echo "selected"; ?>>Tinggi</option>
+                                                            <option value="3" <?php if($pekerjaan[0]->level_prioritas=='3')echo "selected"; ?>>Sedang</option>
+                                                            <option value="4" <?php if($pekerjaan[0]->level_prioritas=='4')echo "selected"; ?>>Rendah</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -146,7 +156,7 @@
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-        <?php $this->load->view('taskman_rightbar_page') ?>
+<?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
@@ -201,8 +211,8 @@
             }).data('datepicker');
         });
     </script>
-    <?php $this->load->view("taskman_footer_page") ?>
-    <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
+<?php $this->load->view("taskman_footer_page") ?>
+<?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
         <script>
             var list_nip = [];
             var list_nama = [];
@@ -210,8 +220,8 @@
             //var list_id = [];
             function query_staff() {
                 var tubuh = $("#tabel_list_enroll_staff_body");
-                //alert("query staff"+tubuh.html().trim().length);
-                if (tubuh.html().trim().length === 0) {
+                var sudah_diproses = false;
+                if (list_nip.length === 0) {
                     $.ajax({// create an AJAX call...
                         data: "", // get the form data
                         type: "GET", // GET or POST
@@ -228,26 +238,31 @@
                                     list_departemen[i] = json.data[i]['nama_departemen'];
                                     //list_id[i] = json.data[i]["id_akun"];
                                     var id = list_nip[i];
-
-                                    tubuh.append('<tr id="tabel_list_enroll_staff_row_' + id + '"></tr>');
-                                    var row = $('#tabel_list_enroll_staff_row_' + id);
-                                    row.append('<td>' + (1 + i) + '</td>');
-                                    row.append('<td>' + json.data[i]['nip'] + '</td>');
-                                    row.append('<td>' + json.data[i]['nama_departemen'] + '</td>');
-                                    row.append('<td>' + json.data[i]['nama'] + '</td>');
-                                    //row.append('<td>0</td>');
-                                    row.append('<td><input type="checkbox" id="enroll_' + id + '" name="enroll_' + id + '"/></td>');
-                                    //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
+                                    tampilkan_staff(tubuh);
+                                    sudah_diproses=true;
                                 }
-
                             } else {
-
                             }
                         }
                     });
                 }
+                if(sudah_diproses===false)
+                tampilkan_staff(tubuh);
+            }
+            function tampilkan_staff(tubuh) {
                 var jumlah_staff = list_nip.length;
+                //alert("jumlah data" + jumlah_staff)
+                tubuh.html("");
                 for (var i = 0; i < jumlah_staff; i++) {
+                    tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_nip[i] + '"></tr>');
+                    var row = $('#tabel_list_enroll_staff_row_' + list_nip[i]);
+                    row.append('<td>' + (1 + i) + '</td>');
+                    row.append('<td>' + list_nip[i] + '</td>');
+                    row.append('<td>' + list_departemen[i] + '</td>');
+                    row.append('<td>' + list_nama[i] + '</td>');
+                    //row.append('<td>0</td>');
+                    row.append('<td><input type="checkbox" id="enroll_' + list_nip[i] + '" name="enroll_' + list_nip[i] + '"/></td>');
+                    //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
                     $('#enroll_' + list_nip[i]).attr('checked', false);
                 }
                 var assigned = $('#staff').val().split('::');
@@ -255,6 +270,7 @@
                 for (var i = 0; i < jumlah_assigned; i++) {
                     if (assigned[i].length > 0)
                         $('#enroll_' + assigned[i]).attr('checked', true);
+                    //alert('#enroll_' + assigned[i]);
                 }
             }
             function pilih_staff_ok() {
@@ -275,8 +291,8 @@
                 $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
             }
         </script>
-    <?php } ?>
-    <script>        
+<?php } ?>
+    <script>
         $('#pilih_berkas_assign').change(function() {
             var pilih_berkas = document.getElementById('pilih_berkas_assign');
             var files = pilih_berkas.files;
@@ -291,4 +307,5 @@
             }
         }
         document.title = "Task Management - Edit Pekerjaan";
+        //$('a').click(function(event){event.preventDefault();});
     </script>
