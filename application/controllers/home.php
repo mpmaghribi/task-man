@@ -47,7 +47,7 @@ class home extends CI_Controller {
     public function index() {
         if ($this->check_session_and_cookie() == 1) {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
-            $result = $this->taskman_repository->sp_view_pekerjaan();
+            $result = $this->taskman_repository->sp_view_pekerjaan($this->session->userdata('user_id'));
             $data['pkj_karyawan'] = $result;
             $this->load->view('homepage/taskman_home_page',$data);
         } else {

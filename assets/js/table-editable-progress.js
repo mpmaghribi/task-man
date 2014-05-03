@@ -18,13 +18,12 @@ var EditableTableProgress = function () {
             function editRow(oTable, nRow) {
                 var aData = oTable.fnGetData(nRow);
                 var jqTds = $('>td', nRow);
-                jqTds[0].innerHTML = '<input type="text" readonly style="display: none" class="form-control small" value="' + aData[0] + '">';
-                jqTds[1].innerHTML = '<input type="text" readonly class="form-control small" value="' + aData[1] + '">';
+                jqTds[0].innerHTML = '<input type="text" readonly class="form-control small" value="' + aData[0] + '">';
+                jqTds[1].innerHTML = '<input type="text" style="display:none" readonly class="form-control small" value="' + aData[1] + '">';
                 jqTds[2].innerHTML = '<input type="text" readonly class="form-control small" value="' + aData[2] + '">';
-                jqTds[3].innerHTML = '<input type="text" readonly class="form-control small" value="' + aData[3] + '">';
-                jqTds[4].innerHTML = '<input type="number" class="form-control small" min="0" max="100" step="10" placeholder="0-100%" value="' + aData[4] + '';
-                jqTds[5].innerHTML = '<a class="edit" href="">Save</a>';
-                jqTds[6].innerHTML = '<a class="cancel" href="">Cancel</a>';
+                jqTds[3].innerHTML = '<input type="number" class="form-control small" min="0" max="100" step="10" placeholder="0-100%" value="' + aData[3] + '';
+                jqTds[4].innerHTML = '<a class="edit" href="">Simpan</a>';
+                jqTds[5].innerHTML = '<a class="cancel" href="">Batal</a>';
             }
 
             function saveRow(oTable, nRow) {
@@ -33,9 +32,8 @@ var EditableTableProgress = function () {
                 oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
                 oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
                 oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-                oTable.fnUpdate(jqInputs[4].value, nRow, 4, false);
-                oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 5, false);
-                oTable.fnUpdate('<a class="delete" href="">Delete</a>', nRow, 6, false);
+                oTable.fnUpdate('<a class="edit" href="">Ubah Progress</a>', nRow, 4, false);
+                oTable.fnUpdate('<a class="delete" href="">Hapus</a>', nRow, 5, false);
                 oTable.fnDraw();
             }
 
@@ -44,8 +42,7 @@ var EditableTableProgress = function () {
                 oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
                 oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
                 oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-                oTable.fnUpdate(jqInputs[4].value, nRow, 4, false);
-                oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 5, false);
+                oTable.fnUpdate('<a class="edit" href="">Ubah Progress</a>', nRow, 4, false);
                 oTable.fnDraw();
             }
             
@@ -55,7 +52,7 @@ var EditableTableProgress = function () {
                             data: 
                             {
                                 id_detail_pkj:nRow.cells[0].innerHTML,
-                                data_baru:nRow.cells[4].innerHTML
+                                data_baru:nRow.cells[3].innerHTML
                             }, // get the form data
                             type: "POST", // GET or POST
                             url: "http://localhost:90/task_man/index.php/pekerjaan/update_progress", // the file to call
@@ -104,7 +101,7 @@ var EditableTableProgress = function () {
                 "bPaginate":false,
                 "aoColumnDefs": [{
                         'bSortable': false,
-                        'aTargets': [0]
+                        'aTargets': [0,1,4,5]
                     }
                 ]
             });
@@ -141,9 +138,11 @@ var EditableTableProgress = function () {
                 if ($(this).attr("data-mode") == "new") {
                     var nRow = $(this).parents('tr')[0];
                     oTable.fnDeleteRow(nRow);
+                    
                 } else {
                     restoreRow(oTable, nEditing);
                     nEditing = null;
+                    window.location.href="";
                 }
             });
 
@@ -158,7 +157,7 @@ var EditableTableProgress = function () {
                     restoreRow(oTable, nEditing);
                     editRow(oTable, nRow);
                     nEditing = nRow;
-                } else if (nEditing == nRow && this.innerHTML == "Save") {
+                } else if (nEditing == nRow && this.innerHTML == "Simpan") {
                     /* Editing this row and want to save it */
                     saveRow(oTable, nEditing);
                     nEditing = null;

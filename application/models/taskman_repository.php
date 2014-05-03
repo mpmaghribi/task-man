@@ -71,8 +71,8 @@ class taskman_repository extends CI_Model {
     }
 
 
-    public function sp_view_pekerjaan() {
-        $query = "SELECT pekerjaan.* from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun=".$this->session->userdata('user_id');
+    public function sp_view_pekerjaan($id_user) {
+        $query = "SELECT pekerjaan.* from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun=".$id_user;
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -90,5 +90,24 @@ class taskman_repository extends CI_Model {
                 . "'$deskripsi_pkj', 'now()');"; 
         $query = $this->db->query($query);
         return 1;
+    }
+    
+    public function sp_view_profil($id_user)
+    {
+        $query = "select * from akun inner join jabatan on jabatan.id_jabatan = akun.id_jabatan where id_akun = ".$id_user."";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    
+    public function sp_aktivitas_staff($id_user) {
+        $query = "select * from activity inner join akun on akun.id_akun= ".$id_user."";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    
+    public function sp_log_pekerjaan($id_user) {
+        $query = "SELECT * from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun=".$id_user." and status = 'finished'";
+        $query = $this->db->query($query);
+        return $query->result();
     }
 }

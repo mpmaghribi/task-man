@@ -36,7 +36,7 @@
                                     <div id="ListPekerjaan" class="tab-pane active">
                                         <section class="panel">
                                             <header class="panel-heading">
-                                                List of tasks
+                                                Daftar Pekerjaan yang Dikerjakan
                                             </header>
                                             <div class="panel-body">
                                                 <table class="table  table-hover general-table">
@@ -56,6 +56,7 @@
                                                             $i = 1;
                                                             foreach ($pkj_karyawan as $value) {
                                                                 ?>
+                                                        <?php if ($value->flag_usulan == 2) { ?>
                                                                 <tr>
                                                                     <td>
                                                                         <a href="#">
@@ -74,10 +75,64 @@
                                                                         </form>
                                                                     </td>
                                                                 </tr>
+                                                                <?php } else { break;}?>
                                                                 <?php
                                                                 $i++;
                                                             }
                                                             ?>
+                                                        <?php } ?>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </section>
+                                        <section class="panel">
+                                            <header class="panel-heading">
+                                                Daftar Pekerjaan yang Diusulkan Staff
+                                            </header>
+                                            <div class="panel-body">
+                                                <table class="table  table-hover general-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th> No</th>
+                                                            <th class="hidden-phone">Pekerjaan</th>
+                                                            <th>Deadline</th>
+                                                            <th>Assign To</th>
+                                                            <th>Status</th>
+<!--                                                            <th>Progress</th>-->
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php if (isset($pkj_karyawan)) { ?>
+                                                            <?php
+                                                            $i = 1;
+                                                            foreach ($pkj_karyawan as $value) {
+                                                                ?>
+                                                        <?php if ($value->flag_usulan == 1) { ?>
+                                                                <tr>
+                                                                    <td>
+                                                                        <a href="#">
+                                                                            <?php echo $i; ?>
+                                                                        </a>
+                                                                    </td>
+                                                                    <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
+                                                                    <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
+                                                                    <td><?php echo $this->session->userdata('user_nama') ?></td>
+                                                                    <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
+
+                                                                    <td>
+                                                                        <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
+                                                                            <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
+                                                                            <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
+                                                                        </form>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php } else break;?>
+                                                                <?php
+                                                                $i++;
+                                                            }
+                                                            ?>
+                                                            
                                                         <?php } ?>
 
                                                     </tbody>

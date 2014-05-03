@@ -23,12 +23,18 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="profile-desk">
-                                            <h1><?php echo $this->session->userdata('user_nama')?></h1>
-                                            <span class="text-muted">Product Manager</span>
+                                            <?php foreach ($profil as $value) {?>
+                                                
+                                            
+                                            <h1><?php echo $value->nama?></h1>
+                                            <span class="text-muted"><?php echo $value->nama_jabatan?></span>
                                             <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean porttitor vestibulum imperdiet. Ut auctor accumsan erat, a vulputate metus tristique non. Aliquam aliquam vel orci quis sagittis.
+                                                Seorang staff yang memiliki NIP <?php echo $value->nip?> ini adalah seorang karyawan yang sangat pekerja keras.
+                                                Jika ada perlu terhadap beliau terkait pekerjaan, dapat menghubungi ke
+                                                Email: <?php echo $value->email?>, HP: <?php echo $value->hp?>, dan telepon kantor: <?php echo $value->telepon?>
+                                                
                                             </p>
-                                            <a href="#" class="btn btn-primary">View Profile</a>
+                                            <?php }?>
                                         </div>
                                     </div>
 <!--                                    <div class="col-md-3">
@@ -65,12 +71,12 @@
                                     <ul class="nav nav-tabs nav-justified ">
                                         <li class="active">
                                             <a data-toggle="tab" href="#overview">
-                                                Timeline
+                                                Rekam Aktivitas
                                             </a>
                                         </li>
                                         <li>
                                             <a data-toggle="tab" href="#job-history">
-                                                Job History
+                                                Rekam Pekerjaan
                                             </a>
                                         </li>
                                     </ul>
@@ -79,65 +85,26 @@
                                     <div class="tab-content tasi-tab">
                                         <div id="overview" class="tab-pane active">
                                             <div class="row">
-                                                <div class="col-md-8">
+                                                <div class="col-md-12">
                                                     <div class="recent-act">
-                                                        <h1>Recent Activity</h1>
-                                                        <div class="activity-icon terques">
-                                                            <i class="fa fa-check"></i>
-                                                        </div>
-                                                        <div class="activity-desk">
-                                                            <h2>1 Hour Ago</h2>
-                                                            <p>Purchased new stationary items for head office</p>
-                                                        </div>
-                                                        <div class="activity-icon red">
-                                                            <i class="fa fa-beer"></i>
-                                                        </div>
-                                                        <div class="activity-desk">
-                                                            <h2 class="red">2 Hour Ago</h2>
-                                                            <p>Completed Coffee meeting with <a href="#" class="terques">Stive Martin</a> regarding the Product Promotion</p>
-                                                        </div>
-                                                        <div class="activity-icon purple">
-                                                            <i class="fa fa-tags"></i>
-                                                        </div>
-                                                        <div class="activity-desk">
-                                                            <h2 class="purple">today evening</h2>
-                                                            <p>3 photo Uploaded on facebook product page</p>
-                                                            <div class="photo-gl">
-                                                                <a href="#">
-                                                                    <img src="images/sm-img-1.jpg" alt=""/>
-                                                                </a>
-                                                                <a href="#">
-                                                                    <img src="images/sm-img-2.jpg" alt=""/>
-                                                                </a>
-                                                                <a href="#">
-                                                                    <img src="images/sm-img-3.jpg" alt=""/>
-                                                                </a>
+                                                        <h1>Semua Aktivitas</h1>
+                                                        
+                                                        <?php foreach ($aktivitas as $value) {?>
+                                                            <div class="activity-icon terques">
+                                                                <i class="fa fa-check"></i>
                                                             </div>
-                                                        </div>
-
-                                                        <div class="activity-icon green">
-                                                            <i class="fa fa-map-marker"></i>
-                                                        </div>
                                                         <div class="activity-desk">
-                                                            <h2 class="green">yesterday</h2>
-                                                            <p>Outdoor visit at <a href="#" class="blue">California State Route</a> 85 with <a href="#" class="terques">John Boltana</a> & <a href="#" class="terques">Harry Piterson</a> regarding to setup a new show room.</p>
-                                                            <div class="loc-map">
-                                                                location map goes here
-                                                            </div>
+                                                            <h2><?php echo date("d M Y h:i:s",  strtotime($value->tanggal_activity));?></h2>
+                                                            <p><?php echo $value->nama_activity?></p>
+                                                            <p><?php echo $value->nama." "?><?php echo $value->deskripsi_activity?></p>
                                                         </div>
-
-                                                        <div class="activity-icon yellow">
-                                                            <i class="fa fa-user-md"></i>
-                                                        </div>
-                                                        <div class="activity-desk">
-                                                            <h2 class="yellow">12 december 2013</h2>
-                                                            <p>Montly Regular Medical check up at Greenland Hospital.</p>
-                                                        </div>
+                                                        <?php }?>
+                                                        
 
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <div class="prf-box">
+                          <!--                       <div class="col-md-4">
+                                                   <div class="prf-box">
                                                         <h3 class="prf-border-head">work in progress</h3>
                                                         <div class=" wk-progress">
                                                             <div class="col-md-5">Themeforest</div>
@@ -183,8 +150,8 @@
                                                             </div>
                                                             <div class="col-md-2">30%</div>
                                                         </div>
-                                                    </div>
-                                                    <div class="prf-box">
+                                                    </div>-->
+<!--                                                    <div class="prf-box">
                                                         <h3 class="prf-border-head">performance status</h3>
                                                         <div class=" wk-progress pf-status">
                                                             <div class="col-md-8 col-xs-8">Total Product Sales</div>
@@ -204,8 +171,8 @@
                                                                 <strong>235452344$</strong>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="prf-box">
+                                                    </div>-->
+<!--                                                    <div class="prf-box">
                                                         <h3 class="prf-border-head">team members</h3>
                                                         <div class=" wk-progress tm-membr">
                                                             <div class="col-md-2 col-xs-2">
@@ -260,138 +227,32 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div>-->
                                             </div>
                                         </div>
                                         <div id="job-history" class="tab-pane ">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="timeline-messages">
-                                                        <h3>Take a Tour</h3>
+                                                        <h3>Seluruh Rekam Pekerjaan Yang Selesai</h3>
                                                         <!-- Comment -->
-                                                        <div class="msg-time-chat">
+                                                        <?php foreach ($pekerjaan as $value) {?>
+                                                            <div class="msg-time-chat">
                                                             <div class="message-body msg-in">
                                                                 <span class="arrow"></span>
                                                                 <div class="text">
                                                                     <div class="first">
-                                                                        13 January 2013
+                                                                       Selesai tanggal <?php echo date("d M Y h:i:s",  strtotime($value->tglaslli_selesai));?>
                                                                     </div>
                                                                     <div class="second bg-terques ">
-                                                                        Join as Product Asst. Manager
+                                                                        <p><?php echo $value->nama_pekerjaan?></p>
+                                                                        <p><?php echo $value->deskripsi_pekerjaan?></p>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!-- /comment -->
-
-                                                        <!-- Comment -->
-                                                        <div class="msg-time-chat">
-                                                            <div class="message-body msg-in">
-                                                                <span class="arrow"></span>
-                                                                <div class="text">
-                                                                    <div class="first">
-                                                                        10 February 2012
-                                                                    </div>
-                                                                    <div class="second bg-red">
-                                                                        Completed Provition period and Appointed as a permanent Employee
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- /comment -->
-
-                                                        <!-- Comment -->
-                                                        <div class="msg-time-chat">
-                                                            <div class="message-body msg-in">
-                                                                <span class="arrow"></span>
-                                                                <div class="text">
-                                                                    <div class="first">
-                                                                        2 January 2011
-                                                                    </div>
-                                                                    <div class="second bg-purple">
-                                                                        Selected Employee of the Month
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- /comment -->
-
-                                                        <!-- Comment -->
-                                                        <div class="msg-time-chat">
-                                                            <div class="message-body msg-in">
-                                                                <span class="arrow"></span>
-                                                                <div class="text">
-                                                                    <div class="first">
-                                                                        4 March 2010
-                                                                    </div>
-                                                                    <div class="second bg-green">
-                                                                        Got Promotion and become area manager of California
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- /comment -->
-                                                        <!-- Comment -->
-                                                        <div class="msg-time-chat">
-                                                            <div class="message-body msg-in">
-                                                                <span class="arrow"></span>
-                                                                <div class="text">
-                                                                    <div class="first">
-                                                                        3 April 2009
-                                                                    </div>
-                                                                    <div class="second bg-yellow">
-                                                                        Selected the Best Employee of the Year 2013 and was awarded
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- /comment -->
-
-                                                        <!-- Comment -->
-                                                        <div class="msg-time-chat">
-                                                            <div class="message-body msg-in">
-                                                                <span class="arrow"></span>
-                                                                <div class="text">
-                                                                    <div class="first">
-                                                                        23 May 2008
-                                                                    </div>
-                                                                    <div class="second bg-terques">
-                                                                        Got Promotion and become Product Manager and was transper from Branch to Head Office. Lorem ipsum dolor sit amet
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- /comment -->
-                                                        <!-- Comment -->
-                                                        <div class="msg-time-chat">
-                                                            <div class="message-body msg-in">
-                                                                <span class="arrow"></span>
-                                                                <div class="text">
-                                                                    <div class="first">
-                                                                        14 June 2007
-                                                                    </div>
-                                                                    <div class="second bg-blue">
-                                                                        Height Sales scored and break all of the previous sales record ever in the company. Awarded
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- /comment -->
-                                                        <!-- Comment -->
-                                                        <div class="msg-time-chat">
-                                                            <div class="message-body msg-in">
-                                                                <span class="arrow"></span>
-                                                                <div class="text">
-                                                                    <div class="first">
-                                                                        1 January 2006
-                                                                    </div>
-                                                                    <div class="second bg-green">
-                                                                        Take 15 days leave for his wedding and Honeymoon & Christmas
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- /comment -->
+                                                        <?php }?>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>

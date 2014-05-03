@@ -17,7 +17,7 @@
                                 List of tasks
                             </header>
                             <div class="panel-body">
-                                <table class="table table-striped table-hover table-bordered" id="editable-sample">
+                                <table class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
                                             <th style="display: none">id</th>

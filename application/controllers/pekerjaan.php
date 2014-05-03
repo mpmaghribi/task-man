@@ -53,7 +53,7 @@ class pekerjaan extends CI_Controller {
 
     public function karyawan() {
         if ($this->check_session_and_cookie() == 1) {
-            $result = $this->taskman_repository->sp_view_pekerjaan();
+            $result = $this->taskman_repository->sp_view_pekerjaan($this->session->userdata('user_id'));
             $data['pkj_karyawan'] = $result;
             $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
         } else {

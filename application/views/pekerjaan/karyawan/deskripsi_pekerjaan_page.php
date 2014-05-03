@@ -14,24 +14,38 @@
                 <!-- page start-->
                 <div class="row">
                     <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
-                        <div class="col-md-12">
-                            <section class="panel">
-                                <header class="panel-heading">Aksi
-                                    <span class="tools pull-right">
-                                        <a href="javascript:;" class="fa fa-chevron-down"></a>
-                                    </span>
-                                </header>
-                                <div class="panel-body">
-                                    <div class="btn-group btn-group-lg">
-                                        <a class="btn btn-success" href="#">Validasi</a>
-                                        <a class="btn btn-info" href="#">Edit</a>
-                                        <a class="btn btn-danger" href="#">Batalkan</a>
-                                    </div>
-                                </div>
-                            </section>
-                        </div>
-                    <?php } ?>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
+                        <section class="panel">
+                            <header class="panel-heading tab-bg-dark-navy-blue ">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#deskripsiPekerjaan">Deskripsi Pekerjaan</a>
+                                    </li>
+                                    <?php if (true) { ?>
+                                        <li class="">
+                                            <a data-toggle="tab" href="#penilaianPekerjaan">Penilaian Kerja Staff</a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            </header>
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                    <div id="deskripsiPekerjaan" class="tab-pane active">
+                                        <section class="panel">
+                                            <header class="panel-heading">Aksi
+                                                <span class="tools pull-right">
+                                                    <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                                </span>
+                                            </header>
+                                            <div class="panel-body">
+                                                <div class="btn-group btn-group-lg">
+                                                    <a class="btn btn-success" href="#">Validasi</a>
+                                                    <a class="btn btn-info" href="#">Edit</a>
+                                                    <a class="btn btn-danger" href="#">Batalkan</a>
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <div class="col-md-6">
                         <section class="panel">
                             <header class="panel-heading">
                                 <?php if (isset($deskripsi_pekerjaan)) { ?>
@@ -91,12 +105,15 @@
                                 </span>
                             </header>
                             <div class="panel-body">
-                                <table class="table table-striped table-hover table-condensed">
+                                <table class="table table-striped table-hover table-condensed" id="editable-sample">
                                     <thead>
                                         <tr>
+                                            <th style="display: none">id</th>
                                             <th>#</th>
                                             <th>Nama</th>
                                             <th>Progress</th>
+                                            <th></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -106,6 +123,7 @@
                                             foreach ($listassign_pekerjaan as $value) {
                                                 ?>
                                                 <tr>
+                                                    <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                     <td><?php echo $i; ?></td>
                                                     <td><?php echo $value->nama; ?></td>
                                                     <td>
@@ -115,6 +133,12 @@
                                                             </div>
                                                         </div>
                                                     </td>
+                                                    <td>
+                                                    <?php if ($value->id_akun == $this->session->userdata('user_id') && $value->flag_usulan == 2){?>
+                                                    <a class="edit" href="javascript:;">Progress</a>
+                                                    <?php }?>
+                                                    </td>
+                                                    <td></td>
                                                 </tr>
                                                 <?php
                                                 $i++;
@@ -126,6 +150,19 @@
                             </div>
                         </section>
                     </div>
+                                    </div>
+                                    <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
+                                        <div id="penilaianPekerjaan" class="tab-pane">
+                                                                                      
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                        </section>
+                    </div>
+                    <?php } ?>
+                    
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -192,6 +229,15 @@
                         </section>
                     </div>
                 </div>
+                <!--script for this page only-->
+        <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
+
+        <!-- END JAVASCRIPTS -->
+        <script>
+            jQuery(document).ready(function() {
+                EditableTableProgress.init();
+            });
+        </script>
                 <script>
                     $(function() {
                         $('#komentar').click(function(e) {

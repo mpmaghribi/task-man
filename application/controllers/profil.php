@@ -49,7 +49,10 @@ class profil extends CI_Controller {
     public function index() {
 //$this->load->view('profil/taskman_profil_page');
         if ($this->check_session_and_cookie() == 1) {
-            $this->load->view('profil/taskman_profil_page');
+            $data['profil'] = $this->taskman_repository->sp_view_profil($this->session->userdata('user_id'));
+            $data['aktivitas'] = $this->taskman_repository->sp_aktivitas_staff($this->session->userdata('user_id'));
+            $data['pekerjaan'] = $this->taskman_repository->sp_log_pekerjaan($this->session->userdata('user_id'));
+            $this->load->view('profil/taskman_profil_page',$data);
         } else {
             $this->session->set_flashdata('status', 4);
             redirect('login');
