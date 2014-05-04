@@ -82,7 +82,7 @@
                                                                     </td>
                                                                     <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                                     <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                                    <td><?php echo $this->session->userdata('user_nama') ?></td>
+                                                                    <td><?php echo $data_akun['user_nama'] ?></td>
                                                                     <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
 <!--                                                                    <td>
                                                                         <div class="progress progress-striped progress-xs">

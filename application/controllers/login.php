@@ -120,19 +120,32 @@ class login extends CI_Controller {
 
     public function logout() {
         $session_data = array(
+//            'user_nip' => "",
+//            'user_email' => "",
+//            'user_nama' => "",
+//            //'user_pwd' => "",
+//            'is_login' => FALSE,
+//            'admin' => FALSE
+            
+            'id_akun' => "",
+            'nip' => "",
+            'user_id' => "",
             'user_nip' => "",
-            'user_email' => "",
+            'nama' => "",
             'user_nama' => "",
-            //'user_pwd' => "",
+            'user_email' => "",
             'is_login' => FALSE,
-            'admin' => FALSE
+            'user_jabatan' => "",
+            'user_departemen'=>"",
         );
-        delete_cookie("cookie_user");
-        delete_cookie("cookie_password");
+        $temp = $this->session->userdata('logged_in');
+        $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'],0, "Logout", "baru saja logout");
+//        delete_cookie("cookie_user");
+//        delete_cookie("cookie_password");
+        
+        $this->session->unset_userdata('logged_in');
         $this->session->sess_destroy();
-        $this->session->unset_userdata($session_data);
-        $result = $this->taskman_repository->sp_insert_activity($this->session->userdata('user_id'),0, "Logout", "baru saja logout");
-        redirect('login');
+        redirect('http://localhost/integrarsud');
     }
 
 }

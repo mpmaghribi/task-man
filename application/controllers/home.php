@@ -51,11 +51,12 @@ class home extends Admin_Controller {
         {
             $temp = $this->session->userdata('logged_in');
             $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
+            $data['data_akun'] = $this->session->userdata('logged_in');
             $data['pkj_karyawan'] = $result;
             $this->load->view('homepage/taskman_home_page',$data);
         }
         else
-            echo 'gagal';
+            redirect('http://localhost/integrarsud');
     }
     
     public function recent_activity()
