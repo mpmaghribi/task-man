@@ -56,13 +56,13 @@ class user extends ceklogin {
     }
 
     public function my_staff() {
-        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan")=="manager") {
+//        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan")=="manager") {
             $this->load->model("akun");
             $staff=$this->akun->my_staff($this->session->userdata("user_id"));
             echo json_encode(array("status"=>"OK", "data"=>$staff));
-        } else {
-            echo json_encode(array("status"=>"FAILED", "reason"=>"mbuh"));
-        }
+//        } else {
+//            echo json_encode(array("status"=>"FAILED", "reason"=>"mbuh"));
+//        }
     }
 
 }

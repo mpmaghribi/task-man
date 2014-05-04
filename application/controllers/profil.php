@@ -48,28 +48,28 @@ class profil extends ceklogin {
 
     public function index() {
 //$this->load->view('profil/taskman_profil_page');
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             $data['profil'] = $this->taskman_repository->sp_view_profil($this->session->userdata('user_id'));
             $data['aktivitas'] = $this->taskman_repository->sp_aktivitas_staff($this->session->userdata('user_id'));
             $data['pekerjaan'] = $this->taskman_repository->sp_log_pekerjaan($this->session->userdata('user_id'));
             $this->load->view('profil/taskman_profil_page',$data);
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect('login');
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect('login');
+//        }
     }
 
     public function setting() {
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             $kirim = array();
             $kirim["akun"] = $this->akun->get_akun($this->session->userdata("user_nip"));
             $kirim["jabatan"] = $this->jabatan_model->semua();
             $kirim["departemen"]=$this->departemen->semua();
             $this->load->view('profil/setting', $kirim);
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect('login');
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect('login');
+//        }
     }
 
     public function ubah_password() {
@@ -87,7 +87,7 @@ class profil extends ceklogin {
     }
 
     public function ubah_profil() {
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             $update = array();
             $update["nama"] = pg_escape_string($this->input->post("nama"));
             $update["jenis_kelamin"] = pg_escape_string($this->input->post("jenis_kelamin"));
@@ -112,10 +112,10 @@ class profil extends ceklogin {
             } else {
                 echo json_encode(array("status" => "FAILED"));
             }
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect('login');
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect('login');
+//        }
     }
 
 }

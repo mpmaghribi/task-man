@@ -43,12 +43,12 @@ class pekerjaan extends ceklogin {
     }
 
     public function index() {
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             redirect(base_url() . 'pekerjaan/karyawan');
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     public function karyawan() {
@@ -66,7 +66,7 @@ class pekerjaan extends ceklogin {
     }
 
     public function usulan_pekerjaan2() {
-        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+//        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $sifat_pkj = $this->input->post('sifat_pkj');
             $parent_pkj = 0; //$this->input->post('parent_pkj');
             $nama_pkj = $this->input->post('nama_pkj');
@@ -111,10 +111,10 @@ class pekerjaan extends ceklogin {
             }
 
             redirect('pekerjaan/karyawan');
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     public function upload_file($files, $path, $id_pekerjaan) {
@@ -141,7 +141,7 @@ class pekerjaan extends ceklogin {
     }
 
     public function usulan_pekerjaan() {
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             $sifat_pkj = $this->input->post('sifat_pkj');
             $parent_pkj = 0; //$this->input->post('parent_pkj');
             $nama_pkj = $this->input->post('nama_pkj');
@@ -168,38 +168,38 @@ class pekerjaan extends ceklogin {
                 
             }
             redirect('pekerjaan/karyawan');
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     public function list_pekerjaan() {
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
             $data["list_pekerjaan"] = $this->pekerjaan_model->list_pekerjaan();
             $this->load->view('pekerjaan/taskman_listpekerjaan_page', $data);
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     public function req_pending_task() {
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             $this->load->model("pekerjaan_model");
             $list_pekerjaan = $this->pekerjaan_model->list_pending_task($this->session->userdata("user_id"));
             echo json_encode(array("status" => "OK", "data" => $list_pekerjaan));
             //return true;
-        } else {
-            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
-            //return false;
-        }
+//        } else {
+//            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
+//            //return false;
+//        }
     }
 
     public function deskripsi_pekerjaan() {
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
             $id_detail_pkj = $this->input->get('id_detail_pkj');
@@ -229,50 +229,50 @@ class pekerjaan extends ceklogin {
             $data["id_pkj"] = $id_detail_pkj;
             $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
             //redirect("pekerjaan/karyawan/deskripsi_pekerjaan_page?id_detail_pkj=".$id_detail_pkj);
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     public function komentar_pekerjaan() {
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
             $id_detail_pkj = $this->input->post('id_detail_pkj');
             $isi_komentar = $this->input->post('komentar_pkj');
             $id_akun = $this->session->userdata('user_id');
             $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     public function lihat_usulan() {
-        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+//        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
             //$data["list_usulan"] = $this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
             $this->load->view("pekerjaan/lihat_usulan_pekerjaan_page");
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     public function get_usulan_pekerjaan() {
-        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+//        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
             $data = $this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
 
             echo json_encode(array("status" => "OK", "data" => $data));
-        } else {
-            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
-        }
+//        } else {
+//            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
+//        }
     }
 
     public function validasi_usulan() {
-        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+//        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $id_pekerjaan = $this->input->post("id_pekerjaan");
             $this->load->model("pekerjaan_model");
             if ($this->pekerjaan_model->validasi_pekerjaan($id_pekerjaan) == 1) {
@@ -280,9 +280,9 @@ class pekerjaan extends ceklogin {
                 echo json_encode(array("status" => "OK"));
             } else
                 echo json_encode(array("status" => "FAILED", "reason" => "failed to update"));
-        } else {
-            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
-        }
+//        } else {
+//            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
+//        }
     }
 
     /*
@@ -290,12 +290,12 @@ class pekerjaan extends ceklogin {
      */
 
     public function pekerjaan_staff() {
-        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+//        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->view("pekerjaan/lihat_daftar_pekerjaan_staff_page");
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     /*
@@ -303,50 +303,50 @@ class pekerjaan extends ceklogin {
      */
 
     public function data_pekerjaan_staff() {
-        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+//        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
             $data_pekerjaan_staff = $this->pekerjaan_model->list_pekerjaan_staff($this->session->userdata("user_departemen"));
             echo json_encode(array("status" => "OK", "data" => $data_pekerjaan_staff));
-        } else {
-            echo json_encode(array("status" => "FAILED", "reason" => "gagal"));
-        }
+//        } else {
+//            echo json_encode(array("status" => "FAILED", "reason" => "gagal"));
+//        }
     }
 
     private function baca_pending_task($id_pekerjaan) {
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             $this->load->model("pekerjaan_model");
             $this->pekerjaan_model->baca_pending_task(pg_escape_string($id_pekerjaan), $this->session->userdata("user_id"));
             return true;
-        } else {
-            return false;
-        }
+//        } else {
+//            return false;
+//        }
     }
 
     public function progress() {
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             $id_detail_pkj = $this->input->get('id_detail_pkj');
             $this->load->model("pekerjaan_model");
             $data["progress_pekerjaan"] = $this->pekerjaan_model->sp_progress_pekerjaan($id_detail_pkj);
             $this->load->view("pekerjaan/progress/progress_pekerjaan_page", $data);
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     public function get_status_usulan() {
-        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+//        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
             $id_pekerjaan = pg_escape_string($this->input->get("id_pekerjaan"));
             $status_usulan = $this->pekerjaan_model->get_status_usulan($id_pekerjaan);
             echo json_encode(array("status" => "OK", "data" => $status_usulan));
-        } else {
-            echo json_encode(array("status" => "FAILED", "reason" => "gagal"));
-        }
+//        } else {
+//            echo json_encode(array("status" => "FAILED", "reason" => "gagal"));
+//        }
     }
 
     public function update_progress() {
-        if ($this->check_session_and_cookie() == 1) {
+//        if ($this->check_session_and_cookie() == 1) {
             $id_detail_pkj = $this->input->post('id_detail_pkj');
             $data = $this->input->post('data_baru');
             $this->load->model("pekerjaan_model");
@@ -359,14 +359,14 @@ class pekerjaan extends ceklogin {
 
             echo json_encode($status);
             //$this->load->view("pekerjaan/progress/progress_pekerjaan_page",$data);
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     public function edit() {
-        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+//        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
             $this->load->model("berkas_model");
             $id_pekerjaan = pg_escape_string($this->input->get('id_pekerjaan'));
@@ -379,10 +379,10 @@ class pekerjaan extends ceklogin {
             $data["detail_pekerjaan"]=$this->pekerjaan_model->get_detil_of_pekerjaan($id_pekerjaan);
             $data["berkas"]=$this->berkas_model->get_berkas_of_pekerjaan($id_pekerjaan);
             $this->load->view("pekerjaan/edit_pekerjaan_page",$data);
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     public function get_idModule() {
