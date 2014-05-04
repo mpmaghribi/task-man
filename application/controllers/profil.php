@@ -2,8 +2,8 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-
-class profil extends CI_Controller {
+require APPPATH.'/libraries/ceklogin.php';
+class profil extends ceklogin {
 
     public function __construct() {
         parent::__construct();
