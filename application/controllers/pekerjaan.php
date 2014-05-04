@@ -2,8 +2,8 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-
-class pekerjaan extends CI_Controller {
+require APPPATH.'/libraries/ceklogin.php';
+class pekerjaan extends ceklogin {
 
     public function __construct() {
         parent::__construct();
@@ -52,14 +52,17 @@ class pekerjaan extends CI_Controller {
     }
 
     public function karyawan() {
-        if ($this->check_session_and_cookie() == 1) {
-            $result = $this->taskman_repository->sp_view_pekerjaan($this->session->userdata('user_id'));
+//        if ($this->check_session_and_cookie() == 1) {
+        $temp = $this->session->userdata('logged_in');
+            $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
+            $data['data_akun'] = $this->session->userdata('logged_in');
+//            $result = $this->taskman_repository->sp_view_pekerjaan($this->session->userdata('user_id'));
             $data['pkj_karyawan'] = $result;
             $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
-        } else {
-            $this->session->set_flashdata('status', 4);
-            redirect("login");
-        }
+//        } else {
+//            $this->session->set_flashdata('status', 4);
+//            redirect("login");
+//        }
     }
 
     public function usulan_pekerjaan2() {
@@ -380,6 +383,10 @@ class pekerjaan extends CI_Controller {
             $this->session->set_flashdata('status', 4);
             redirect("login");
         }
+    }
+
+    public function get_idModule() {
+        
     }
 
 }

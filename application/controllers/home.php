@@ -2,10 +2,8 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-
-require APPPATH.'/libraries/Admin_Controller.php';
-
-class home extends Admin_Controller {
+require APPPATH.'/libraries/ceklogin.php';
+class home extends ceklogin {
 
     public function __construct() {
         parent::__construct();
@@ -47,16 +45,16 @@ class home extends Admin_Controller {
 //    }
 
     public function index() {
-        if($this->session->userdata('logged_in'))
-        {
+//        if($this->session->userdata('logged_in'))
+//        {
             $temp = $this->session->userdata('logged_in');
             $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
             $data['data_akun'] = $this->session->userdata('logged_in');
             $data['pkj_karyawan'] = $result;
             $this->load->view('homepage/taskman_home_page',$data);
-        }
-        else
-            redirect('http://localhost/integrarsud');
+//        }
+//        else
+//            redirect('http://localhost/integrarsud');
     }
     
     public function recent_activity()
