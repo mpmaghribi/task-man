@@ -18,14 +18,6 @@
                         <li><a href="<?php echo site_url() ?>/profil">Akun</a></li>
                     </ul>
                 </li>
-<!--                <li class="sub-menu">
-                    <a href="javascript:;">
-                        <i class="fa fa-users"></i>
-                        <span>User Manajemen</span>
-                    </a>
-                    <ul class="sub">
-                    </ul>
-                </li>-->
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>
