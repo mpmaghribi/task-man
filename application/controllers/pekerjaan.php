@@ -141,6 +141,8 @@ class pekerjaan extends ceklogin {
     }
 
     public function usulan_pekerjaan() {
+        $temp = $this->session->userdata("logged_in");
+        
 //        if ($this->check_session_and_cookie() == 1) {
             $sifat_pkj = $this->input->post('sifat_pkj');
             $parent_pkj = 0; //$this->input->post('parent_pkj');
@@ -154,7 +156,7 @@ class pekerjaan extends ceklogin {
             $result = $this->taskman_repository->sp_tambah_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
             $id_pekerjaan_baru = $result[0]->kode;
             if ($id_pekerjaan_baru >= 0) {
-                $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $this->session->userdata("user_id"));
+                $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $temp['user_id']);
                 if (isset($_FILES["berkas"])) {
                     $path = './uploads/pekerjaan/' . $id_pekerjaan_baru . '/';
                     $this->load->library('upload');
