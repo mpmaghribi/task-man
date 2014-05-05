@@ -287,7 +287,7 @@
     <?php
     $this->load->view("taskman_footer_page");
 
-    if ($this->session->userdata("user_jabatan") == "manager") {
+    if($data_akun['jmlstaff'] > 0){
         ?>
         <script>
             function validasi(id_pekerjaan) {
