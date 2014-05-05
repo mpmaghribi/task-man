@@ -196,9 +196,10 @@ class pekerjaan extends ceklogin {
     public function req_pending_task() {
 //        if ($this->check_session_and_cookie() == 1) {
         $temp = $this->session->userdata('logged_in');
+        //var_dump($temp);
         $data['temp'] = $this->session->userdata('logged_in');
             $this->load->model("pekerjaan_model");
-            $list_pekerjaan = $this->pekerjaan_model->list_pending_task($this->session->userdata("user_id"));
+            $list_pekerjaan = $this->pekerjaan_model->list_pending_task($temp['user_id']);
             echo json_encode(array("status" => "OK", "data" => $list_pekerjaan));
             //return true;
 //        } else {
@@ -280,6 +281,7 @@ class pekerjaan extends ceklogin {
     public function get_usulan_pekerjaan() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
+            //var_dump($this->session->userdata('logged_in'));
             $data = $this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
 
             echo json_encode(array("status" => "OK", "data" => $data));
