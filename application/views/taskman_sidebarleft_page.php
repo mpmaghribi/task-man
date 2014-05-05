@@ -30,7 +30,7 @@
                                 <span>Pekerjaan Saya</span>
                             </a>
                         </li>
-                        <?php if($this->session->userdata("user_jabatan")=="manager"){?>
+                        <?php if($data_akun['jmlstaff'] > 0){?>
                         <li class="sub-menu">
                             <a href="<?php echo site_url(); ?>/pekerjaan/lihat_usulan">
                                 <i class="fa fa-book"></i>

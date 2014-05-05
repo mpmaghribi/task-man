@@ -49,9 +49,11 @@ class profil extends ceklogin {
     public function index() {
 //$this->load->view('profil/taskman_profil_page');
 //        if ($this->check_session_and_cookie() == 1) {
-            $data['profil'] = $this->taskman_repository->sp_view_profil($this->session->userdata('user_id'));
-            $data['aktivitas'] = $this->taskman_repository->sp_aktivitas_staff($this->session->userdata('user_id'));
-            $data['pekerjaan'] = $this->taskman_repository->sp_log_pekerjaan($this->session->userdata('user_id'));
+        $temp = $this->session->userdata('logged_in');
+        $data['data_akun']= $this->session->userdata('logged_in');
+            $data['profil'] = $this->taskman_repository->sp_view_profil($temp['user_id']);
+            $data['aktivitas'] = $this->taskman_repository->sp_aktivitas_staff($temp['user_id']);
+            $data['pekerjaan'] = $this->taskman_repository->sp_log_pekerjaan($temp['user_id']);
             $this->load->view('profil/taskman_profil_page',$data);
 //        } else {
 //            $this->session->set_flashdata('status', 4);
@@ -62,7 +64,9 @@ class profil extends ceklogin {
     public function setting() {
 //        if ($this->check_session_and_cookie() == 1) {
             $kirim = array();
-            $kirim["akun"] = $this->akun->get_akun($this->session->userdata("user_nip"));
+            $temp = $this->session->userdata('logged_in');
+            $kirim['data_akun']= $this->session->userdata('logged_in');
+            $kirim["akun"] = $this->akun->get_akun($temp['user_nip']);
             $kirim["jabatan"] = $this->jabatan_model->semua();
             $kirim["departemen"]=$this->departemen->semua();
             $this->load->view('profil/setting', $kirim);

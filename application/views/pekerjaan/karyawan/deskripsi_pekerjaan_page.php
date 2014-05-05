@@ -13,7 +13,7 @@
             <section class="wrapper">
                 <!-- page start-->
                 <div class="row">
-                    <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
+                    <?php if ($temp['jmlstaff'] > 0 ) { ?>
                         <div class="col-md-12" >
                             <section class="panel">
                                 <header class="panel-heading tab-bg-dark-navy-blue ">
@@ -151,7 +151,7 @@
                                                 </section>
                                             </div>
                                         </div>
-                                        <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
+                                        <?php if ($temp['jmlstaff'] > 0) { ?>
                                             <div id="penilaianPekerjaan" class="tab-pane">
 
                                             </div>

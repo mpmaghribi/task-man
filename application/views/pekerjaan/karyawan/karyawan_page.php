@@ -140,7 +140,7 @@
                                             </div>
                                         </section>
                                     </div>
-                                    <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
+                                    <?php if ($temp['jmlstaff'] > 0) { ?>
                                         <div id="assignPekerjaan" class="tab-pane">
                                             <div class="form">
                                                 <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan2" enctype="multipart/form-data">

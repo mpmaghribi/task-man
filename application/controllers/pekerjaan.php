@@ -54,6 +54,7 @@ class pekerjaan extends ceklogin {
     public function karyawan() {
 //        if ($this->check_session_and_cookie() == 1) {
         $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
             $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
             $data['data_akun'] = $this->session->userdata('logged_in');
 //            $result = $this->taskman_repository->sp_view_pekerjaan($this->session->userdata('user_id'));
@@ -67,6 +68,8 @@ class pekerjaan extends ceklogin {
 
     public function usulan_pekerjaan2() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+        $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
             $sifat_pkj = $this->input->post('sifat_pkj');
             $parent_pkj = 0; //$this->input->post('parent_pkj');
             $nama_pkj = $this->input->post('nama_pkj');
@@ -141,7 +144,7 @@ class pekerjaan extends ceklogin {
     }
 
     public function usulan_pekerjaan() {
-        $temp = $this->session->userdata("logged_in");
+        $data['temp'] = $this->session->userdata("logged_in");
         
 //        if ($this->check_session_and_cookie() == 1) {
             $sifat_pkj = $this->input->post('sifat_pkj');
@@ -179,6 +182,8 @@ class pekerjaan extends ceklogin {
     public function list_pekerjaan() {
 //        if ($this->check_session_and_cookie() == 1) {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
+        $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
             $this->load->model("pekerjaan_model");
             $data["list_pekerjaan"] = $this->pekerjaan_model->list_pekerjaan();
             $this->load->view('pekerjaan/taskman_listpekerjaan_page', $data);
@@ -190,6 +195,8 @@ class pekerjaan extends ceklogin {
 
     public function req_pending_task() {
 //        if ($this->check_session_and_cookie() == 1) {
+        $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
             $this->load->model("pekerjaan_model");
             $list_pekerjaan = $this->pekerjaan_model->list_pending_task($this->session->userdata("user_id"));
             echo json_encode(array("status" => "OK", "data" => $list_pekerjaan));
@@ -201,6 +208,9 @@ class pekerjaan extends ceklogin {
     }
 
     public function deskripsi_pekerjaan() {
+         $data['data_akun'] = $this->session->userdata('logged_in');
+         $data['temp'] = $this->session->userdata('logged_in');
+         $temp = $this->session->userdata('logged_in');
 //        if ($this->check_session_and_cookie() == 1) {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
             $this->load->model("pekerjaan_model");
@@ -221,7 +231,7 @@ class pekerjaan extends ceklogin {
             if (isset($is_isi_komentar)) {
                 if ($is_isi_komentar == TRUE) {
                     $isi_komentar = $this->input->post('komentar_pkj');
-                    $id_akun = $this->session->userdata('user_id');
+                    $id_akun = $temp['user_id'];
                     $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
                     $data["display"] = "block";
                     $r = $this->taskman_repository->sp_insert_activity($id_akun, 0, "Komentar", "baru saja memberikan komentar");
@@ -229,6 +239,7 @@ class pekerjaan extends ceklogin {
             }
             $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
             $data["id_pkj"] = $id_detail_pkj;
+            //echo $temp['user_id'];;
             $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
             //redirect("pekerjaan/karyawan/deskripsi_pekerjaan_page?id_detail_pkj=".$id_detail_pkj);
 //        } else {
@@ -240,10 +251,12 @@ class pekerjaan extends ceklogin {
     public function komentar_pekerjaan() {
 //        if ($this->check_session_and_cookie() == 1) {
             //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
+        $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
             $this->load->model("pekerjaan_model");
             $id_detail_pkj = $this->input->post('id_detail_pkj');
             $isi_komentar = $this->input->post('komentar_pkj');
-            $id_akun = $this->session->userdata('user_id');
+            $id_akun = $temp['user_id'];
             $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
 //        } else {
 //            $this->session->set_flashdata('status', 4);
@@ -255,7 +268,9 @@ class pekerjaan extends ceklogin {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
             $this->load->model("pekerjaan_model");
             //$data["list_usulan"] = $this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
-            $this->load->view("pekerjaan/lihat_usulan_pekerjaan_page");
+            $temp = $this->session->userdata('logged_in');
+            $data['data_akun'] = $this->session->userdata('logged_in');
+            $this->load->view("pekerjaan/lihat_usulan_pekerjaan_page",$data);
 //        } else {
 //            $this->session->set_flashdata('status', 4);
 //            redirect("login");
@@ -275,6 +290,8 @@ class pekerjaan extends ceklogin {
 
     public function validasi_usulan() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+        $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
             $id_pekerjaan = $this->input->post("id_pekerjaan");
             $this->load->model("pekerjaan_model");
             if ($this->pekerjaan_model->validasi_pekerjaan($id_pekerjaan) == 1) {
@@ -293,7 +310,9 @@ class pekerjaan extends ceklogin {
 
     public function pekerjaan_staff() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
-            $this->load->view("pekerjaan/lihat_daftar_pekerjaan_staff_page");
+        $temp = $this->session->userdata('logged_in');
+        $data['data_akun'] = $this->session->userdata('logged_in');
+            $this->load->view("pekerjaan/lihat_daftar_pekerjaan_staff_page",$data);
 //        } else {
 //            $this->session->set_flashdata('status', 4);
 //            redirect("login");
@@ -306,6 +325,8 @@ class pekerjaan extends ceklogin {
 
     public function data_pekerjaan_staff() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+        $temp = $this->session->userdata('logged_in');
+        $data['data_akun'] = $this->session->userdata('logged_in');
             $this->load->model("pekerjaan_model");
             $data_pekerjaan_staff = $this->pekerjaan_model->list_pekerjaan_staff($this->session->userdata("user_departemen"));
             echo json_encode(array("status" => "OK", "data" => $data_pekerjaan_staff));
@@ -316,6 +337,8 @@ class pekerjaan extends ceklogin {
 
     private function baca_pending_task($id_pekerjaan) {
 //        if ($this->check_session_and_cookie() == 1) {
+        $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
             $this->load->model("pekerjaan_model");
             $this->pekerjaan_model->baca_pending_task(pg_escape_string($id_pekerjaan), $this->session->userdata("user_id"));
             return true;
@@ -338,6 +361,8 @@ class pekerjaan extends ceklogin {
 
     public function get_status_usulan() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+        $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
             $this->load->model("pekerjaan_model");
             $id_pekerjaan = pg_escape_string($this->input->get("id_pekerjaan"));
             $status_usulan = $this->pekerjaan_model->get_status_usulan($id_pekerjaan);
@@ -349,6 +374,8 @@ class pekerjaan extends ceklogin {
 
     public function update_progress() {
 //        if ($this->check_session_and_cookie() == 1) {
+        $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
             $id_detail_pkj = $this->input->post('id_detail_pkj');
             $data = $this->input->post('data_baru');
             $this->load->model("pekerjaan_model");
@@ -369,6 +396,8 @@ class pekerjaan extends ceklogin {
 
     public function edit() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
+        $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
             $this->load->model("pekerjaan_model");
             $this->load->model("berkas_model");
             $id_pekerjaan = pg_escape_string($this->input->get('id_pekerjaan'));

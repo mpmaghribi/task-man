@@ -32,7 +32,7 @@
             
             <!-- inbox dropdown end -->
             <!-- notification dropdown start-->
-            <li id="header_notification_bar" class="dropdown">
+<!--            <li id="header_notification_bar" class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
 
                     <i class="fa fa-bell-o"></i>
@@ -68,7 +68,7 @@
                     </li>
 
                 </ul>
-            </li>
+            </li>-->
             <!-- notification dropdown end -->
         </ul>
         <!--  notification end -->
@@ -88,7 +88,6 @@
                 </a>
                 <ul class="dropdown-menu extended logout">
                     <li><a href="<?php echo site_url() ?>/profil"><i class=" fa fa-suitcase"></i>Profile</a></li>
-                    <li><a href="<?php echo site_url() ?>/profil/setting"><i class="fa fa-cog"></i> Settings</a></li>
                     <li><a href="<?php echo site_url() ?>/login/logout"><i class="fa fa-key"></i> Log Out</a></li>
                 </ul>
             </li>
