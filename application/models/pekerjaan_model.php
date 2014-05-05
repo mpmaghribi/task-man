@@ -137,7 +137,7 @@ class pekerjaan_model extends CI_Model {
      */
 
     public function list_pekerjaan_staff($id_departemen) {
-        if ($id_departemen != NULL && strlen($id_departemen) > 0) {
+        /*if ($id_departemen != NULL && strlen($id_departemen) > 0) {
             $this->load->model("jabatan_model");
             $id_jabatan_staff = $this->jabatan_model->get_id_jabatan("staff");
             if ($id_jabatan_staff == NULL) {
@@ -152,7 +152,8 @@ class pekerjaan_model extends CI_Model {
             //echo $query;
             return $this->db->query($query)->result();
         }
-        return NULL;
+        return NULL;*/
+        $this->load->model("akun");
     }
 
     public function staff_progress($id_pekerjaan) {

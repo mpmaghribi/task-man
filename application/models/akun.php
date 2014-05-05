@@ -52,7 +52,7 @@ class akun extends CI_Model {
     }
 
     public function my_staff($id_akun) {
-        $query = "select * from akun where id_akun=$id_akun";
+        /*$query = "select * from akun where id_akun=$id_akun";
         $query = $this->db->query($query);
         if ($query->num_rows() == 0) {
             echo "akun not found";
@@ -66,7 +66,7 @@ class akun extends CI_Model {
         if ($id_departemen == NULL) {
             echo "departemen not found";
             return NULL;
-        }*/
+        }
         $this->load->model("jabatan_model");
         $id_jabatan = $this->jabatan_model->get_id_jabatan("staff");
         if ($id_jabatan == NULL){
@@ -77,7 +77,12 @@ class akun extends CI_Model {
                 . "departemen.id_departemen = akun.id_departemen where departemen.id_departemen=$id_departemen"
                 . " and id_jabatan=$id_jabatan";
         $query=$this->db->query($query);
-        return $query->result();
+        return $query->result();*/
+        $list_staff = json_decode(
+                file_get_contents(
+                        "http://hello:world@localhost:90/integrarsud/index.php/api/integration/bawahan/id/".$id_akun."/format/json"
+                        ));
+        var_dump($list_staff);
     }
 
 }

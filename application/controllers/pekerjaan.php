@@ -328,9 +328,12 @@ class pekerjaan extends ceklogin {
     public function data_pekerjaan_staff() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
         $temp = $this->session->userdata('logged_in');
+        var_dump($temp);
         $data['data_akun'] = $this->session->userdata('logged_in');
             $this->load->model("pekerjaan_model");
-            $data_pekerjaan_staff = $this->pekerjaan_model->list_pekerjaan_staff($this->session->userdata("user_departemen"));
+            /* query list pekerjaan staff berdasarkan feedback list staff dari integra, */
+            //"http://localhost:90/integrarsud/index.php/api/integration/bawahan/id/".$temp["user_id"]."/format/json";
+            $data_pekerjaan_staff = $this->pekerjaan_model->list_pekerjaan_staff();
             echo json_encode(array("status" => "OK", "data" => $data_pekerjaan_staff));
 //        } else {
 //            echo json_encode(array("status" => "FAILED", "reason" => "gagal"));
