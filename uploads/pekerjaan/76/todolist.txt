@@ -1,0 +1,42 @@
+1. View
+   a. jenis pkj done
+   b. deadline done
+   c. team ditampilkan done
+   d. deskripsi pkj done
+   e. progress done 
+   f. file yg diupload
+   g. komentar done
+   
+2. Kerjakan
+   a. update progress done
+   b. upload file
+   c. insert keterangan file yg diupload
+   //d. komentar
+
+3. Profil
+   a. Activity log done
+   b. Job log done
+
+4. Pekerjaan status
+   a. Belum dibaca
+   b. dibaca
+   c. dikerjakan
+   d. selesai
+   e. terlambat
+
+5. work in progress right bar hapus done
+
+6. Tampilan tambah Pekerjaan Dibuat POP-UP.
+   a. NIP
+   b. Nama, Jabatan, Tombol Assign
+
+7. jenis Pekerjaan
+   a. Harian 
+   b. Project
+
+8. Tambah Pekerjaan
+   a. Upload file
+
+9. Tampilan UI
+   a. Font diperbesar done
+   b. Warna kontras done

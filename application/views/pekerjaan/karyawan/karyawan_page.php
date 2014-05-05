@@ -21,7 +21,7 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#ListPekerjaan">List Pekerjaan</a>
                                     </li>
-                                    <?php if (true) { ?>
+                                    <?php if ($temp['jmlstaff'] > 0) { ?>
                                         <li class="">
                                             <a data-toggle="tab" href="#assignPekerjaan">Assign Pekerjaan</a>
                                         </li>
@@ -65,7 +65,7 @@
                                                                     </td>
                                                                     <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                                     <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                                    <td><?php echo $this->session->userdata('user_nama') ?></td>
+                                                                    <td><?php echo $temp['user_nama'] ?></td>
                                                                     <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
 
                                                                     <td>
@@ -152,7 +152,7 @@
 
                                                             </div>
 
-                                                            <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="query_staff();">
+                                                            <a class="btn btn-success" data-toggle="modal" id="tambahstaff" href="#modalTambahStaff">
                                                                 Tambah Staff
                                                             </a>
                                                             <!--input id="autostaff" class="form-control" class="tags" value="" type="text" /-->
@@ -390,13 +390,13 @@
         });
     </script>
     <?php $this->load->view("taskman_footer_page") ?>
-    <?php if ($this->session->userdata("user_jabatan") == "manager") { ?>
+    <?php if ($temp['jmlstaff'] > 0) { ?>
         <script>
             var list_nip = [];
             var list_nama = [];
             var list_departemen = [];
             //var list_id = [];
-            function query_staff() {
+            $("#tambahstaff").click(function() {
                 var tubuh = $("#tabel_list_enroll_staff_body");
                 //alert("query staff"+tubuh.html().trim().length);
                 if (tubuh.html().trim().length === 0) {
@@ -429,7 +429,7 @@
                                 }
 
                             } else {
-
+                                
                             }
                         }
                     });
@@ -444,7 +444,7 @@
                     if (assigned[i].length > 0)
                         $('#enroll_' + assigned[i]).attr('checked', true);
                 }
-            }
+            });
             function pilih_staff_ok() {
                 var jumlah_data = list_nip.length;
                 var staf = $('#staff');

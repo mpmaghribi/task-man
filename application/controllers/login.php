@@ -139,7 +139,7 @@ class login extends CI_Controller {
             'user_departemen'=>"",
         );
         $temp = $this->session->userdata('logged_in');
-        $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'],0, "Logout", "baru saja logout");
+        $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'],0, "Aktivitas Logout", $temp['user_nama']." baru saja sgn out dari SI Task Management.");
 //        delete_cookie("cookie_user");
 //        delete_cookie("cookie_password");
         

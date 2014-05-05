@@ -23,18 +23,17 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="profile-desk">
-                                            <?php foreach ($profil as $value) {?>
+                                            
                                                 
                                             
-                                            <h1><?php echo $value->nama?></h1>
-                                            <span class="text-muted"><?php echo $value->nama_jabatan?></span>
+                                            <h1><?php  echo $profil->nama?></h1>
+                                            <span class="text-muted"><?php echo $jabatan->nama_jabatan?></span>
                                             <p>
-                                                Seorang staff yang memiliki NIP <?php echo $value->nip?> ini adalah seorang karyawan yang sangat pekerja keras.
+                                                Seorang staff yang memiliki NIP <?php echo $profil->nip?> ini adalah seorang karyawan yang sangat pekerja keras.
                                                 Jika ada perlu terhadap beliau terkait pekerjaan, dapat menghubungi ke
-                                                Email: <?php echo $value->email?>, HP: <?php echo $value->hp?>, dan telepon kantor: <?php echo $value->telepon?>
+                                                Email: <?php echo $profil->email?>, HP: <?php echo $profil->hp?>
                                                 
                                             </p>
-                                            <?php }?>
                                         </div>
                                     </div>
 <!--                                    <div class="col-md-3">
@@ -94,9 +93,9 @@
                                                                 <i class="fa fa-check"></i>
                                                             </div>
                                                         <div class="activity-desk">
-                                                            <h2><?php echo date("d M Y h:i:s",  strtotime($value->tanggal_activity));?></h2>
+                                                            <h2><?php date_default_timezone_set('Asia/Jakarta'); echo date('d M Y h:i:s',strtotime($value->tanggal_activity))?></h2>
                                                             <p><?php echo $value->nama_activity?></p>
-                                                            <p><?php echo $value->nama." "?><?php echo $value->deskripsi_activity?></p>
+                                                            <p><?php echo $value->deskripsi_activity?></p>
                                                         </div>
                                                         <?php }?>
                                                         

@@ -10,9 +10,9 @@
             <?php //echo $delta / 86400;?>
         </p>
         <p>
-            <a href="#"><?php echo $value->nama?> </a><?php echo $value->deskripsi_activity?>
-            <p>
-                <?php echo $value->nama_activity?>
+            <a href="#"><?php echo $value->nama_activity?></a>
+            <p style="font-size: small">
+                <?php echo $value->deskripsi_activity?>
             </p>
         </p>
     </div>

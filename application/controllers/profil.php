@@ -51,6 +51,9 @@ class profil extends ceklogin {
 //        if ($this->check_session_and_cookie() == 1) {
         $temp = $this->session->userdata('logged_in');
         $data['data_akun']= $this->session->userdata('logged_in');
+        $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'],0, "Aktivitas Profil", $temp['user_nama']." sedang melihat profil miliknya sendiri..");        
+            
+        $data['jabatan'] = $this->taskman_repository->sp_view_jabatan($temp['user_id']);
             $data['profil'] = $this->taskman_repository->sp_view_profil($temp['user_id']);
             $data['aktivitas'] = $this->taskman_repository->sp_aktivitas_staff($temp['user_id']);
             $data['pekerjaan'] = $this->taskman_repository->sp_log_pekerjaan($temp['user_id']);

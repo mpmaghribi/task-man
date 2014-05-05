@@ -82,9 +82,19 @@ class akun extends CI_Model {
                 file_get_contents(
                         "http://hello:world@localhost:90/integrarsud/index.php/api/integration/bawahan/id/".$id_akun."/format/json"
                         ));
-        var_dump($list_staff);
+        //var_dump($list_staff);
+        return $list_staff;
     }
-
+    
+    public function akun_user($id_akun)
+    {
+        $akun = json_decode(
+                file_get_contents(
+                        "http://hello:world@localhost:90/integrarsud/index.php/api/integration/user/id/".$id_akun."/format/json"
+                        ));
+        //var_dump($list_staff);
+        return $akun;
+    }
 }
 
 ?>

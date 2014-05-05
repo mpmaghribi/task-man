@@ -78,7 +78,7 @@ class taskman_repository extends CI_Model {
     }
 
     public function sp_recent_activity() {
-        $query = "SELECT * from activity inner join akun on akun.id_akun = activity.id_akun order by activity.tanggal_activity DESC";
+        $query = "SELECT * from activity order by activity.tanggal_activity DESC";
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -94,13 +94,32 @@ class taskman_repository extends CI_Model {
     
     public function sp_view_profil($id_user)
     {
-        $query = "select * from akun inner join jabatan on jabatan.id_jabatan = akun.id_jabatan where id_akun = ".$id_user."";
-        $query = $this->db->query($query);
-        return $query->result();
+//        $query = "select * from akun inner join jabatan on jabatan.id_jabatan = akun.id_jabatan where id_akun = ".$id_user."";
+//        $query = $this->db->query($query);
+//        return $query->result();
+        $akun = json_decode(
+                file_get_contents(
+                        "http://hello:world@localhost:90/integrarsud/index.php/api/integration/user/id/".$id_user."/format/json"
+                        ));
+        //var_dump($list_staff);
+        return $akun;
+    }
+    
+    public function sp_view_jabatan($id_user)
+    {
+//        $query = "select * from akun inner join jabatan on jabatan.id_jabatan = akun.id_jabatan where id_akun = ".$id_user."";
+//        $query = $this->db->query($query);
+//        return $query->result();
+        $jabatan = json_decode(
+                file_get_contents(
+                        "http://hello:world@localhost:90/integrarsud/index.php/api/integration/jabatan/id/".$id_user."/format/json"
+                        ));
+        //var_dump($list_staff);
+        return $jabatan;
     }
     
     public function sp_aktivitas_staff($id_user) {
-        $query = "select * from activity inner join akun on akun.id_akun= ".$id_user."";
+        $query = "select * from activity where activity.id_akun= ".$id_user." order by activity.tanggal_activity DESC";
         $query = $this->db->query($query);
         return $query->result();
     }

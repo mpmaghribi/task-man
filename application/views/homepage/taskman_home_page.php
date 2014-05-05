@@ -15,7 +15,7 @@
                             <div class="mini-stat clearfix">
                                 <span class="mini-stat-icon tar"><i class="fa fa-tasks"></i></span>
                                 <div class="mini-stat-info">
-                                    <span>1</span>
+                                    <span></span>
                                     All Tasks
                                 </div>
                             </div>
