@@ -145,7 +145,7 @@ class login extends CI_Controller {
         
         $this->session->unset_userdata('logged_in');
         $this->session->sess_destroy();
-        redirect('http://localhost/integrarsud');
+        redirect(str_replace('taskmanagement','',  base_url()).'integrarsud');
     }
 
 }
