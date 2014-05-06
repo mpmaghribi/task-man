@@ -8,6 +8,7 @@ class home extends ceklogin {
     public function __construct() {
         parent::__construct();
         //$this->load->database();
+        $this->load->model('pekerjaan_model');
     }
 
 //    private function check_session_and_cookie() {
@@ -51,6 +52,14 @@ class home extends ceklogin {
             $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
             $data['data_akun'] = $this->session->userdata('logged_in');
             $data['pkj_karyawan'] = $result;
+            $result1 = $this->pekerjaan_model->alltask($temp['user_id']);
+            $result2 = $this->pekerjaan_model->ongoingtask($temp['user_id']);
+            $result3 = $this->pekerjaan_model->finishtask($temp['user_id']);
+            $result4 = $this->pekerjaan_model->notworkingtask($temp['user_id']);
+            $data['alltask'] = $result1[0]->count;
+            $data['ongoingtask'] = $result2[0]->count;
+            $data['finishtask'] = $result3[0]->count;
+            $data['notworkingtask'] = $result4[0]->count;
             $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'],0, "Aktivitas Login", $temp['user_nama']." sedang berada di halaman dashboard.");
             $this->load->view('homepage/taskman_home_page',$data);
 //        }

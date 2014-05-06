@@ -5,7 +5,35 @@ class pekerjaan_model extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
-
+    
+    public function alltask($id_akun)
+    {
+        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun = ". pg_escape_string($id_akun)."";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    
+    public function ongoingtask($id_akun)
+    {
+        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = ". pg_escape_string($id_akun)."where status = 'on-going'";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    
+    public function finishtask($id_akun)
+    {
+        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = ". pg_escape_string($id_akun)."where status = 'finished'";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    
+    public function notworkingtask($id_akun)
+    {
+        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = ". pg_escape_string($id_akun)."where status = 'un-read'";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    
     public function list_pekerjaan($id_akun) {
         $id_akun = pg_escape_string($id_akun);
         $query = "select detil_pekerjaan.*, pekerjaan.nama_pekerjaan, pekerjaan.tgl_selesai,"

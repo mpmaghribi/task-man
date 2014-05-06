@@ -15,7 +15,7 @@
                             <div class="mini-stat clearfix">
                                 <span class="mini-stat-icon tar"><i class="fa fa-tasks"></i></span>
                                 <div class="mini-stat-info">
-                                    <span></span>
+                                    <span><?php if (isset($alltask) && $alltask > 0) echo $alltask; else echo '0'; ?></span>
                                     All Tasks
                                 </div>
                             </div>
@@ -24,7 +24,7 @@
                             <div class="mini-stat clearfix">
                                 <span class="mini-stat-icon pink"><i class="fa fa-tasks"></i></span>
                                 <div class="mini-stat-info">
-                                    <span>0</span>
+                                    <span><?php if (isset($ongoingtask) &&$ongoingtask > 0) echo $ongoingtask; else echo '0';?></span>
                                     On-Going Tasks
                                 </div>
                             </div>
@@ -33,7 +33,7 @@
                             <div class="mini-stat clearfix">
                                 <span class="mini-stat-icon green"><i class="fa fa-tasks"></i></span>
                                 <div class="mini-stat-info">
-                                    <span>0</span>
+                                    <span><?php if (isset($finishtask) && $finishtask > 0) echo $finishtask; else echo '0';?></span>
                                     Finished Tasks
                                 </div>
                             </div>
@@ -42,7 +42,7 @@
                             <div class="mini-stat clearfix">
                                 <span class="mini-stat-icon orange"><i class="fa fa-tasks"></i></span>
                                 <div class="mini-stat-info">
-                                    <span>1</span>
+                                    <span><?php if (isset($notworkingtask) && $notworkingtask > 0) echo $notworkingtask; else echo '0'; ?></span>
                                     Not Working Yet
                                 </div>
                             </div>
@@ -57,7 +57,7 @@
                                     List of tasks
                                 </header>
                                 <div class="panel-body">
-                                    <table class="table  table-hover general-table">
+                                    <table class="table table-hover general-table">
                                                     <thead>
                                                         <tr>
                                                             <th> No</th>
