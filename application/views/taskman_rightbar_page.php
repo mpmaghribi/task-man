@@ -107,7 +107,7 @@
                             var refreshId = setInterval(function()
                             {
                                 $container.load('<?php echo site_url(); ?>/home/recent_activity');
-                            }, 1000);
+                            }, 100000);
                         });
                     })(jQuery);
                 </script>

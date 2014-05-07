@@ -2,7 +2,8 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-require APPPATH.'/libraries/ceklogin.php';
+require APPPATH . '/libraries/ceklogin.php';
+
 class user extends ceklogin {
 
     public function __construct() {
@@ -57,11 +58,11 @@ class user extends ceklogin {
 
     public function my_staff() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan")=="manager") {
-            $this->load->model("akun");
-            $temp = $this->session->userdata('logged_in');
+        $this->load->model("akun");
+        $temp = $this->session->userdata('logged_in');
         $data["data_akun"] = $this->session->userdata('logged_in');
-            $staff=$this->akun->my_staff($temp["user_id"]);
-            echo json_encode(array("status"=>"OK", "data"=>$staff));
+        $staff = $this->akun->my_staff($temp["user_id"]);
+        echo json_encode(array("status" => "OK", "data" => $staff));
 //        } else {
 //            echo json_encode(array("status"=>"FAILED", "reason"=>"mbuh"));
 //        }

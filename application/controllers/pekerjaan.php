@@ -438,6 +438,15 @@ class pekerjaan extends ceklogin {
         
     }
 
+    
+    public function get_yang_mengerjakan_pekerjaan(){
+        $list_pekerjaan = $this->input->post("list_id_pekerjaan");
+        //echo json_decode($list_pekerjaan);
+        //var_dump($list_pekerjaan);
+        $this->load->model("pekerjaan_model");
+        $hasil = $this->pekerjaan_model->get_yang_mengerjakan_pekerjaan($list_pekerjaan);
+        echo json_encode(array("status"=>"OK","data"=>$hasil));
+    }
 }
 
 ?>

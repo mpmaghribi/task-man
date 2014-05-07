@@ -231,6 +231,13 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
+    public function  get_yang_mengerjakan_pekerjaan($list_id_pekerjaan){
+        $dalam = "";
+        $query = "select id_pekerjaan, id_akun from detil_pekerjaan where id_pekerjaan in "
+                . "(".implode(",",  $list_id_pekerjaan).")";
+        $query=$this->db->query($query);
+        return $query->result();
+    }
 }
 
 ?>
