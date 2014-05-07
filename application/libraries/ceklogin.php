@@ -14,7 +14,7 @@ class ceklogin extends CI_Controller
         {
             
         }else
-            redirect('http://localhost/integrarsud');   
+            redirect(str_replace('taskmanagement','',  base_url()).'integrarsud');
     }
     
     public function index() {
