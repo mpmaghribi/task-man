@@ -19,9 +19,9 @@ class testing extends CI_Controller {
 	 */
 	public function index()
 	{
-           //$this->load->database();
-             $query = $this->db->query("insert into tes values(2,'oktri')");       
-		$this->load->view('welcome_message');
+           echo base_url();
+           echo "<br>";
+           echo str_replace('://', '://hello:world@', base_url())."index.php/api/integration/bawahan/id/1/format/json";
 	}
 }
 

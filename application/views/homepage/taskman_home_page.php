@@ -227,5 +227,5 @@ if (isset($pkj_karyawan)) {
                 }
             }
         }
-
+document.title="DashBoard - Task Management";
     </script>

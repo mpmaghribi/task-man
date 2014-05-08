@@ -530,4 +530,5 @@
             }
             return false;
         }
+        document.title="Pekerjaan Saya - Task Management";
     </script>
