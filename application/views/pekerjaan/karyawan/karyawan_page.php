@@ -56,31 +56,33 @@
                                                             $i = 1;
                                                             foreach ($pkj_karyawan as $value) {
                                                                 ?>
-                                                        <?php if ($value->flag_usulan == 2) { ?>
-                                                                <tr>
-                                                                    <td>
-                                                                        <a href="#">
-                                                                            <?php echo $i; ?>
-                                                                        </a>
-                                                                    </td>
-                                                                    <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
-                                                                    <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                                    <td id="pekerjaan_nama_staff_<?php echo $value->id_pekerjaan; ?>"></td>
-                                                                    <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
+                                                                <?php if ($value->flag_usulan == 2) { ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <a href="#">
+                                                                                <?php echo $i; ?>
+                                                                            </a>
+                                                                        </td>
+                                                                        <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
+                                                                        <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
+                                                                        <td id="pekerjaan_nama_staff_<?php echo $value->id_pekerjaan; ?>"></td>
+                                                                        <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
 
-                                                                    <td>
-                                                                        <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
-                                                                            <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
-                                                                            <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
-                                                                        </form>
-                                                                    </td>
-                                                                </tr>
-                                                                <?php } else { break;}?>
+                                                                        <td>
+                                                                            <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
+                                                                                <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
+                                                                                <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
+                                                                            </form>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php } else {
+                                                                    break;
+                                                                } ?>
                                                                 <?php
                                                                 $i++;
                                                             }
                                                             ?>
-                                                        <?php } ?>
+<?php } ?>
 
                                                     </tbody>
                                                 </table>
@@ -108,39 +110,39 @@
                                                             $i = 1;
                                                             foreach ($pkj_karyawan as $value) {
                                                                 ?>
-                                                        <?php if ($value->flag_usulan == 1) { ?>
-                                                                <tr>
-                                                                    <td>
-                                                                        <a href="#">
-                                                                            <?php echo $i; ?>
-                                                                        </a>
-                                                                    </td>
-                                                                    <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
-                                                                    <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                                    <td id="pekerjaan_nama_staff_<?php echo $value->id_pekerjaan; ?>"></td>
-                                                                    <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
+        <?php if ($value->flag_usulan == 1) { ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <a href="#">
+            <?php echo $i; ?>
+                                                                            </a>
+                                                                        </td>
+                                                                        <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
+                                                                        <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
+                                                                        <td id="pekerjaan_nama_staff_<?php echo $value->id_pekerjaan; ?>"></td>
+                                                                        <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
 
-                                                                    <td>
-                                                                        <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
-                                                                            <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
-                                                                            <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
-                                                                        </form>
-                                                                    </td>
-                                                                </tr>
+                                                                        <td>
+                                                                            <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
+                                                                                <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
+                                                                                <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
+                                                                            </form>
+                                                                        </td>
+                                                                    </tr>
                                                                 <?php } ?>
                                                                 <?php
                                                                 $i++;
                                                             }
                                                             ?>
-                                                            
-                                                        <?php } ?>
+
+<?php } ?>
 
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </section>
                                     </div>
-                                    <?php if ($temp['jmlstaff'] > 0) { ?>
+<?php if ($temp['jmlstaff'] > 0) { ?>
                                         <div id="assignPekerjaan" class="tab-pane">
                                             <div class="form">
                                                 <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan2" enctype="multipart/form-data">
@@ -220,7 +222,7 @@
                                                 </form>
                                             </div>                                            
                                         </div>
-                                    <?php } ?>
+<?php } ?>
                                     <div id="TambahPekerjaan" class="tab-pane">
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan" enctype="multipart/form-data">
@@ -334,7 +336,7 @@
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-        <?php $this->load->view('taskman_rightbar_page') ?>
+<?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
@@ -364,7 +366,7 @@
             }).on('changeDate', function(ev) {
                 checkout.hide();
             }).data('datepicker');
-            
+
             var checkin2 = $('.dpd3').datepicker({
                 format: 'dd-mm-yyyy',
                 onRender: function(date) {
@@ -389,8 +391,8 @@
             }).data('datepicker');
         });
     </script>
-    <?php $this->load->view("taskman_footer_page") ?>
-    <?php if ($temp['jmlstaff'] > 0) { ?>
+<?php $this->load->view("taskman_footer_page") ?>
+<?php if ($temp['jmlstaff'] > 0) { ?>
         <script>
             var list_nip = [];
             var list_nama = [];
@@ -429,7 +431,7 @@
                                 }
 
                             } else {
-                                
+
                             }
                         }
                     });
@@ -463,44 +465,48 @@
                 $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
             }
             $('#pilih_berkas_assign').change(function() {
-            var pilih_berkas = document.getElementById('pilih_berkas_assign');
-            var files = pilih_berkas.files;
-            populate_file('list_file_upload_assign', files);
+                var pilih_berkas = document.getElementById('pilih_berkas_assign');
+                var files = pilih_berkas.files;
+                populate_file('list_file_upload_assign', files);
 
-        });
-        var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
-        var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
-        var jumlah_staff = my_staff.length;
-        var jumlah_detil_pekerjaan = detil_pekerjaan.length;
-        for(var i=0;i<jumlah_detil_pekerjaan;i++){
-            var cell = $("#pekerjaan_nama_staff_"+detil_pekerjaan[i]["id_pekerjaan"]);
-            if(cell===null)
-                continue;
-            var id_akun = detil_pekerjaan[i]["id_akun"];
-            var nama_staff = "";
-            for(var j=0;j<jumlah_staff;j++){
-                if(my_staff[j]["id_akun"]===id_akun){
-                    nama_staff=my_staff[j]["nama"];
-                    break;
+            });
+            var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
+            var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
+            var jumlah_staff = my_staff.length;
+            var jumlah_detil_pekerjaan = detil_pekerjaan.length;
+            for (var i = 0; i < jumlah_detil_pekerjaan; i++) {
+                var cell = $("#pekerjaan_nama_staff_" + detil_pekerjaan[i]["id_pekerjaan"]);
+                if (cell === null)
+                    continue;
+                var id_akun = detil_pekerjaan[i]["id_akun"];
+                var nama_staff = "";
+                if (id_akun ==='<?php echo $temp["user_id"]; ?>') {
+                    nama_staff='<?php echo $temp["nama"]; ?>';
+                } else {
+                    for (var j = 0; j < jumlah_staff; j++) {
+                        if (my_staff[j]["id_akun"] === id_akun) {
+                            nama_staff = my_staff[j]["nama"];
+                            break;
+                        }
+                    }
+                }
+                //var isi_html = cell.html();
+                //console.log(cell);
+                if (cell.html().trim().length === 0) {
+                    cell.html(nama_staff);
+                } else {
+                    cell.html(cell.html() + ", " + nama_staff);
                 }
             }
-            //var isi_html = cell.html();
-            //console.log(cell);
-            if(cell.html().trim().length===0){
-                cell.html(nama_staff);
-            }else{
-                cell.html(cell.html()+", "+nama_staff);
-            }
-        }
         </script>
-    <?php } ?>
+<?php } ?>
     <script>
         $('#pilih_berkas_usul').change(function() {
             var pilih_berkas = document.getElementById('pilih_berkas_usul');
             var files = pilih_berkas.files;
             populate_file('list_file_upload_usul', files);
         });
-        
+
         function populate_file(div_id, files) {
             $('#' + div_id).html('');
             var jumlah_file = files.length;
@@ -525,4 +531,3 @@
             return false;
         }
     </script>
-    

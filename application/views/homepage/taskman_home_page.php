@@ -209,15 +209,19 @@ if (isset($pkj_karyawan)) {
                 //alert(id_akun + " " + id_pekerjaan);
                 var isi_lama = $("#assign_to_" + id_pekerjaan).html();
                 var nama = "";
-                for (var x = 0; x < m; x++) {
-                    if (my_staff[x]["id_akun"] === id_akun) {
-                        nama = my_staff[x]["nama"];
-                        break;
+                if (id_akun === '<?php echo $data_akun["user_id"]; ?>') {
+                    nama = '<?php echo $data_akun["nama"]; ?>';
+                } else {
+                    for (var x = 0; x < m; x++) {
+                        if (my_staff[x]["id_akun"] === id_akun) {
+                            nama = my_staff[x]["nama"];
+                            break;
+                        }
                     }
                 }
-                
+
                 if (isi_lama.trim().length > 0) {
-                    $("#assign_to_" + id_pekerjaan).html(isi_lama + ", " + nama );
+                    $("#assign_to_" + id_pekerjaan).html(isi_lama + ", " + nama);
                 } else {
                     $("#assign_to_" + id_pekerjaan).html(nama);
                 }

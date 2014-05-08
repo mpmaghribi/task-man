@@ -53,23 +53,28 @@ class pekerjaan extends ceklogin {
     }
 
     public function karyawan() {
-$this->load->model("pekerjaan_model");
-$this->load->model("akun");
+        $this->load->model("pekerjaan_model");
+        $this->load->model("akun");
         $temp = $this->session->userdata('logged_in');
         $data['temp'] = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
         $data['data_akun'] = $this->session->userdata('logged_in');
 //            $result = $this->taskman_repository->sp_view_pekerjaan($this->session->userdata('user_id'));
         $data['pkj_karyawan'] = $result;
+        //var_dump($result);
         $list_id_pekerjaan = array();
-        foreach ($result as $pekerjaan){
-              $list_id_pekerjaan[]=$pekerjaan->id_pekerjaan;
+        foreach ($result as $pekerjaan) {
+            $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
         }
+        //var_dump($list_id_pekerjaan);
         $staff = $this->akun->my_staff($temp["user_id"]);
         $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
-        //var_dump($yang_mengerjakan);
-        $data["detil_pekerjaan"] =  json_encode($detil_pekerjaan);
-        $data["my_staff"]=  json_encode($staff);
+        //var_dump($detil_pekerjaan);
+        //var_dump($staff);
+        //echo "temp";
+        //var_dump($temp);
+        $data["detil_pekerjaan"] = json_encode($detil_pekerjaan);
+        $data["my_staff"] = json_encode($staff);
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang berada di halaman pekerjaan.");
         //var_dump($data["pkj_karyawan"]);
         $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
@@ -94,7 +99,7 @@ $this->load->model("akun");
         $asal_pkj = 'task management'; //$this->input->post('asal_pkj');
         $list_staff = $this->input->post("staff");
         $staff = explode("::", $list_staff);
-        //var_dump($staff);
+        //var_dump($staff);;
         $this->load->model("akun");
         $this->load->model("pekerjaan_model");
         //var_dump($staff);
