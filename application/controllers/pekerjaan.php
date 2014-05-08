@@ -53,15 +53,25 @@ class pekerjaan extends ceklogin {
     }
 
     public function karyawan() {
-//        if ($this->check_session_and_cookie() == 1) {
+$this->load->model("pekerjaan_model");
+$this->load->model("akun");
         $temp = $this->session->userdata('logged_in');
         $data['temp'] = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
         $data['data_akun'] = $this->session->userdata('logged_in');
 //            $result = $this->taskman_repository->sp_view_pekerjaan($this->session->userdata('user_id'));
         $data['pkj_karyawan'] = $result;
+        $list_id_pekerjaan = array();
+        foreach ($result as $pekerjaan){
+              $list_id_pekerjaan[]=$pekerjaan->id_pekerjaan;
+        }
+        $staff = $this->akun->my_staff($temp["user_id"]);
+        $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
+        //var_dump($yang_mengerjakan);
+        $data["detil_pekerjaan"] =  json_encode($detil_pekerjaan);
+        $data["my_staff"]=  json_encode($staff);
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang berada di halaman pekerjaan.");
-
+        //var_dump($data["pkj_karyawan"]);
         $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
 //        } else {
 //            $this->session->set_flashdata('status', 4);
@@ -439,12 +449,12 @@ class pekerjaan extends ceklogin {
         
     }
 
-    public function get_yang_mengerjakan_pekerjaan() {
+    public function get_detil_pekerjaan() {
         $list_pekerjaan = $this->input->post("list_id_pekerjaan");
         //echo json_decode($list_pekerjaan);
         //var_dump($list_pekerjaan);
         $this->load->model("pekerjaan_model");
-        $hasil = $this->pekerjaan_model->get_yang_mengerjakan_pekerjaan($list_pekerjaan);
+        $hasil = $this->pekerjaan_model->get_detil_pekerjaan($list_pekerjaan);
         echo json_encode(array("status" => "OK", "data" => $hasil));
     }
 

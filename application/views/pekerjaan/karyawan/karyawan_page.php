@@ -65,7 +65,7 @@
                                                                     </td>
                                                                     <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                                     <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                                    <td><?php echo $temp['user_nama'] ?></td>
+                                                                    <td id="pekerjaan_nama_staff_<?php echo $value->id_pekerjaan; ?>"></td>
                                                                     <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
 
                                                                     <td>
@@ -117,7 +117,7 @@
                                                                     </td>
                                                                     <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                                     <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                                    <td><?php echo $this->session->userdata('user_nama') ?></td>
+                                                                    <td id="pekerjaan_nama_staff_<?php echo $value->id_pekerjaan; ?>"></td>
                                                                     <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
 
                                                                     <td>
@@ -127,7 +127,7 @@
                                                                         </form>
                                                                     </td>
                                                                 </tr>
-                                                                <?php } else break;?>
+                                                                <?php } ?>
                                                                 <?php
                                                                 $i++;
                                                             }
@@ -462,6 +462,36 @@
                 $('#div_staff_' + id_staff).remove();
                 $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
             }
+            $('#pilih_berkas_assign').change(function() {
+            var pilih_berkas = document.getElementById('pilih_berkas_assign');
+            var files = pilih_berkas.files;
+            populate_file('list_file_upload_assign', files);
+
+        });
+        var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
+        var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
+        var jumlah_staff = my_staff.length;
+        var jumlah_detil_pekerjaan = detil_pekerjaan.length;
+        for(var i=0;i<jumlah_detil_pekerjaan;i++){
+            var cell = $("#pekerjaan_nama_staff_"+detil_pekerjaan[i]["id_pekerjaan"]);
+            if(cell===null)
+                continue;
+            var id_akun = detil_pekerjaan[i]["id_akun"];
+            var nama_staff = "";
+            for(var j=0;j<jumlah_staff;j++){
+                if(my_staff[j]["id_akun"]===id_akun){
+                    nama_staff=my_staff[j]["nama"];
+                    break;
+                }
+            }
+            //var isi_html = cell.html();
+            //console.log(cell);
+            if(cell.html().trim().length===0){
+                cell.html(nama_staff);
+            }else{
+                cell.html(cell.html()+", "+nama_staff);
+            }
+        }
         </script>
     <?php } ?>
     <script>
@@ -470,12 +500,7 @@
             var files = pilih_berkas.files;
             populate_file('list_file_upload_usul', files);
         });
-        $('#pilih_berkas_assign').change(function() {
-            var pilih_berkas = document.getElementById('pilih_berkas_assign');
-            var files = pilih_berkas.files;
-            populate_file('list_file_upload_assign', files);
-
-        });
+        
         function populate_file(div_id, files) {
             $('#' + div_id).html('');
             var jumlah_file = files.length;

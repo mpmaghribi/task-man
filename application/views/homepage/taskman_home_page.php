@@ -171,7 +171,7 @@
             $.ajax({// create an AJAX call...
                 data: {list_id_pekerjaan: array_id_pekerjaan},
                 type: "post", // GET or POST
-                url: "<?php echo base_url(); ?>pekerjaan/get_yang_mengerjakan_pekerjaan", // the file to call
+                url: "<?php echo base_url(); ?>pekerjaan/get_detil_pekerjaan", // the file to call
                 success: function(response) { // on success..
                     var json = jQuery.parseJSON(response);
                     //alert(response);
