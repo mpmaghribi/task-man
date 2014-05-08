@@ -16,13 +16,14 @@ class akun extends CI_Model {
         }
         return array("error" => "not found");
     }
+
     public function get_id_akun($nip) {
-        $nip=  pg_escape_string($nip);
+        $nip = pg_escape_string($nip);
         $query = "select id_akun from akun where nip='$nip'";
         $query = $this->db->query($query);
-        if($query->num_rows()==0)
+        if ($query->num_rows() == 0)
             return NULL;
-        foreach ($query->result() as $row){
+        foreach ($query->result() as $row) {
             return $row->id_akun;
         }
     }
@@ -52,49 +53,52 @@ class akun extends CI_Model {
     }
 
     public function my_staff($id_akun) {
-        /*$query = "select * from akun where id_akun=$id_akun";
-        $query = $this->db->query($query);
-        if ($query->num_rows() == 0) {
-            echo "akun not found";
-            return NULL;
-        }
-        $id_departemen = $this->session->userdata("user_departemen");
-        /* ($query->result() as $row) {
-            $id_departemen = $row->id_departemen;
-            break;
-        }
-        if ($id_departemen == NULL) {
-            echo "departemen not found";
-            return NULL;
-        }
-        $this->load->model("jabatan_model");
-        $id_jabatan = $this->jabatan_model->get_id_jabatan("staff");
-        if ($id_jabatan == NULL){
-            echo "id jabatan not found";
-            return NULL;
-        }
-        $query = "select id_akun, nip, nama, departemen.nama_departemen from akun inner join departemen on "
-                . "departemen.id_departemen = akun.id_departemen where departemen.id_departemen=$id_departemen"
-                . " and id_jabatan=$id_jabatan";
-        $query=$this->db->query($query);
-        return $query->result();*/
+        /* $query = "select * from akun where id_akun=$id_akun";
+          $query = $this->db->query($query);
+          if ($query->num_rows() == 0) {
+          echo "akun not found";
+          return NULL;
+          }
+          $id_departemen = $this->session->userdata("user_departemen");
+          /* ($query->result() as $row) {
+          $id_departemen = $row->id_departemen;
+          break;
+          }
+          if ($id_departemen == NULL) {
+          echo "departemen not found";
+          return NULL;
+          }
+          $this->load->model("jabatan_model");
+          $id_jabatan = $this->jabatan_model->get_id_jabatan("staff");
+          if ($id_jabatan == NULL){
+          echo "id jabatan not found";
+          return NULL;
+          }
+          $query = "select id_akun, nip, nama, departemen.nama_departemen from akun inner join departemen on "
+          . "departemen.id_departemen = akun.id_departemen where departemen.id_departemen=$id_departemen"
+          . " and id_jabatan=$id_jabatan";
+          $query=$this->db->query($query);
+          return $query->result(); */
+        $url = str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/" . $id_akun . "/format/json";
         $list_staff = json_decode(
                 file_get_contents(
-                        "http://hello:world@localhost:90/integrarsud/index.php/api/integration/bawahan/id/".$id_akun."/format/json"
-                        ));
+                        $url
+        ));
         //var_dump($list_staff);
         return $list_staff;
     }
-    
-    public function akun_user($id_akun)
-    {
+
+    public function akun_user($id_akun) {
+        $url = str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/user/id/" . $id_akun . "/format/json";
+        //echo $url;
         $akun = json_decode(
                 file_get_contents(
-                        "http://hello:world@localhost:90/integrarsud/index.php/api/integration/user/id/".$id_akun."/format/json"
-                        ));
+                        $url
+        ));
         //var_dump($list_staff);
         return $akun;
     }
+
 }
 
 ?>
