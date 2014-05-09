@@ -106,10 +106,25 @@
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script>
+        var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
+        var list_id_staff=[];
+        var jumlah_staff = my_staff.length;
+        for(var i=0;i<jumlah_staff;i++){
+            list_id_staff.push(my_staff[i]["id_akun"]);
+        }
+        function get_nama_staff(id_akun){
+            for(var i=0;i<jumlah_staff;i++){
+                if(id_akun==my_staff[i]["id_akun"]){
+                    return my_staff[i]["nama"];
+                }
+            }
+            return "Staff";
+        }
+        //alert("jumlah_staff = " + jumlah_staff);
         function get_data_usulan_pekerjaan() {
             $.ajax({// create an AJAX call...
-                data: "", // get the form data
-                type: "get", // GET or POST
+                data: {list_id_staff: list_id_staff}, // get the form data
+                type: "post", // GET or POST
                 url: "<?php echo site_url(); ?>/pekerjaan/get_usulan_pekerjaan", // the file to call
                 success: function(response) { // on success..
                     var json = jQuery.parseJSON(response);
@@ -117,7 +132,7 @@
                         var jumlah_data = json.data.length;
                         var nomor_baris = 1;
                         for (var i = 0; i < jumlah_data; i++) {
-                            var html_tabel = "";
+                            //console.log(json.data[i]);
                             var id_pekerjaan = json.data[i]["id_pekerjaan"];
                             /* mengecek apakah element dengan id xxx telah ada pada halaman*/
                             if ($("#tr_tabel_usulan_pekerjaan_" + id_pekerjaan).length > 0) {
@@ -128,7 +143,7 @@
                                 $("#tr_tabel_usulan_pekerjaan_" + id_pekerjaan).append("<td id=\"td_tabel_usulan_pekerjaan_deadline_" + id_pekerjaan + "\"></td>");
                                 $("#tr_tabel_usulan_pekerjaan_" + id_pekerjaan).append("<td id=\"td_tabel_usulan_pekerjaan_nama_staff_" + id_pekerjaan + "\"></td>");
                                 $("#tr_tabel_usulan_pekerjaan_" + id_pekerjaan).append("<td id=\"td_tabel_usulan_pekerjaan_status_" + id_pekerjaan + "\"></td>");
-                                $("#tr_tabel_usulan_pekerjaan_" + id_pekerjaan).append("<td id=\"td_tabel_usulan_pekerjaan_progress_" + id_pekerjaan + "\"></td>");
+                                //$("#tr_tabel_usulan_pekerjaan_" + id_pekerjaan).append("<td id=\"td_tabel_usulan_pekerjaan_progress_" + id_pekerjaan + "\"></td>");
                                 $("#tr_tabel_usulan_pekerjaan_" + id_pekerjaan).append("<td id=\"td_tabel_usulan_pekerjaan_view_" + id_pekerjaan + "\"></td>");
                                 $("#tr_tabel_usulan_pekerjaan_" + id_pekerjaan).append("<td id=\"td_tabel_usulan_pekerjaan_validasi_" + id_pekerjaan + "\"></td>");
                                 nomor_baris++;
@@ -139,7 +154,7 @@
                             if (isi.length > 0) {
                                 isi += ", ";
                             }
-                            $("#td_tabel_usulan_pekerjaan_nama_staff_" + id_pekerjaan).html(isi + json.data[i]["nama"]);
+                            $("#td_tabel_usulan_pekerjaan_nama_staff_" + id_pekerjaan).html(isi + get_nama_staff(json.data[i]["id_akun"]));
                             var status = "";//$("#td_tabel_pekerjaan_staff_status_" + id_pekerjaan).html();
 
                             status += "<span class=\"label label-";
@@ -147,10 +162,9 @@
                                 status += "danger label-mini\">Not Approved";
                             else
                                 status += "success label-mini\">Approved";
-
                             status += "</span>";
                             $("#td_tabel_usulan_pekerjaan_status_" + id_pekerjaan).html(status);
-                            var pemisah = "style=\"margin-top:5px\"";
+                            /*var pemisah = "style=\"margin-top:5px\"";
                             isi = $("#td_tabel_usulan_pekerjaan_progress_" + id_pekerjaan).html();
                             if (isi.length > 0) {
                                 pemisah = "style=\"margin-top:25px\"";
@@ -161,7 +175,7 @@
                                     "</div>" +
                                     "</div>";
                             //alert(progress);
-                            $("#td_tabel_usulan_pekerjaan_progress_" + id_pekerjaan).html(isi + progress);
+                            //$("#td_tabel_usulan_pekerjaan_progress_" + id_pekerjaan).html(isi + progress);*/
                             $("#td_tabel_usulan_pekerjaan_view_" + id_pekerjaan).html("<form method=\"get\" action=\"<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan\">" +
                                     "<input type=\"hidden\" name=\"id_detail_pkj\" value=\"" + id_pekerjaan + "\"/>" +
                                     "<button type=\"submit\" class=\"btn btn-success btn-xs\"><i class=\"fa fa-eye\"></i> View </button>" +

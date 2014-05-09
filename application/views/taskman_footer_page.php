@@ -80,7 +80,7 @@
                     var html = "";
                     var jumlah_data = json.data.length;
                     //id="bagian_pending_task">
-                    html = "<li><p class=\"\">Anda Memiliki " + jumlah_data + " Pending Task</p></li>";
+                    html = "<li><p class=\"\">Anda Memiliki " + jumlah_data + " Pemberitahuan</p></li>";
                     for (var i = 0; i < jumlah_data; i++) {
                         html += "<li>" +
                                 "<a href =\"<?php echo site_url(); ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj="+json.data[i]["id_pekerjaan"]+ "&sumber=notifikasi\">" +

@@ -50,8 +50,8 @@ class pekerjaan_model extends CI_Model {
         $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan,"
                 . "detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_akun, detil_pekerjaan.progress, "
                 . "pekerjaan.tgl_selesai from detil_pekerjaan inner join pekerjaan on "
-                . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan inner join akun "
-                . "on akun.id_akun=detil_pekerjaan.id_akun where akun.id_akun=$id_akun "
+                . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan  "
+                . "where id_akun=$id_akun "
                 . "and progress<100";
         //echo $query;
         $query = $this->db->query($query);
@@ -95,13 +95,20 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function sp_deskripsi_pekerjaan($id_detail_pkj) {
-        $query = "select * from pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
+        $query = "select * from pekerjaan inner join sifat_pekerjaan "
+                . "on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan "
+                . "where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
         $query = $this->db->query($query);
         return $query->result();
     }
 
     public function sp_progress_pekerjaan($id_detail_pkj) {
-        $query = "select * from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan inner join akun on akun.id_akun = detil_pekerjaan.id_akun where pekerjaan.id_pekerjaan = " . $id_detail_pkj . " and akun.id_akun = " . $this->session->userdata('user_id') . ";";
+        $query = "select * from detil_pekerjaan inner join pekerjaan "
+                . "on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan "
+                . "inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan "
+                . "= pekerjaan.id_sifat_pekerjaan inner join akun on akun.id_akun "
+                . "= detil_pekerjaan.id_akun where pekerjaan.id_pekerjaan = " . 
+                $id_detail_pkj . " and akun.id_akun = " . $this->session->userdata('user_id') . ";";
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -115,11 +122,7 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function sp_listassign_pekerjaan($id_detail_pkj) {
-        $query = "select * from detil_pekerjaan inner join pekerjaan on "
-                . "pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan "
-                . "inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan "
-                . "= pekerjaan.id_sifat_pekerjaan inner join akun on akun.id_akun = "
-                . "detil_pekerjaan.id_akun where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
+        $query = "select * from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
@@ -131,22 +134,19 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function sp_lihat_komentar_pekerjaan($id_detail_pkj) {
-        $query = "select * from komentar inner join pekerjaan on pekerjaan.id_pekerjaan = komentar.id_pekerjaan inner join akun on akun.id_akun = komentar.id_akun where komentar.id_pekerjaan = " . $id_detail_pkj . ";";
+        $query = "select * from komentar inner join pekerjaan on pekerjaan.id_pekerjaan = komentar.id_pekerjaan  where komentar.id_pekerjaan = " . $id_detail_pkj . ";";
         $query = $this->db->query($query);
         return $query->result();
     }
 
-    public function get_list_usulan_pekerjaan($id_departemen) {
-        $this->load->model("jabatan_model");
-        $id_jabatan_staff = $this->jabatan_model->get_id_jabatan("staff");
-        if ($id_jabatan_staff == NULL || strlen($id_jabatan_staff) == 0)
+    public function get_list_usulan_pekerjaan($list_id_akun) {
+        if (count($list_id_akun)==0)
             return NULL;
         $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan, pekerjaan.tgl_mulai," .
-                "pekerjaan.tgl_selesai, akun.nama, pekerjaan.flag_usulan, pekerjaan.id_pekerjaan " .
-                "from detil_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun " .
-                "inner join departemen on departemen.id_departemen=akun.id_departemen " .
+                "pekerjaan.tgl_selesai, pekerjaan.flag_usulan, pekerjaan.id_pekerjaan, detil_pekerjaan.id_akun " .
+                "from detil_pekerjaan " .
                 "inner join pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan " .
-                "where pekerjaan.flag_usulan='1' and akun.id_jabatan=$id_jabatan_staff and departemen.id_departemen=" . $id_departemen;
+                "where pekerjaan.flag_usulan='1' and id_akun in (".implode(",",  $list_id_akun).")";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();

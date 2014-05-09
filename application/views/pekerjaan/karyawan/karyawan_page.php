@@ -21,11 +21,7 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#ListPekerjaan">List Pekerjaan</a>
                                     </li>
-                                    <?php if ($temp['jmlstaff'] > 0) { ?>
-                                        <li class="">
-                                            <a data-toggle="tab" href="#assignPekerjaan">Assign Pekerjaan</a>
-                                        </li>
-                                    <?php } ?>
+                                    
                                     <li class="">
                                         <a data-toggle="tab" href="#TambahPekerjaan">Tambah Pekerjaan</a>
                                     </li>
@@ -36,7 +32,7 @@
                                     <div id="ListPekerjaan" class="tab-pane active">
                                         <section class="panel">
                                             <header class="panel-heading">
-                                                Daftar Pekerjaan yang Dikerjakan
+                                                Daftar Pekerjaan yang Saya Kerjakan
                                             </header>
                                             <div class="panel-body">
                                                 <table class="table  table-hover general-table">
@@ -90,7 +86,7 @@
                                         </section>
                                         <section class="panel">
                                             <header class="panel-heading">
-                                                Daftar Pekerjaan yang Diusulkan Staff
+                                                Daftar Pekerjaan yang Saya usulkan
                                             </header>
                                             <div class="panel-body">
                                                 <table class="table  table-hover general-table">

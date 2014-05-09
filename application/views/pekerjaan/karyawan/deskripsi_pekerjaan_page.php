@@ -13,7 +13,7 @@
             <section class="wrapper">
                 <!-- page start-->
                 <div class="row">
-                    <?php if ($temp['jmlstaff'] > 0 ) { ?>
+                    <?php if ($temp['jmlstaff'] > 0) { ?>
                         <div class="col-md-12" >
                             <section class="panel">
                                 <header class="panel-heading tab-bg-dark-navy-blue ">
@@ -32,7 +32,7 @@
                                     <div class="tab-content">
                                         <div id="deskripsiPekerjaan" class="tab-pane active">
                                             <section class="panel" >
-                                                <header class="panel-heading" id="header_aksi" style="display:none">Aksi
+                                                <header class="panel-heading" id="header_aksi" style="display:none">tindakan
                                                     <span class="tools pull-right">
                                                         <a href="javascript:;" class="fa fa-chevron-down"></a>
                                                     </span>
@@ -48,10 +48,11 @@
                                             <div class="col-md-6">
                                                 <section class="panel">
                                                     <header class="panel-heading">
-                                                        <?php if (isset($deskripsi_pekerjaan)) { ?>
+                                                        <?php if (isset($deskripsi_pekerjaan)) { $nama_pekerjaan="";?>
                                                             <?php
                                                             foreach ($deskripsi_pekerjaan as $value) {
                                                                 echo $value->nama_pekerjaan;
+                                                                $nama_pekerjaan=$value->nama_pekerjaan;
                                                             }
                                                             ?>
                                                         <?php } ?> 
@@ -125,7 +126,7 @@
                                                                         <tr>
                                                                             <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                                             <td><?php echo $i; ?></td>
-                                                                            <td><?php echo $value->nama; ?></td>
+                                                                            <td id="nama_staff_<?php echo $value->id_akun; ?>"></td>
                                                                             <td>
                                                                                 <div class="progress progress-striped progress-xs">
                                                                                     <div style="width: <?php echo $value->progress; ?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress; ?>" role="progressbar" class="progress-bar progress-bar-warning">
@@ -204,7 +205,7 @@
                                                 <div class="col-lg-6">
                                                     <?php foreach ($lihat_komentar_pekerjaan as $value) { ?>
                                                         <div class="well">
-                                                            <h4><?php echo $value->nama; ?></h4>
+                                                            <h4 id="komentar_nama_<?php echo $value->id_akun; ?>">Nama Disembunyikan</h4>
                                                             <?php echo $value->isi_komentar; ?>
                                                         </div>
                                                     <?php } ?>
@@ -287,7 +288,7 @@
     <?php
     $this->load->view("taskman_footer_page");
 
-    if($data_akun['jmlstaff'] > 0){
+    if ($data_akun['jmlstaff'] > 0) {
         ?>
         <script>
             function validasi(id_pekerjaan) {
@@ -320,17 +321,17 @@
                             if (json.data === "1") {
                                 $('#div_acc_edit_cancel_usulan_pekerjaan').css("display", "block");
                                 $('#header_aksi').css("display", "block");
-                                $('#tombol_edit_usulan').attr("href", '<?php echo base_url();?>pekerjaan/edit?id_pekerjaan='+id_pekerjaan);
+                                $('#tombol_edit_usulan').attr("href", '<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=' + id_pekerjaan);
                                 $('#tombol_validasi_usulan').attr("onclick", 'validasi(' + id_pekerjaan + ');');
                                 $('#tombol_batalkan_usulan').attr("onclick", '');
                             }
                         } else {
+                            $('#div_acc_edit_cancel_usulan_pekerjaan').remove();
+                            $('#header_aksi').remove();
                         }
                     }
-
                 });
             }
-            
             $('#tombol_validasi_usulan').click(function(event) {
                 event.preventDefault();
             });
@@ -338,7 +339,32 @@
                 event.preventDefault();
             });
             get_status_usulan(<?php if (isset($id_pkj)) echo $id_pkj; ?>);
+            var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
+            console.log(my_staff);
+            var jumlah_staff = my_staff.length;
+            var list_id_akun_detil_pekerjaan = [];
+    <?php foreach ($listassign_pekerjaan as $detil) { ?>list_id_akun_detil_pekerjaan.push('<?php echo $detil->id_akun; ?>');<?php } ?>
+            var jumlah_id_akun_detil_pekerjaan = list_id_akun_detil_pekerjaan.length;
+            for (var i = 0; i < jumlah_id_akun_detil_pekerjaan; i++) {
+                var nama = "";
+                var id_akun = list_id_akun_detil_pekerjaan[i];
+                //alert('id akun = ' + id_akun);
+                if (id_akun === '<?php echo $temp["user_id"]; ?>') {
+                    nama = '<?php echo $temp["nama"]; ?>';
+                } else {
+                    for (var j = 0; j < jumlah_staff; j++) {
+                        //alert('id staff = ' + my_staff[j]["id_akun"]);
+                        if (id_akun === my_staff[j]["id_akun"]) {
+                            nama = my_staff[j]["nama"];
+                            break;
+                        }
+                    }
+                }
+                $('#nama_staff_' + id_akun).html(nama);
+                $('#komentar_nama_'+id_akun).html(nama);
+            }
+            document.title='Deskripsi Pekerjaan: <?php echo $nama_pekerjaan; ?> - Task Management';
         </script>
-    <?php
-}
-?>
+        <?php
+    }
+    ?>

@@ -10,46 +10,8 @@ class pekerjaan extends ceklogin {
         parent::__construct();
     }
 
-    private function check_session_and_cookie() {
-        //$usernamecookie = $this->input->cookie("cookie_user", TRUE);
-        //$passwordcookie = $this->input->cookie("cookie_password", TRUE);
-        $usernamecookie = get_cookie("cookie_user");
-        $passwordcookie = get_cookie("cookie_password");
-        $username = $this->session->userdata("user_nip");
-        $password = $this->session->userdata("user_password");
-        if (strlen($username) > 0 && strlen($password) > 0) {
-            if ($this->authenticate($username, $password) == 1) {
-                //echo "login by session";
-                return 1;
-            } else {
-                if (strlen($usernamecookie) > 0 && strlen($passwordcookie) > 0) {
-                    if ($this->authenticate($usernamecookie, $passwordcookie) == 1) {
-                        //echo "login by cookie";
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                }
-            }
-        }
-    }
-
-    private function authenticate($username, $password) {
-        $result = $this->taskman_repository->sp_login_sistem($username, $password);
-        if ($result["kode"] == 1) {
-            $this->session->set_userdata(array('user_jabatan' => strtolower($result["nama_jabatan"])));
-            return 1;
-        }
-        return 0;
-    }
-
     public function index() {
-//        if ($this->check_session_and_cookie() == 1) {
         redirect(base_url() . 'pekerjaan/karyawan');
-//        } else {
-//            $this->session->set_flashdata('status', 4);
-//            redirect("login");
-//        }
     }
 
     public function karyawan() {
@@ -216,18 +178,11 @@ class pekerjaan extends ceklogin {
     }
 
     public function req_pending_task() {
-//        if ($this->check_session_and_cookie() == 1) {
         $temp = $this->session->userdata('logged_in');
-        //var_dump($temp);
         $data['data_akun'] = $this->session->userdata('logged_in');
         $this->load->model("pekerjaan_model");
         $list_pekerjaan = $this->pekerjaan_model->list_pending_task($temp['user_id']);
         echo json_encode(array("status" => "OK", "data" => $list_pekerjaan));
-        //return true;
-//        } else {
-//            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
-//            //return false;
-//        }
     }
 
     public function deskripsi_pekerjaan() {
@@ -264,8 +219,9 @@ class pekerjaan extends ceklogin {
         }
         $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
         $data["id_pkj"] = $id_detail_pkj;
-        //echo $temp['user_id'];;
-
+        $this->load->model("akun");
+        $data['my_staff'] = $this->akun->my_staff($temp["user_id"]);
+        $data['my_staff'] = json_encode($data['my_staff']);
         $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
         //redirect("pekerjaan/karyawan/deskripsi_pekerjaan_page?id_detail_pkj=".$id_detail_pkj);
 //        } else {
@@ -291,27 +247,28 @@ class pekerjaan extends ceklogin {
     }
 
     public function lihat_usulan() {
-//        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
-        $this->load->model("pekerjaan_model");
+        $this->load->model(array("pekerjaan_model","akun"));
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
-        //$data["list_usulan"] = $this->pekerjaan_model->get_list_usulan_pekerjaan($this->session->userdata("user_departemen"));
+        $staff = $this->akun->my_staff($temp["user_id"]);
+        $data["my_staff"] = json_encode($staff);
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat daftar usulan pekerjaan yang ada.");
-
         $this->load->view("pekerjaan/lihat_usulan_pekerjaan_page", $data);
-//        } else {
-//            $this->session->set_flashdata('status', 4);
-//            redirect("login");
-//        }
     }
 
     public function get_usulan_pekerjaan() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
-        $this->load->model("pekerjaan_model");
+        $this->load->model(array("pekerjaan_model"));
         //var_dump($this->session->userdata('logged_in'));
         $temp = $this->session->userdata('logged_in');
-        $data = $this->pekerjaan_model->get_list_usulan_pekerjaan($temp["user_departemen"]);
-
+        //$staff = $this->akun->my_staff($temp["user_id"]);
+        $staff = $this->input->post("list_id_staff");
+        //var_dump($staff);
+        $list_id_staff = array();
+        foreach ($staff as $my_staff){
+            $list_id_staff[]=$my_staff;
+        }
+        $data = $this->pekerjaan_model->get_list_usulan_pekerjaan($list_id_staff);
         echo json_encode(array("status" => "OK", "data" => $data));
 //        } else {
 //            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
