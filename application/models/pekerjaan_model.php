@@ -233,7 +233,8 @@ class pekerjaan_model extends CI_Model {
     }
     public function  get_detil_pekerjaan($list_id_pekerjaan){
         if(count($list_id_pekerjaan)==0)return NULL;
-        $query = "select id_pekerjaan, id_akun from detil_pekerjaan where id_pekerjaan in "
+        $query = "select id_pekerjaan, id_akun, tgl_read, tglasli_mulai, tglasli_selesai "
+                . "from detil_pekerjaan where id_pekerjaan in "
                 . "(".implode(",",  $list_id_pekerjaan).")";
         $query=$this->db->query($query);
         return $query->result();

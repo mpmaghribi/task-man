@@ -310,7 +310,7 @@ class pekerjaan extends ceklogin {
         $data["data_akun"]=$session;
         $id_staff= $this->input->get("id_akun");
         $data["pekerjaan_staff"] = $this->pekerjaan_model->list_pekerjaan($id_staff);
-        $data["my_staff"]=$this->akun->my_staff($session["user_id"]);
+        $data["my_staff"]=  $this->akun->my_staff($session["user_id"]);
         $data["id_staff"] = $id_staff;
         $data["nama_staff"] = "";
         foreach ($data["my_staff"] as $st){
@@ -319,6 +319,12 @@ class pekerjaan extends ceklogin {
                 break;
             }
         }
+        $list_id_pekerjaan=array();
+        foreach ($data["pekerjaan_staff"] as $pekerjaan){
+            $list_id_pekerjaan[]=$pekerjaan->id_pekerjaan;
+        }
+        $data["detil_pekerjaan"]=  json_encode($this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan));
+        $data["my_staff"]=  json_encode($data["my_staff"]);
         $this->load->view('pekerjaan/pekerjaan_per_staff_page',$data);
     }
 

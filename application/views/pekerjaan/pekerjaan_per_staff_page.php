@@ -64,5 +64,27 @@
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script>
-        document.title = "Daftar Pekerjaan - Task Management";
+        document.title = "Daftar Pekerjaan <?php echo $nama_staff; ?> - Task Management";
+        var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
+        var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
+        var jumlah_detil = detil_pekerjaan.length;
+        var jumlah_staff= my_staff.length;
+        for(var i=0;i<jumlah_detil;i++){
+            var cell = $('#assigh_to_'+detil_pekerjaan[i]['id_pekerjaan']);
+            if(cell.length>0){
+                var nama_staff = '';
+                for(var j=0;j<jumlah_staff;j++){
+                    if(my_staff[j]['id_akun']==detil_pekerjaan[i]['id_akun'])
+                    {
+                        nama_staff=my_staff[j]['nama'];
+                        break;
+                    }
+                }
+                if(cell.html()>0){
+                    cell.html(cell.html()+', '+nama_staff);
+                }else{
+                    cell.html(nama_staff);
+                }
+            }
+        }
     </script>
