@@ -13,7 +13,7 @@
             <section class="wrapper">
                 <!-- page start-->
                 <div class="row">
-                    <?php if ($temp['jmlstaff'] > 0) { ?>
+                    
                         <div class="col-md-12" >
                             <section class="panel">
                                 <header class="panel-heading tab-bg-dark-navy-blue ">
@@ -162,7 +162,7 @@
 
                             </section>
                         </div>
-                    <?php } ?>
+                    
 
                 </div>
                 <div class="row">

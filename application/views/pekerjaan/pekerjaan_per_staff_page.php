@@ -43,7 +43,7 @@
                                                     <td><?php echo $pekerjaan->tgl_mulai . ' - ' . $pekerjaan->tgl_selesai; ?></td>
                                                     <td id="assigh_to_<?php echo $pekerjaan->id_pekerjaan; ?>"></td>
                                                     <td id="status_<?php echo $pekerjaan->id_pekerjaan; ?>">status</td>
-                                                    <td></td>
+                                                    <td><form method="get" action="<?php echo base_url();?>pekerjaan/deskripsi_pekerjaan"><input type="hidden" name="id_detail_pkj" value="<?php echo $pekerjaan->id_pekerjaan; ?>"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>
                                                 </tr><?php
                                             }
                                             ?>
@@ -101,7 +101,7 @@
                 var flag = get_flag(detil_pekerjaan[i]['id_pekerjaan']);
                 var status = '<span class="label label-';
                 if (flag == 1) {
-                    status += "default label-mini\">";
+                    status += "danger label-mini\">";
                     if (detil_pekerjaan[i]["status"] == null || detil_pekerjaan[i]["status"].trim().length == 0) {
                         status += "Not Approved";
                     } else {
@@ -144,7 +144,7 @@
                         }
                     }
                     else if (detil_pekerjaan[i]["progress"] != "100") {
-                        status += "danger label-mini\">Terlambat";
+                        status += "default label-mini\">Terlambat";
                     }
                 }
                 status += "</span>";
