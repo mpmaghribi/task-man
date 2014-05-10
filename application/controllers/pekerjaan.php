@@ -247,7 +247,7 @@ class pekerjaan extends ceklogin {
     }
 
     public function lihat_usulan() {
-        $this->load->model(array("pekerjaan_model","akun"));
+        $this->load->model(array("pekerjaan_model", "akun"));
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
         $staff = $this->akun->my_staff($temp["user_id"]);
@@ -265,8 +265,8 @@ class pekerjaan extends ceklogin {
         $staff = $this->input->post("list_id_staff");
         //var_dump($staff);
         $list_id_staff = array();
-        foreach ($staff as $my_staff){
-            $list_id_staff[]=$my_staff;
+        foreach ($staff as $my_staff) {
+            $list_id_staff[] = $my_staff;
         }
         $data = $this->pekerjaan_model->get_list_usulan_pekerjaan($list_id_staff);
         echo json_encode(array("status" => "OK", "data" => $data));
@@ -296,16 +296,19 @@ class pekerjaan extends ceklogin {
      */
 
     public function pekerjaan_staff() {
-//        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
         $temp = $this->session->userdata('logged_in');
         $data["data_akun"] = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat progress pekerjaan dari para staffnya.");
-
+        $this->load->model("akun");
+        $data["my_staff"] = $this->akun->my_staff($temp["user_id"]);
         $this->load->view("pekerjaan/lihat_daftar_pekerjaan_staff_page", $data);
-//        } else {
-//            $this->session->set_flashdata('status', 4);
-//            redirect("login");
-//        }
+    }
+    
+    public function pekerjaan_per_staff() {
+        $session = $this->session->userdata('logged_in');
+        $data["data_akun"]=$session;
+        $id_staff= pg_escape_string($this->input->get("id_akun"));
+        $this->load->view('pekerjaan/pekerjaan_per_staff_page',$data);
     }
 
     /*
