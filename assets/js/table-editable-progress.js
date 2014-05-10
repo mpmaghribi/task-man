@@ -33,7 +33,7 @@ var EditableTableProgress = function () {
                 oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
                 oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
                 oTable.fnUpdate('<a class="edit" href="">Ubah Progress</a>', nRow, 4, false);
-                oTable.fnUpdate('<a class="delete" href="">Hapus</a>', nRow, 5, false);
+                oTable.fnUpdate('<a class="#" href=""></a>', nRow, 5, false);
                 oTable.fnDraw();
             }
 
@@ -48,6 +48,7 @@ var EditableTableProgress = function () {
             
             function savetodb(nRow)
             {
+                
                 $.ajax({// create an AJAX call...
                             data: 
                             {
@@ -55,11 +56,11 @@ var EditableTableProgress = function () {
                                 data_baru:nRow.cells[3].innerHTML
                             }, // get the form data
                             type: "POST", // GET or POST
-                            url: "http://localhost:90/task_man/index.php/pekerjaan/update_progress", // the file to call
+                            url: "http://localhost:90/taskmanagement/index.php/pekerjaan/update_progress", // the file to call
                             cache: false,
                             success: function(response) { // on success..
                                 var json = jQuery.parseJSON(response);
-                                alert(json.status);
+                                
                                 if (json.status === "OK") {
                                     alert("Updated!");
                                     window.location.href = "";

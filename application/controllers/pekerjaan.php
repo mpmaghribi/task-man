@@ -388,7 +388,7 @@ class pekerjaan extends ceklogin {
         $data = $this->input->post('data_baru');
         $this->load->model("pekerjaan_model");
         $result = $this->pekerjaan_model->sp_updateprogress_pekerjaan($data, $id_detail_pkj);
-
+        
         if ($result == 1)
             $status = array('status' => 'OK');
         else

@@ -34,7 +34,6 @@
                                             <section class="panel" >
                                                 <header class="panel-heading" id="header_aksi" style="display:none">tindakan
                                                     <span class="tools pull-right">
-                                                        <a href="javascript:;" class="fa fa-chevron-down"></a>
                                                     </span>
                                                 </header>
                                                 <div class="panel-body" id="div_acc_edit_cancel_usulan_pekerjaan" style="display:none">
@@ -57,7 +56,6 @@
                                                             ?>
                                                         <?php } ?> 
                                                         <span class="tools pull-right">
-                                                            <a href="javascript:;" class="fa fa-chevron-down"></a>
                                                         </span>
                                                     </header>
                                                     <div class="panel-body">
@@ -102,7 +100,6 @@
                                                     <header class="panel-heading">
                                                         Anggota Tim
                                                         <span class="tools pull-right">
-                                                            <a href="javascript:;" class="fa fa-chevron-down"></a>
                                                         </span>
                                                     </header>
                                                     <div class="panel-body">
@@ -135,8 +132,8 @@
                                                                                 </div>
                                                                             </td>
                                                                             <td>
-                                                                                <?php if ($value->id_akun == $this->session->userdata('user_id') && $value->flag_usulan == 2) { ?>
-                                                                                    <a class="edit" href="javascript:;">Progress</a>
+                                                                                <?php if ($value->id_akun == $temp['user_id'] && $value->flag_usulan == 2) { ?>
+                                                                                    <a class="edit" href="javascript:;">Ubah Progress</a>
                                                                                 <?php } ?>
                                                                             </td>
                                                                             <td></td>
