@@ -16,8 +16,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <section class="panel">
-                            <header class="panel-heading">
-                                Pekerjaan Staff
+                            <header class="panel-heading" id="header_pekerjaan_staff">
+                                Daftar Pekerjaan <?php echo $nama_staff ?>
                             </header>
                             <div class="panel-body">
                                 <div class="form">
@@ -25,16 +25,27 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th >Nama Staff</th>
-                                                <th >Pekerjaan</th>
+                                                <td>Nama Pekerjaan</td>
                                                 <th>Deadline</th>
                                                 <th>Assign To</th>
                                                 <th>Status</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            
+                                            $counter = 0;
+                                            foreach ($pekerjaan_staff as $pekerjaan) {
+                                                $counter++;
+                                                ?><tr>
+                                                    <td><?php echo $counter; ?></td>
+                                                    <td><?php echo $pekerjaan->nama_pekerjaan; ?></td>
+                                                    <td><?php echo $pekerjaan->tgl_mulai . ' - ' . $pekerjaan->tgl_selesai; ?></td>
+                                                    <td id="assigh_to_<?php echo $pekerjaan->id_pekerjaan; ?>"></td>
+                                                    <td>status</td>
+                                                    <td></td>
+                                                </tr><?php
+                                            }
                                             ?>
                                         </tbody>
                                     </table>
@@ -53,5 +64,5 @@
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script>
-        document.title="Daftar Pekerjaan - Task Management";
+        document.title = "Daftar Pekerjaan - Task Management";
     </script>

@@ -305,9 +305,20 @@ class pekerjaan extends ceklogin {
     }
     
     public function pekerjaan_per_staff() {
+        $this->load->model(array("pekerjaan_model","akun"));
         $session = $this->session->userdata('logged_in');
         $data["data_akun"]=$session;
-        $id_staff= pg_escape_string($this->input->get("id_akun"));
+        $id_staff= $this->input->get("id_akun");
+        $data["pekerjaan_staff"] = $this->pekerjaan_model->list_pekerjaan($id_staff);
+        $data["my_staff"]=$this->akun->my_staff($session["user_id"]);
+        $data["id_staff"] = $id_staff;
+        $data["nama_staff"] = "";
+        foreach ($data["my_staff"] as $st){
+            if($st->id_akun==$id_staff){
+                $data["nama_staff"] = $st->nama;
+                break;
+            }
+        }
         $this->load->view('pekerjaan/pekerjaan_per_staff_page',$data);
     }
 
