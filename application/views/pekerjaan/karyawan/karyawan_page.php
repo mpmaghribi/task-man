@@ -71,9 +71,7 @@
                                                                             </form>
                                                                         </td>
                                                                     </tr>
-                                                                <?php } else {
-                                                                    break;
-                                                                } ?>
+                                                                <?php }  ?>
                                                                 <?php
                                                                 $i++;
                                                             }
@@ -492,9 +490,9 @@
                 }
                 //var isi_html = cell.html();
                 //console.log(cell);
-                if (cell.html().trim().length === 0) {
+                if (cell.length>0 && cell.html().trim().length === 0) {
                     cell.html(nama_staff);
-                } else {
+                } else if(cell.length>0){
                     cell.html(cell.html() + ", " + nama_staff);
                 }
             }

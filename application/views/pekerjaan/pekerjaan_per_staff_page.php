@@ -25,7 +25,7 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <td>Nama Pekerjaan</td>
+                                                <th>Nama Pekerjaan</th>
                                                 <th>Deadline</th>
                                                 <th>Assign To</th>
                                                 <th>Status</th>
@@ -42,7 +42,7 @@
                                                     <td><?php echo $pekerjaan->nama_pekerjaan; ?></td>
                                                     <td><?php echo $pekerjaan->tgl_mulai . ' - ' . $pekerjaan->tgl_selesai; ?></td>
                                                     <td id="assigh_to_<?php echo $pekerjaan->id_pekerjaan; ?>"></td>
-                                                    <td>status</td>
+                                                    <td id="status_<?php echo $pekerjaan->id_pekerjaan; ?>">status</td>
                                                     <td></td>
                                                 </tr><?php
                                             }
@@ -54,7 +54,6 @@
                         </section>
                     </div>
                 </div>
-
                 <!-- page end-->
             </section>
         </section>
@@ -67,24 +66,110 @@
         document.title = "Daftar Pekerjaan <?php echo $nama_staff; ?> - Task Management";
         var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
         var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
+        var pekerjaan_flag = [];
+        var pekerjaan_id = [];
+<?php foreach ($pekerjaan_staff as $pekerjaan) {
+    ?>pekerjaan_id.push('<?php echo $pekerjaan->id_pekerjaan ?>');
+            pekerjaan_flag.push('<?php echo $pekerjaan->flag_usulan; ?>');
+<?php } ?>
+        function get_flag(id_pekerjaan) {
+            var jumlah_pekerjaan = pekerjaan_id.length;
+            for (var i = 0; i < jumlah_pekerjaan; i++) {
+                if (pekerjaan_id[i] == id_pekerjaan)
+                    return pekerjaan_flag[i];
+            }
+            return 1;
+        }
         var jumlah_detil = detil_pekerjaan.length;
-        var jumlah_staff= my_staff.length;
-        for(var i=0;i<jumlah_detil;i++){
-            var cell = $('#assigh_to_'+detil_pekerjaan[i]['id_pekerjaan']);
-            if(cell.length>0){
+        var jumlah_staff = my_staff.length;
+        for (var i = 0; i < jumlah_detil; i++) {
+            var cell = $('#assigh_to_' + detil_pekerjaan[i]['id_pekerjaan']);
+            if (cell.length > 0) {
                 var nama_staff = '';
-                for(var j=0;j<jumlah_staff;j++){
-                    if(my_staff[j]['id_akun']==detil_pekerjaan[i]['id_akun'])
+                for (var j = 0; j < jumlah_staff; j++) {
+                    if (my_staff[j]['id_akun'] == detil_pekerjaan[i]['id_akun'])
                     {
-                        nama_staff=my_staff[j]['nama'];
+                        nama_staff = my_staff[j]['nama'];
                         break;
                     }
                 }
-                if(cell.html()>0){
-                    cell.html(cell.html()+', '+nama_staff);
-                }else{
+                if (cell.html() > 0) {
+                    cell.html(cell.html() + ', ' + nama_staff);
+                } else {
                     cell.html(nama_staff);
                 }
+                var flag = get_flag(detil_pekerjaan[i]['id_pekerjaan']);
+                var status = '<span class="label label-';
+                if (flag == 1) {
+                    status += "default label-mini\">";
+                    if (detil_pekerjaan[i]["status"] == null || detil_pekerjaan[i]["status"].trim().length == 0) {
+                        status += "Not Approved";
+                    } else {
+                        status += detil_pekerjaan[i]["status"];
+                    }
+                } else if (flag == "2") {
+                    var sekarang = detil_pekerjaan[i]["sekarang"];
+                    if (sekarang <= detil_pekerjaan[i]["tgl_selesai"]) {
+                        if (detil_pekerjaan[i]["tgl_read"] == null) {
+                            status += "primary label-mini\">";
+                            if (detil_pekerjaan[i]["status"] == null || detil_pekerjaan[i]["status"].trim().length == 0) {
+                                status += "Belum Dibaca";
+                            } else {
+                                status += detil_pekerjaan[i]["status"];
+                            }
+                        }
+                        else {
+                            if (detil_pekerjaan[i]["progress"] == "0") {
+                                status += "info label-mini\">";
+                                if (detil_pekerjaan[i]["status"] == null || detil_pekerjaan[i]["status"].trim().length == 0) {
+                                    status += "Sudah Dibaca";
+                                } else {
+                                    status += detil_pekerjaan[i]["status"];
+                                }
+                            } else if (detil_pekerjaan[i]["progress"] == "100") {
+                                status += "success label-mini\">";
+                                if (detil_pekerjaan[i]["status"] == null || detil_pekerjaan[i]["status"].trim().length == 0) {
+                                    status += "Selesai";
+                                } else {
+                                    status += detil_pekerjaan[i]["status"];
+                                }
+                            } else {
+                                status += "inverse label-mini\">";
+                                if (detil_pekerjaan[i]["status"] == null || detil_pekerjaan[i]["status"].trim().length == 0) {
+                                    status += "Dikerjakan";
+                                } else {
+                                    status += detil_pekerjaan[i]["status"];
+                                }
+                            }
+                        }
+                    }
+                    else if (detil_pekerjaan[i]["progress"] != "100") {
+                        status += "danger label-mini\">Terlambat";
+                    }
+                }
+                status += "</span>";
+                $('#status_' + detil_pekerjaan[i]['id_pekerjaan']).html(status);
             }
         }
+
+        /*var jumlah_pekerjaan = pekerjaan_id.length;
+        for (var i = 0; i < jumlah_pekerjaan; i++) {
+            var index_pekerjaan = 0;
+            var id_pekerjaan = 0, flag_pekerjaan = 1;
+            if (pekerjaan_id[i] != null) {
+                index_pekerjaan = i;
+                id_pekerjaan = pekerjaan_id[index_pekerjaan];
+                flag_pekerjaan = pekerjaan_flag[index_pekerjaan];
+                var status = '<span class="label label-';
+                if (flag_pekerjaan == 1) {
+                    status += "danger label-mini\">Not Approved";
+                } else
+                {
+                    status += "success label-mini\">Approved";
+                }
+                status += "</span>";
+                $('#status_' + id_pekerjaan).html(status);
+            }
+        }*/
+
     </script>
