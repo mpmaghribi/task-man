@@ -466,7 +466,11 @@
                 populate_file('list_file_upload_assign', files);
 
             });
-            var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
+            
+        </script>
+<?php } ?>
+    <script>
+        var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
             var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
             var jumlah_staff = my_staff.length;
             var jumlah_detil_pekerjaan = detil_pekerjaan.length;
@@ -494,9 +498,6 @@
                     cell.html(cell.html() + ", " + nama_staff);
                 }
             }
-        </script>
-<?php } ?>
-    <script>
         $('#pilih_berkas_usul').change(function() {
             var pilih_berkas = document.getElementById('pilih_berkas_usul');
             var files = pilih_berkas.files;

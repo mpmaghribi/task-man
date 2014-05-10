@@ -156,11 +156,13 @@
                     var json = jQuery.parseJSON(response);
                     //alert(response);
                     if (json.status === "OK") {
+                        //alert("aku punya staff");
                         var jumlah_staff = json.data.length;
                         for (var i = 0; i < jumlah_staff; i++) {
                             my_staff.push(json.data[i]);
                         }
                     } else {
+                        //alert("aku tidak punya staff");
                     }
                     get_staff_yang_mengerjakan();
                 }
@@ -201,7 +203,7 @@ if (isset($pkj_karyawan)) {
         function update_tabel_home() {
             var n = list_detil_pekerjaan.length;
             var m = my_staff.length;
-
+            console.log("list my staff");
             console.log(my_staff);
             for (var i = 0; i < n; i++) {
                 var id_akun = list_detil_pekerjaan[i]["id_akun"];
