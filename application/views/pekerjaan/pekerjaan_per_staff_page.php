@@ -6,7 +6,6 @@
         <?php $this->load->view("taskman_header2_page") ?>
         <!--header end-->
         <?php $this->load->view("taskman_sidebarleft_page") ?>
-
         <!--sidebar end-->
         <!--main content start-->
         <section id="main-content">
@@ -147,25 +146,4 @@
                 $('#status_' + detil_pekerjaan[i]['id_pekerjaan']).html(status);
             }
         }
-
-        /*var jumlah_pekerjaan = pekerjaan_id.length;
-        for (var i = 0; i < jumlah_pekerjaan; i++) {
-            var index_pekerjaan = 0;
-            var id_pekerjaan = 0, flag_pekerjaan = 1;
-            if (pekerjaan_id[i] != null) {
-                index_pekerjaan = i;
-                id_pekerjaan = pekerjaan_id[index_pekerjaan];
-                flag_pekerjaan = pekerjaan_flag[index_pekerjaan];
-                var status = '<span class="label label-';
-                if (flag_pekerjaan == 1) {
-                    status += "danger label-mini\">Not Approved";
-                } else
-                {
-                    status += "success label-mini\">Approved";
-                }
-                status += "</span>";
-                $('#status_' + id_pekerjaan).html(status);
-            }
-        }*/
-
     </script>

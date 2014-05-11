@@ -79,6 +79,15 @@ class pekerjaan extends ceklogin {
                 $this->pekerjaan_model->tambah_detil_pekerjaan($val, $id_pekerjaan);
                 echo "menambahkan $val <br/>";
             }
+            if (isset($_FILES["berkas"])) {
+                $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
+                //$this->load->library('upload');
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+                $files = $_FILES["berkas"];
+                $this->upload_file($files, $path, $id_pekerjaan);
+            }
         } else {
             echo "gagal update";
         }
@@ -121,13 +130,14 @@ class pekerjaan extends ceklogin {
                 //echo "id akun $id_akun mendapat pekerjaan $id_pekerjaan <br/>";
             }
 
-            $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
-            $this->load->library('upload');
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-            }
+
             //echo "path = $path<br/>";
             if (isset($_FILES["berkas"])) {
+                $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
+                //$this->load->library('upload');
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
                 $files = $_FILES["berkas"];
                 $this->upload_file($files, $path, $id_pekerjaan);
             }
