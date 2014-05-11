@@ -56,9 +56,11 @@ class pekerjaan extends ceklogin {
         $update["tgl_selesai"] = pg_escape_string($this->input->post("tgl_selesai_pkj"));
         $update["level_prioritas"] = pg_escape_string($this->input->post("prioritas"));
         $update["asal_pekerjaan"] = 'task management';
-        if($this->pekerjaan_model->update_pekerjaan($update,  pg_escape_string($this->input->post('id_pekerjaan')))){
+        $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
+        if($this->pekerjaan_model->update_pekerjaan($update,  $id_pekerjaan)){
             echo "berhasil update";
         }
+        redirect(base_url()."pekerjaan/deskripsi_pekerjaan?id_detail_pkj=".$id_pekerjaan);
     }
 
     public function usulan_pekerjaan2() {

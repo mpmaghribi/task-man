@@ -32,11 +32,9 @@
                                                             <?php foreach ($detail_pekerjaan as $d) { ?>
                                                                 <div id="div_staff_<?php echo $d->id_akun; ?>">
                                                                     <span>
-                                                                        <a class="btn btn-primary btn-xs" onclick="hapus_staff(<?php echo $d->id_akun; ?>);" href="#">Hapus</a>
+                                                                        <a class="btn btn-primary btn-xs" onclick="hapus_staff(<?php echo $d->id_akun; ?>);" href="javascript:void(0)">Hapus</a>
                                                                     </span>
-                                                                    <span style="margin-left: 0px" id="nama_staff_<?php echo $d->id_akun; ?>">
-
-                                                                    </span>
+                                                                    <span style="margin-left: 0px" id="nama_staff_<?php echo $d->id_akun; ?>"></span>
                                                                 </div>
                                                             <?php } ?>
                                                         </div>
@@ -132,7 +130,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
-                                                    <button class="btn btn-success" type="button" onclick="pilih_staff_ok()">Save changes</button>
+                                                    <button class="btn btn-success" type="button" onclick="pilih_staff_ok();">Save changes</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -231,17 +229,21 @@
         }
         query_staff();
         var tubuh = $("#tabel_list_enroll_staff_body");
-        var list_staff_sudah_diproses=false;
         function tampilkan_staff() {
             if (sudah_diproses === false)
                 query_staff();
             var jumlah_staff = list_id.length;
             //alert("jumlah data" + jumlah_staff)
             tubuh.html("");
-            for (var i = 0; i < jumlah_staff && !list_staff_sudah_diproses; i++) {
+            var assigned = $('#staff').val();
+            var crow=0;
+            for (var i = 0; i < jumlah_staff; i++) {
+                if(assigned.indexOf('::'+list_id[i]+'::')>=0)
+                    continue;
+                crow++;
                 tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');
                 var row = $('#tabel_list_enroll_staff_row_' + list_id[i]);
-                row.append('<td>' + (1 + i) + '</td>');
+                row.append('<td>' + crow + '</td>');
                 row.append('<td>' + list_nip[i] + '</td>');
                 row.append('<td>' + list_departemen[i] + '</td>');
                 row.append('<td>' + list_nama[i] + '</td>');
@@ -251,23 +253,16 @@
                 $('#enroll_' + list_id[i]).attr('checked', false);
             }
             var assigned = $('#staff').val().split('::');
-            var jumlah_assigned = assigned.length;
-            for (var i = 0; i < jumlah_assigned; i++) {
-                if (assigned[i].length > 0)
-                    $('#enroll_' + assigned[i]).attr('checked', true);
-                //alert('#enroll_' + assigned[i]);
-            }
-            list_staff_sudah_diproses=true;
         }
         function pilih_staff_ok() {
             var jumlah_data = list_id.length;
             var staf = $('#staff');
-            staf.val('::');
-            $('#span_list_assign_staff').html('');
+            //staf.val('::');
+            //$('#span_list_assign_staff').html('');
             for (var i = 0; i < jumlah_data; i++) {
                 if ($('#enroll_' + list_id[i]).attr('checked')) {
                     staf.val(staf.val() + list_id[i] + '::');
-                    $('#span_list_assign_staff').append('<div id="div_staff_' + list_id[i] + '"><span><a class="btn btn-primary btn-xs" href="#" onclick="hapus_staff(' + list_id[i] + ');">Hapus</a></span><span style="margin-left: 5px">' + list_nama[i] + '</span></div>');
+                    $('#span_list_assign_staff').append('<div id="div_staff_' + list_id[i] + '"><span><a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="hapus_staff(' + list_id[i] + ');">Hapus</a></span><span style="margin-left: 5px">' + list_nama[i] + '</span></div>');
                 }
             }
             $('#tombol_tutup').click();
