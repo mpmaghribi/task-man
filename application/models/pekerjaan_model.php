@@ -228,12 +228,7 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
-    public function get_detil_of_pekerjaan($id_pekerjaan) {
-        $query="select detil_pekerjaan.*, akun.nama,akun.nip from detil_pekerjaan inner join akun"
-                . " on akun.id_akun=detil_pekerjaan.id_akun where id_pekerjaan=$id_pekerjaan";
-        $query = $this->db->query($query);
-        return $query->result();
-    }
+   
     public function  get_detil_pekerjaan($list_id_pekerjaan){
         if(count($list_id_pekerjaan)==0)return NULL;
         $query = "select detil_pekerjaan.id_pekerjaan, id_akun, tgl_read, tglasli_mulai, tglasli_selesai, progress, skor, now() as sekarang, status, pekerjaan.tgl_selesai "

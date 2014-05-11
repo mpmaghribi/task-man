@@ -415,7 +415,7 @@ class pekerjaan extends ceklogin {
         }
         $data = array();
         $data["pekerjaan"] = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
-        $data["detail_pekerjaan"] = $this->pekerjaan_model->get_detil_of_pekerjaan($id_pekerjaan);
+        $data["detail_pekerjaan"] = $this->pekerjaan_model->get_detil_pekerjaan(array($id_pekerjaan));
         $data["berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_pekerjaan);
         $data["data_akun"] = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja melakukan perubahan pada detail pekerjaan.");

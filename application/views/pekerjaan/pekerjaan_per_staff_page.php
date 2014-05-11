@@ -102,11 +102,7 @@
                 var status = '<span class="label label-';
                 if (flag == 1) {
                     status += "danger label-mini\">";
-                    if (detil_pekerjaan[i]["status"] == null || detil_pekerjaan[i]["status"].trim().length == 0) {
                         status += "Not Approved";
-                    } else {
-                        status += detil_pekerjaan[i]["status"];
-                    }
                 } else if (flag == "2") {
                     var sekarang = detil_pekerjaan[i]["sekarang"];
                     if (sekarang <= detil_pekerjaan[i]["tgl_selesai"]) {

@@ -27,7 +27,7 @@
                                         </li>
                                     <?php } ?>
                                 </ul>
-                                <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px" id="div_acc_edit_cancel_usulan_pekerjaan">
+                                <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;display: none;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                     <a class="btn btn-success btn-xs" href="#" id="tombol_validasi_usulan" style="font-size: 10px">Validasi</a>
                                     <a class="btn btn-info btn-xs" href="#" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-danger btn-xs" href="#" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
@@ -294,7 +294,6 @@
                         //alert(response);
                         if (json.status === "OK") {
                             $('#div_acc_edit_cancel_usulan_pekerjaan').remove();
-                            $('#header_aksi').remove();
                         } else {
                             alert("validasi gagal, " + json.reason);
                         }
@@ -312,14 +311,12 @@
                         if (json.status === "OK") {
                             if (json.data === "1") {
                                 $('#div_acc_edit_cancel_usulan_pekerjaan').css("display", "block");
-                                $('#header_aksi').css("display", "block");
                                 $('#tombol_edit_usulan').attr("href", '<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=' + id_pekerjaan);
                                 $('#tombol_validasi_usulan').attr("onclick", 'validasi(' + id_pekerjaan + ');');
                                 $('#tombol_batalkan_usulan').attr("onclick", '');
                             }
                         } else {
                             $('#div_acc_edit_cancel_usulan_pekerjaan').remove();
-                            $('#header_aksi').remove();
                         }
                     }
                 });
