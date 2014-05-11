@@ -38,7 +38,8 @@ class pekerjaan_model extends CI_Model {
         $id_akun = pg_escape_string($id_akun);
         $query = "select detil_pekerjaan.id_akun, pekerjaan.*, pekerjaan.tgl_selesai"
                 . "  from detil_pekerjaan inner join pekerjaan on "
-                . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan  where detil_pekerjaan.id_akun=$id_akun "
+                . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan "
+                . "where detil_pekerjaan.id_akun=$id_akun and detil_pekerjaan.status!='Batal' "
                 . "order by tglasli_mulai desc";
         //echo $query;
         $query = $this->db->query($query);
@@ -122,7 +123,11 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function sp_listassign_pekerjaan($id_detail_pkj) {
-        $query = "select * from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
+        $query = "select * from detil_pekerjaan inner join pekerjaan on "
+                . "pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan "
+                . "inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan "
+                . "= pekerjaan.id_sifat_pekerjaan where pekerjaan.id_pekerjaan = "
+                . $id_detail_pkj . " and detil_pekerjaan.status!='Batal';";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
@@ -231,8 +236,11 @@ class pekerjaan_model extends CI_Model {
    
     public function  get_detil_pekerjaan($list_id_pekerjaan){
         if(count($list_id_pekerjaan)==0)return NULL;
-        $query = "select detil_pekerjaan.id_pekerjaan, id_akun, tgl_read, tglasli_mulai, tglasli_selesai, progress, skor, now() as sekarang, status, pekerjaan.tgl_selesai "
-                . "from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_pekerjaan in "
+        $query = "select detil_pekerjaan.id_pekerjaan, id_akun, tgl_read, tglasli_mulai, "
+                . "tglasli_selesai, progress, skor, now() as sekarang, status, pekerjaan.tgl_selesai "
+                . "from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan="
+                . "detil_pekerjaan.id_pekerjaan where detil_pekerjaan.status!='Batal' and "
+                . "detil_pekerjaan.id_pekerjaan in "
                 . "(".implode(",",  $list_id_pekerjaan).")";
         $query=$this->db->query($query);
         return $query->result();
@@ -240,6 +248,11 @@ class pekerjaan_model extends CI_Model {
     public function update_pekerjaan($update,$id) {
         $this->db->where('id_pekerjaan',$id);
         return $this->db->update('pekerjaan',$update);
+    }
+    
+    public function batalkan_penugasan_staff($id_akun,$id_pekerjaan){
+        $query = "update detil_pekerjaan set status='Batal' where id_pekerjaan=$id_pekerjaan and id_akun=$id_akun";
+        return $this->db->query($query);
     }
 }
 

@@ -93,7 +93,7 @@
                         break;
                     }
                 }
-                if (cell.html() > 0) {
+                if (cell.html().length > 0) {
                     cell.html(cell.html() + ', ' + nama_staff);
                 } else {
                     cell.html(nama_staff);

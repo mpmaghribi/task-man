@@ -64,7 +64,8 @@ class taskman_repository extends CI_Model {
         return $query->result();
     }
     public function sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $id_akun){
-        $query = "select * from function_tambah_detil_pekerjaan('$id_pekerjaan_baru','$id_akun') as (kode integer)";
+        $query = "select * from function_tambah_detil_pekerjaan('$id_pekerjaan_baru','$id_akun') "
+                . "as (kode integer)";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
