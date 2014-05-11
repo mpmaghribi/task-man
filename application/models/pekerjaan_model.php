@@ -153,8 +153,11 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function validasi_pekerjaan($id_pekerjaan) {
-        $query = "update pekerjaan set flag_usulan=2 where id_pekerjaan=" . pg_escape_string($id_pekerjaan);
+        $id_pekerjaan=  pg_escape_string($id_pekerjaan);
+        $query = "update pekerjaan set flag_usulan=2 where id_pekerjaan=" . $id_pekerjaan;
         if ($this->db->query($query)) {
+            $query = "update detil_pekerjaan set status='Belum Dibaca', tgl_read=null, tglasli_mulai=null, tglasli_selesai=null, skor=0, progress=0 where id_pekerjaan=$id_pekerjaan";
+            $this->db->query($query);
             return 1;
         }
         return 0;
