@@ -46,6 +46,21 @@ class pekerjaan extends ceklogin {
 //        }
     }
 
+    public function do_edit() {
+        $session = $this->session->userdata('logged_in');
+        $this->load->model(array("pekerjaan_model"));
+        $update["id_sifat_pekerjaan"] = pg_escape_string($this->input->post("sifat_pkj"));
+        $update["nama_pekerjaan"] = pg_escape_string($this->input->post("nama_pkj"));
+        $update["deskripsi_pekerjaan"] = pg_escape_string($this->input->post("deskripsi_pkj"));
+        $update["tgl_mulai"] = pg_escape_string($this->input->post("tgl_mulai_pkj"));
+        $update["tgl_selesai"] = pg_escape_string($this->input->post("tgl_selesai_pkj"));
+        $update["level_prioritas"] = pg_escape_string($this->input->post("prioritas"));
+        $update["asal_pekerjaan"] = 'task management';
+        if($this->pekerjaan_model->update_pekerjaan($update,  pg_escape_string($this->input->post('id_pekerjaan')))){
+            echo "berhasil update";
+        }
+    }
+
     public function usulan_pekerjaan2() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
         $temp = $this->session->userdata('logged_in');
@@ -303,29 +318,29 @@ class pekerjaan extends ceklogin {
         $data["my_staff"] = $this->akun->my_staff($temp["user_id"]);
         $this->load->view("pekerjaan/lihat_daftar_pekerjaan_staff_page", $data);
     }
-    
+
     public function pekerjaan_per_staff() {
-        $this->load->model(array("pekerjaan_model","akun"));
+        $this->load->model(array("pekerjaan_model", "akun"));
         $session = $this->session->userdata('logged_in');
-        $data["data_akun"]=$session;
-        $id_staff= $this->input->get("id_akun");
+        $data["data_akun"] = $session;
+        $id_staff = $this->input->get("id_akun");
         $data["pekerjaan_staff"] = $this->pekerjaan_model->list_pekerjaan($id_staff);
-        $data["my_staff"]=  $this->akun->my_staff($session["user_id"]);
+        $data["my_staff"] = $this->akun->my_staff($session["user_id"]);
         $data["id_staff"] = $id_staff;
         $data["nama_staff"] = "";
-        foreach ($data["my_staff"] as $st){
-            if($st->id_akun==$id_staff){
+        foreach ($data["my_staff"] as $st) {
+            if ($st->id_akun == $id_staff) {
                 $data["nama_staff"] = $st->nama;
                 break;
             }
         }
-        $list_id_pekerjaan=array();
-        foreach ($data["pekerjaan_staff"] as $pekerjaan){
-            $list_id_pekerjaan[]=$pekerjaan->id_pekerjaan;
+        $list_id_pekerjaan = array();
+        foreach ($data["pekerjaan_staff"] as $pekerjaan) {
+            $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
         }
-        $data["detil_pekerjaan"]=  json_encode($this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan));
-        $data["my_staff"]=  json_encode($data["my_staff"]);
-        $this->load->view('pekerjaan/pekerjaan_per_staff_page',$data);
+        $data["detil_pekerjaan"] = json_encode($this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan));
+        $data["my_staff"] = json_encode($data["my_staff"]);
+        $this->load->view('pekerjaan/pekerjaan_per_staff_page', $data);
     }
 
     /*
@@ -388,7 +403,7 @@ class pekerjaan extends ceklogin {
         $data = $this->input->post('data_baru');
         $this->load->model("pekerjaan_model");
         $result = $this->pekerjaan_model->sp_updateprogress_pekerjaan($data, $id_detail_pkj);
-        
+
         if ($result == 1)
             $status = array('status' => 'OK');
         else

@@ -237,6 +237,10 @@ class pekerjaan_model extends CI_Model {
         $query=$this->db->query($query);
         return $query->result();
     }
+    public function update_pekerjaan($update,$id) {
+        $this->db->where('id_pekerjaan',$id);
+        return $this->db->update('pekerjaan',$update);
+    }
 }
 
 ?>
