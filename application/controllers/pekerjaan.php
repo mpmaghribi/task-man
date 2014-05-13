@@ -251,21 +251,21 @@ class pekerjaan extends ceklogin {
          * dibaca
          */
         $this->baca_pending_task($id_detail_pkj);
-        $is_isi_komentar = $this->input->post('is_isi_komentar');
+        $is_isi_komentar = $this->input->get('is_isi_komentar');
         $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
         $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
         $data["display"] = "none";
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat detail tentang pekerjaannya.");
 
-        if (isset($is_isi_komentar)) {
-            if ($is_isi_komentar == TRUE) {
-                $isi_komentar = $this->input->post('komentar_pkj');
-                $id_akun = $temp['user_id'];
-                $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
-                $data["display"] = "block";
-                $r = $this->taskman_repository->sp_insert_activity($id_akun, 0, "Aktivitas Komentar", $temp['user_nama'] . " baru saja memberikan komentar : " . $isi_komentar . "");
-            }
-        }
+//        if (isset($is_isi_komentar)) {
+//            if ($is_isi_komentar == TRUE) {
+//                $isi_komentar = $this->input->get('komentar_pkj');
+//                $id_akun = $temp['user_id'];
+//                $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
+//                $data["display"] = "block";
+//                $r = $this->taskman_repository->sp_insert_activity($id_akun, 0, "Aktivitas Komentar", $temp['user_nama'] . " baru saja memberikan komentar : " . $isi_komentar . "");
+//            }
+//        }
         $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
         $data["id_pkj"] = $id_detail_pkj;
         $this->load->model("akun");
@@ -279,16 +279,57 @@ class pekerjaan extends ceklogin {
 //        }
     }
 
+    public function lihat_komentar_pekerjaan($id_pkj = 0) {
+        $this->load->model("pekerjaan_model");
+        $id_detail_pkj = $id_pkj;
+        $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
+        $url = str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $data["temp"] = $this->session->userdata('logged_in');
+        $data["users"] = json_decode(file_get_contents($url));
+        $this->load->view("pekerjaan/lihat_komentar",$data);
+    }
+    
+    public function ubah_komentar_pekerjaan() {
+        $this->load->model("pekerjaan_model");
+        $id_komentar = $this->input->get("id_komentar_ubah");
+        $isi_komentar = $this->input->get("isi_komentar_ubah");
+        $data["ubah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_ubah_komentar_pekerjaan($id_komentar,$isi_komentar);
+        
+    }
+    
+    public function lihat_komentar_pekerjaan_by_id() {
+        $this->load->model("pekerjaan_model");
+        $id_komentar = $this->input->get("id_komentar_ubah");
+        //echo $id_komentar;
+        $data = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan_by_id($id_komentar);
+        foreach ($data as $value) {
+            $komentar = $value->isi_komentar;
+        }
+        //echo $id_komentar;
+        echo json_encode(array("status" => "OK", "data" => $komentar));
+    }
+    
+    public function hapus_komentar_pekerjaan() {
+        $this->load->model("pekerjaan_model");
+        $id_komentar = $this->input->get('id_komentar');
+        $data["hapus_komentar_pekerjaan"] = $this->pekerjaan_model->sp_hapus_komentar_pekerjaan($id_komentar);
+        
+    }
+
     public function komentar_pekerjaan() {
 //        if ($this->check_session_and_cookie() == 1) {
         //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
+
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
         $this->load->model("pekerjaan_model");
-        $id_detail_pkj = $this->input->post('id_detail_pkj');
-        $isi_komentar = $this->input->post('komentar_pkj');
+        $id_detail_pkj = $this->input->get('id_detail_pkj');
+        $isi_komentar = $this->input->get('komentar_pkj');
         $id_akun = $temp['user_id'];
         $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
+        $data["display"] = "block";
+        $r = $this->taskman_repository->sp_insert_activity($id_akun, 0, "Aktivitas Komentar", $temp['user_nama'] . " baru saja memberikan komentar : " . $isi_komentar . "");
+
 //        } else {
 //            $this->session->set_flashdata('status', 4);
 //            redirect("login");

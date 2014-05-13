@@ -122,6 +122,24 @@ var EditableTableProgress = function() {
                 ]
             });
             
+            $('#tabel_komentar').dataTable({
+                // set the initial value
+                "iDisplayLength": 3,
+                "sDom": "<'row'<'col-lg-6'>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
+                "sPaginationType": "bootstrap",
+                "oLanguage": {
+                    "oPaginate": {
+                        "sPrevious": "Prev",
+                        "sNext": "Next"
+                    }
+                },
+                "aoColumnDefs": [{
+                        'bSortable': false,
+                        'aTargets': [0]
+                    }
+                ]
+            });
+            
 //            var oTable = $('#editable-sample').dataTable({
 //                "aLengthMenu": [
 //                    [5, 15, 20, -1],

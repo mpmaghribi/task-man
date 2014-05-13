@@ -134,12 +134,28 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar) {
-        $query = "insert into komentar (id_akun, id_pekerjaan, isi_komentar) values ('" . $id_akun . "','" . $id_detail_pkj . "','" . $isi_komentar . "');";
+        $query = "insert into komentar (id_akun, id_pekerjaan, isi_komentar, tgl_komentar, history_komentar) values ('" . $id_akun . "','" . $id_detail_pkj . "','" . $isi_komentar . "','now()','null');";
+        $query = $this->db->query($query);
+    }
+    
+    public function sp_hapus_komentar_pekerjaan($id_komentar) {
+        $query = "delete from komentar where id_komentar = ".$id_komentar;
+        $query = $this->db->query($query);
+    }
+    
+    public function sp_ubah_komentar_pekerjaan($id_komentar, $isi_komen) {
+        $query = "update komentar set isi_komentar = '".$isi_komen."', tgl_komentar = now() where id_komentar = ".$id_komentar;
         $query = $this->db->query($query);
     }
 
     public function sp_lihat_komentar_pekerjaan($id_detail_pkj) {
-        $query = "select * from komentar inner join pekerjaan on pekerjaan.id_pekerjaan = komentar.id_pekerjaan  where komentar.id_pekerjaan = " . $id_detail_pkj . ";";
+        $query = "select * from komentar inner join pekerjaan on pekerjaan.id_pekerjaan = komentar.id_pekerjaan  where komentar.id_pekerjaan = " . $id_detail_pkj . " order by tgl_komentar DESC;";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    
+    public function sp_lihat_komentar_pekerjaan_by_id($id_komentar) {
+        $query = "select * from komentar where komentar.id_komentar = ".$id_komentar."  order by tgl_komentar DESC;";
         $query = $this->db->query($query);
         return $query->result();
     }

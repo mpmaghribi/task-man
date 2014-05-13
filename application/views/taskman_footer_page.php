@@ -1,5 +1,5 @@
 <!--Core js-->
-
+<script src="<?php echo base_url()?>/assets/js/jquery.simplePagination.js"></script>
 <!--Notification script-->
     <script src="<?php echo base_url()?>/assets/js/miniNotification.js"></script>
     <script>
@@ -26,6 +26,7 @@
 <script src="<?php echo base_url()?>/assets/js/jvector-map/jquery-jvectormap-us-lcc-en.js"></script>
 <script src="<?php echo base_url()?>/assets/js/gauge/gauge.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>/assets/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
 <!--clock init-->
 <script src="<?php echo base_url()?>/assets/js/css3clock/js/css3clock.js"></script>
 <!--Easy Pie Chart-->

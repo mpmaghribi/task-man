@@ -170,40 +170,41 @@
                                         </div>
                                     <?php } ?>
                             <div class="panel-body">
-                                <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan">
+                                <form class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url() ?>/pekerjaan/usulan_pekerjaan">
                                         <div class="form-group">
                                             <div class="col-lg-12">
-                                                <button id="komentar" class="btn btn-primary" type="submit">Lihat Komentar</button>
+                                                <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
                                             </div>
                                         </div>
                                     </form>
                                 <div id="box_komentar" style="display: <?php echo $display ?>">
                                     <div class="form">
                                         
-                                        <form class="cmxform form-horizontal " id="signupForm" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-                                            <input type="hidden" name="is_isi_komentar" value="true"/>
-                                            <input type="hidden" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
+                                        <form class="cmxform form-horizontal " id="signupForm" method="post" action="#<?php //echo $_SERVER['REQUEST_URI']; ?>">
+                                            <?php //echo $_SERVER['REQUEST_URI']; ?>
+                                            <input type="hidden" id="is_isi_komentar" name="is_isi_komentar" value="true"/>
+                                            <input type="hidden" id="id_detail_pkj" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
                                             <div class="form-group">
-                                                <div class="col-lg-12">
-                                                    <?php foreach ($lihat_komentar_pekerjaan as $value) { ?>
-                                                        <div class="well">
-                                                            <h4 id="komentar_nama_<?php echo $value->id_akun; ?>">Nama Disembunyikan</h4>
-                                                            <?php echo $value->isi_komentar; ?>
-                                                        </div>
-                                                    <?php } ?>
+                                                <div id="lihat_komen" class="col-lg-12">
+                                                    
+                                                </div>
+                                                <div id="tes" class="col-lg-12">
+                                                    
                                                 </div>
                                             </div>
                                             <div class="form-group ">
                                                 <div class="col-lg-12">
-                                                    <textarea class="form-control" name="komentar_pkj" rows="12"></textarea>
+                                                    <textarea class="form-control" id="komentar_pkj" name="komentar_pkj" rows="12"></textarea>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <div class="col-lg-12">
-                                                    <button class="btn btn-primary" type="submit">Save</button>
+                                                    <button id="save_komen" class="btn btn-primary" type="button">Save</button>
                                                 </div>
                                             </div>
+                                            
+                                            
                                         </form>
                                     </div>
                                 </div>
@@ -233,11 +234,13 @@
                     });
                 </script>
                 <script>
+                   
                     $(function() {
                         $('#komentar').click(function(e) {
                             e.preventDefault();
+                            var id_pkj = document.getElementById('id_detail_pkj').value;
                             $('#box_komentar').show();
-                            //$('#deskripsi_pkj2').load('<?php echo site_url() ?>pekerjaan/deskripsi_pekerjaan');
+                            $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/"+id_pkj);
                         });
                     });
                 </script>
@@ -277,6 +280,87 @@
                 checkout.hide();
             }).data('datepicker');
         });
+    </script>
+    <script>
+       function ubah_komentar(id_komen){
+           //alert(id_komen);
+           $.ajax({// create an AJAX call...
+                    data:
+                            {
+                                id_komentar_ubah: id_komen
+                            }, // get the form data
+                    type: "GET", // GET or POST
+                    url: "<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan_by_id", // the file to call
+                    success: function(response) { // on success..
+                        var json = jQuery.parseJSON(response);
+                        //alert(json.data);
+                        $("#komentar_pkj_ubah").val(json.data);
+                    }
+                });
+    $('#ubah_komen').click(function(e){
+            //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+            e.preventDefault();
+            //alert(document.getElementById('komentar_pkj_ubah').value);
+           var id_pkj = document.getElementById('id_detail_pkj').value;
+                $.ajax({// create an AJAX call...
+                    data:
+                            {
+                                id_komentar_ubah: id_komen,
+                                isi_komentar_ubah: document.getElementById('komentar_pkj_ubah').value
+                            }, // get the form data
+                    type: "GET", // GET or POST
+                    url: "<?php echo site_url(); ?>/pekerjaan/ubah_komentar_pekerjaan", // the file to call
+                    success: function(response) { // on success..
+                        //var json = jQuery.parseJSON(response);
+                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/"+id_pkj);
+                    }
+                });
+        });
+        }
+    </script>
+    <script>
+    function hapus(id){
+    $('#hapus_komen').click(function(e){
+            //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+            e.preventDefault();
+           var id_pkj = document.getElementById('id_detail_pkj').value;
+                $.ajax({// create an AJAX call...
+                    data:
+                            {
+                                id_komentar: id
+                            }, // get the form data
+                    type: "GET", // GET or POST
+                    url: "<?php echo site_url(); ?>/pekerjaan/hapus_komentar_pekerjaan", // the file to call
+                    success: function(response) { // on success..
+                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/"+id_pkj);
+                    }
+                });
+        });
+        }
+    </script>
+
+    <script>
+        
+        $('#save_komen').click(function(e){
+            //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+            e.preventDefault();
+            var id_pkj = document.getElementById('id_detail_pkj').value;
+                $.ajax({// create an AJAX call...
+                    data:
+                            {
+                                id_detail_pkj: document.getElementById('id_detail_pkj').value, // get the form data
+                                komentar_pkj: document.getElementById('komentar_pkj').value,
+                                is_isi_komentar: document.getElementById('is_isi_komentar').value
+                            }, // get the form data
+                    type: "GET", // GET or POST
+                    url: "<?php echo site_url(); ?>/pekerjaan/komentar_pekerjaan", // the file to call
+                    success: function(response) { // on success..
+                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/"+id_pkj);
+                    }
+                });
+        });
+                
+            
     </script>
     <?php
     $this->load->view("taskman_footer_page");

@@ -4,9 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/models/pekerjaan_model.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/edit_pekerjaan_page.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/lihat_usulan_pekerjaan_page.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/pekerjaan.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/karyawan/deskripsi_pekerjaan_page.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/assets/js/table-editable-progress.js</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/karyawan/karyawan_page.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/models/akun.php</file>
         </group>
     </open-files>
