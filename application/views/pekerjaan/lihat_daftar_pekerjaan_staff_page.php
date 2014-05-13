@@ -14,7 +14,7 @@
                 <!-- page start-->
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <section class="panel">
                             <header class="panel-heading">
                                 Pekerjaan Staff
@@ -25,7 +25,11 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th class="hidden-phone">NIP Staff</th>
                                                 <th class="hidden-phone">Nama Staff</th>
+                                                <th class="hidden-phone">Jabatan Staff</th>
+                                                <th class="hidden-phone">Departemen</th>
+                                                <th class="hidden-phone">Email Staff</th>
                                                 <th style="text-align: right"></th>
                                             </tr>
                                         </thead>
@@ -38,7 +42,11 @@
                                                     $counter++;
                                                     echo '<tr>';
                                                     echo '<td >' . $counter . '</td>';
+                                                    echo '<td>' . $staff->nip . '</td>';
                                                     echo '<td>' . $staff->nama . '</td>';
+                                                    echo '<td>' . $staff->nama_jabatan . '</td>';
+                                                    echo '<td>' . $staff->nama_departemen. '</td>';
+                                                    echo '<td>' . $staff->email . '</td>';
                                                     echo '<td ><form method="get" action="' . base_url() . 'pekerjaan/pekerjaan_per_staff"><input type="hidden" name="id_akun" value="' . $staff->id_akun . '"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>';
                                                     echo '</tr>';
                                                 }
