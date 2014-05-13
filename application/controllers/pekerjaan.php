@@ -254,6 +254,9 @@ class pekerjaan extends ceklogin {
         $is_isi_komentar = $this->input->get('is_isi_komentar');
         $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
         $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
+        $url = str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $data["temp"] = $this->session->userdata('logged_in');
+        $data["users"] = json_decode(file_get_contents($url));
         $data["display"] = "none";
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat detail tentang pekerjaannya.");
 

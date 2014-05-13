@@ -73,7 +73,7 @@ class taskman_repository extends CI_Model {
 
 
     public function sp_view_pekerjaan($id_user) {
-        $query = "SELECT pekerjaan.* from pekerjaan "
+        $query = "SELECT * from pekerjaan "
                 . "inner join detil_pekerjaan on "
                 . "pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan "
                 . "where detil_pekerjaan.id_akun=".$id_user;

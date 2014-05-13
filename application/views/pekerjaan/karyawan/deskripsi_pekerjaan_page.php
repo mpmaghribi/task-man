@@ -138,7 +138,9 @@
                                                                     <tr>
                                                                         <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td id="nama_staff_<?php echo $value->id_akun; ?>"></td>
+                                                                        <td <!--id="nama_staff_<?php //echo $value->id_akun; ?>-->"><?php foreach ($users as $value2) { ?>
+                    <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
+                <?php } ?></td>
                                                                         <td>
                                                                             <div class="progress progress-striped progress-xs">
                                                                                 <div style="width: <?php echo $value->progress; ?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress; ?>" role="progressbar" class="progress-bar progress-bar-warning">
