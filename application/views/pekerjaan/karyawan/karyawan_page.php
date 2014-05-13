@@ -21,7 +21,11 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#ListPekerjaan">List Pekerjaan</a>
                                     </li>
-                                    
+                                    <?php if ($temp['jmlstaff'] > 0){?>
+                                    <li class="">
+                                        <a data-toggle="tab" href="#assignPekerjaan">Assign Pekerjaan</a>
+                                    </li>
+                                    <?php }?>
                                     <li class="">
                                         <a data-toggle="tab" href="#TambahPekerjaan">Tambah Pekerjaan</a>
                                     </li>
@@ -87,7 +91,7 @@
                                         </section>
                                         <section class="panel">
                                             <header class="panel-heading">
-                                                Daftar Pekerjaan yang Saya usulkan
+                                                Daftar Usulan Pekerjaan
                                             </header>
                                             <div class="panel-body">
                                                 <div class="form">
@@ -466,7 +470,7 @@
                 for (var i = 0; i < jumlah_data; i++) {
                     if ($('#enroll_' + list_nip[i]).attr('checked')) {
                         staf.val(staf.val() + list_nip[i] + '::');
-                        $('#span_list_assign_staff').append('<div id="div_staff_' + list_nip[i] + '"><span><a class="btn btn-primary btn-xs" href="#" onclick="hapus_staff(' + list_nip[i] + ');">Hapus</a></span><span style="margin-left: 5px">' + list_nama[i] + '</span></div>');
+                        $('#span_list_assign_staff').append('<div id="div_staff_' + list_nip[i] + '"><span><a class="btn btn-danger btn-xs clearfix" href="#" onclick="hapus_staff(' + list_nip[i] + ');">X</a></span><span style="margin-left: 5px">' + list_nama[i] + '</span></div>');
                     }
                 }
                 $('#tombol_tutup').click();
