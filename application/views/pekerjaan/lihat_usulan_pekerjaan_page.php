@@ -60,13 +60,13 @@
                                                     <?php
                                                 }
                                             }
-                                            if ($counter == -1) {
-                                                ?>
-                                                <tr>
+//                                            if ($counter == -1) {
+//                                                ?>
+<!--                                                <tr>
                                                     <td colspan="7" style="text-align: center">Tidak ada pekerjaan yang diusulkan</td>
-                                                </tr>
+                                                </tr>-->
                                                 <?php
-                                            }
+//                                            }
                                             ?>
                                         </tbody>
                                     </table>
