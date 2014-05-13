@@ -90,7 +90,7 @@ var EditableTableProgress = function() {
             $('#tabel_pkj_saya,#tabel_pkj_saya2').dataTable({
                 // set the initial value
                 "iDisplayLength": 5,
-                "sDom": "<'row'<'col-lg-6'><'col-lg-6'f>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
+                "sDom": "<'row'f<'col-lg-6'>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
                 "sPaginationType": "bootstrap",
                 "oLanguage": {
                     "oPaginate": {
