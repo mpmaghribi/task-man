@@ -138,7 +138,7 @@
                                                                     <tr>
                                                                         <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td <!--id="nama_staff_<?php //echo $value->id_akun; ?>-->"><?php foreach ($users as $value2) { ?>
+                                                                        <td id="nama_staff_<?php //echo $value->id_akun; ?>"><?php //echo $value->id_akun; ?><?php foreach ($users as $value2) { ?>
                     <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                 <?php } ?></td>
                                                                         <td>
