@@ -38,26 +38,48 @@
                                     <div id="deskripsiPekerjaan" class="tab-pane active">
                                         <section class="panel" >
                                         </section>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <section class="panel">
-                                                <header class="panel-heading">
-                                                    <?php if (isset($deskripsi_pekerjaan)) {
-                                                        $nama_pekerjaan = ""; ?>
+                                                <h4 style="color: #1FB5AD;">
+                                                    Nama Pekerjaan
+                                                </h4>
+                                                <p style="font-size: larger">
+                                                    <?php
+                                                    if (isset($deskripsi_pekerjaan)) {
+                                                        $nama_pekerjaan = "";
+                                                        ?>
                                                         <?php
                                                         foreach ($deskripsi_pekerjaan as $value) {
                                                             echo $value->nama_pekerjaan;
                                                             $nama_pekerjaan = $value->nama_pekerjaan;
                                                         }
                                                         ?>
-<?php } ?> 
-                                                    <span class="tools pull-right">
-                                                    </span>
-                                                </header>
+                                                    <?php } ?> 
+                                                </p>
+                                                <h4 style="color: #1FB5AD;">
+                                                    Penjelasan Pekerjaan
+                                                </h4>
+                                                <p style="font-size: larger">
+                                                    <?php if (isset($deskripsi_pekerjaan)) { ?>
+                                                        <?php foreach ($deskripsi_pekerjaan as $value) { ?>
+                                                            <?php echo $value->deskripsi_pekerjaan; ?>
+                                                            <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                                </p>
+                                            </section>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <section class="panel">
+                                                <h4 style="color: #1FB5AD;">
+                                                    Detail Pekerjaan
+                                                </h4>
                                                 <div class="panel-body">
-                                                    <table class="table table-striped table-hover table-condensed">
+                                                    <table class="table table-striped table-hover table-condensed" id="table_deskripsi">
                                                         <thead>
                                                             <tr>
-                                                                <th>#</th>
+                                                                 <th>#</th>
                                                                 <th>Jenis Pekerjaan</th>
                                                                 <th>Deadline</th>
                                                                 <th>File Pendukung</th>
@@ -90,13 +112,11 @@
                                                 </div>
                                             </section>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <section class="panel">
-                                                <header class="panel-heading">
+                                                <h4 style="color: #1FB5AD;">
                                                     Anggota Tim
-                                                    <span class="tools pull-right">
-                                                    </span>
-                                                </header>
+                                                </h4>
                                                 <div class="panel-body">
                                                     <table class="table table-striped table-hover table-condensed" id="editable-sample">
                                                         <thead>
@@ -129,7 +149,7 @@
                                                                         <td>
                                                                             <?php if ($value->id_akun == $temp['user_id'] && $value->flag_usulan == 2) { ?>
                                                                                 <a class="edit" href="javascript:;">Ubah Progress</a>
-        <?php } ?>
+                                                                            <?php } ?>
                                                                         </td>
                                                                         <td></td>
                                                                     </tr>
@@ -144,11 +164,50 @@
                                             </section>
                                         </div>
                                     </div>
-<?php if ($temp['jmlstaff'] > 0) { ?>
+                                    <?php if ($temp['jmlstaff'] > 0) { ?>
                                         <div id="penilaianPekerjaan" class="tab-pane">
 
                                         </div>
-<?php } ?>
+                                    <?php } ?>
+                            <div class="panel-body">
+                                <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan">
+                                        <div class="form-group">
+                                            <div class="col-lg-12">
+                                                <button id="komentar" class="btn btn-primary" type="submit">Lihat Komentar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                <div id="box_komentar" style="display: <?php echo $display ?>">
+                                    <div class="form">
+                                        
+                                        <form class="cmxform form-horizontal " id="signupForm" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+                                            <input type="hidden" name="is_isi_komentar" value="true"/>
+                                            <input type="hidden" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <?php foreach ($lihat_komentar_pekerjaan as $value) { ?>
+                                                        <div class="well">
+                                                            <h4 id="komentar_nama_<?php echo $value->id_akun; ?>">Nama Disembunyikan</h4>
+                                                            <?php echo $value->isi_komentar; ?>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <div class="col-lg-12">
+                                                    <textarea class="form-control" name="komentar_pkj" rows="12"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <button class="btn btn-primary" type="submit">Save</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                                 </div>
                             </div>
 
@@ -160,65 +219,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <section class="panel">
-                            <header class="panel-heading">
-
-                            </header>
-                            <div class="panel-body">
-                                <div class="form">
-                                    <form class="cmxform form-horizontal " id="signupForm" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan">
-                                        <div class="form-group ">
-
-                                            <label for="komentar_pkj" class="control-label col-lg-3"></label>
-                                            <div class="col-lg-6">
-                                                <?php if (isset($deskripsi_pekerjaan)) { ?>
-                                                    <?php foreach ($deskripsi_pekerjaan as $value) { ?>
-                                                        <h3><?php echo $value->deskripsi_pekerjaan; ?></h3> 
-                                                        <?php
-                                                    }
-                                                }
-                                                ?>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="col-lg-offset-3 col-lg-6">
-                                                <button id="komentar" class="btn btn-primary" type="submit">Lihat Komentar</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id="box_komentar" style="display: <?php echo $display ?>">
-                                    <div class="form">
-                                        <form class="cmxform form-horizontal " id="signupForm" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-                                            <input type="hidden" name="is_isi_komentar" value="true"/>
-                                            <input type="hidden" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
-                                            <div class="form-group">
-                                                <label class="control-label col-lg-3"></label>
-                                                <div class="col-lg-6">
-<?php foreach ($lihat_komentar_pekerjaan as $value) { ?>
-                                                        <div class="well">
-                                                            <h4 id="komentar_nama_<?php echo $value->id_akun; ?>">Nama Disembunyikan</h4>
-                                                        <?php echo $value->isi_komentar; ?>
-                                                        </div>
-<?php } ?>
-                                                </div>
-                                            </div>
-                                            <div class="form-group ">
-                                                <label for="komentar_pkj" class="control-label col-lg-3">Berikan Komentar</label>
-                                                <div class="col-lg-6">
-                                                    <textarea class="form-control" name="komentar_pkj" rows="12"></textarea>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <div class="col-lg-offset-3 col-lg-6">
-                                                    <button class="btn btn-primary" type="submit">Save</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </section>
                     </div>
                 </div>
@@ -245,7 +246,7 @@
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-<?php $this->load->view('taskman_rightbar_page') ?>
+        <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>

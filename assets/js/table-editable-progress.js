@@ -1,9 +1,8 @@
-var EditableTableProgress = function () {
+var EditableTableProgress = function() {
 
     return {
-
         //main function to initiate the module
-        init: function () {
+        init: function() {
             function restoreRow(oTable, nRow) {
                 var aData = oTable.fnGetData(nRow);
                 var jqTds = $('>td', nRow);
@@ -45,32 +44,50 @@ var EditableTableProgress = function () {
                 oTable.fnUpdate('<a class="edit" href="">Ubah Progress</a>', nRow, 4, false);
                 oTable.fnDraw();
             }
-            
+
             function savetodb(nRow)
             {
-                
+
                 $.ajax({// create an AJAX call...
-                            data: 
+                    data:
                             {
-                                id_detail_pkj:nRow.cells[0].innerHTML,
-                                data_baru:nRow.cells[3].innerHTML
+                                id_detail_pkj: nRow.cells[0].innerHTML,
+                                data_baru: nRow.cells[3].innerHTML
                             }, // get the form data
-                            type: "POST", // GET or POST
-                            url: "http://localhost:90/taskmanagement/index.php/pekerjaan/update_progress", // the file to call
-                            cache: false,
-                            success: function(response) { // on success..
-                                var json = jQuery.parseJSON(response);
-                                
-                                if (json.status === "OK") {
-                                    alert("Updated!");
-                                    window.location.href = "";
-                                } else {
-                                    alert("Data gagal di update");
-                                }
-                            }
-                        });
+                    type: "POST", // GET or POST
+                    url: "http://localhost:90/taskmanagement/index.php/pekerjaan/update_progress", // the file to call
+                    cache: false,
+                    success: function(response) { // on success..
+                        var json = jQuery.parseJSON(response);
+
+                        if (json.status === "OK") {
+                            alert("Updated!");
+                            window.location.href = "";
+                        } else {
+                            alert("Data gagal di update");
+                        }
+                    }
+                });
             }
 
+            $('#table_deskripsi').dataTable({
+                // set the initial value
+                "iDisplayLength": 5,
+                "sDom": "<'row'<'col-lg-6'><'col-lg-6'f>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
+                "sPaginationType": "bootstrap",
+                "oLanguage": {
+                    "oPaginate": {
+                        "sPrevious": "Prev",
+                        "sNext": "Next"
+                    }
+                },
+                "aoColumnDefs": [{
+                        'bSortable': false,
+                        'aTargets': [0]
+                    }
+                ]
+            });
+            
 //            var oTable = $('#editable-sample').dataTable({
 //                "aLengthMenu": [
 //                    [5, 15, 20, -1],
@@ -93,16 +110,23 @@ var EditableTableProgress = function () {
 //                    }
 //                ]
 //            });
-            
+
             var oTable = $('#editable-sample').dataTable({
                 // set the initial value
+
+                // set the initial value
                 "iDisplayLength": 5,
-                "sDom": "<'row'<'col-lg-6'r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
+                "sDom": "<'row'<'col-lg-6'><'col-lg-6'f>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
                 "sPaginationType": "bootstrap",
-                "bPaginate":false,
+                "oLanguage": {
+                    "oPaginate": {
+                        "sPrevious": "Prev",
+                        "sNext": "Next"
+                    }
+                },
                 "aoColumnDefs": [{
                         'bSortable': false,
-                        'aTargets': [0,1,4,5]
+                        'aTargets': [0, 1, 4, 5]
                     }
                 ]
             });
@@ -112,17 +136,17 @@ var EditableTableProgress = function () {
 
             var nEditing = null;
 
-            $('#editable-sample_new').click(function (e) {
+            $('#editable-sample_new').click(function(e) {
                 e.preventDefault();
                 var aiNew = oTable.fnAddData(['', '', '', '',
-                        '<a class="edit" href="">Edit</a>', '<a class="cancel" data-mode="new" href="">Cancel</a>'
+                    '<a class="edit" href="">Edit</a>', '<a class="cancel" data-mode="new" href="">Cancel</a>'
                 ]);
                 var nRow = oTable.fnGetNodes(aiNew[0]);
                 editRow(oTable, nRow);
                 nEditing = nRow;
             });
 
-            $('#editable-sample a.delete').live('click', function (e) {
+            $('#editable-sample a.delete').live('click', function(e) {
                 e.preventDefault();
 
                 if (confirm("Are you sure to delete this row ?") == false) {
@@ -134,20 +158,20 @@ var EditableTableProgress = function () {
                 alert("Deleted! Do not forget to do some ajax to sync with backend :)");
             });
 
-            $('#editable-sample a.cancel').live('click', function (e) {
+            $('#editable-sample a.cancel').live('click', function(e) {
                 e.preventDefault();
                 if ($(this).attr("data-mode") == "new") {
                     var nRow = $(this).parents('tr')[0];
                     oTable.fnDeleteRow(nRow);
-                    
+
                 } else {
                     restoreRow(oTable, nEditing);
                     nEditing = null;
-                    window.location.href="";
+                    window.location.href = "";
                 }
             });
 
-            $('#editable-sample a.edit').live('click', function (e) {
+            $('#editable-sample a.edit').live('click', function(e) {
                 e.preventDefault();
 
                 /* Get the row as a parent of the link that was clicked on */
@@ -163,7 +187,7 @@ var EditableTableProgress = function () {
                     saveRow(oTable, nEditing);
                     nEditing = null;
                     savetodb(nRow);
-                    
+
                 } else {
                     /* No edit in progress - let's start one */
                     editRow(oTable, nRow);

@@ -74,10 +74,10 @@
                     <div class="col-md-8">
                         <section class="panel">
                             <header class="panel-heading">
-                                List of tasks
+                                Daftar Pekerjaan
                             </header>
                             <div class="panel-body">
-                                <table class="table table-hover general-table">
+                                <table class="table table-striped table-hover table-condensed" id="table_home">
                                     <thead>
                                         <tr>
                                             <th> No</th>
@@ -140,12 +140,33 @@
                 </div>
             </section>
         </section>
+        <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
+        
         <!--main content end-->
         <!--right sidebar start-->
         <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
+    <script>
+            $('#table_home').dataTable({
+                // set the initial value
+                "iDisplayLength": 5,
+                "sDom": "<'row'<'col-lg-6'><'col-lg-6'f>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
+                "sPaginationType": "bootstrap",
+                "oLanguage": {
+                    "oPaginate": {
+                        "sPrevious": "Prev",
+                        "sNext": "Next"
+                    }
+                },
+                "aoColumnDefs": [{
+                        'bSortable': false,
+                        'aTargets': [0]
+                    }
+                ]
+            });
+        </script>
     <script>
         var my_staff = [];
         function get_my_staff() {
