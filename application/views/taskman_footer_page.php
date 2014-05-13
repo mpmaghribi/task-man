@@ -87,11 +87,11 @@
                                 "<a href =\"<?php echo site_url(); ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj="+json.data[i]["id_pekerjaan"]+ "&sumber=notifikasi\">" +
                                 "<div class = \"task-info clearfix\" >" +
                                 "<div class = \"desc pull-left\" >" +
-                                "<h5>"+json.data[i]["nama_pekerjaan"]+"</h5>" +
+                                "<p><strong>"+json.data[i]["nama_pekerjaan"].substring(0,30)+"...</strong></p>" +
                                 "<p >"+ json.data[i]["progress"] +"% , "+ json.data[i]["tgl_selesai"] +" </p>" +
                                 "</div>" +
-                                "<span class = \"notification-pie-chart pull-right\" data-percent = \""+ json.data[i]["progress"] +"\" >" +
-                                "<span class = \"percent\" > </span>" +
+//                                "<span class = \"notification-pie-chart pull-right\" data-percent = \""+ json.data[i]["progress"] +"\" >" +
+//                                "<span class = \"percent\" ></span>" +
                                 "</span>" +
                                 "</div>" +
                                 "</a>" +
