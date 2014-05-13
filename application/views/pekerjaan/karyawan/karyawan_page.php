@@ -35,7 +35,8 @@
                                                 Daftar Pekerjaan yang Saya Kerjakan
                                             </header>
                                             <div class="panel-body">
-                                                <table class="table  table-hover general-table">
+                                                <div class="form">
+                                                <table class="table  table-hover general-table" id="tabel_pkj_saya">
                                                     <thead>
                                                         <tr>
                                                             <th> No</th>
@@ -43,6 +44,7 @@
                                                             <th>Deadline</th>
                                                             <th>Assign To</th>
                                                             <th>Status</th>
+                                                            <th></th>
 <!--                                                            <th>Progress</th>-->
                                                         </tr>
                                                     </thead>
@@ -80,6 +82,7 @@
 
                                                     </tbody>
                                                 </table>
+                                                    </div>
                                             </div>
                                         </section>
                                         <section class="panel">
@@ -87,7 +90,8 @@
                                                 Daftar Pekerjaan yang Saya usulkan
                                             </header>
                                             <div class="panel-body">
-                                                <table class="table  table-hover general-table">
+                                                <div class="form">
+                                                <table class="table  table-hover general-table" id="tabel_pkj_saya2">
                                                     <thead>
                                                         <tr>
                                                             <th> No</th>
@@ -95,6 +99,7 @@
                                                             <th>Deadline</th>
                                                             <th>Assign To</th>
                                                             <th>Status</th>
+                                                            <th></th>
 <!--                                                            <th>Progress</th>-->
                                                         </tr>
                                                     </thead>
@@ -133,6 +138,7 @@
 
                                                     </tbody>
                                                 </table>
+                                                    </div>
                                             </div>
                                         </section>
                                     </div>
@@ -316,6 +322,8 @@
                         </section>
                     </div>
                 </div>
+                
+                
                 <script>
                     $(function() {
                         $('#nama_pkj').click(function(e) {
@@ -385,7 +393,16 @@
             }).data('datepicker');
         });
     </script>
+    
 <?php $this->load->view("taskman_footer_page") ?>
+    <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
+
+                <!-- END JAVASCRIPTS -->
+                <script>
+                    jQuery(document).ready(function() {
+                        EditableTableProgress.init();
+                    });
+                </script>
 <?php if ($temp['jmlstaff'] > 0) { ?>
         <script>
             var list_nip = [];

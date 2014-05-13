@@ -77,7 +77,8 @@
                                 Daftar Pekerjaan
                             </header>
                             <div class="panel-body">
-                                <table class="table table-striped table-hover table-condensed" id="table_home">
+                                <div class="form">
+                                <table class="table table-striped table-hover table-condensed" id="tabel_home">
                                     <thead>
                                         <tr>
                                             <th> No</th>
@@ -85,6 +86,7 @@
                                             <th>Deadline</th>
                                             <th>Assign To</th>
                                             <th>Status</th>
+                                            <th></th>
 <!--                                                            <th>Progress</th>-->
                                         </tr>
                                     </thead>
@@ -119,6 +121,7 @@
 
                                     </tbody>
                                 </table>
+                                    </div>
                             </div>
                         </section>
                     </div>
@@ -140,7 +143,6 @@
                 </div>
             </section>
         </section>
-        <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
         
         <!--main content end-->
         <!--right sidebar start-->
@@ -148,25 +150,6 @@
         <!--right sidebar end-->
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
-    <script>
-            $('#table_home').dataTable({
-                // set the initial value
-                "iDisplayLength": 5,
-                "sDom": "<'row'<'col-lg-6'><'col-lg-6'f>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
-                "sPaginationType": "bootstrap",
-                "oLanguage": {
-                    "oPaginate": {
-                        "sPrevious": "Prev",
-                        "sNext": "Next"
-                    }
-                },
-                "aoColumnDefs": [{
-                        'bSortable': false,
-                        'aTargets': [0]
-                    }
-                ]
-            });
-        </script>
     <script>
         var my_staff = [];
         function get_my_staff() {
@@ -252,3 +235,11 @@ if (isset($pkj_karyawan)) {
         }
 document.title="DashBoard - Task Management";
     </script>
+    <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
+
+                <!-- END JAVASCRIPTS -->
+                <script>
+                    jQuery(document).ready(function() {
+                        EditableTableProgress.init();
+                    });
+                </script>

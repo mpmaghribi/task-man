@@ -98,6 +98,14 @@
                 <!-- page end-->
             </section>
         </section>
+        <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
+
+                <!-- END JAVASCRIPTS -->
+                <script>
+                    jQuery(document).ready(function() {
+                        EditableTableProgress.init();
+                    });
+                </script>
         <!--main content end-->
         <!--right sidebar start-->
         <?php $this->load->view('taskman_rightbar_page') ?>
