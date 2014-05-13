@@ -1,21 +1,12 @@
 
 <style type="text/css">
-    .well {
-       //display: none;
-    }
+/*    .well {
+       display: none;
+    }*/
 </style>
-<script>
-                function page(pageNumber)
-                {
-                    
-                  var page="#page-"+pageNumber;
-                  $('.well').hide();
-                  $(page).show();
 
-                }
-        </script>
-<?php date_default_timezone_set('Asia/Jakarta'); $counter=1; foreach ($lihat_komentar_pekerjaan as $value) { ?>
-    <div id="page-<?php echo $counter;?>" class="well">
+<?php date_default_timezone_set('Asia/Jakarta'); $pageNum = 1; $jum=1; $counter=1; foreach ($lihat_komentar_pekerjaan as $value) { ?>
+    <div id="page-<?php echo $pageNum;?>" class="well">
         <h5 id="komentar_nama_<?php echo $value->id_akun; ?>">
             <strong>
                 <?php foreach ($users as $value2) { ?>
@@ -30,7 +21,7 @@
         <a class="btn btn-danger btn-xs" onclick="ubah_komentar(<?php echo $value->id_komentar?>)" data-toggle="modal" href="#UbahKomentar" type="button"><strong>Ubah</strong></a></p>
         <?php }?>
     </div>
-<?php $counter++; } ?>
+<?php $jum++; $counter++; if ($counter > 5){ $counter = 1; $pageNum++;}} ?>
 <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -70,13 +61,21 @@
     </div>
 </div>
 <div id="paging"></div>
-            <script>
-             $(function() {
-    $("#paging").pagination({
-        items: <?php echo $counter-1;?>,
-        itemsOnPage: 10,
-        cssStyle: 'light-theme',
-        onPageClick: function(pageNumber,event){page(pageNumber); event.preventDefault();}
-    });
-});
+<script>
+//                function page(pageNumber)
+//                {
+//                  var page="#page-"+pageNumber;
+//                  $('.well').hide();
+//                  $(page).show();
+//                }
+//        </script>
+            <script>//
+//             $(function() {
+//    $("#paging").pagination({
+//        items: <?php echo $jum-1;?>,
+//        itemsOnPage: 5,
+//        cssStyle: 'light-theme',
+//        onPageClick: function(pageNumber,event){page(pageNumber); event.preventDefault();}
+//    });
+//});
         </script>
