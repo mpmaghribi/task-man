@@ -11,7 +11,6 @@
         <section id="main-content">
             <section class="wrapper">
                 <!-- page start-->
-
                 <div class="row">
                     <div class="col-md-12">
                         <section class="panel">
@@ -61,8 +60,10 @@
         <?php $this->load->view('taskman_rightbar_page') ?>
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
+    <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
     <script>
         document.title = "Daftar Pekerjaan <?php echo $nama_staff; ?> - Task Management";
+        
         var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
         var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
         var pekerjaan_flag = [];
@@ -146,4 +147,5 @@
                 $('#status_' + detil_pekerjaan[i]['id_pekerjaan']).html(status);
             }
         }
+        EditableTableProgress.init();
     </script>

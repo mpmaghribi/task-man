@@ -21,7 +21,7 @@
                             </header>
                             <div class="panel-body">
                                 <div class="form">
-                                    <table class="table  table-hover general-table" id="tabel_pekerjaan_staff">
+                                    <table class="table table-hover general-table" id="tabel_pekerjaan_staff">
                                         <thead>
                                             <tr>
                                                 <th>No</th>

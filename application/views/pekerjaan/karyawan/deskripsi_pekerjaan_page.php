@@ -68,39 +68,48 @@
                                                     }
                                                     ?>
                                                 </p>
+                                                <h4 style="color: #1FB5AD;">
+                                                    Jenis Pekerjaan
+                                                </h4>
+                                                <p style="font-size: larger">
+                                                    <?php echo $deskripsi_pekerjaan[0]->nama_sifat_pekerjaan; ?>
+                                                </p>
+                                                <h4 style="color: #1FB5AD;">
+                                                    Deadline
+                                                </h4>
+                                                <p style="font-size: larger">
+                                                    <?php
+                                                    echo date("d M Y", strtotime($deskripsi_pekerjaan[0]->tgl_mulai));
+                                                    echo " - ";
+                                                    echo date("d M Y", strtotime($deskripsi_pekerjaan[0]->tgl_selesai));
+                                                    ?>
+                                                </p>
                                             </section>
                                         </div>
                                         <div class="col-md-12">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
-                                                    Detail Pekerjaan
+                                                    File Pendukung
                                                 </h4>
                                                 <div class="panel-body">
                                                     <table class="table table-striped table-hover table-condensed" id="table_deskripsi">
                                                         <thead>
                                                             <tr>
-                                                                 <th>#</th>
-                                                                <th>Jenis Pekerjaan</th>
-                                                                <th>Deadline</th>
-                                                                <th>File Pendukung</th>
+                                                                <th>#</th>
+                                                                <th>Nama File</th>
+                                                                <th></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <?php
-                                                            if (isset($deskripsi_pekerjaan)) {
+                                                            if (isset($list_berkas)) {
                                                                 $i = 1;
-                                                                foreach ($deskripsi_pekerjaan as $value) {
+                                                                foreach ($list_berkas as $berkas) {
                                                                     ?>
                                                                     <tr>
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td><?php echo $value->nama_sifat_pekerjaan; ?></td>
-                                                                        <td><?php
-                                                                            echo date("d M Y", strtotime($value->tgl_mulai));
-                                                                            echo " - ";
-                                                                            echo date("d M Y", strtotime($value->tgl_selesai));
-                                                                            ?></td>
-
-                                                                        <td>file</td>
+                                                                        <td><?php echo basename($berkas->nama_file);?></td>
+                                                                        <td style="text-align: right">download hapus</td>
                                                                     </tr>
                                                                     <?php
                                                                     $i++;
@@ -138,9 +147,9 @@
                                                                     <tr>
                                                                         <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td id="nama_staff_<?php //echo $value->id_akun; ?>"><?php //echo $value->id_akun; ?><?php foreach ($users as $value2) { ?>
-                    <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
-                <?php } ?></td>
+                                                                        <td id="nama_staff_<?php //echo $value->id_akun;  ?>"><?php //echo $value->id_akun;  ?><?php foreach ($users as $value2) { ?>
+                                                                                <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
+                                                                            <?php } ?></td>
                                                                         <td>
                                                                             <div class="progress progress-striped progress-xs">
                                                                                 <div style="width: <?php echo $value->progress; ?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress; ?>" role="progressbar" class="progress-bar progress-bar-warning">
@@ -171,46 +180,46 @@
 
                                         </div>
                                     <?php } ?>
-                            <div class="panel-body">
-                                <form class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url() ?>/pekerjaan/usulan_pekerjaan">
-                                        <div class="form-group">
-                                            <div class="col-lg-12">
-                                                <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
+                                    <div class="panel-body">
+                                        <form class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()  ?>/pekerjaan/usulan_pekerjaan">
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div id="box_komentar" style="display: <?php echo $display ?>">
+                                            <div class="form">
+
+                                                <form class="cmxform form-horizontal " id="signupForm" method="post" action="#<?php //echo $_SERVER['REQUEST_URI'];  ?>">
+                                                    <?php //echo $_SERVER['REQUEST_URI']; ?>
+                                                    <input type="hidden" id="is_isi_komentar" name="is_isi_komentar" value="true"/>
+                                                    <input type="hidden" id="id_detail_pkj" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
+                                                    <div class="form-group">
+                                                        <div id="lihat_komen" class="col-lg-12">
+
+                                                        </div>
+                                                        <div id="tes" class="col-lg-12">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group ">
+                                                        <div class="col-lg-12">
+                                                            <textarea class="form-control" id="komentar_pkj" name="komentar_pkj" rows="12"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="col-lg-12">
+                                                            <button id="save_komen" class="btn btn-primary" type="button">Save</button>
+                                                        </div>
+                                                    </div>
+
+
+                                                </form>
                                             </div>
                                         </div>
-                                    </form>
-                                <div id="box_komentar" style="display: <?php echo $display ?>">
-                                    <div class="form">
-                                        
-                                        <form class="cmxform form-horizontal " id="signupForm" method="post" action="#<?php //echo $_SERVER['REQUEST_URI']; ?>">
-                                            <?php //echo $_SERVER['REQUEST_URI']; ?>
-                                            <input type="hidden" id="is_isi_komentar" name="is_isi_komentar" value="true"/>
-                                            <input type="hidden" id="id_detail_pkj" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
-                                            <div class="form-group">
-                                                <div id="lihat_komen" class="col-lg-12">
-                                                    
-                                                </div>
-                                                <div id="tes" class="col-lg-12">
-                                                    
-                                                </div>
-                                            </div>
-                                            <div class="form-group ">
-                                                <div class="col-lg-12">
-                                                    <textarea class="form-control" id="komentar_pkj" name="komentar_pkj" rows="12"></textarea>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <div class="col-lg-12">
-                                                    <button id="save_komen" class="btn btn-primary" type="button">Save</button>
-                                                </div>
-                                            </div>
-                                            
-                                            
-                                        </form>
                                     </div>
-                                </div>
-                            </div>
                                 </div>
                             </div>
 
@@ -222,7 +231,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <section class="panel">
-                            
+
                         </section>
                     </div>
                 </div>
@@ -236,13 +245,13 @@
                     });
                 </script>
                 <script>
-                   
+
                     $(function() {
                         $('#komentar').click(function(e) {
                             e.preventDefault();
                             var id_pkj = document.getElementById('id_detail_pkj').value;
                             $('#box_komentar').show();
-                            $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/"+id_pkj);
+                            $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
                         });
                     });
                 </script>
@@ -284,26 +293,26 @@
         });
     </script>
     <script>
-       function ubah_komentar(id_komen){
-           //alert(id_komen);
-           $.ajax({// create an AJAX call...
-                    data:
-                            {
-                                id_komentar_ubah: id_komen
-                            }, // get the form data
-                    type: "GET", // GET or POST
-                    url: "<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan_by_id", // the file to call
-                    success: function(response) { // on success..
-                        var json = jQuery.parseJSON(response);
-                        //alert(json.data);
-                        $("#komentar_pkj_ubah").val(json.data);
-                    }
-                });
-    $('#ubah_komen').click(function(e){
-            //alert("pekerjaan yg divalidasi " + id_pekerjaan);
-            e.preventDefault();
-            //alert(document.getElementById('komentar_pkj_ubah').value);
-           var id_pkj = document.getElementById('id_detail_pkj').value;
+        function ubah_komentar(id_komen) {
+            //alert(id_komen);
+            $.ajax({// create an AJAX call...
+                data:
+                        {
+                            id_komentar_ubah: id_komen
+                        }, // get the form data
+                type: "GET", // GET or POST
+                url: "<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan_by_id", // the file to call
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+                    //alert(json.data);
+                    $("#komentar_pkj_ubah").val(json.data);
+                }
+            });
+            $('#ubah_komen').click(function(e) {
+                //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+                e.preventDefault();
+                //alert(document.getElementById('komentar_pkj_ubah').value);
+                var id_pkj = document.getElementById('id_detail_pkj').value;
                 $.ajax({// create an AJAX call...
                     data:
                             {
@@ -314,18 +323,18 @@
                     url: "<?php echo site_url(); ?>/pekerjaan/ubah_komentar_pekerjaan", // the file to call
                     success: function(response) { // on success..
                         //var json = jQuery.parseJSON(response);
-                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/"+id_pkj);
+                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
                     }
                 });
-        });
+            });
         }
     </script>
     <script>
-    function hapus(id){
-    $('#hapus_komen').click(function(e){
-            //alert("pekerjaan yg divalidasi " + id_pekerjaan);
-            e.preventDefault();
-           var id_pkj = document.getElementById('id_detail_pkj').value;
+        function hapus(id) {
+            $('#hapus_komen').click(function(e) {
+                //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+                e.preventDefault();
+                var id_pkj = document.getElementById('id_detail_pkj').value;
                 $.ajax({// create an AJAX call...
                     data:
                             {
@@ -334,35 +343,35 @@
                     type: "GET", // GET or POST
                     url: "<?php echo site_url(); ?>/pekerjaan/hapus_komentar_pekerjaan", // the file to call
                     success: function(response) { // on success..
-                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/"+id_pkj);
+                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
                     }
                 });
-        });
+            });
         }
     </script>
 
     <script>
-        
-        $('#save_komen').click(function(e){
+
+        $('#save_komen').click(function(e) {
             //alert("pekerjaan yg divalidasi " + id_pekerjaan);
             e.preventDefault();
             var id_pkj = document.getElementById('id_detail_pkj').value;
-                $.ajax({// create an AJAX call...
-                    data:
-                            {
-                                id_detail_pkj: document.getElementById('id_detail_pkj').value, // get the form data
-                                komentar_pkj: document.getElementById('komentar_pkj').value,
-                                is_isi_komentar: document.getElementById('is_isi_komentar').value
-                            }, // get the form data
-                    type: "GET", // GET or POST
-                    url: "<?php echo site_url(); ?>/pekerjaan/komentar_pekerjaan", // the file to call
-                    success: function(response) { // on success..
-                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/"+id_pkj);
-                    }
-                });
+            $.ajax({// create an AJAX call...
+                data:
+                        {
+                            id_detail_pkj: document.getElementById('id_detail_pkj').value, // get the form data
+                            komentar_pkj: document.getElementById('komentar_pkj').value,
+                            is_isi_komentar: document.getElementById('is_isi_komentar').value
+                        }, // get the form data
+                type: "GET", // GET or POST
+                url: "<?php echo site_url(); ?>/pekerjaan/komentar_pekerjaan", // the file to call
+                success: function(response) { // on success..
+                    $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
+                }
+            });
         });
-                
-            
+
+
     </script>
     <?php
     $this->load->view("taskman_footer_page");

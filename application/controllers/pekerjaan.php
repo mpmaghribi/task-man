@@ -240,7 +240,7 @@ class pekerjaan extends ceklogin {
         $temp = $this->session->userdata('logged_in');
 //        if ($this->check_session_and_cookie() == 1) {
         //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
-        $this->load->model("pekerjaan_model");
+        $this->load->model(array("pekerjaan_model","berkas_model"));
         $id_detail_pkj = $this->input->get('id_detail_pkj');
         if ($id_detail_pkj == NULL || strlen($id_detail_pkj) == 0) {
             redirect(base_url() . "pekerjaan/karyawan");
@@ -274,6 +274,7 @@ class pekerjaan extends ceklogin {
         $this->load->model("akun");
         $data['my_staff'] = $this->akun->my_staff($temp["user_id"]);
         $data['my_staff'] = json_encode($data['my_staff']);
+        $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
         $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
         //redirect("pekerjaan/karyawan/deskripsi_pekerjaan_page?id_detail_pkj=".$id_detail_pkj);
 //        } else {
