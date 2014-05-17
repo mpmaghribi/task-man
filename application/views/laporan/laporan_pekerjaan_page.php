@@ -24,10 +24,10 @@ and open the template in the editor.
                     <div class="col-md-12">
                         <section class="panel">
                             <a href="#" onclick="window.print()">Print</a>
-                            <a href="#" onclick="window.open('<?= site_url('laporan/exportToPDF') ?>', '_blank')">Save as PDF</a>
+                            <a href="#" onclick="window.open('<?= site_url('laporan/exportToPDF') ?>', '_blank')">Lihat sebagai PDF</a>
 
                             <div class="form">
-                                <table class="table  table-hover general-table">
+                                <table class="table table-hover general-table">
                                     <thead>
                                         <tr>
                                             <th> No</th>
