@@ -163,11 +163,12 @@ class pekerjaan_model extends CI_Model {
     public function get_list_usulan_pekerjaan($list_id_akun) {
         if (count($list_id_akun)==0)
             return NULL;
-        $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan, pekerjaan.tgl_mulai," .
+        $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan, pekerjaan.tgl_mulai, "
+                . "to_char(pekerjaan.tgl_mulai,'DD Mon YYYY') as tanggal_mulai, to_char(pekerjaan.tgl_selesai,'DD Mon YYYY') as tanggal_selesai, " .
                 "pekerjaan.tgl_selesai, pekerjaan.flag_usulan, pekerjaan.id_pekerjaan, detil_pekerjaan.id_akun " .
                 "from detil_pekerjaan " .
                 "inner join pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan " .
-                "where pekerjaan.flag_usulan='1' and id_akun in (".implode(",",  $list_id_akun).")";
+                "where pekerjaan.flag_usulan='1' and detil_pekerjaan.status!='Batal' and id_akun in (".implode(",",  $list_id_akun).")";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();

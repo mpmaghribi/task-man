@@ -149,7 +149,7 @@
                                 nomor_baris++;
                             }
                             $("#td_tabel_usulan_pekerjaan_nama_pekerjaan_" + id_pekerjaan).html(json.data[i]["nama_pekerjaan"]);
-                            $("#td_tabel_usulan_pekerjaan_deadline_" + id_pekerjaan).html(json.data[i]["tgl_mulai"] + " - " + json.data[i]["tgl_selesai"]);
+                            $("#td_tabel_usulan_pekerjaan_deadline_" + id_pekerjaan).html(json.data[i]["tanggal_mulai"] + " - " + json.data[i]["tanggal_selesai"]);
                             var isi = $("#td_tabel_usulan_pekerjaan_nama_staff_" + id_pekerjaan).html();
                             if (isi.length > 0) {
                                 isi += ", ";
