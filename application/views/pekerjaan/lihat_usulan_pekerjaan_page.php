@@ -61,11 +61,12 @@
                                                 }
                                             }
 //                                            if ($counter == -1) {
-//                                                ?>
+//                                                
+                                            ?>
 <!--                                                <tr>
-                                                    <td colspan="7" style="text-align: center">Tidak ada pekerjaan yang diusulkan</td>
-                                                </tr>-->
-                                                <?php
+                                            <td colspan="7" style="text-align: center">Tidak ada pekerjaan yang diusulkan</td>
+                                        </tr>-->
+                                            <?php
 //                                            }
                                             ?>
                                         </tbody>
@@ -98,31 +99,22 @@
                 <!-- page end-->
             </section>
         </section>
-        <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
 
-                <!-- END JAVASCRIPTS -->
-                <script>
-                    jQuery(document).ready(function() {
-                        EditableTableProgress.init();
-                    });
-                </script>
-        <!--main content end-->
-        <!--right sidebar start-->
-        <?php $this->load->view('taskman_rightbar_page') ?>
+<?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
-    <?php $this->load->view("taskman_footer_page") ?>
+<?php $this->load->view("taskman_footer_page") ?>
     <script>
         var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
-        var list_id_staff=[];
+        var list_id_staff = [];
         var jumlah_staff = my_staff.length;
-        for(var i=0;i<jumlah_staff;i++){
+        for (var i = 0; i < jumlah_staff; i++) {
             list_id_staff.push(my_staff[i]["id_akun"]);
         }
-        function get_nama_staff(id_akun){
-            for(var i=0;i<jumlah_staff;i++){
-                if(id_akun==my_staff[i]["id_akun"]){
+        function get_nama_staff(id_akun) {
+            for (var i = 0; i < jumlah_staff; i++) {
+                if (id_akun == my_staff[i]["id_akun"]) {
                     return my_staff[i]["nama"];
                 }
             }
@@ -173,17 +165,17 @@
                             status += "</span>";
                             $("#td_tabel_usulan_pekerjaan_status_" + id_pekerjaan).html(status);
                             /*var pemisah = "style=\"margin-top:5px\"";
-                            isi = $("#td_tabel_usulan_pekerjaan_progress_" + id_pekerjaan).html();
-                            if (isi.length > 0) {
-                                pemisah = "style=\"margin-top:25px\"";
-                            }
-                            var progress = "<div class=\"progress progress-striped progress-xs\" " + pemisah + ">" +
-                                    "<div style=\"width: " + json.data[i]["progress"] + "%\" aria-valuemax=\"100\" aria-valuemin=\"0\" aria-valuenow=\"" + json.data[i]["progress"] + "\" role=\"progressbar\" class=\"progress-bar progress-bar-danger\">" +
-                                    "<span class=\"sr-only\">" + json.data[i]["progress"] + "% Complete (success)</span>" +
-                                    "</div>" +
-                                    "</div>";
-                            //alert(progress);
-                            //$("#td_tabel_usulan_pekerjaan_progress_" + id_pekerjaan).html(isi + progress);*/
+                             isi = $("#td_tabel_usulan_pekerjaan_progress_" + id_pekerjaan).html();
+                             if (isi.length > 0) {
+                             pemisah = "style=\"margin-top:25px\"";
+                             }
+                             var progress = "<div class=\"progress progress-striped progress-xs\" " + pemisah + ">" +
+                             "<div style=\"width: " + json.data[i]["progress"] + "%\" aria-valuemax=\"100\" aria-valuemin=\"0\" aria-valuenow=\"" + json.data[i]["progress"] + "\" role=\"progressbar\" class=\"progress-bar progress-bar-danger\">" +
+                             "<span class=\"sr-only\">" + json.data[i]["progress"] + "% Complete (success)</span>" +
+                             "</div>" +
+                             "</div>";
+                             //alert(progress);
+                             //$("#td_tabel_usulan_pekerjaan_progress_" + id_pekerjaan).html(isi + progress);*/
                             $("#td_tabel_usulan_pekerjaan_view_" + id_pekerjaan).html("<form method=\"get\" action=\"<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan\">" +
                                     "<input type=\"hidden\" name=\"id_detail_pkj\" value=\"" + id_pekerjaan + "\"/>" +
                                     "<button type=\"submit\" class=\"btn btn-success btn-xs\"><i class=\"fa fa-eye\"></i> View </button>" +
@@ -192,13 +184,17 @@
                                 $("#td_tabel_usulan_pekerjaan_validasi_" + id_pekerjaan).html("<button id=\"validasi" + id_pekerjaan + "\" type=\"button\" class=\"btn btn-default btn-xs\" onclick=\"validasi(" + id_pekerjaan + ")\"><i class=\"fa fa-eye\"> OK</i> </button>");
                             }
                         }
-                        if (jumlah_data === 0) {
-                            $("#tabel_usulan_pekerjaan").append("<tr><td colspan=\"7\" style=\"text-align: center\">Tidak ada pekerjaan yang diusulkan</td></tr>");
-                        }
+                        EditableTableProgress.init();
                     } else {
                     }
                 }
             });
         }
         get_data_usulan_pekerjaan();
+    </script>
+    <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
+    <script>
+//jQuery(document).ready(function() {
+//EditableTableProgress.init();
+//});
     </script>

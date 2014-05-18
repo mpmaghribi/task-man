@@ -22,7 +22,17 @@ class testing extends CI_Controller {
            echo base_url();
            echo "<br>";
            echo str_replace('://', '://hello:world@', base_url())."index.php/api/integration/bawahan/id/1/format/json";
+           echo '<br><br>';
+           $this->load->database();
+           $this->kuery("show datestyle");
+           $this->kuery("show config_file");
 	}
+        public function kuery($param) {
+            $query = $this->db->query($param);
+           foreach ($query->result() as $row){
+               var_dump($row);
+           }
+        }
 }
 
 /* End of file welcome.php */

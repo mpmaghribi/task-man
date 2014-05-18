@@ -389,7 +389,8 @@
                         var json = jQuery.parseJSON(response);
                         //alert(response);
                         if (json.status === "OK") {
-                            $('#div_acc_edit_cancel_usulan_pekerjaan').remove();
+                            //$('#div_acc_edit_cancel_usulan_pekerjaan').remove();
+                            $('#tombol_validasi_usulan').remove();
                         } else {
                             alert("validasi gagal, " + json.reason);
                         }
@@ -409,6 +410,11 @@
                                 $('#div_acc_edit_cancel_usulan_pekerjaan').css("display", "block");
                                 $('#tombol_edit_usulan').attr("href", '<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=' + id_pekerjaan);
                                 $('#tombol_validasi_usulan').attr("onclick", 'validasi(' + id_pekerjaan + ');');
+                                $('#tombol_batalkan_usulan').attr("onclick", '');
+                            }else if (json.data === "2") {
+                                $('#div_acc_edit_cancel_usulan_pekerjaan').css("display", "block");
+                                $('#tombol_edit_usulan').attr("href", '<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=' + id_pekerjaan);
+                                $('#tombol_validasi_usulan').remove();
                                 $('#tombol_batalkan_usulan').attr("onclick", '');
                             }
                         } else {
