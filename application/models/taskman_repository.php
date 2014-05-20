@@ -116,7 +116,7 @@ class taskman_repository extends CI_Model {
 //        return $query->result();
         $jabatan = json_decode(
                 file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/jabatan/id/".$id_user."/format/json"
+                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id_user."/format/json"
                         ));
         //var_dump($list_staff);
         return $jabatan;

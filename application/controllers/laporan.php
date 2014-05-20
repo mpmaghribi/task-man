@@ -25,17 +25,21 @@ class laporan extends CI_Controller {
     
     function laporan_pekerjaan_saya()
     {
-        $id = $this->input->get('id_akun');
-        $data["jabatan"] = $this->input->get('jabatan');
-        $data["departemen"] = $this->input->get('departemen');
-        $data["nama"] = $this->input->get('nama');
-        $data["nip"] = $this->input->get('nip');
-        $this->load->helper(array('pdf', 'date'));
-        $filename = 'Laporan Kerja Staff.pdf';
-        $data['state'] = 'Report';
-        $temp = $this->session->userdata('logged_in');
+        $temp = $this->session->userdata("logged_in");
         $data['data_akun'] = $temp;
         $data['temp'] = $temp;
+        $id = $temp["user_id"];
+        $jabatan = json_decode(
+                file_get_contents(
+                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id."/format/json"
+                        ));
+        $data["jabatan"] = $jabatan[0]->nama_jabatan;
+        $data["departemen"] = $jabatan[0]->nama_departemen;
+        $data["nama"] = $jabatan[0]->nama;
+        $data["nip"] = $jabatan[0]->nip;
+        $this->load->helper(array('pdf', 'date'));
+        $filename = 'Laporan Kerja '.$data['nama'].'.pdf';
+        $data['state'] = 'Report';
         $this->load->model("pekerjaan_model");
         $result = $this->taskman_repository->sp_view_pekerjaan($id);
         $data['pkj_karyawan'] = $result;

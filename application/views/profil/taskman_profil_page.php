@@ -27,7 +27,7 @@
                                                 
                                             
                                             <h1><?php  echo $profil->nama?></h1>
-                                            <span class="text-muted"><?php echo $jabatan->nama_jabatan?></span>
+                                            <span class="text-muted"><?php echo $jabatan[0]->nama_jabatan?> - <?php echo $jabatan[0]->nama_departemen?></span>
                                             <p>
                                                 Seorang staff yang memiliki NIP <?php echo $profil->nip?> ini adalah seorang karyawan yang sangat pekerja keras.
                                                 Jika ada perlu terhadap beliau terkait pekerjaan, dapat menghubungi ke
