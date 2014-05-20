@@ -68,7 +68,15 @@ class laporan extends CI_Controller {
         $data["periode"] = $periode;
         $data["data_akun"] = $this->session->userdata("logged_in");
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat laporan pekerjaan per periode dari para staffnya.");
-        
+        $id_penilai = $temp["user_id"];
+        $jabatan = json_decode(
+                file_get_contents(
+                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id_penilai."/format/json"
+                        ));
+        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
+        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
+        $data["nama_penilai"] = $jabatan[0]->nama;
+        $data["nip_penilai"] = $jabatan[0]->nip;
         $id = $this->input->get("id_akun");
         $data["jabatan"] = $this->input->get("nama_jabatan");
         $data["departemen"] = $this->input->get("nama_departemen");
@@ -222,6 +230,15 @@ Data Pengaduan ' . $ket . '
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $temp;
         $data['temp'] = $temp;
+        $id_penilai = $temp["user_id"];
+        $jabatan = json_decode(
+                file_get_contents(
+                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id_penilai."/format/json"
+                        ));
+        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
+        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
+        $data["nama_penilai"] = $jabatan[0]->nama;
+        $data["nip_penilai"] = $jabatan[0]->nip;
         $this->load->model("pekerjaan_model");
         $result = $this->taskman_repository->sp_view_pekerjaan($id);
         $data['pkj_karyawan'] = $result;

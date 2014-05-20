@@ -14,6 +14,7 @@ function generate_pdf($object, $filename='', $direct_download=FALSE)
     require_once("dompdf/dompdf_config.inc.php");
     //
     $dompdf = new DOMPDF();
+    $dompdf->set_paper("a4", "landscape");
     $dompdf->load_html($object);
     $dompdf->render();
     //return $dompdf->output();

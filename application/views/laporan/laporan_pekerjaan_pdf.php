@@ -33,13 +33,13 @@ and open the template in the editor.
 
     <section id="container" >
         <section id="main-content">
-            <section class="wrapper">
+            <section class="wrapper" >
                 <!-- page start-->
                 <div class="row">
                     <div class="col-md-6">
                         <section class="panel">
                             <div class="form">
-                                <h1 align="center">Laporan Pekerjaan Staff <?php if (isset($periode))echo "Selama ".$periode." Bulan"?></h1>
+                                <h2 align="center">Formulir Sasaran Kerja Pegawai Negeri Sipil <?php if (isset($periode))echo "Selama ".$periode." Bulan"?></h2>
                             </div>
 
                         </section>
@@ -47,13 +47,30 @@ and open the template in the editor.
                 </div>
                 <br/>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
+                        <section class="panel">
+                            <div class="form">
+                                <table>
+                                        <tr>
+                                            <th width="372" align="left">Pejabat Penilai</th>
+                                            <th width="370" align="left">Pegawai yang Dinilai</th>
+                                        </tr>
+                                </table>
+                            </div>
+
+                        </section>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
                         <section class="panel">
                             <div class="form">
                                 <table>
                                         <tr>
                                             <th width="70" align="left">NIP</th>
-                                            <td>: <?php echo $nip?></td>
+                                            <td width="300" align="left">: <?php echo $nip_penilai?></td>
+                                            <th width="70" align="left">NIP</th>
+                                            <td width="300" align="left">: <?php echo $nip?></td>
                                         </tr>
                                 </table>
                             </div>
@@ -68,7 +85,9 @@ and open the template in the editor.
                                 <table>
                                         <tr>
                                             <th width="70" align="left">Nama</th>
-                                            <td>: <?php echo $nama?></td>
+                                            <td width="300" align="left">: <?php echo $nama_penilai?></td>
+                                            <th width="70" align="left">Nama</th>
+                                            <td width="300" align="left">: <?php echo $nama?></td>
                                         </tr>
                                 </table>
                             </div>
@@ -81,7 +100,9 @@ and open the template in the editor.
                                 <table>
                                         <tr>
                                             <th width="70" align="left">Departemen</th>
-                                            <td>: <?php if (isset($departemen)) echo $departemen?></td>
+                                            <td width="300" align="left">: <?php if (isset($departemen_penilai)) echo $departemen_penilai?></td>
+                                            <th width="70" align="left">Departemen</th>
+                                            <td width="300" align="left">: <?php if (isset($departemen)) echo $departemen?></td>
                                         </tr>
                                 </table>
                             </div>
@@ -96,7 +117,9 @@ and open the template in the editor.
                                 <table>
                                         <tr>
                                             <th width="70" align="left">Jabatan</th>
-                                            <td>: <?php echo $jabatan?></td>
+                                            <td width="300" align="left">: <?php echo $jabatan_penilai?></td>
+                                            <th width="70" align="left">Jabatan</th>
+                                            <td width="300" align="left">: <?php echo $jabatan?></td>
                                         </tr>
                                 </table>
                             </div>
@@ -123,13 +146,30 @@ and open the template in the editor.
                     <div class="col-md-12">
                         <section class="panel">
                             <div class="form">
+                                <br/>
+                            </div>
+
+                        </section>
+                    </div>
+                </div>
+                <div class="row" style="height: 40%;">
+                    <div class="col-md-12">
+                        <section class="panel">
+                            <div class="form">
                                 <table class="tabel_pdf_staff">
                                     <thead>
                                         <tr>
-                                            <th>No</th>
-                                            <th>Pekerjaan</th>
-                                            <th>Deadline</th>
-                                            <th>Status</th>
+                                            <th rowspan="2" width="30">No</th>
+                                            <th rowspan="2">Kegiatan Tugas Jabatan</th>
+                                            <th rowspan="2" width="30">AK</th>
+                                            <th colspan="4">Target</th>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <th width="50">Output</th>
+                                            <th width="50">Kualitas</th>
+                                            <th width="50">Waktu</th>
+                                            <th width="50">Biaya</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -143,9 +183,12 @@ and open the template in the editor.
                                                         <td align="center">
                                                                 <?php echo $i; ?>
                                                         </td>
-                                                        <td  align="center"><?php echo $value->nama_pekerjaan ?></td>
-                                                        <td  align="center"> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                        <td  align="center"><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
+                                                        <td  align="justify"><?php echo $value->nama_pekerjaan ?></td>
+                                                        <td  align="center"></td>
+                                                        <td  align="center"></td>
+                                                        <td  align="center"></td>
+                                                        <td  align="center"><?php if (isset($periode))echo $periode." Bulan"; else echo "12 Bulan";?></td>
+                                                        <td  align="center"></td>
                                                     </tr>
                                                 <?php } ?>
                                                 <?php
@@ -161,7 +204,7 @@ and open the template in the editor.
                         </section>
                     </div>
                 </div>
-
+                
 
                 <script>
                     $(function() {
@@ -173,6 +216,35 @@ and open the template in the editor.
                     });
                 </script>
                 <!-- page end-->
+            </section>
+            <section class="footer-section">
+                <div class="row">
+                    <div class="col-md-12">
+                        <section class="panel">
+                            <div class="form">
+                                <table>
+                                        <tr>
+                                            <th width="100" align="left"></th>
+                                            <th width="100" align="left">Surabaya, <?php echo date("d M Y")?></th>
+                                        </tr>
+                                        <tr>
+                                            <th style="padding-bottom: 50px;" width="600" align="left">Pejabat Penilai</th>
+                                            <th style="padding-bottom: 50px;" width="600" align="left">Pegawai yang Dinilai</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-decoration: underline;" width="200" align="left"> <?php echo $nama_penilai?></td>
+                                            <td style="text-decoration: underline;" width="200" align="left"> <?php echo $nama?></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="200" align="left"> <?php echo $nip_penilai?></td>
+                                            <td width="200" align="left"> <?php echo $nip?></td>
+                                        </tr>
+                                </table>
+                            </div>
+
+                        </section>
+                    </div>
+                </div>
             </section>
         </section>
     </section>
