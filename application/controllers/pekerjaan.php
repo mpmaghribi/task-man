@@ -13,7 +13,13 @@ class pekerjaan extends ceklogin {
     public function index() {
         redirect(base_url() . 'pekerjaan/karyawan');
     }
-
+    function pengaduan()
+    {
+        $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
+        $data['data_akun'] = $this->session->userdata('logged_in');
+        $this->load->view("pekerjaan/pengaduan_page",$data);
+    }
     public function karyawan() {
         $this->load->model("pekerjaan_model");
         $this->load->model("akun");

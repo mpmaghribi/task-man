@@ -25,6 +25,12 @@
                     </a>
                     <ul class="sub">
                         <li class="sub-menu">
+                            <a href="<?php echo site_url(); ?>/pekerjaan/pengaduan">
+                                <i class="fa fa-book"></i>
+                                <span>Pengaduan</span>
+                            </a>
+                        </li>
+                        <li class="sub-menu">
                             <a href="<?php echo site_url()?>/pekerjaan/karyawan">
                                 <i class="fa fa-book"></i>
                                 <span>Pekerjaan Saya</span>
