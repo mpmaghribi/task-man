@@ -32,7 +32,6 @@
                                                 <th class="hidden-phone">Email Staff</th>
                                                 <th style="text-align: right"></th>
                                                 <th style="text-align: right"></th>
-                                                <th style="text-align: right"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -51,8 +50,7 @@
                                                     echo '<td>' . $staff->email . '</td>';
                                                     echo '<td ><form method="get" action="' . base_url() . 'pekerjaan/pekerjaan_per_staff"><input type="hidden" name="id_akun" value="' . $staff->id_akun . '"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>';
                                                     ?>
-                                        <td><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/exportToPDF?id_akun='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" class="btn btn-success btn-xs">Export PDF</a></td>
-                                        <td><a href="#exportPeriode" data-toggle="modal"  onclick="exportPeriode('<?php echo $staff->id_akun?>','<?php echo $staff->nama?>','<?php echo $staff->nama_jabatan?>','<?php echo $staff->nama_departemen?>','<?php echo $staff->nip?>')" class="btn btn-success btn-xs">Laporan per Periode</a></td>
+                                        <td><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/exportToPDF?id='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" class="btn btn-success btn-xs">Export PDF</a></td>
                                                     <?php echo '</tr>';
                                                 }
                                             }
@@ -64,40 +62,6 @@
                         </section>
                     </div>
                 </div>
-                <div class="modal fade" id="exportPeriode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Pilih Periode Yang Anda Ingin Eksport</h4>
-            </div>
-            <form action="<?php echo site_url()?>laporan/laporan_per_periode" method="GET">
-            <div class="modal-body">
-                
-                    <input type="hidden" id="id_akun" name="id_akun" value="" />
-                    <input type="hidden" id="nama" name="nama" value="" />
-                    <select name="periode" class="form-control m-bot15">
-                        <option value="6">
-                            6 Bulan
-                        </option>
-                        <option value="12">
-                            1 Tahun
-                        </option>
-                    </select>
-                    
-                    <input type="hidden" id="nama_jabatan" name="nama_jabatan" value="" />
-                    <input type="hidden" id="nama_departemen" name="nama_departemen" value="" />
-                    <input type="hidden" id="nip" name="nip" value="" />
-                
-            </div>
-            <div class="modal-footer">
-                <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
-                <button class="btn btn-warning" type="submit"> Export PDF</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
 
                 <!-- page end-->
             </section>
@@ -118,14 +82,12 @@
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script>
-        function exportPeriode(id_akun,nama,jabatan,departemen,nip)
+        function exportPDF(id_akun)
         {
-            $("#id_akun").val(id_akun);
-            $("#nama").val(nama);
-            $("#nama_jabatan").val(jabatan);
-            $("#nama_departemen").val(departemen);
-            $("#nip").val(nip);
-        } 
+                        //alert(id_akun);
+            
+        }
+                    
                 </script>
     <script type="text/javascript">
         function validasi(id_pekerjaan) {

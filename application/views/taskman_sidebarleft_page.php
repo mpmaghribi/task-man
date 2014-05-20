@@ -69,7 +69,8 @@
                         <span>Rekap Pekerjaan</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="<?php echo site_url()?>/laporan">Laporan rekap pekerjaan</a></li>
+                        <li><a href="<?php echo site_url()?>/laporan">Laporan Pekerjaan Staff</a></li>
+                         <li><a href="<?php echo site_url()?>/laporan/laporan_per_periode">Laporan Pekerjaan Saya</a></li>
 <!--                        <li><a href="#">Per Periode</a></li>
                         <li><a href="#">Per Status</a></li>
                         <li><a href="#">Filter Lainnya</a></li>
