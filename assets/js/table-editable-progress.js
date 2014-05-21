@@ -72,7 +72,7 @@ var EditableTableProgress = function() {
 
             $('#table_deskripsi,#tabel_pekerjaan_staff,#tabel_usulan_pekerjaan').dataTable({
                 // set the initial value
-                "iDisplayLength": 5,
+                "iDisplayLength": 20,
                 "sDom": "<'row'f<'col-lg-6'>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
                 "sPaginationType": "bootstrap",
                 "oLanguage": {
@@ -89,7 +89,7 @@ var EditableTableProgress = function() {
             });
             $('#tabel_pkj_saya,#tabel_pkj_saya2').dataTable({
                 // set the initial value
-                "iDisplayLength": 5,
+                "iDisplayLength": 20,
                 "sDom": "<'row'f<'col-lg-6'>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
                 "sPaginationType": "bootstrap",
                 "oLanguage": {
@@ -106,7 +106,7 @@ var EditableTableProgress = function() {
             });
             $('#tabel_home').dataTable({
                 // set the initial value
-                "iDisplayLength": 5,
+                "iDisplayLength": 20,
                 "sDom": "<'row'f<'col-lg-6'>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
                 "sPaginationType": "bootstrap",
                 "oLanguage": {
@@ -167,7 +167,7 @@ var EditableTableProgress = function() {
                 // set the initial value
 
                 // set the initial value
-                "iDisplayLength": 5,
+                "iDisplayLength": 20,
                 "sDom": "<'row'f<'col-lg-6'><'col-lg-6'>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
                 "sPaginationType": "bootstrap",
                 "oLanguage": {
