@@ -28,7 +28,7 @@
                                     <?php } ?>
                                 </ul>
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;display: none;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    <a class="btn btn-success btn-xs" href="#" id="tombol_validasi_usulan" style="font-size: 10px">Validasi</a>
+                                    <?php if ($temp["atasan"] == 0){?><a class="btn btn-success btn-xs" href="#" id="tombol_validasi_usulan" style="font-size: 10px">Validasi</a><?php }?>
                                     <a class="btn btn-info btn-xs" href="#" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-danger btn-xs" href="#" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                 </div>
@@ -159,7 +159,7 @@
                                                                         </td>
                                                                         <td>
                                                                             <?php if ($value->id_akun == $temp['user_id'] && $value->flag_usulan == 2) { ?>
-                                                                                <a class="edit" href="javascript:;">Ubah Progress</a>
+                                                                                <a class="edit btn btn-primary btn-xs" href="javascript:;">Ubah Progress</a>
                                                                             <?php } ?>
                                                                         </td>
                                                                         <td></td>
