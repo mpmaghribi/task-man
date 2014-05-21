@@ -20,6 +20,10 @@ var Script = function () {
         // validate signup form on keyup and submit
         $("#signupForm").validate({
             rules: {
+                topik_pengaduan: "required",
+                isi_pengaduan: "required",
+                tgl_pengaduan: "required",
+                urgensitas: "required",
                 nama_pkj: "required",
                 deskripsi_pkj: "required",
                 tgl_mulai_pkj: "required",

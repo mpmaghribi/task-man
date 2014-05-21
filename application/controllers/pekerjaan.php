@@ -20,6 +20,10 @@ class pekerjaan extends ceklogin {
         $data['data_akun'] = $this->session->userdata('logged_in');
         $this->load->view("pekerjaan/pengaduan_page",$data);
     }
+    function tambah_pengaduan()
+    {
+        
+    }
     public function karyawan() {
         $this->load->model("pekerjaan_model");
         $this->load->model("akun");
