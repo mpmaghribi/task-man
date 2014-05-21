@@ -9,7 +9,7 @@
  $filename = nama file untuk pdf yang jadi (contoh: hasil.pdf)
  $direct_download = apakah akan didownload langsung?? direct download bila bernilai true maka akan menampilkan download dialog pada browser 
 */
-function generate_pdf($object, $filename='', $direct_download=FALSE) 
+function generate_pdf($object, $filename='', $direct_download=TRUE) 
 {
     require_once("dompdf/dompdf_config.inc.php");
     //
@@ -19,10 +19,10 @@ function generate_pdf($object, $filename='', $direct_download=FALSE)
     $dompdf->render();
     //return $dompdf->output();
     
-    //$dompdf->stream($filename);
-    if ($direct_download == TRUE)
-        $dompdf->stream($filename);
-    else
-        return $dompdf->output();
+    $dompdf->stream($filename);
+    //if ($direct_download == TRUE)
+    //    $dompdf->stream($filename);
+    //else
+    //    return $dompdf->output();
 }
 ?>  

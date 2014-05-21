@@ -68,7 +68,7 @@ and open the template in the editor.
                                 <table>
                                         <tr>
                                             <th width="70" align="left">NIP</th>
-                                            <td width="300" align="left">: <?php echo $nip_penilai?></td>
+                                            <td width="300" align="left">: <?php if(isset($nip_penilai)) echo $nip_penilai?></td>
                                             <th width="70" align="left">NIP</th>
                                             <td width="300" align="left">: <?php echo $nip?></td>
                                         </tr>
@@ -85,7 +85,7 @@ and open the template in the editor.
                                 <table>
                                         <tr>
                                             <th width="70" align="left">Nama</th>
-                                            <td width="300" align="left">: <?php echo $nama_penilai?></td>
+                                            <td width="300" align="left">: <?php if(isset($nama_penilai)) echo $nama_penilai?></td>
                                             <th width="70" align="left">Nama</th>
                                             <td width="300" align="left">: <?php echo $nama?></td>
                                         </tr>
@@ -117,7 +117,7 @@ and open the template in the editor.
                                 <table>
                                         <tr>
                                             <th width="70" align="left">Jabatan</th>
-                                            <td width="300" align="left">: <?php echo $jabatan_penilai?></td>
+                                            <td width="300" align="left">: <?php if(isset($jabatan_penilai)) echo $jabatan_penilai?></td>
                                             <th width="70" align="left">Jabatan</th>
                                             <td width="300" align="left">: <?php echo $jabatan?></td>
                                         </tr>
@@ -204,20 +204,6 @@ and open the template in the editor.
                         </section>
                     </div>
                 </div>
-                
-
-                <script>
-                    $(function() {
-                        $('#nama_pkj').click(function(e) {
-                            e.preventDefault();
-                            $('#deskripsi_pkj').show();
-                            $('#deskripsi_pkj2').load('<?php echo site_url() ?>pekerjaan/deskripsi_pekerjaan');
-                        });
-                    });
-                </script>
-                <!-- page end-->
-            </section>
-            <section class="footer-section">
                 <div class="row">
                     <div class="col-md-12">
                         <section class="panel">
@@ -232,11 +218,11 @@ and open the template in the editor.
                                             <th style="padding-bottom: 50px;" width="600" align="left">Pegawai yang Dinilai</th>
                                         </tr>
                                         <tr>
-                                            <td style="text-decoration: underline;" width="200" align="left"> <?php echo $nama_penilai?></td>
+                                            <td style="text-decoration: underline;" width="200" align="left"> <?php if(isset($nama_penilai)) echo  $nama_penilai?></td>
                                             <td style="text-decoration: underline;" width="200" align="left"> <?php echo $nama?></td>
                                         </tr>
                                         <tr>
-                                            <td width="200" align="left"> <?php echo $nip_penilai?></td>
+                                            <td width="200" align="left"> <?php if(isset($nip_penilai)) echo  $nip_penilai?></td>
                                             <td width="200" align="left"> <?php echo $nip?></td>
                                         </tr>
                                 </table>
@@ -245,6 +231,20 @@ and open the template in the editor.
                         </section>
                     </div>
                 </div>
+
+                <script>
+                    $(function() {
+                        $('#nama_pkj').click(function(e) {
+                            e.preventDefault();
+                            $('#deskripsi_pkj').show();
+                            $('#deskripsi_pkj2').load('<?php echo site_url() ?>pekerjaan/deskripsi_pekerjaan');
+                        });
+                    });
+                </script>
+                <!-- page end-->
+            </section>
+            <section class="footer-section">
+                
             </section>
         </section>
     </section>
