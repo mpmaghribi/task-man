@@ -3,11 +3,13 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 require APPPATH.'/libraries/ceklogin.php';
-class home extends ceklogin {
 
+class home extends ceklogin {
+    
     public function __construct() {
         parent::__construct();
         //$this->load->database();
+        
         $this->load->model('pekerjaan_model');
     }
 

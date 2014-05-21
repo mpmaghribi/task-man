@@ -75,7 +75,7 @@
                         <span>Rekap Pekerjaan</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="<?php echo site_url()?>/laporan">Laporan Pekerjaan Staff</a></li>
+                        <?php $temp = $this->session->userdata('logged_in'); if ($temp['jmlstaff'] > 0){?><li><a href="<?php echo site_url()?>/laporan">Laporan Pekerjaan Staff</a></li><?php }?>
                          <li><a href="<?php echo site_url()?>/laporan/laporan_pekerjaan_saya">Laporan Pekerjaan Saya</a></li>
 <!--                        <li><a href="#">Per Periode</a></li>
                         <li><a href="#">Per Status</a></li>

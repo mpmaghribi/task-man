@@ -82,7 +82,7 @@
             <!-- user login dropdown start-->
             <li class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                    <img alt="" src="<?php echo base_url() ?>/assets/images/avatar1_small.jpg">
+<!--                    <img alt="" src="<?php echo base_url() ?>/assets/images/avatar1_small.jpg">-->
                     <span class="username"><?php echo $data_akun['user_nama'] ?></span>
                     <b class="caret"></b>
                 </a>
