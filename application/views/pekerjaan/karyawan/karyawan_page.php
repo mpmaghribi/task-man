@@ -40,7 +40,7 @@
                                             </header>
                                             <div class="panel-body">
                                                 <div class="form">
-                                                <table class="table  table-hover general-table" id="tabel_pkj_saya">
+                                                <table class="table table-striped table-hover table-condensed" id="tabel_pkj_saya">
                                                     <thead>
                                                         <tr>
                                                             <th> No</th>
@@ -95,7 +95,7 @@
                                             </header>
                                             <div class="panel-body">
                                                 <div class="form">
-                                                <table class="table  table-hover general-table" id="tabel_pkj_saya2">
+                                                <table class="table table-striped table-hover table-condensed" id="tabel_pkj_saya2">
                                                     <thead>
                                                         <tr>
                                                             <th> No</th>
