@@ -234,7 +234,7 @@
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                     <div class="col-lg-6">
-                                                        <select name="sifat_pkj" class="form-control m-bot15">
+                                                        <select name="sifat_pkj2" class="form-control m-bot15">
                                                             <option value="">--Pekerjaan--</option>    
                                                             <option value="1">Personal</option>
                                                             <option value="2">Umum</option>
@@ -244,29 +244,29 @@
                                                 <div class="form-group ">
                                                     <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
                                                     <div class="col-lg-6">
-                                                        <input class=" form-control" id="firstname" name="nama_pkj" type="text" />
+                                                        <input class=" form-control" id="nama_pkj2" name="nama_pkj2" type="text" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
                                                     <div class="col-lg-6">
-                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"></textarea>
+                                                        <textarea class="form-control" name="deskripsi_pkj2" rows="12"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="deadline" class="control-label col-lg-3">Deadline</label>
                                                     <div class="col-lg-6 ">
                                                         <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                                                            <input id="dd" readonly type="text" class="form-control dpd3" value="" name="tgl_mulai_pkj">
+                                                            <input id="dd" readonly type="text" class="form-control dpd3" value="" name="tgl_mulai_pkj2">
                                                             <span class="input-group-addon">Sampai</span>
-                                                            <input readonly type="text" class="form-control dpd4" value="" name="tgl_selesai_pkj">
+                                                            <input readonly type="text" class="form-control dpd4" value="" name="tgl_selesai_pkj2">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
                                                     <div class="col-lg-6">
-                                                        <select name="prioritas" class="form-control m-bot15">
+                                                        <select name="prioritas2" class="form-control m-bot15">
                                                             <option value="">--Prioritas--</option>    
                                                             <option value="1">Urgent</option>
                                                             <option value="2">Tinggi</option>
