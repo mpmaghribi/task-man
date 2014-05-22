@@ -8,6 +8,7 @@ class pekerjaan extends ceklogin {
 
     public function __construct() {
         parent::__construct();
+        //$this->load->model("pengaduan_model");
     }
 
     public function index() {
@@ -15,14 +16,100 @@ class pekerjaan extends ceklogin {
     }
     function pengaduan()
     {
+        //http://localhost:90/integrarsud/helpdesk/index.php/pengaduan/getDelegate/
+        //print_r($url);
+        $url = str_replace('taskmanagement','integrarsud/helpdesk',str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
+        $data["pengaduan"] = json_decode(file_get_contents($url));
+        $url2 = str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $data["pegawai"] = json_decode(file_get_contents($url2));
         $temp = $this->session->userdata('logged_in');
         $data['temp'] = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
+        //print_r($url);
         $this->load->view("pekerjaan/pengaduan_page",$data);
+    }
+    
+    
+    
+    function get_pengaduan()
+    {
+        //http://localhost:90/integrarsud/helpdesk/index.php/pengaduan/getDelegate/
+        //print_r($url);
+        $url = str_replace('taskmanagement','integrarsud/helpdesk',str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
+        $data["pengaduan"] = json_decode(file_get_contents($url));
+        $url2 = str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $data["pegawai"] = json_decode(file_get_contents($url2));
+        $temp = $this->session->userdata('logged_in');
+        $data['temp'] = $this->session->userdata('logged_in');
+        $data['data_akun'] = $this->session->userdata('logged_in');
+        //print_r($url);
+        echo json_encode(array("status" => "OK", "data" =>  $data["pengaduan"]));
     }
     function tambah_pengaduan()
     {
+        $topik = $this->input->post("topik_pengaduan");
+        $isi = $this->input->post("isi_pengaduan");
+        $tgl = $this->input->post("tgl_pengaduan");
+        $tgl2 = $this->input->post("tgl_pengaduan2");
+        $urgensitas = $this->input->post("urgensitas");
+        $staff = $this->input->post("staff_rsud");
+        foreach ($staff as $value) {
+            echo ($value);
+        }
+         $temp = $this->session->userdata('logged_in');
+        $data['data_akun'] = $this->session->userdata('logged_in');
+        $sifat_pkj = 2;
+        $parent_pkj = 0; //$this->input->post('parent_pkj');
+        $nama_pkj = $this->input->post('topik_pengaduan');
+        $deskripsi_pkj = $this->input->post('isi_pengaduan');
+        $tgl_mulai_pkj = $this->input->post('tgl_mulai_pengaduan');
+        $tgl_selesai_pkj = $this->input->post('tgl_selesai_pengaduan');
+        $prioritas = $this->input->post('urgensitas');
+        $status_pkj = '2'; //$this->input->post('status_pkj');
+        $asal_pkj = 'Help Desk'; //$this->input->post('asal_pkj');
+        //$list_staff = $this->input->post("staff_rsud");
+        //$staff = explode("::", $list_staff);
+        //var_dump($staff);;
+        $this->load->model("akun");
+        $this->load->model("pekerjaan_model");
+        $this->load->model("pengaduan_model");
+        //var_dump($staff);
+        $respon = $this->input->post("respon_pengaduan");
+        $alasan = "0";
+        $pengaduan = $this->pengaduan_model->sp_tambah_pengaduan($nama_pkj, $deskripsi_pkj, $tgl, $prioritas, $respon, $alasan);
         
+        $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
+        if ($id_pekerjaan != NULL) {
+            foreach ($staff as $val) {//val itu nip
+//                if (strlen($val) == 0) {
+//                    continue;
+//                }
+//                //echo "id akun akan dikenai pekerjaan $val ";
+//                //$id_akun = $this->akun->get_id_akun($val);
+//                if ($id_akun == NULL) {
+//                    //echo "id akun tidak valid ";
+//                    continue;
+//                }
+                //echo "akun valid ";
+                $this->pekerjaan_model->tambah_detil_pekerjaan($val, $id_pekerjaan);
+                //echo "id akun $id_akun mendapat pekerjaan $id_pekerjaan <br/>";
+            }
+
+
+            //echo "path = $path<br/>";
+            if (isset($_FILES["berkas"])) {
+                $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
+                //$this->load->library('upload');
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+                $files = $_FILES["berkas"];
+                $this->upload_file($files, $path, $id_pekerjaan);
+            }
+            $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja memberikan pekerjaan kepada staffnya.");
+        }
+        $this->session->set_flashdata("notif_sukses","sukses");
+        redirect('pekerjaan/pengaduan');
     }
     public function karyawan() {
         $this->load->model("pekerjaan_model");

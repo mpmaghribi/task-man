@@ -14,6 +14,8 @@
 <script src="<?php echo base_url()?>/assets/js/jquery.scrollTo.min.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jquery.nicescroll.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>/assets/js/gritter/js/jquery.gritter.js"></script>
+<script src="<?php echo base_url()?>/assets/js/gritter.js" type="text/javascript"></script>
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot-chart/excanvas.min.js"></script><![endif]-->
 <script src="<?php echo base_url()?>/assets/js/skycons/skycons.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jquery.scrollTo/jquery.scrollTo.js"></script>

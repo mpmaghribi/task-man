@@ -70,7 +70,7 @@ var EditableTableProgress = function() {
                 });
             }
 
-            $('#table_deskripsi,#tabel_pekerjaan_staff,#tabel_usulan_pekerjaan').dataTable({
+            $('#table_deskripsi,#tabel_pekerjaan_staff,#tabel_usulan_pekerjaan,#tabel_pengaduan').dataTable({
                 // set the initial value
                 "iDisplayLength": 20,
                 "sDom": "<'row'f<'col-lg-6'>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",
