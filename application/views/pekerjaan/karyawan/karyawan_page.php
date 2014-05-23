@@ -21,7 +21,7 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#ListPekerjaan">List Pekerjaan</a>
                                     </li>
-                                    <?php if ($temp['jmlstaff'] > 0){?>
+                                    <?php if (false){?>
                                     <li class="">
                                         <a data-toggle="tab" href="#assignPekerjaan">Assign Pekerjaan</a>
                                     </li>
@@ -146,7 +146,7 @@
                                             </div>
                                         </section>
                                     </div>
-<?php if ($temp['jmlstaff'] > 0) { ?>
+<?php if (false) { ?>
                                         <div id="assignPekerjaan" class="tab-pane">
                                             <div class="form">
                                                 <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan2" enctype="multipart/form-data">
@@ -564,11 +564,13 @@
                     element.files.splice(i, 1);
                     console.log(element.files);
                     alert('mengahpus ' + value);
-                    populate_file(div_id, element.files)
+                    populate_file(div_id, element.files);
                     break;
                 }
             }
             return false;
         }
         document.title="Pekerjaan Saya - Task Management";
+        $('#submenu_pekerjaan').attr('class','dcjq-parent active');
+        //$('#submenu_pekerjaan_ul').css('display','block');
     </script>

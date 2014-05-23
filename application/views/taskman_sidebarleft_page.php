@@ -19,11 +19,11 @@
                     </ul>
                 </li>
                 <li class="sub-menu">
-                    <a href="javascript:;">
-                        <i class="fa fa-book"></i>
+                    <a href="javascript:;" id="submenu_pekerjaan">
+                        <i class="fa fa-book" ></i>
                         <span>Pekerjaan</span>
                     </a>
-                    <ul class="sub">
+                    <ul class="sub" id="submenu_pekerjaan_ul">
                         <li class="sub-menu">
                             <a href="<?php echo site_url(); ?>/pekerjaan/pengaduan">
                                 <i class="fa fa-book"></i>
