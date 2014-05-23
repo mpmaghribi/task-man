@@ -20,64 +20,129 @@
                                         <a data-toggle="tab" href="#PekerjaanStaff">Pekerjaan Staff</a>
                                     </li>
                                     <li class="">
-                                        <a data-toggle="tab" href="#AssignPekerjaan">Assign Pekerjaan</a>
+                                        <a data-toggle="tab" href="#assignPekerjaan">Assign Pekerjaan</a>
                                     </li>
                                 </ul>
                             </header>
                             <div class="panel-body">
                                 <div class="tab-content">
+                                    <div id="assignPekerjaan" class="tab-pane">
+                                        <div class="form">
+                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo base_url() ?>pekerjaan/do_edit" enctype="multipart/form-data">
+                                                <div class="form-group ">
+                                                    <label for="staff" class="control-label col-lg-3">Staff</label>
+                                                    <div class="col-lg-6">
+                                                        <div id="span_list_assign_staff">
+                                                            
+                                                        </div>
+                                                        <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff();">Tambah Staff</a>
+                                                        <input type="hidden" value="::" name="staff" id="staff"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group ">
+                                                    <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="sifat_pkj" class="form-control m-bot15">
+                                                            <option value="1" >Personal</option>
+                                                            <option value="2" >Umum</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <input class=" form-control" id="firstname" name="nama_pkj" type="text" value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
+                                                    <div class="col-lg-6">
+                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="deadline" class="control-label col-lg-3">Deadline</label>
+                                                    <div class="col-lg-6 ">
+                                                        <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
+                                                            <input id="d" readonly type="text" class="form-control dpd1" value="" name="tgl_mulai_pkj">
+                                                            <span class="input-group-addon">Sampai</span>
+                                                            <input readonly type="text" class="form-control dpd2" value="" name="tgl_selesai_pkj">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="prioritas" class="form-control m-bot15">
+                                                            <option value="1" >Urgent</option>
+                                                            <option value="2" >Tinggi</option>
+                                                            <option value="3" >Sedang</option>
+                                                            <option value="4" >Rendah</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">File</label>
+                                                    <div class="col-lg-6">
+                                                        <div id="list_file_upload_assign">
+                                                        </div>
+                                                        <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-lg-offset-3 col-lg-6">
+                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>                                            
+                                    </div>
                                     <div id="PekerjaanStaff" class="tab-pane active">
                                         <section class="panel">
                                             <header class="panel-heading">
-                                                Daftar Pekerjaan yang Saya Kerjakan
+                                                Daftar Staff
                                             </header>
                                             <div class="panel-body">
-                                    
-                                    
-                                <div class="form">
-                                    <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_staff">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th class="hidden-phone">NIP Staff</th>
-                                                <th class="hidden-phone">Nama Staff</th>
-                                                <th class="hidden-phone">Jabatan Staff</th>
-                                                <th class="hidden-phone">Departemen</th>
-                                                <th class="hidden-phone">Email Staff</th>
-                                                <th style="text-align: right"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            if (isset($my_staff)) {
-                                                //var_dump($my_staff);
-                                                $counter = 0;
-                                                foreach ($my_staff as $staff) {
-                                                    $counter++;
-                                                    echo '<tr>';
-                                                    echo '<td >' . $counter . '</td>';
-                                                    echo '<td>' . $staff->nip . '</td>';
-                                                    echo '<td>' . $staff->nama . '</td>';
-                                                    echo '<td>' . $staff->nama_jabatan . '</td>';
-                                                    echo '<td>' . $staff->nama_departemen. '</td>';
-                                                    echo '<td>' . $staff->email . '</td>';
-                                                    echo '<td ><form method="get" action="' . base_url() . 'pekerjaan/pekerjaan_per_staff"><input type="hidden" name="id_akun" value="' . $staff->id_akun . '"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>';
-                                                    echo '</tr>';
-                                                }
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                <div class="form">
+                                                    <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_staff">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th class="hidden-phone">NIP Staff</th>
+                                                                <th class="hidden-phone">Nama Staff</th>
+                                                                <th class="hidden-phone">Jabatan Staff</th>
+                                                                <th class="hidden-phone">Departemen</th>
+                                                                <th class="hidden-phone">Email Staff</th>
+                                                                <th style="text-align: right"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php
+                                                            if (isset($my_staff)) {
+                                                                //var_dump($my_staff);
+                                                                $counter = 0;
+                                                                foreach ($my_staff as $staff) {
+                                                                    $counter++;
+                                                                    echo '<tr>';
+                                                                    echo '<td >' . $counter . '</td>';
+                                                                    echo '<td>' . $staff->nip . '</td>';
+                                                                    echo '<td>' . $staff->nama . '</td>';
+                                                                    echo '<td>' . $staff->nama_jabatan . '</td>';
+                                                                    echo '<td>' . $staff->nama_departemen . '</td>';
+                                                                    echo '<td>' . $staff->email . '</td>';
+                                                                    echo '<td ><form method="get" action="' . base_url() . 'pekerjaan/pekerjaan_per_staff"><input type="hidden" name="id_akun" value="' . $staff->id_akun . '"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>';
+                                                                    echo '</tr>';
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </section>
                                     </div>
-                                    
-                                    
-                                    
-                                    
-                                    
-                            </div>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -90,12 +155,12 @@
         <!--right sidebar start-->
         <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
 
-                <!-- END JAVASCRIPTS -->
-                <script>
-                    jQuery(document).ready(function() {
-                        EditableTableProgress.init();
-                    });
-                </script>
+        <!-- END JAVASCRIPTS -->
+        <script>
+            jQuery(document).ready(function() {
+                EditableTableProgress.init();
+            });
+        </script>
         <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
@@ -259,5 +324,5 @@
         }
         get_data_pekerjaan_staff();
         document.title = "Daftar Pekerjaan Staff - Task Management";
-        $('#submenu_pekerjaan').attr('class','dcjq-parent active');
+        $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     </script>
