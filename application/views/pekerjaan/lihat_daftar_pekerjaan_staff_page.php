@@ -28,7 +28,7 @@
                                 <div class="tab-content">
                                     <div id="assignPekerjaan" class="tab-pane">
                                         <div class="form">
-                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo base_url() ?>pekerjaan/do_edit" enctype="multipart/form-data">
+                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo base_url() ?>pekerjaan/usulan_pekerjaan2" enctype="multipart/form-data">
                                                 <div class="form-group ">
                                                     <label for="staff" class="control-label col-lg-3">Staff</label>
                                                     <div class="col-lg-6">
