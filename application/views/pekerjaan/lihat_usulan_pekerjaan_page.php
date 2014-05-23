@@ -105,6 +105,7 @@
 
     </section>
 <?php $this->load->view("taskman_footer_page") ?>
+    <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
     <script>
         var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
         var list_id_staff = [];
@@ -191,10 +192,5 @@
             });
         }
         get_data_usulan_pekerjaan();
-    </script>
-    <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
-    <script>
-//jQuery(document).ready(function() {
-//EditableTableProgress.init();
-//});
+        $('#submenu_pekerjaan').attr('class','dcjq-parent active');
     </script>

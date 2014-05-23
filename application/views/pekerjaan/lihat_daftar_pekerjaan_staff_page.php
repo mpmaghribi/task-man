@@ -1,12 +1,10 @@
 <?php $this->load->view("taskman_header_page") ?> 
 <body>
-
     <section id="container" >
         <!--header start-->
         <?php $this->load->view("taskman_header2_page") ?>
         <!--header end-->
         <?php $this->load->view("taskman_sidebarleft_page") ?>
-
         <!--sidebar end-->
         <!--main content start-->
         <section id="main-content">
@@ -16,10 +14,26 @@
                 <div class="row">
                     <div class="col-md-12">
                         <section class="panel">
-                            <header class="panel-heading">
-                                Pekerjaan Staff
+                            <header class="panel-heading tab-bg-dark-navy-blue ">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#PekerjaanStaff">Pekerjaan Staff</a>
+                                    </li>
+                                    <li class="">
+                                        <a data-toggle="tab" href="#AssignPekerjaan">Assign Pekerjaan</a>
+                                    </li>
+                                </ul>
                             </header>
                             <div class="panel-body">
+                                <div class="tab-content">
+                                    <div id="PekerjaanStaff" class="tab-pane active">
+                                        <section class="panel">
+                                            <header class="panel-heading">
+                                                Daftar Pekerjaan yang Saya Kerjakan
+                                            </header>
+                                            <div class="panel-body">
+                                    
+                                    
                                 <div class="form">
                                     <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_staff">
                                         <thead>
@@ -55,6 +69,15 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    
+                                    
+                                    
+                                    
+                                    
+                            </div>
                             </div>
                         </section>
                     </div>
@@ -236,4 +259,5 @@
         }
         get_data_pekerjaan_staff();
         document.title = "Daftar Pekerjaan Staff - Task Management";
+        $('#submenu_pekerjaan').attr('class','dcjq-parent active');
     </script>

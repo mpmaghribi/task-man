@@ -18,7 +18,7 @@
                         <li><a href="<?php echo site_url() ?>/profil">Akun</a></li>
                     </ul>
                 </li>
-                <li class="sub-menu">
+                <li class="sub-menu" id="submenu_pekerjaan_li">
                     <a href="javascript:;" id="submenu_pekerjaan">
                         <i class="fa fa-book" ></i>
                         <span>Pekerjaan</span>

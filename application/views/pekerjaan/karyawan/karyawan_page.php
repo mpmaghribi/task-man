@@ -571,6 +571,7 @@
             return false;
         }
         document.title="Pekerjaan Saya - Task Management";
+        //$('#submenu_pekerjaan_li').click();
         $('#submenu_pekerjaan').attr('class','dcjq-parent active');
         //$('#submenu_pekerjaan_ul').css('display','block');
     </script>
