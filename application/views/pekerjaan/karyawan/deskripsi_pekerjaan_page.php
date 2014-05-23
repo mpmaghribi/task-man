@@ -370,8 +370,7 @@
                 }
             });
         });
-
-
+$('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     </script>
     <?php
     $this->load->view("taskman_footer_page");
