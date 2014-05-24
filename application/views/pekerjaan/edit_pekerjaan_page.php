@@ -196,8 +196,6 @@
         var list_id = [];
         var sudah_diproses = false;
         function query_staff() {
-            //var tubuh = $("#tabel_list_enroll_staff_body");
-            
             if (list_id.length === 0) {
                 $.ajax({// create an AJAX call...
                     data: "", // get the form data
