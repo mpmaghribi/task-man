@@ -49,6 +49,12 @@
                                 <span>Pekerjaan Staff</span>
                             </a>
                         </li>
+                        <li class="sub-menu">
+                            <a href="<?php echo site_url(); ?>/pekerjaan/draft_pekerjaan">
+                                <i class="fa fa-book"></i>
+                                <span>Draft Pekerjaan</span>
+                            </a>
+                        </li>
                         <?php } ?>
 <!--                        <li class="sub-menu">
                             <a href="javascript:;">

@@ -217,13 +217,13 @@ class pekerjaan extends ceklogin {
                     continue;
                 }
                 //echo "id akun akan dikenai pekerjaan $val ";
-                $id_akun = $this->akun->get_id_akun($val);
-                if ($id_akun == NULL) {
+                //$id_akun = $this->akun->get_id_akun($val);
+                //if ($id_akun == NULL) {
                     //echo "id akun tidak valid ";
-                    continue;
-                }
+                    //continue;
+                //}
                 //echo "akun valid ";
-                $this->pekerjaan_model->tambah_detil_pekerjaan($id_akun, $id_pekerjaan);
+                $this->pekerjaan_model->tambah_detil_pekerjaan($val, $id_pekerjaan);
                 //echo "id akun $id_akun mendapat pekerjaan $id_pekerjaan <br/>";
             }
 

@@ -71,63 +71,63 @@
                 <!--mini statistics start-->
                 <!--mini statistics end-->
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <section class="panel">
                             <header class="panel-heading">
                                 Daftar Pekerjaan
                             </header>
                             <div class="panel-body">
                                 <div class="form">
-                                <table class="table table-striped table-hover table-condensed" id="tabel_home">
-                                    <thead>
-                                        <tr>
-                                            <th> No</th>
-                                            <th class="hidden-phone">Pekerjaan</th>
-                                            <th>Deadline</th>
-                                            <th>Assign To</th>
-                                            <th>Status</th>
-                                            <th></th>
-<!--                                                            <th>Progress</th>-->
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php if (isset($pkj_karyawan)) { ?>
-                                            <?php
-                                            $i = 1;
-                                            foreach ($pkj_karyawan as $value) {
-                                                ?>
-                                                <tr>
-                                                    <td>
-                                                        <a href="#">
-                                                            <?php echo $i; ?>
-                                                        </a>
-                                                    </td>
-                                                    <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
-                                                    <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                    <td id="assign_to_<?php //echo $value->id_pekerjaan; ?>"><?php foreach ($users as $value2) { ?>
-                    <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
-                <?php } ?></td>
-                                                    <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
-                                                    <td>
-                                                        <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
-                                                            <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
-                                                            <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
-                                                        </form>
-                                                    </td>
-                                                </tr>
+                                    <table class="table table-striped table-hover table-condensed" id="tabel_home">
+                                        <thead>
+                                            <tr>
+                                                <th> No</th>
+                                                <th class="hidden-phone">Pekerjaan</th>
+                                                <th>Deadline</th>
+                                                <th>Assign To</th>
+                                                <th>Status</th>
+                                                <th></th>
+    <!--                                                            <th>Progress</th>-->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if (isset($pkj_karyawan)) { ?>
                                                 <?php
-                                                $i++;
-                                            }
-                                            ?>
-                                        <?php } ?>
+                                                $i = 1;
+                                                foreach ($pkj_karyawan as $value) {
+                                                    ?>
+                                                    <tr>
+                                                        <td>
+                                                            <a href="#">
+                                                                <?php echo $i; ?>
+                                                            </a>
+                                                        </td>
+                                                        <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
+                                                        <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
+                                                        <td id="assign_to_<?php //echo $value->id_pekerjaan;  ?>"><?php foreach ($users as $value2) { ?>
+                                                                <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
+                                                            <?php } ?></td>
+                                                        <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
+                                                        <td>
+                                                            <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
+                                                                <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
+                                                                <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                    <?php
+                                                    $i++;
+                                                }
+                                                ?>
+                                            <?php } ?>
 
-                                    </tbody>
-                                </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </section>
                     </div>
-                    <div class="col-md-4">
+                    <!--div class="col-md-4">
                         <div class="profile-nav alt">
                             <section class="panel">
                                 <div class="user-heading alt clock-row terques-bg">
@@ -141,11 +141,11 @@
                                 </ul>
                             </section>
                         </div>
-                    </div>
+                    </div-->
                 </div>
             </section>
         </section>
-        
+
         <!--main content end-->
         <!--right sidebar start-->
         <?php $this->load->view('taskman_rightbar_page') ?>
@@ -235,13 +235,13 @@ if (isset($pkj_karyawan)) {
                 }
             }
         }
-document.title="DashBoard - Task Management";
+        document.title = "DashBoard - Task Management";
     </script>
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
 
-                <!-- END JAVASCRIPTS -->
-                <script>
-                    jQuery(document).ready(function() {
-                        EditableTableProgress.init();
-                    });
-                </script>
+    <!-- END JAVASCRIPTS -->
+    <script>
+jQuery(document).ready(function() {
+EditableTableProgress.init();
+});
+    </script>
