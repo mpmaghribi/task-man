@@ -33,6 +33,11 @@ class testing extends CI_Controller {
                var_dump($row);
            }
         }
+        public function session(){
+            $session = $this->session->userdata('logged_in');
+            var_dump($session);
+            print_r($session);
+        }
 }
 
 /* End of file welcome.php */

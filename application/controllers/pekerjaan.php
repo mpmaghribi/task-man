@@ -593,6 +593,10 @@ class pekerjaan extends ceklogin {
 //        }
     }
 
+    public function draft_pekerjaan(){
+        
+    }
+    
     public function edit() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
         $temp = $this->session->userdata('logged_in');
