@@ -19,7 +19,6 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#PekerjaanStaff">Pekerjaan Staff</a>
                                     </li>
-                                    
                                     <li class="">
                                         <a data-toggle="tab" href="#assignPekerjaan">Assign Pekerjaan</a>
                                     </li>
