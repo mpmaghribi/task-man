@@ -15,8 +15,8 @@
                 <label for="kategori" class="control-label col-lg-3">Kategori</label>
                 <div class="col-lg-6">
                     <select name="kategori" class="form-control m-bot15">
-                        <option value="1">Rutin</option>
-                        <option value="2">Project</option>
+                        <option value="rutin">Rutin</option>
+                        <option value="project">Project</option>
                     </select>
                 </div>
             </div>

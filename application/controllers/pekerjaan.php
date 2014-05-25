@@ -193,33 +193,44 @@ class pekerjaan extends ceklogin {
     public function usulan_pekerjaan2() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
         $temp = $this->session->userdata('logged_in');
-        $data['data_akun'] = $this->session->userdata('logged_in');
-        $pekerjaan['id_sifat_pekerjaan'] = pg_escape_string($this->input->post('sifat_pkj'));
-        $pekerjaan['parent_pekerjaan'] = 0;
-        $pekerjaan['nama_pekerjaan'] = pg_escape_string($this->input->post('sifat_pkj'));
-        $pekerjaan['deskripsi_pekerjaan'] = pg_escape_string($this->input->post('deskripsi_pkj'));
-        $pekerjaan['tgl_mulai'] = pg_escape_string($this->input->post('tgl_mulai_pkj'));
-        $pekerjaan['tgl_selesai'] = pg_escape_string($this->input->post('tgl_selesai_pkj'));
-        $pekerjaan['asal_pekerjaan'] = 'task management';
-        $pekerjaan['level_prioritas'] = pg_escape_string($this->input->post('prioritas'));
+//        $data['data_akun'] = $this->session->userdata('logged_in');
+//        $pekerjaan['id_sifat_pekerjaan'] = pg_escape_string($this->input->post('sifat_pkj'));
+//        $pekerjaan['parent_pekerjaan'] = 0;
+//        $pekerjaan['nama_pekerjaan'] = pg_escape_string($this->input->post('sifat_pkj'));
+//        $pekerjaan['deskripsi_pekerjaan'] = pg_escape_string($this->input->post('deskripsi_pkj'));
+//        $pekerjaan['tgl_mulai'] = pg_escape_string($this->input->post('tgl_mulai_pkj'));
+//        $pekerjaan['tgl_selesai'] = pg_escape_string($this->input->post('tgl_selesai_pkj'));
+//        $pekerjaan['asal_pekerjaan'] = 'task management';
+//        $pekerjaan['level_prioritas'] = pg_escape_string($this->input->post('prioritas'));
 
 
 
-//        $sifat_pkj = $this->input->post('sifat_pkj');
-//        $parent_pkj = 0; //$this->input->post('parent_pkj');
-//        $nama_pkj = $this->input->post('nama_pkj');
-//        $deskripsi_pkj = $this->input->post('deskripsi_pkj');
-//        $tgl_mulai_pkj = $this->input->post('tgl_mulai_pkj');
-//        $tgl_selesai_pkj = $this->input->post('tgl_selesai_pkj');
-//        $prioritas = $this->input->post('prioritas');
-//        $status_pkj = '2';
-//        $asal_pkj = 'task management';
+        $sifat_pkj = $this->input->post('sifat_pkj');
+        $parent_pkj = 0; 
+        $nama_pkj = $this->input->post('nama_pkj');
+        $deskripsi_pkj = $this->input->post('deskripsi_pkj');
+        $tgl_mulai_pkj = $this->input->post('tgl_mulai_pkj');
+        $tgl_selesai_pkj = $this->input->post('tgl_selesai_pkj');
+        $prioritas = $this->input->post('prioritas');
+        $status_pkj = '2';
+        $asal_pkj = 'task management';
+        $kategori = pg_escape_string(strtolower($this->input->post('kategori')));
+        
+        
+        if(!($kategori=='project' || $kategori=='rutin')){
+            $kategori=null;
+        }
         
         
         $list_staff = $this->input->post("staff");
         $jenis_usulan = $this->input->post('jenis_usulan');
+        
+        $lempar = 'pekerjaan/pekerjaan_staff';
         if (!($jenis_usulan == 'draft' || $jenis_usulan == 'usulan')) {
             $jenis_usulan = 'usulan';
+        }
+        if($jenis_usulan=='draft'){
+            $lempar = 'pekerjaan/draft_pekerjaan';
         }
 
 
@@ -238,13 +249,13 @@ class pekerjaan extends ceklogin {
             $status_pkj = '5';
         }
         
-        $pekerjaan['asal_pekerjaan'] = $status_pkj;
+        //$pekerjaan['asal_pekerjaan'] = $status_pkj;
         //var_dump($staff);
         $this->load->model("akun");
         $this->load->model("pekerjaan_model");
-        $my_staff = $this->akun->my_staff();
+        $my_staff = $this->akun->my_staff($temp['user_id']);
         //var_dump($staff);
-        $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
+        $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj,$kategori);
         if ($id_pekerjaan != NULL) {
             if ($jenis_usulan == 'usulan') {
                 foreach ($staff as $index => $val) {//val itu nip
@@ -275,8 +286,9 @@ class pekerjaan extends ceklogin {
                 $this->upload_file($files, $path, $id_pekerjaan);
             }
             $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja memberikan pekerjaan kepada staffnya.");
+            $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'],$id_pekerjaan);
         }
-        redirect('pekerjaan/karyawan');
+        redirect($lempar);
 //        } else {
 //            $this->session->set_flashdata('status', 4);
 //            redirect("login");
@@ -686,7 +698,14 @@ class pekerjaan extends ceklogin {
 
     public function draft_pekerjaan() {
         $session = $this->session->userdata('logged_in');
-        $this->load->view('pekerjaan/draft/body', array('data_akun' => $session));
+        $this->load->model(array('pekerjaan_model','akun'));
+        $my_staff=$this->akun->my_staff($session['user_id']);
+        $staff_=array();
+        foreach($my_staff as $s){
+            $staff_[]=$s->id_akun;
+        }
+        $list_draft=$this->pekerjaan_model->get_list_draft($staff_);
+        $this->load->view('pekerjaan/draft/body', array('data_akun' => $session,'list_draft'=>$list_draft));
     }
 
     public function edit() {

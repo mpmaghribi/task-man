@@ -28,7 +28,7 @@
                                 echo '<td>' . $draft->nama_pekerjaan . '</td>';
                                 echo '<td>' . $draft->tgl_mulai . ' - '. $draft->tgl_selesai . '</td>';
                                 echo '<td>' . $prioritas[$draft->level_prioritas] . '</td>';
-                                echo '<td><form method="get" action="' . base_url() . 'pekerjaan/pekerjaan_per_staff"><input type="hidden" name="id_akun" value="' . $staff->id_akun . '"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>';
+                                echo '<td></td>';
                                 echo '</tr>';
                             }
                         }

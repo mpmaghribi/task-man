@@ -29,7 +29,10 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
-
+    public function isi_pemberi_pekerjaan($user_id,$id_pekerjaan) {
+        $queri ="insert into pemberi pekerjaan (id_pekerjaan, id_akun) values ('$id_pekerjaan','$user_id')";
+        return $this->db->query($queri);
+    }
     public function list_pekerjaan($id_akun) {
         $id_akun = pg_escape_string($id_akun);
         $query = "select detil_pekerjaan.id_akun, pekerjaan.*, pekerjaan.tgl_selesai"
@@ -55,7 +58,7 @@ class pekerjaan_model extends CI_Model {
         return $query->result();
     }
 
-    public function usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj) {
+    public function usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj,$kategori) {
         $sifat_pkj = pg_escape_string($sifat_pkj);
         $deskripsi_pkj = pg_escape_string($deskripsi_pkj);
         $prioritas = pg_escape_string($prioritas);
@@ -67,10 +70,10 @@ class pekerjaan_model extends CI_Model {
         $nama_pkj = pg_escape_string($nama_pkj);
         $query1 = "insert into pekerjaan (id_sifat_pekerjaan, parent_pekerjaan, "
                 . "nama_pekerjaan, deskripsi_pekerjaan, tgl_mulai, tgl_selesai, asal_pekerjaan, "
-                . "level_prioritas, flag_usulan)"
+                . "level_prioritas, flag_usulan, kategori)"
                 . " values ('$sifat_pkj', '$parent_pkj', '$nama_pkj', "
                 . "'$deskripsi_pkj', to_date('$tgl_mulai_pkj', 'DD-MM-YYYY'), to_date('$tgl_selesai_pkj', 'DD-MM-YYYY'), "
-                . "'$asal_pkj','$prioritas', '$status_pkj');";
+                . "'$asal_pkj','$prioritas', '$status_pkj','$kategori');";
         $query2 = $this->db->query($query1);
         if ($query2 === true) {
             $query1 = "select currval('tbl_pekerjaan_id') as id_baru";
@@ -84,7 +87,7 @@ class pekerjaan_model extends CI_Model {
         return NULL;
     }
     public function usul_pekerjaan2($data){
-        $this->db->insert('pekerjaan',$data);
+        $pekerjaan=$this->db->insert('pekerjaan',$data);
     }
 
     public function tambah_detil_pekerjaan($id_akun, $id_pekerjaan) {
@@ -158,7 +161,11 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
-
+    public function get_list_draft() {
+        $query = "select * from pekerjaan where flag_usulan='5'";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
     public function get_list_usulan_pekerjaan($list_id_akun) {
         if (count($list_id_akun) == 0)
             return NULL;
@@ -280,7 +287,8 @@ class pekerjaan_model extends CI_Model {
     public function batalkan_task($id_pekerjaan, $staffku) {
         $query = "update detil_pekerjaan set status='Batal' where id_pekerjaan='$id_pekerjaan' and "
                 . "id_akun in (" . implode(",", $staffku) . ")";
-        return $this->db->query($query);
+        $query2 = "update pekerjaan set flag_usulan='3' where id_pekerjaan='$id_pekerjaan'";
+        return $this->db->query($query) && $this->db->query($query2);
     }
 
 }

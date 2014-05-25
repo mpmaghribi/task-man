@@ -68,7 +68,6 @@
                                                         <input type="hidden" value="::" name="staff" id="staff"/>
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                     <div class="col-lg-6">
@@ -78,6 +77,15 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="form-group ">
+                <label for="kategori" class="control-label col-lg-3">Kategori</label>
+                <div class="col-lg-6">
+                    <select name="kategori" class="form-control m-bot15">
+                        <option value="rutin">Rutin</option>
+                        <option value="project">Project</option>
+                    </select>
+                </div>
+            </div>
                                                 <div class="form-group ">
                                                     <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
                                                     <div class="col-lg-6">
