@@ -99,7 +99,7 @@
             });
         }
         
-        document.title = "Daftar Pekerjaan Staff - Task Management";
+        document.title = "Draft Pekerjaan - Task Management";
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
         var list_nip = [];
         var list_nama = [];

@@ -1,12 +1,22 @@
 <div id="div_create_draft" class="tab-pane">
-    <div class="form">
+    <div class="form" style="">
         <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo base_url() ?>pekerjaan/usulan_pekerjaan2" enctype="multipart/form-data">
+            <input type="hidden" name="jenis_usulan" value="draft"/>
             <div class="form-group ">
                 <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                 <div class="col-lg-6">
                     <select name="sifat_pkj" class="form-control m-bot15">
                         <option value="1" >Personal</option>
                         <option value="2" >Umum</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="kategori" class="control-label col-lg-3">Kategori</label>
+                <div class="col-lg-6">
+                    <select name="kategori" class="form-control m-bot15">
+                        <option value="1">Rutin</option>
+                        <option value="2">Project</option>
                     </select>
                 </div>
             </div>

@@ -230,7 +230,7 @@
                                     <div id="TambahPekerjaan" class="tab-pane">
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan" enctype="multipart/form-data">
-
+<input type="hidden" name="jenis_usulan" value="usulan"/>
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                     <div class="col-lg-6">
