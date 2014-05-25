@@ -17,7 +17,12 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
-
+public function cek_pemberi_pekerjaan($id_pekerjaan){
+    $query = "select * from pemberi_pekerjaan where id_pekerjaan='$id_pekerjaan'";
+    $query = $this->db->query($query);
+    return $query->result();
+}
+    
     public function finishtask($id_akun) {
         $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "where status = 'finished'";
         $query = $this->db->query($query);

@@ -26,5 +26,14 @@ class berkas_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
+    public function get_berkas($id_file){
+        $query = "select * from file where id_file=$id_file";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    public function hapus_file($id_file){
+        $query = "delete from file where id_file='$id_file'";
+        return $this->db->query($query);
+    }
 }
 ?>
