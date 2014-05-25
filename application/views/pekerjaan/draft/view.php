@@ -1,7 +1,7 @@
 <div id="div_view_draft" class="tab-pane active">
     <section class="panel">
         <header class="panel-heading">
-            Daftar Staff
+            Daftar Draft Pekerjaan
         </header>
         <div class="panel-body">
             <div class="form">
@@ -9,29 +9,26 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th class="hidden-phone">NIP Staff</th>
-                            <th class="hidden-phone">Nama Staff</th>
-                            <th class="hidden-phone">Jabatan Staff</th>
-                            <th class="hidden-phone">Departemen</th>
-                            <th class="hidden-phone">Email Staff</th>
+                            <th class="hidden-phone">Nama Pekerjaan</th>
+                            <th class="hidden-phone">Waktu Pekerjaan</th>
+                            <th class="hidden-phone">Prioritas</th>
                             <th style="text-align: right"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        if (isset($my_staff)) {
+                        if (isset($list_draft)) {
+                            $prioritas = array(1=>'Urgent',2=>'Tinggi',3=>'Sedang',4=>'Rendah');
                             //var_dump($my_staff);
                             $counter = 0;
-                            foreach ($my_staff as $staff) {
+                            foreach ($list_draft as $draft) {
                                 $counter++;
                                 echo '<tr>';
                                 echo '<td >' . $counter . '</td>';
-                                echo '<td>' . $staff->nip . '</td>';
-                                echo '<td>' . $staff->nama . '</td>';
-                                echo '<td>' . $staff->nama_jabatan . '</td>';
-                                echo '<td>' . $staff->nama_departemen . '</td>';
-                                echo '<td>' . $staff->email . '</td>';
-                                echo '<td ><form method="get" action="' . base_url() . 'pekerjaan/pekerjaan_per_staff"><input type="hidden" name="id_akun" value="' . $staff->id_akun . '"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>';
+                                echo '<td>' . $draft->nama_pekerjaan . '</td>';
+                                echo '<td>' . $draft->tgl_mulai . ' - '. $draft->tgl_selesai . '</td>';
+                                echo '<td>' . $prioritas[$draft->level_prioritas] . '</td>';
+                                echo '<td><form method="get" action="' . base_url() . 'pekerjaan/pekerjaan_per_staff"><input type="hidden" name="id_akun" value="' . $staff->id_akun . '"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>';
                                 echo '</tr>';
                             }
                         }
