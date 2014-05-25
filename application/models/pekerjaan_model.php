@@ -83,6 +83,9 @@ class pekerjaan_model extends CI_Model {
         //echo $query1;
         return NULL;
     }
+    public function usul_pekerjaan2($data){
+        $this->db->insert('pekerjaan',$data);
+    }
 
     public function tambah_detil_pekerjaan($id_akun, $id_pekerjaan) {
         $query = "insert into detil_pekerjaan(id_akun, id_pekerjaan, "
