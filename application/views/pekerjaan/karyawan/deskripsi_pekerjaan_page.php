@@ -147,7 +147,7 @@
                                                                     <tr>
                                                                         <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td id="nama_staff_<?php //echo $value->id_akun;   ?>"><?php //echo $value->id_akun;   ?><?php foreach ($users as $value2) { ?>
+                                                                        <td id="nama_staff_<?php //echo $value->id_akun;      ?>"><?php //echo $value->id_akun;      ?><?php foreach ($users as $value2) { ?>
                                                                                 <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                                                                             <?php } ?></td>
                                                                         <td>
@@ -181,7 +181,7 @@
                                         </div>
                                     <?php } ?>
                                     <div class="panel-body">
-                                        <form class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()   ?>/pekerjaan/usulan_pekerjaan">
+                                        <form class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()      ?>/pekerjaan/usulan_pekerjaan">
                                             <div class="form-group">
                                                 <div class="col-lg-12">
                                                     <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -191,7 +191,7 @@
                                         <div id="box_komentar" style="display: <?php echo $display ?>">
                                             <div class="form">
 
-                                                <form class="cmxform form-horizontal " id="signupForm" method="post" action="#<?php //echo $_SERVER['REQUEST_URI'];   ?>">
+                                                <form class="cmxform form-horizontal " id="signupForm" method="post" action="#<?php //echo $_SERVER['REQUEST_URI'];      ?>">
                                                     <?php //echo $_SERVER['REQUEST_URI']; ?>
                                                     <input type="hidden" id="is_isi_komentar" name="is_isi_komentar" value="true"/>
                                                     <input type="hidden" id="id_detail_pkj" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
@@ -374,84 +374,100 @@
     </script>
     <?php
     $this->load->view("taskman_footer_page");
-    if ($data_akun['jmlstaff'] > 0) {
-        ?>
-        <script>
-            function validasi(id_pekerjaan) {
-                //alert("pekerjaan yg divalidasi " + id_pekerjaan);
-                $.ajax({// create an AJAX call...
-                    data: "id_pekerjaan=" + id_pekerjaan, // get the form data
-                    type: "POST", // GET or POST
-                    url: "<?php echo site_url(); ?>/pekerjaan/validasi_usulan", // the file to call
-                    success: function(response) { // on success..
-                        var json = jQuery.parseJSON(response);
-                        //alert(response);
-                        if (json.status === "OK") {
-                            //$('#div_acc_edit_cancel_usulan_pekerjaan').remove();
-                            $('#tombol_validasi_usulan').remove();
-                        } else {
-                            alert("validasi gagal, " + json.reason);
-                        }
-                    }
-                });
-            }
-            function get_status_usulan(id_pekerjaan) {
-                $.ajax({// create an AJAX call...
-                    data: "id_pekerjaan=" + id_pekerjaan, // get the form data
-                    type: "GET", // GET or POST
-                    url: "<?php echo site_url(); ?>/pekerjaan/get_status_usulan", // the file to call
-                    success: function(response) { // on success..
-                        var json = jQuery.parseJSON(response);
-                        //alert(response);
-                        if (json.status === "OK") {
-                            $('#div_acc_edit_cancel_usulan_pekerjaan').css("display", "block");
-                            if (json.data === "1") {
-                                $('#tombol_validasi_usulan').css('display','block');
-                                $('#tombol_validasi_usulan').attr("onclick", 'validasi(' + id_pekerjaan + ');');
-                            } else if (json.data === "2") {
-                                $('#tombol_validasi_usulan').remove();
-                            }
-                            $('#tombol_batalkan_usulan').attr("onclick", '');
-                            $('#tombol_edit_usulan').attr("href", '<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=' + id_pekerjaan);
-                        } else {
-                            $('#div_acc_edit_cancel_usulan_pekerjaan').remove();
-                        }
-                    }
-                });
-            }
-            $('#tombol_validasi_usulan').click(function(event) {
-                event.preventDefault();
-            });
-            $('#tombol_batalkan_usulan').click(function(event) {
-                event.preventDefault();
-            });
-            get_status_usulan(<?php if (isset($id_pkj)) echo $id_pkj; ?>);
-            var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
-            console.log(my_staff);
-            var jumlah_staff = my_staff.length;
-            var list_id_akun_detil_pekerjaan = [];
-    <?php foreach ($listassign_pekerjaan as $detil) { ?>list_id_akun_detil_pekerjaan.push('<?php echo $detil->id_akun; ?>');<?php } ?>
-            var jumlah_id_akun_detil_pekerjaan = list_id_akun_detil_pekerjaan.length;
-            for (var i = 0; i < jumlah_id_akun_detil_pekerjaan; i++) {
-                var nama = "";
-                var id_akun = list_id_akun_detil_pekerjaan[i];
-                //alert('id akun = ' + id_akun);
-                if (id_akun === '<?php echo $temp["user_id"]; ?>') {
-                    nama = '<?php echo $temp["nama"]; ?>';
-                } else {
-                    for (var j = 0; j < jumlah_staff; j++) {
-                        //alert('id staff = ' + my_staff[j]["id_akun"]);
-                        if (id_akun === my_staff[j]["id_akun"]) {
-                            nama = my_staff[j]["nama"];
-                            break;
-                        }
+    ?>
+    <script>
+        function validasi(id_pekerjaan) {
+            //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+            $.ajax({// create an AJAX call...
+                data: "id_pekerjaan=" + id_pekerjaan, // get the form data
+                type: "POST", // GET or POST
+                url: "<?php echo site_url(); ?>/pekerjaan/validasi_usulan", // the file to call
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+                    //alert(response);
+                    if (json.status === "OK") {
+                        //$('#div_acc_edit_cancel_usulan_pekerjaan').remove();
+                        $('#tombol_validasi_usulan').remove();
+                    } else {
+                        alert("validasi gagal, " + json.reason);
                     }
                 }
-                $('#nama_staff_' + id_akun).html(nama);
-                $('#komentar_nama_' + id_akun).html(nama);
+            });
+        }
+        function batalkan_pekerjaan(id_pekerjaan) {
+            $.ajax({// create an AJAX call...
+                data: "id_pekerjaan=::" + id_pekerjaan + "::", // get the form data
+                type: "GET", // GET or POST
+                url: "<?php echo site_url(); ?>/pekerjaan/batalkan_pekerjaan", // the file to call
+                success: function(response) { // on success..
+                    //var json = jQuery.parseJSON(response);
+                    //alert(response);
+                    //if (json.status === "OK") {
+                        <?php if ($this->session->userdata('prev')!=null){ ?>
+                            var url = '<?php echo base_url(); ?>pekerjaan/<?php echo $this->session->userdata('prev'); ?>';
+                            //alert('redirect to ' + url);
+                            window.location=url;
+                        <?php } ?>
+                    //}
+                }
+            });
+        }
+        function get_status_usulan(id_pekerjaan) {
+            $.ajax({// create an AJAX call...
+                data: "id_pekerjaan=" + id_pekerjaan, // get the form data
+                type: "GET", // GET or POST
+                url: "<?php echo site_url(); ?>/pekerjaan/get_status_usulan", // the file to call
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+                    //alert(response);
+                    if (json.status === "OK") {
+                        $('#div_acc_edit_cancel_usulan_pekerjaan').css("display", "block");
+                        if (json.data === "1") {
+                            $('#tombol_validasi_usulan').css('display', 'block');
+                            $('#tombol_validasi_usulan').attr("onclick", 'validasi(' + id_pekerjaan + ');');
+                        } else if (json.data === "2") {
+                            $('#tombol_validasi_usulan').remove();
+                        }
+                        $('#tombol_batalkan_usulan').attr("onclick", 'batalkan_pekerjaan(' + id_pekerjaan + ');');
+                        $('#tombol_edit_usulan').attr("href", '<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=' + id_pekerjaan);
+                    } else {
+                        $('#div_acc_edit_cancel_usulan_pekerjaan').remove();
+                    }
+                }
+            });
+        }
+        $('#tombol_validasi_usulan').click(function(event) {
+            event.preventDefault();
+        });
+        $('#tombol_batalkan_usulan').click(function(event) {
+            event.preventDefault();
+        });
+        get_status_usulan(<?php if (isset($id_pkj)) echo $id_pkj; ?>);
+        var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
+        console.log(my_staff);
+        var jumlah_staff = my_staff.length;
+        var list_id_akun_detil_pekerjaan = [];
+<?php foreach ($listassign_pekerjaan as $detil) { ?>list_id_akun_detil_pekerjaan.push('<?php echo $detil->id_akun; ?>');<?php } ?>
+        var jumlah_id_akun_detil_pekerjaan = list_id_akun_detil_pekerjaan.length;
+        for (var i = 0; i < jumlah_id_akun_detil_pekerjaan; i++) {
+            var nama = "";
+            var id_akun = list_id_akun_detil_pekerjaan[i];
+            //alert('id akun = ' + id_akun);
+            if (id_akun === '<?php echo $temp["user_id"]; ?>') {
+                nama = '<?php echo $temp["nama"]; ?>';
+            } else {
+                for (var j = 0; j < jumlah_staff; j++) {
+                    //alert('id staff = ' + my_staff[j]["id_akun"]);
+                    if (id_akun === my_staff[j]["id_akun"]) {
+                        nama = my_staff[j]["nama"];
+                        break;
+                    }
+                }
             }
-            document.title = 'Deskripsi Pekerjaan: <?php echo $nama_pekerjaan; ?> - Task Management';
-        </script>
-        <?php
-    }
-    ?>
+            $('#nama_staff_' + id_akun).html(nama);
+            $('#komentar_nama_' + id_akun).html(nama);
+        }
+        document.title = 'Deskripsi Pekerjaan: <?php echo $nama_pekerjaan; ?> - Task Management';
+
+    </script>
+

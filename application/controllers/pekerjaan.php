@@ -110,6 +110,7 @@ class pekerjaan extends ceklogin {
     }
 
     public function karyawan() {
+        $this->session->set_userdata('prev','karyawan');
         $this->load->model("pekerjaan_model");
         $this->load->model("akun");
         $temp = $this->session->userdata('logged_in');
@@ -434,6 +435,7 @@ class pekerjaan extends ceklogin {
     }
 
     public function lihat_usulan() {
+        $this->session->set_userdata('prev','lihat_usulan');
         $this->load->model(array("pekerjaan_model", "akun"));
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
@@ -496,6 +498,7 @@ class pekerjaan extends ceklogin {
         $session = $this->session->userdata('logged_in');
         $data["data_akun"] = $session;
         $id_staff = $this->input->get("id_akun");
+        $this->session->set_userdata('prev','pekerjaan_per_staff?id_akun='.$id_staff);
         $data["pekerjaan_staff"] = $this->pekerjaan_model->list_pekerjaan($id_staff);
         $data["my_staff"] = $this->akun->my_staff($session["user_id"]);
         $data["id_staff"] = $id_staff;
@@ -572,6 +575,7 @@ class pekerjaan extends ceklogin {
         }
         echo 'id pekerjaan ';
         print_r($id_pekerjaan);
+        echo json_encode(array('status'=>'OK'));
 //        $list_detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
 //        echo 'detil pekerjaan pekerjaan ';
 //        print_r($list_detil_pekerjaan);
