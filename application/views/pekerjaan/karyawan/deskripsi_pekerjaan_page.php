@@ -28,7 +28,7 @@
                                     <?php } ?>
                                 </ul>
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;display: none;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    <?php if ($temp["atasan"] == 0){?><a class="btn btn-success btn-xs" href="#" id="tombol_validasi_usulan" style="font-size: 10px">Validasi</a><?php }?>
+                                    <a class="btn btn-success btn-xs" href="#" id="tombol_validasi_usulan" style="font-size: 10px">Validasi</a>
                                     <a class="btn btn-info btn-xs" href="#" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-danger btn-xs" href="#" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                 </div>
@@ -108,7 +108,7 @@
                                                                     ?>
                                                                     <tr>
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td><?php echo basename($berkas->nama_file);?></td>
+                                                                        <td><?php echo basename($berkas->nama_file); ?></td>
                                                                         <td style="text-align: right">download hapus</td>
                                                                     </tr>
                                                                     <?php
@@ -147,7 +147,7 @@
                                                                     <tr>
                                                                         <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td id="nama_staff_<?php //echo $value->id_akun;  ?>"><?php //echo $value->id_akun;  ?><?php foreach ($users as $value2) { ?>
+                                                                        <td id="nama_staff_<?php //echo $value->id_akun;   ?>"><?php //echo $value->id_akun;   ?><?php foreach ($users as $value2) { ?>
                                                                                 <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                                                                             <?php } ?></td>
                                                                         <td>
@@ -181,7 +181,7 @@
                                         </div>
                                     <?php } ?>
                                     <div class="panel-body">
-                                        <form class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()  ?>/pekerjaan/usulan_pekerjaan">
+                                        <form class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()   ?>/pekerjaan/usulan_pekerjaan">
                                             <div class="form-group">
                                                 <div class="col-lg-12">
                                                     <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -191,7 +191,7 @@
                                         <div id="box_komentar" style="display: <?php echo $display ?>">
                                             <div class="form">
 
-                                                <form class="cmxform form-horizontal " id="signupForm" method="post" action="#<?php //echo $_SERVER['REQUEST_URI'];  ?>">
+                                                <form class="cmxform form-horizontal " id="signupForm" method="post" action="#<?php //echo $_SERVER['REQUEST_URI'];   ?>">
                                                     <?php //echo $_SERVER['REQUEST_URI']; ?>
                                                     <input type="hidden" id="is_isi_komentar" name="is_isi_komentar" value="true"/>
                                                     <input type="hidden" id="id_detail_pkj" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
@@ -370,11 +370,10 @@
                 }
             });
         });
-$('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+        $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     </script>
     <?php
     $this->load->view("taskman_footer_page");
-
     if ($data_akun['jmlstaff'] > 0) {
         ?>
         <script>
@@ -405,17 +404,15 @@ $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
                         var json = jQuery.parseJSON(response);
                         //alert(response);
                         if (json.status === "OK") {
+                            $('#div_acc_edit_cancel_usulan_pekerjaan').css("display", "block");
                             if (json.data === "1") {
-                                $('#div_acc_edit_cancel_usulan_pekerjaan').css("display", "block");
-                                $('#tombol_edit_usulan').attr("href", '<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=' + id_pekerjaan);
+                                $('#tombol_validasi_usulan').css('display','block');
                                 $('#tombol_validasi_usulan').attr("onclick", 'validasi(' + id_pekerjaan + ');');
-                                $('#tombol_batalkan_usulan').attr("onclick", '');
-                            }else if (json.data === "2") {
-                                $('#div_acc_edit_cancel_usulan_pekerjaan').css("display", "block");
-                                $('#tombol_edit_usulan').attr("href", '<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=' + id_pekerjaan);
+                            } else if (json.data === "2") {
                                 $('#tombol_validasi_usulan').remove();
-                                $('#tombol_batalkan_usulan').attr("onclick", '');
                             }
+                            $('#tombol_batalkan_usulan').attr("onclick", '');
+                            $('#tombol_edit_usulan').attr("href", '<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=' + id_pekerjaan);
                         } else {
                             $('#div_acc_edit_cancel_usulan_pekerjaan').remove();
                         }
