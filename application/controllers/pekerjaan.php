@@ -648,7 +648,8 @@ class pekerjaan extends ceklogin {
     }
 
     public function draft_pekerjaan() {
-        
+        $session = $this->session->userdata('logged_in');
+        $this->load->view('pekerjaan/draft/body',array('data_akun'=>$session));
     }
 
     public function edit() {

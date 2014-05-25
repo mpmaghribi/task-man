@@ -1,0 +1,15 @@
+=oci=
+progress bar masalah
+download file belum
+rekam pekerjaan
+button to activity per pekerjaan, disamping progres bar
+clear comment box, after comment
+tampilka 5 komentar terbaru, trs ada link lihat komentar lainnya. (pagination / dll) 
+
+
+=zar=
+halaman edit pekerjaan, file pendukung belum
+kategori rutin / project
+tab di dashboard (saya, staff, draft)
+jam di ilangi
+submenu draft
