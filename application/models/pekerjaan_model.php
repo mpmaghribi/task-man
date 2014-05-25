@@ -5,35 +5,31 @@ class pekerjaan_model extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
-    
-    public function alltask($id_akun)
-    {
-        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun = ". pg_escape_string($id_akun)."";
+
+    public function alltask($id_akun) {
+        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "";
         $query = $this->db->query($query);
         return $query->result();
     }
-    
-    public function ongoingtask($id_akun)
-    {
-        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = ". pg_escape_string($id_akun)."where status = 'on-going'";
+
+    public function ongoingtask($id_akun) {
+        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "where status = 'on-going'";
         $query = $this->db->query($query);
         return $query->result();
     }
-    
-    public function finishtask($id_akun)
-    {
-        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = ". pg_escape_string($id_akun)."where status = 'finished'";
+
+    public function finishtask($id_akun) {
+        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "where status = 'finished'";
         $query = $this->db->query($query);
         return $query->result();
     }
-    
-    public function notworkingtask($id_akun)
-    {
-        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = ". pg_escape_string($id_akun)."where status = 'un-read'";
+
+    public function notworkingtask($id_akun) {
+        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "where status = 'un-read'";
         $query = $this->db->query($query);
         return $query->result();
     }
-    
+
     public function list_pekerjaan($id_akun) {
         $id_akun = pg_escape_string($id_akun);
         $query = "select detil_pekerjaan.id_akun, pekerjaan.*, pekerjaan.tgl_selesai"
@@ -108,7 +104,7 @@ class pekerjaan_model extends CI_Model {
                 . "on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan "
                 . "inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan "
                 . "= pekerjaan.id_sifat_pekerjaan inner join akun on akun.id_akun "
-                . "= detil_pekerjaan.id_akun where pekerjaan.id_pekerjaan = " . 
+                . "= detil_pekerjaan.id_akun where pekerjaan.id_pekerjaan = " .
                 $id_detail_pkj . " and akun.id_akun = " . $this->session->userdata('user_id') . ";";
         $query = $this->db->query($query);
         return $query->result();
@@ -137,14 +133,14 @@ class pekerjaan_model extends CI_Model {
         $query = "insert into komentar (id_akun, id_pekerjaan, isi_komentar, tgl_komentar, history_komentar) values ('" . $id_akun . "','" . $id_detail_pkj . "','" . $isi_komentar . "','now()','null');";
         $query = $this->db->query($query);
     }
-    
+
     public function sp_hapus_komentar_pekerjaan($id_komentar) {
-        $query = "delete from komentar where id_komentar = ".$id_komentar;
+        $query = "delete from komentar where id_komentar = " . $id_komentar;
         $query = $this->db->query($query);
     }
-    
+
     public function sp_ubah_komentar_pekerjaan($id_komentar, $isi_komen) {
-        $query = "update komentar set isi_komentar = '".$isi_komen."', tgl_komentar = now() where id_komentar = ".$id_komentar;
+        $query = "update komentar set isi_komentar = '" . $isi_komen . "', tgl_komentar = now() where id_komentar = " . $id_komentar;
         $query = $this->db->query($query);
     }
 
@@ -153,29 +149,29 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
-    
+
     public function sp_lihat_komentar_pekerjaan_by_id($id_komentar) {
-        $query = "select * from komentar where komentar.id_komentar = ".$id_komentar."  order by tgl_komentar DESC;";
+        $query = "select * from komentar where komentar.id_komentar = " . $id_komentar . "  order by tgl_komentar DESC;";
         $query = $this->db->query($query);
         return $query->result();
     }
 
     public function get_list_usulan_pekerjaan($list_id_akun) {
-        if (count($list_id_akun)==0)
+        if (count($list_id_akun) == 0)
             return NULL;
         $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan, pekerjaan.tgl_mulai, "
                 . "to_char(pekerjaan.tgl_mulai,'DD Mon YYYY') as tanggal_mulai, to_char(pekerjaan.tgl_selesai,'DD Mon YYYY') as tanggal_selesai, " .
                 "pekerjaan.tgl_selesai, pekerjaan.flag_usulan, pekerjaan.id_pekerjaan, detil_pekerjaan.id_akun " .
                 "from detil_pekerjaan " .
                 "inner join pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan " .
-                "where pekerjaan.flag_usulan='1' and detil_pekerjaan.status!='Batal' and id_akun in (".implode(",",  $list_id_akun).")";
+                "where pekerjaan.flag_usulan='1' and detil_pekerjaan.status!='Batal' and id_akun in (" . implode(",", $list_id_akun) . ")";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }
 
     public function validasi_pekerjaan($id_pekerjaan) {
-        $id_pekerjaan=  pg_escape_string($id_pekerjaan);
+        $id_pekerjaan = pg_escape_string($id_pekerjaan);
         $query = "update pekerjaan set flag_usulan=2 where id_pekerjaan=" . $id_pekerjaan;
         if ($this->db->query($query)) {
             $query = "update detil_pekerjaan set status='Belum Dibaca', tgl_read=null, tglasli_mulai=null, tglasli_selesai=null, skor=0, progress=0 where id_pekerjaan=$id_pekerjaan";
@@ -190,22 +186,22 @@ class pekerjaan_model extends CI_Model {
      */
 
     public function list_pekerjaan_staff($id_departemen) {
-        /*if ($id_departemen != NULL && strlen($id_departemen) > 0) {
-            $this->load->model("jabatan_model");
-            $id_jabatan_staff = $this->jabatan_model->get_id_jabatan("staff");
-            if ($id_jabatan_staff == NULL) {
-                return NULL;
-            }
-            $query = "select pekerjaan.*,detil_pekerjaan.progress,detil_pekerjaan.status, akun.nama, detil_pekerjaan.tgl_read, now() "
-                    . "as sekarang from pekerjaan left outer join detil_pekerjaan on pekerjaan.id_pekerjaan="
-                    . "detil_pekerjaan.id_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun"
-                    . " where akun."
-                    . "id_jabatan=$id_jabatan_staff and akun.id_departemen=$id_departemen"
-                    . " order by pekerjaan.id_pekerjaan desc";
-            //echo $query;
-            return $this->db->query($query)->result();
-        }
-        return NULL;*/
+        /* if ($id_departemen != NULL && strlen($id_departemen) > 0) {
+          $this->load->model("jabatan_model");
+          $id_jabatan_staff = $this->jabatan_model->get_id_jabatan("staff");
+          if ($id_jabatan_staff == NULL) {
+          return NULL;
+          }
+          $query = "select pekerjaan.*,detil_pekerjaan.progress,detil_pekerjaan.status, akun.nama, detil_pekerjaan.tgl_read, now() "
+          . "as sekarang from pekerjaan left outer join detil_pekerjaan on pekerjaan.id_pekerjaan="
+          . "detil_pekerjaan.id_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun"
+          . " where akun."
+          . "id_jabatan=$id_jabatan_staff and akun.id_departemen=$id_departemen"
+          . " order by pekerjaan.id_pekerjaan desc";
+          //echo $query;
+          return $this->db->query($query)->result();
+          }
+          return NULL; */
         $this->load->model("akun");
     }
 
@@ -229,7 +225,7 @@ class pekerjaan_model extends CI_Model {
                 strlen($id_user) > 0) {
             $query = "update detil_pekerjaan set tgl_read=now() where id_akun=$id_user and "
                     . "id_pekerjaan=$id_pekerjaan and tgl_read is null";
-            $query="update detil_pekerjaan set tgl_read=now(), status='Sudah Dibaca' "
+            $query = "update detil_pekerjaan set tgl_read=now(), status='Sudah Dibaca' "
                     . "from pekerjaan where id_akun=$id_user "
                     . "and pekerjaan.id_pekerjaan=$id_pekerjaan and tgl_read is null and "
                     . "pekerjaan.flag_usulan='2' and pekerjaan.id_pekerjaan = "
@@ -237,40 +233,53 @@ class pekerjaan_model extends CI_Model {
             $this->db->query($query);
         }
     }
-    public function get_status_usulan($id_pekerjaan ){
+
+    public function get_status_usulan($id_pekerjaan) {
         $query = "select flag_usulan from pekerjaan where id_pekerjaan = $id_pekerjaan";
         $query = $this->db->query($query);
-        foreach ($query->result() as $row){
+        foreach ($query->result() as $row) {
             return $row->flag_usulan;
         }
         return NULL;
     }
+
     public function get_pekerjaan($id_pekerjaan) {
         $query = "select * from pekerjaan where id_pekerjaan = $id_pekerjaan";
         $query = $this->db->query($query);
         return $query->result();
     }
-   
-    public function  get_detil_pekerjaan($list_id_pekerjaan){
-        if(count($list_id_pekerjaan)==0)return NULL;
+
+    public function get_detil_pekerjaan($list_id_pekerjaan) {
+        if (count($list_id_pekerjaan) == 0)
+            return NULL;
         $query = "select detil_pekerjaan.id_pekerjaan, id_akun, tgl_read, tglasli_mulai, "
                 . "tglasli_selesai, progress, skor, now() as sekarang, status, pekerjaan.tgl_selesai "
                 . "from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan="
                 . "detil_pekerjaan.id_pekerjaan where detil_pekerjaan.status!='Batal' and "
                 . "detil_pekerjaan.id_pekerjaan in "
-                . "(".implode(",",  $list_id_pekerjaan).")";
-        $query=$this->db->query($query);
+                . "(" . implode(",", $list_id_pekerjaan) . ") "
+                . "order by detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_detil_pekerjaan";
+        $query = $this->db->query($query);
         return $query->result();
     }
-    public function update_pekerjaan($update,$id) {
-        $this->db->where('id_pekerjaan',$id);
-        return $this->db->update('pekerjaan',$update);
+
+    public function update_pekerjaan($update, $id) {
+        $this->db->where('id_pekerjaan', $id);
+        return $this->db->update('pekerjaan', $update);
     }
-    
-    public function batalkan_penugasan_staff($id_akun,$id_pekerjaan){
-        $query = "update detil_pekerjaan set status='Batal' where id_pekerjaan=$id_pekerjaan and id_akun=$id_akun";
+
+    public function batalkan_penugasan_staff($id_akun, $id_pekerjaan) {
+        $query = "update detil_pekerjaan set status='Batal' "
+                . "where id_pekerjaan=$id_pekerjaan and id_akun=$id_akun";
         return $this->db->query($query);
     }
+
+    public function batalkan_task($id_pekerjaan, $staffku) {
+        $query = "update detil_pekerjaan set status='Batal' where id_pekerjaan='$id_pekerjaan' and "
+                . "id_akun in (" . implode(",", $staffku) . ")";
+        return $this->db->query($query);
+    }
+
 }
 
 ?>

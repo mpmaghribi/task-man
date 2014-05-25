@@ -14,39 +14,36 @@ class pekerjaan extends ceklogin {
     public function index() {
         redirect(base_url() . 'pekerjaan/karyawan');
     }
-    function pengaduan()
-    {
+
+    function pengaduan() {
         //http://localhost:90/integrarsud/helpdesk/index.php/pengaduan/getDelegate/
         //print_r($url);
-        $url = str_replace('taskmanagement','integrarsud/helpdesk',str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
+        $url = str_replace('taskmanagement', 'integrarsud/helpdesk', str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
         $data["pengaduan"] = json_decode(file_get_contents($url));
-        $url2 = str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $url2 = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["pegawai"] = json_decode(file_get_contents($url2));
         $temp = $this->session->userdata('logged_in');
         $data['temp'] = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
         //print_r($url);
-        $this->load->view("pekerjaan/pengaduan_page",$data);
+        $this->load->view("pekerjaan/pengaduan_page", $data);
     }
-    
-    
-    
-    function get_pengaduan()
-    {
+
+    function get_pengaduan() {
         //http://localhost:90/integrarsud/helpdesk/index.php/pengaduan/getDelegate/
         //print_r($url);
-        $url = str_replace('taskmanagement','integrarsud/helpdesk',str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
+        $url = str_replace('taskmanagement', 'integrarsud/helpdesk', str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
         $data["pengaduan"] = json_decode(file_get_contents($url));
-        $url2 = str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $url2 = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["pegawai"] = json_decode(file_get_contents($url2));
         $temp = $this->session->userdata('logged_in');
         $data['temp'] = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
         //print_r($url);
-        echo json_encode(array("status" => "OK", "data" =>  $data["pengaduan"]));
+        echo json_encode(array("status" => "OK", "data" => $data["pengaduan"]));
     }
-    function tambah_pengaduan()
-    {
+
+    function tambah_pengaduan() {
         $topik = $this->input->post("topik_pengaduan");
         $isi = $this->input->post("isi_pengaduan");
         $tgl = $this->input->post("tgl_pengaduan");
@@ -56,7 +53,7 @@ class pekerjaan extends ceklogin {
         foreach ($staff as $value) {
             echo ($value);
         }
-         $temp = $this->session->userdata('logged_in');
+        $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
         $sifat_pkj = 2;
         $parent_pkj = 0; //$this->input->post('parent_pkj');
@@ -77,7 +74,7 @@ class pekerjaan extends ceklogin {
         $respon = $this->input->post("respon_pengaduan");
         $alasan = "0";
         $pengaduan = $this->pengaduan_model->sp_tambah_pengaduan($nama_pkj, $deskripsi_pkj, $tgl, $prioritas, $respon, $alasan);
-        
+
         $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
         if ($id_pekerjaan != NULL) {
             foreach ($staff as $val) {//val itu nip
@@ -108,9 +105,10 @@ class pekerjaan extends ceklogin {
             }
             $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja memberikan pekerjaan kepada staffnya.");
         }
-        $this->session->set_flashdata("notif_sukses","sukses");
+        $this->session->set_flashdata("notif_sukses", "sukses");
         redirect('pekerjaan/pengaduan');
     }
+
     public function karyawan() {
         $this->load->model("pekerjaan_model");
         $this->load->model("akun");
@@ -219,8 +217,8 @@ class pekerjaan extends ceklogin {
                 //echo "id akun akan dikenai pekerjaan $val ";
                 //$id_akun = $this->akun->get_id_akun($val);
                 //if ($id_akun == NULL) {
-                    //echo "id akun tidak valid ";
-                    //continue;
+                //echo "id akun tidak valid ";
+                //continue;
                 //}
                 //echo "akun valid ";
                 $this->pekerjaan_model->tambah_detil_pekerjaan($val, $id_pekerjaan);
@@ -337,7 +335,7 @@ class pekerjaan extends ceklogin {
         $temp = $this->session->userdata('logged_in');
 //        if ($this->check_session_and_cookie() == 1) {
         //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
-        $this->load->model(array("pekerjaan_model","berkas_model"));
+        $this->load->model(array("pekerjaan_model", "berkas_model"));
         $id_detail_pkj = $this->input->get('id_detail_pkj');
         if ($id_detail_pkj == NULL || strlen($id_detail_pkj) == 0) {
             redirect(base_url() . "pekerjaan/karyawan");
@@ -351,7 +349,7 @@ class pekerjaan extends ceklogin {
         $is_isi_komentar = $this->input->get('is_isi_komentar');
         $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
         $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
-        $url = str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["temp"] = $this->session->userdata('logged_in');
         $data["users"] = json_decode(file_get_contents($url));
         $data["display"] = "none";
@@ -384,20 +382,19 @@ class pekerjaan extends ceklogin {
         $this->load->model("pekerjaan_model");
         $id_detail_pkj = $id_pkj;
         $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
-        $url = str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["temp"] = $this->session->userdata('logged_in');
         $data["users"] = json_decode(file_get_contents($url));
-        $this->load->view("pekerjaan/lihat_komentar",$data);
+        $this->load->view("pekerjaan/lihat_komentar", $data);
     }
-    
+
     public function ubah_komentar_pekerjaan() {
         $this->load->model("pekerjaan_model");
         $id_komentar = $this->input->get("id_komentar_ubah");
         $isi_komentar = $this->input->get("isi_komentar_ubah");
-        $data["ubah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_ubah_komentar_pekerjaan($id_komentar,$isi_komentar);
-        
+        $data["ubah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_ubah_komentar_pekerjaan($id_komentar, $isi_komentar);
     }
-    
+
     public function lihat_komentar_pekerjaan_by_id() {
         $this->load->model("pekerjaan_model");
         $id_komentar = $this->input->get("id_komentar_ubah");
@@ -409,12 +406,11 @@ class pekerjaan extends ceklogin {
         //echo $id_komentar;
         echo json_encode(array("status" => "OK", "data" => $komentar));
     }
-    
+
     public function hapus_komentar_pekerjaan() {
         $this->load->model("pekerjaan_model");
         $id_komentar = $this->input->get('id_komentar');
         $data["hapus_komentar_pekerjaan"] = $this->pekerjaan_model->sp_hapus_komentar_pekerjaan($id_komentar);
-        
     }
 
     public function komentar_pekerjaan() {
@@ -548,6 +544,60 @@ class pekerjaan extends ceklogin {
 //        }
     }
 
+    public function batalkan_pekerjaan() {
+        $this->load->model(array("pekerjaan_model", "akun"));
+        /*
+         * mendapatkan list id pekerjaan yang akan dibatalkan
+         */
+        $list_id_pekerjaan = $this->input->get("id_pekerjaan");
+        $id_pekerjaan = explode("::", $list_id_pekerjaan);
+        $session = $this->session->userdata('logged_in');
+        /*
+         * mendapatkan list staff, untuk dicek apakah suatu pekerjaan dilakukan oleh staffnya
+         * atau oleh staff manager yang lain
+         */
+        $staff = $this->akun->my_staff($session["user_id"]);
+        $id_staff = array();
+        foreach ($staff as $s) {
+            $id_staff[] = $s->id_akun;
+        }
+        echo "id staff ";
+        print_r($id_staff);
+        foreach ($id_pekerjaan as $key => $val) {
+            if (strlen($val) > 0) {
+                $cur_id_pekerjaan = pg_escape_string($val);
+                echo 'id pekerjaan yang akan dibatalkan untuk staffku=' . $cur_id_pekerjaan . "<br>\n";
+                $this->pekerjaan_model->batalkan_task($cur_id_pekerjaan,$id_staff);
+            }
+        }
+        echo 'id pekerjaan ';
+        print_r($id_pekerjaan);
+//        $list_detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
+//        echo 'detil pekerjaan pekerjaan ';
+//        print_r($list_detil_pekerjaan);
+//        $cur_id_pekerjaan="";
+//        $cur_jumlah_staff_ku=0;
+//        $cur_jumlah_staff_orang_lain=0;
+//        foreach($list_detil_pekerjaan as $detil_pekerjaan){
+//            //print_r($detil_pekerjaan);
+//            if($cur_id_pekerjaan==$detil_pekerjaan->id_pekerjaan){
+//                if(in_array($detil_pekerjaan->id_akun,$id_staff)){
+//                    /* jika pekerjaan ini dikerjakan oleh staff ku*/
+//                    $cur_jumlah_staff_ku++;
+//                }else{/*selain itu*/
+//                    $cur_jumlah_staff_orang_lain++;
+//                }
+//            }else{
+//                /*
+//                 * aksi untuk membatalkan pekerjaan
+//                 */
+//                $cur_jumlah_staff_ku=0;
+//                $cur_jumlah_staff_orang_lain=0;
+//                $cur_id_pekerjaan=$detil_pekerjaan->id_pekerjaan;
+//            }
+//        }
+    }
+
     public function progress() {
 //        if ($this->check_session_and_cookie() == 1) {
         $id_detail_pkj = $this->input->get('id_detail_pkj');
@@ -593,10 +643,10 @@ class pekerjaan extends ceklogin {
 //        }
     }
 
-    public function draft_pekerjaan(){
+    public function draft_pekerjaan() {
         
     }
-    
+
     public function edit() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
         $temp = $this->session->userdata('logged_in');
