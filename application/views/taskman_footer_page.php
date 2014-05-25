@@ -1,5 +1,5 @@
 <!--Core js-->
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.11.0.min.js"></script>
+
 <!--        <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-2.0.3.min.js"></script>-->
         <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="<?php echo base_url()?>/assets/js/jquery.simplePagination.js"></script>

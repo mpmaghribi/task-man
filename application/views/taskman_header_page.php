@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.11.0.min.js"></script>
         <meta charset="utf-8">
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
