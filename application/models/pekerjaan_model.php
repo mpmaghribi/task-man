@@ -30,7 +30,7 @@ class pekerjaan_model extends CI_Model {
         return $query->result();
     }
     public function isi_pemberi_pekerjaan($user_id,$id_pekerjaan) {
-        $queri ="insert into pemberi pekerjaan (id_pekerjaan, id_akun) values ('$id_pekerjaan','$user_id')";
+        $queri ="insert into pemberi_pekerjaan (id_pekerjaan, id_akun) values ('$id_pekerjaan','$user_id')";
         return $this->db->query($queri);
     }
     public function list_pekerjaan($id_akun) {
@@ -161,8 +161,10 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
-    public function get_list_draft() {
-        $query = "select * from pekerjaan where flag_usulan='5'";
+    public function get_list_draft($user_id) {
+        $query = "select pekerjaan.* from pekerjaan inner join pemberi_pekerjaan"
+                . " on pemberi_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan"
+                . " where flag_usulan='5' and pemberi_pekerjaan.id_akun='$user_id'";
         $query = $this->db->query($query);
         return $query->result();
     }

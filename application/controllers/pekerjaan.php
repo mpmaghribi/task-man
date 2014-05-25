@@ -704,7 +704,7 @@ class pekerjaan extends ceklogin {
         foreach($my_staff as $s){
             $staff_[]=$s->id_akun;
         }
-        $list_draft=$this->pekerjaan_model->get_list_draft($staff_);
+        $list_draft=$this->pekerjaan_model->get_list_draft($session['user_id']);
         $this->load->view('pekerjaan/draft/body', array('data_akun' => $session,'list_draft'=>$list_draft));
     }
 
