@@ -38,6 +38,9 @@ class testing extends CI_Controller {
             var_dump($session);
             print_r($session);
         }
+        public function upload_view(){
+            $this->load->view('testing/upload');
+        }
 }
 
 /* End of file welcome.php */
