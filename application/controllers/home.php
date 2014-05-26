@@ -66,6 +66,7 @@ class home extends ceklogin {
             $data["temp"] = $this->session->userdata('logged_in');
             $data["users"] = json_decode(file_get_contents($url));
             $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'],0, "Aktivitas Login", $temp['user_nama']." sedang berada di halaman dashboard.");
+            $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
             $this->load->view('homepage/taskman_home_page',$data);
             //var_dump($data["pkj_karyawan"]);
     }
