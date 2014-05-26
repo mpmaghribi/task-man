@@ -82,7 +82,7 @@
                                         <a data-toggle="tab" href="#PekerjaanStaff">Pekerjaan Staff</a>
                                     </li>
                                     <li class="">
-                                        <a data-toggle="tab" href="#DraftPekerjaan">Draft Pekerjaan</a>
+                                        <a data-toggle="tab" href="#div_view_draft">Draft Pekerjaan</a>
                                     </li>
                                 </ul>
                             </header>
@@ -144,7 +144,7 @@
                                 </div>
 
                                 <div id="PekerjaanStaff" class="tab-pane">hancak</div>
-                                <div id="DraftPekerjaan" class="tab-pane">wancak</div>
+                                <?php $this->load->view('pekerjaan/draft/view');?>
 </div>
 
                             </div>
