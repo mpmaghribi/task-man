@@ -169,7 +169,8 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
     public function get_list_draft($user_id) {
         $query = "select pekerjaan.* from pekerjaan inner join pemberi_pekerjaan"
                 . " on pemberi_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan"
-                . " where flag_usulan='5' and pemberi_pekerjaan.id_akun='$user_id'";
+                . " where flag_usulan='5' and pemberi_pekerjaan.id_akun='$user_id' "
+                . "order by pekerjaan.level_prioritas";
         $query = $this->db->query($query);
         return $query->result();
     }
