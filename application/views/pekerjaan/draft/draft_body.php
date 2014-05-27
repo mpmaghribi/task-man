@@ -27,6 +27,8 @@
                             <div class="panel-body">
                                 <div class="tab-content">
                                     <?php 
+                                    
+                                    //echo $draft_create_submit;
                                     $this->load->view('pekerjaan/draft/draft_view');
                                     $this->load->view('pekerjaan/draft/draft_create');
                                     ?>
@@ -80,107 +82,11 @@
                 checkout.hide();
             }).data('datepicker');
         });
-        function validasi(id_pekerjaan) {
-            //alert("pekerjaan yg divalidasi " + id_pekerjaan);
-            $.ajax({// create an AJAX call...
-                data: "id_pekerjaan=" + id_pekerjaan, // get the form data
-                type: "POST", // GET or POST
-                url: "<?php echo site_url(); ?>/pekerjaan/validasi_usulan", // the file to call
-                success: function(response) { // on success..
-                    var json = jQuery.parseJSON(response);
-                    //alert(response);
-                    if (json.status === "OK") {
-                        $("#validasi" + id_pekerjaan).css("display", "none");
-                        $('#td_tabel_pekerjaan_staff_status_' + id_pekerjaan).html("<span class=\"label label-success label-mini\">Aprroved</span>");
-                    } else {
-                        alert("validasi gagal, " + json.reason);
-                    }
-                }
-            });
-        }
+        
         
         document.title = "Draft Pekerjaan - Task Management";
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-        var list_nip = [];
-        var list_nama = [];
-        var list_departemen = [];
-        var list_id = [];
-        var sudah_diproses = false;
-        function query_staff() {
-            if (list_id.length === 0) {
-                $.ajax({// create an AJAX call...
-                    data: "", // get the form data
-                    type: "GET", // GET or POST
-                    url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
-                    success: function(response) { // on success..
-                        var json = jQuery.parseJSON(response);
-                        //alert(response);
-                        if (json.status === "OK") {
-                            var jumlah_data = json.data.length;
-                            for (var i = 0; i < jumlah_data; i++) {
-                                //var id = json.data[i]["id_akun"];
-                                list_nip[i] = json.data[i]['nip'];
-                                list_nama[i] = json.data[i]['nama'];
-                                list_departemen[i] = json.data[i]['nama_departemen'];
-                                list_id[i] = json.data[i]["id_akun"];
-                                var id = list_id[i];
-                                sudah_diproses = true;
-                                var cell = $('#nama_staff_'+id);
-                                if(cell.length>0){
-                                    cell.html(list_nama[i]);
-                                }
-                            }
-                        } else {
-                        }
-                    }
-                });
-            }
-        }
-        query_staff();
-        var tubuh = $("#tabel_list_enroll_staff_body");
-        function tampilkan_staff() {
-            if (sudah_diproses === false)
-                query_staff();
-            var jumlah_staff = list_id.length;
-            //alert("jumlah data" + jumlah_staff)
-            tubuh.html("");
-            var assigned = $('#staff').val();
-            var crow=0;
-            for (var i = 0; i < jumlah_staff; i++) {
-                if(assigned.indexOf('::'+list_id[i]+'::')>=0)
-                    continue;
-                crow++;
-                tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');
-                var row = $('#tabel_list_enroll_staff_row_' + list_id[i]);
-                row.append('<td>' + crow + '</td>');
-                row.append('<td>' + list_nip[i] + '</td>');
-                row.append('<td>' + list_departemen[i] + '</td>');
-                row.append('<td>' + list_nama[i] + '</td>');
-                //row.append('<td>0</td>');
-                row.append('<td><input type="checkbox" id="enroll_' + list_id[i] + '" name="enroll_' + list_id[i] + '"/></td>');
-                //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
-                $('#enroll_' + list_id[i]).attr('checked', false);
-            }
-            //EditableTableProgress.init();
-        }
-        function pilih_staff_ok() {
-            var jumlah_data = list_id.length;
-            var staf = $('#staff');
-            //staf.val('::');
-            //$('#span_list_assign_staff').html('');
-            for (var i = 0; i < jumlah_data; i++) {
-                if ($('#enroll_' + list_id[i]).attr('checked')) {
-                    staf.val(staf.val() + list_id[i] + '::');
-                    $('#span_list_assign_staff').append('<div id="div_staff_' + list_id[i] + '"><span><a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="hapus_staff(' + list_id[i] + ');">Hapus</a></span><span style="margin-left: 5px">' + list_nama[i] + '</span></div>');
-                }
-            }
-            $('#tombol_tutup').click();
-        }
-        function hapus_staff(id_staff) {
-            $('#div_staff_' + id_staff).remove();
-            $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
-        }
-
+        
         $('#pilih_berkas_assign').change(function() {
             var pilih_berkas = document.getElementById('pilih_berkas_assign');
             var files = pilih_berkas.files;

@@ -724,18 +724,7 @@ class pekerjaan extends ceklogin {
 //        }
     }
 
-    public function draft_pekerjaan() {
-        $session = $this->session->userdata('logged_in');
-        $this->load->model(array('pekerjaan_model', 'akun'));
-        $my_staff = $this->akun->my_staff($session['user_id']);
-        $staff_ = array();
-        foreach ($my_staff as $s) {
-            $staff_[] = $s->id_akun;
-        }
-        $list_draft = $this->pekerjaan_model->get_list_draft($session['user_id']);
-        $this->load->view('pekerjaan/draft/draft_body', array('data_akun' => $session, 'list_draft' => $list_draft));
-    }
-
+    
     public function edit() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
         $temp = $this->session->userdata('logged_in');
