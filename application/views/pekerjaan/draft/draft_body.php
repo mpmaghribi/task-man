@@ -27,8 +27,8 @@
                             <div class="panel-body">
                                 <div class="tab-content">
                                     <?php 
-                                    $this->load->view('pekerjaan/draft/view');
-                                    $this->load->view('pekerjaan/draft/create');
+                                    $this->load->view('pekerjaan/draft/draft_view');
+                                    $this->load->view('pekerjaan/draft/draft_create');
                                     ?>
                                 </div>
                             </div>

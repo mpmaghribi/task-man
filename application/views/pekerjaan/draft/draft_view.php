@@ -26,7 +26,7 @@
                                 echo '<tr>';
                                 echo '<td >' . $counter . '</td>';
                                 echo '<td>' . $draft->nama_pekerjaan . '</td>';
-                                echo '<td>' . $draft->tgl_mulai . ' - '. $draft->tgl_selesai . '</td>';
+                                echo '<td>' . date("d M Y", strtotime($draft->tgl_mulai)) . ' - '. date("d M Y", strtotime($draft->tgl_selesai)) . '</td>';
                                 echo '<td>' . $prioritas[$draft->level_prioritas] . '</td>';
                                 echo '<td></td>';
                                 echo '</tr>';

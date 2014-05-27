@@ -733,7 +733,7 @@ class pekerjaan extends ceklogin {
             $staff_[] = $s->id_akun;
         }
         $list_draft = $this->pekerjaan_model->get_list_draft($session['user_id']);
-        $this->load->view('pekerjaan/draft/body', array('data_akun' => $session, 'list_draft' => $list_draft));
+        $this->load->view('pekerjaan/draft/draft_body', array('data_akun' => $session, 'list_draft' => $list_draft));
     }
 
     public function edit() {

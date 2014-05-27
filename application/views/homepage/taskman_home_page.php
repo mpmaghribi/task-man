@@ -144,7 +144,7 @@
                                 </div>
 
                                 <div id="PekerjaanStaff" class="tab-pane">hancak</div>
-                                <?php $this->load->view('pekerjaan/draft/view');?>
+                                <?php $this->load->view('pekerjaan/draft/draft_view');?>
 </div>
 
                             </div>
