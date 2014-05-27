@@ -296,7 +296,7 @@
         });
     </script>
     <script>
-        function hapus_file(id_file, deskripsi, id_pekerjaan)
+        function hapus_file(id_file, deskripsi)
         {
             var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
             if(c==true){
@@ -310,7 +310,7 @@
                     var json = jQuery.parseJSON(response);
                     //alert(response);
                     if (json.status === "OK") {
-                        $('#berkas_<?php echo $berkas->id_file ?>').remove();
+                        $('#berkas_'+id_file).remove();
                         //$('#tombol_validasi_usulan').remove();
                     } else {
                         alert("Gagal menghapus file, " + json.reason);

@@ -26,7 +26,7 @@ class draft extends ceklogin {
 
     public function edit() {
         $session = $this->session->userdata('logged_in');
-        $this->load->model(array('pekerjaan_model', 'akun'));
+        $this->load->model(array('pekerjaan_model', 'akun','berkas_model'));
         $data['id_draft'] = pg_escape_string($this->input->get('id_draft'));
         $data['data_akun']=$session;
         if (strlen($data['id_draft']) == 0) {

@@ -2,7 +2,7 @@
     <div class="form" style="">
         <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo $draft_edit_submit; ?>" enctype="multipart/form-data">
             <input type="hidden" name="jenis_usulan" value="draft"/>
-            <input type="hidden" value="<?php echo $draft[0]->id_pekerjaan; ?>" name="id_draft"/>
+            <input type="hidden" value="<?php echo $draft[0]->id_pekerjaan; ?>" name="id_draft" id="id_draft"/>
             <div class="form-group ">
                 <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                 <div class="col-lg-6">
@@ -58,13 +58,23 @@
                 <label for="prioritas" class="control-label col-lg-3">File</label>
                 <div class="col-lg-6">
                     <div id="list_file_upload_assign">
-                        <table>
-                            <?php foreach ($list_berkas as $berkas){?>
-                            <tr id="file_<?php echo $berkas->id_file; ?>">
-                                <td id="nama_file_<?php echo $berkas->id_file; ?>"></td>
-                            </tr>
-                            <?php } ?>
-                        </table>
+                        <div id="file_lama">
+                            <table  class="table table-hover general-table">
+                                <?php
+                                if (isset($list_berkas)) {
+                                    foreach ($list_berkas as $berkas) {
+                                        ?>
+                                        <tr id="berkas_<?php echo $berkas->id_file; ?>">
+                                            <td id="nama_file_<?php echo $berkas->id_file; ?>"><?php echo basename($berkas->nama_file); ?></td>
+                                            <td id="aksi_<?php echo $berkas->id_file; ?>" style="width: 10px"><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </table>
+                        </div>
+                        <div id="file_baru"></div>
                     </div>
                     <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
                 </div>
@@ -82,4 +92,41 @@
     var akhir = new Date('<?php echo $draft[0]->tgl_selesai; ?>');
     $('.dpd1').val(mulai.getDate() + '-' + (mulai.getMonth() + 1) + '-' + mulai.getFullYear());
     $('.dpd2').val(akhir.getDate() + '-' + (akhir.getMonth() + 1) + '-' + akhir.getFullYear());
+    $('#pilih_berkas_assign').change(function() {
+            var pilih_berkas = document.getElementById('pilih_berkas_assign');
+            var files = pilih_berkas.files;
+            populate_file('list_file_upload_assign', files);
+        });
+        function populate_file(id_tabel, files) {
+            $('#' + id_tabel).html('');
+            var jumlah_file = files.length;
+            for (var i = 0; i < jumlah_file; i++) {
+                $('#' + div_id).append(files[i].name + "<br/>");
+            }
+        }
+    function hapus_file(id_file, deskripsi, id_pekerjaan)
+    {
+        var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
+        if (c == true) {
+            $.ajax({// create an AJAX call...
+                data: {id_file: id_file,
+                    id_pekerjaan: $('#id_draft').val()
+                }, // get the form data
+                type: "get", // GET or POST
+                url: "<?php echo site_url(); ?>/pekerjaan/hapus_file", // the file to call
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+                    //alert(response);
+                    if (json.status === "OK") {
+                        $('#berkas_'+id_file).remove();
+                        //$('#tombol_validasi_usulan').remove();
+                    } else {
+                        alert("Gagal menghapus file, " + json.reason);
+                    }
+                }
+            });
+        }
+        else {
+        }
+    }
 </script>
