@@ -14,7 +14,7 @@
                     <div class="col-md-12">
                         <section class="panel">
                             <header class="panel-heading  ">
-                                Edit Draft
+                                <?php echo $draft[0]->nama_pekerjaan; ?>
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -5px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                     <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>draft/assign?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">Assign</a>
                                     <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>draft/edit?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">Edit</a>
@@ -34,16 +34,12 @@
                             </header>
                             <div class="panel-body">
                                 <div class="tab-content">
-                                    <?php 
-                                    //echo $draft_create_submit;
-                                    $this->load->view('pekerjaan/draft/draft_edit');
-                                    ?>
+                                    <?php $this->load->view('pekerjaan/draft/detail_view'); ?>
                                 </div>
                             </div>
                         </section>
                     </div>
                 </div>
-
                 <!-- page end-->
             </section>
         </section>
@@ -55,19 +51,12 @@
         <script>
             jQuery(document).ready(function() {
                 EditableTableProgress.init();
-            });
-        </script>
+            });</script>
         <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script type="text/javascript">
-        
-        
-        
-        document.title = "Edit Draft Pekerjaan - Task Management";
+        document.title = "Draft Pekerjaan - Task Management";
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-        
-      
-        
     </script>

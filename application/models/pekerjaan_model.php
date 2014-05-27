@@ -270,7 +270,7 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
     }
 
     public function get_draft($list_id_draft){
-        $query = 'select * from pekerjaan inner join '
+        $query = 'select pemberi_pekerjaan.*, pekerjaan.*,sifat_pekerjaan.* from pekerjaan inner join '
                 . 'pemberi_pekerjaan on pekerjaan.'
                 . 'id_pekerjaan=pemberi_pekerjaan.id_pekerjaan inner join sifat_pekerjaan '
                 . 'on sifat_pekerjaan.id_sifat_pekerjaan=pekerjaan.id_sifat_pekerjaan '

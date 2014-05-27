@@ -39,3 +39,6 @@
     <?php $this->load->view("taskman_footer_page");
     ?>
     
+    <script>
+        document.title='<?php echo $judul_kesalahan; ?> - Task Management';
+    </script>

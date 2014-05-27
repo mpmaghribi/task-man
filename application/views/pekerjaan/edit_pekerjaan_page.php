@@ -29,14 +29,14 @@
                                                     <label for="staff" class="control-label col-lg-3">Staff</label>
                                                     <div class="col-lg-6">
                                                         <div id="span_list_assign_staff">
-                                                            <?php foreach ($detail_pekerjaan as $d) { ?>
-                                                                <div id="div_staff_<?php echo $d->id_akun; ?>">
-                                                                    <span>
-                                                                        <a class="btn btn-primary btn-xs" onclick="hapus_staff(<?php echo $d->id_akun; ?>);" href="javascript:void(0)">Hapus</a>
-                                                                    </span>
-                                                                    <span style="margin-left: 0px" id="nama_staff_<?php echo $d->id_akun; ?>"></span>
-                                                                </div>
-                                                            <?php } ?>
+                                                            <table id="tabel_assign_staff" class="table table-hover general-table">
+                                                                <?php foreach ($detail_pekerjaan as $d) { ?>
+                                                                    <tr id="staff_<?php echo $d->id_akun; ?>">
+                                                                        <td id="nama_staff_<?php echo $d->id_akun; ?>"></td> 
+                                                                        <td id="aksi_" style="width:10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(<?php echo $d->id_akun; ?>)">Hapus</a></td>
+                                                                    </tr>
+                                                                <?php } ?>
+                                                            </table>
                                                         </div>
                                                         <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff();">Tambah Staff</a>
                                                         <input type="hidden" value="::<?php
@@ -53,6 +53,15 @@
                                                         <select name="sifat_pkj" class="form-control m-bot15">
                                                             <option value="1" <?php if ($pekerjaan[0]->id_sifat_pekerjaan == '1') echo 'selected'; ?>>Personal</option>
                                                             <option value="2" <?php if ($pekerjaan[0]->id_sifat_pekerjaan == '2') echo 'selected'; ?>>Umum</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="kategori" class="control-label col-lg-3">Kategori</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="kategori" id="kategori" class="form-control m-bot15">
+                                                            <option value="rutin" <?php echo $pekerjaan[0]->kategori == 'rutin' ? 'selected' : ''; ?>>Rutin</option>
+                                                            <option value="project" <?php echo $pekerjaan[0]->kategori == 'project' ? 'selected' : ''; ?>>Project</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -94,29 +103,29 @@
                                                     <div class="col-lg-6">
                                                         <div id="list_file_upload_assign">
                                                             <div id="file_lama">
-                            <table  class="table table-hover general-table">
-                                <?php
-                                if (isset($list_berkas)) {
-                                    foreach ($list_berkas as $berkas) {
-                                        ?>
-                                        <tr id="berkas_<?php echo $berkas->id_file; ?>">
-                                            <td id="nama_file_<?php echo $berkas->id_file; ?>"><?php echo basename($berkas->nama_file); ?></td>
-                                            <td id="aksi_<?php echo $berkas->id_file; ?>" style="width: 10px;text-align:right"><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a></td>
-                                        </tr>
-                                        <?php
-                                    }
-                                }
-                                ?>
-                            </table>
-                        </div>
-                        <div id="file_baru">
-                            <table  class="table table-hover general-table" id="berkas_baru"></table>
-                        </div>
+                                                                <table  class="table table-hover general-table">
+                                                                    <?php
+                                                                    if (isset($list_berkas)) {
+                                                                        foreach ($list_berkas as $berkas) {
+                                                                            ?>
+                                                                            <tr id="berkas_<?php echo $berkas->id_file; ?>">
+                                                                                <td id="nama_file_<?php echo $berkas->id_file; ?>"><?php echo basename($berkas->nama_file); ?></td>
+                                                                                <td id="aksi_<?php echo $berkas->id_file; ?>" style="width: 10px;text-align:right"><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a></td>
+                                                                            </tr>
+                                                                            <?php
+                                                                        }
+                                                                    }
+                                                                    ?>
+                                                                </table>
+                                                            </div>
+                                                            <div id="file_baru">
+                                                                <table  class="table table-hover general-table" id="berkas_baru"></table>
+                                                            </div>
                                                         </div>
                                                         <div style="display:none">
-                    <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
-                    </div>
-                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                        </div>
+                                                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -219,32 +228,34 @@
         var sudah_diproses = false;
         function query_staff() {
             if (list_id.length === 0) {
-                $.ajax({// create an AJAX call...
-                    data: "", // get the form data
-                    type: "GET", // GET or POST
-                    url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
-                    success: function(response) { // on success..
-                        var json = jQuery.parseJSON(response);
-                        //alert(response);
-                        if (json.status === "OK") {
-                            var jumlah_data = json.data.length;
-                            for (var i = 0; i < jumlah_data; i++) {
-                                //var id = json.data[i]["id_akun"];
-                                list_nip[i] = json.data[i]['nip'];
-                                list_nama[i] = json.data[i]['nama'];
-                                list_departemen[i] = json.data[i]['nama_departemen'];
-                                list_id[i] = json.data[i]["id_akun"];
-                                var id = list_id[i];
-                                sudah_diproses = true;
-                                var cell = $('#nama_staff_'+id);
-                                if(cell.length>0){
-                                    cell.html(list_nama[i]);
-                                }
-                            }
-                        } else {
-                        }
+//                $.ajax({// create an AJAX call...
+//                    data: "", // get the form data
+//                    type: "GET", // GET or POST
+//                    url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
+//                    success: function(response) { // on success..
+//                        var json = jQuery.parseJSON(response);
+                var json = jQuery.parseJSON('<?php echo $my_staff; ?>');
+                //alert(response);
+                //if (json.status === "OK") {
+                var jumlah_data = json.length;
+                for (var i = 0; i < jumlah_data; i++) {
+                    //var id = json.data[i]["id_akun"];
+                    list_nip[i] = json[i]['nip'];
+                    list_nama[i] = json[i]['nama'];
+                    list_departemen[i] = json[i]['nama_departemen'];
+                    list_id[i] = json[i]["id_akun"];
+                    var id = list_id[i];
+                    sudah_diproses = true;
+                    var cell = $('#nama_staff_' + id);
+                    if (cell.length > 0) {
+                        cell.html(list_nama[i]);
                     }
-                });
+                }
+                //} 
+                //else {
+//                        }
+//                    }
+//                });
             }
         }
         query_staff();
@@ -256,9 +267,9 @@
             //alert("jumlah data" + jumlah_staff)
             tubuh.html("");
             var assigned = $('#staff').val();
-            var crow=0;
+            var crow = 0;
             for (var i = 0; i < jumlah_staff; i++) {
-                if(assigned.indexOf('::'+list_id[i]+'::')>=0)
+                if (assigned.indexOf('::' + list_id[i] + '::') >= 0)
                     continue;
                 crow++;
                 tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');
@@ -282,13 +293,16 @@
             for (var i = 0; i < jumlah_data; i++) {
                 if ($('#enroll_' + list_id[i]).attr('checked')) {
                     staf.val(staf.val() + list_id[i] + '::');
-                    $('#span_list_assign_staff').append('<div id="div_staff_' + list_id[i] + '"><span><a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="hapus_staff(' + list_id[i] + ');">Hapus</a></span><span style="margin-left: 5px">' + list_nama[i] + '</span></div>');
+                    $('#tabel_assign_staff').append('<tr id="staff_' + list_id[i] + '">' +
+                            '<td id="nama_staff_' + i + '">' + list_nama[i] + '</td>' +
+                            '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(' + list_id[i] + ')">Hapus</a></td>' +
+                            '</tr>');
                 }
             }
             $('#tombol_tutup').click();
         }
         function hapus_staff(id_staff) {
-            $('#div_staff_' + id_staff).remove();
+            $('#staff_' + id_staff).remove();
             $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
         }
 
@@ -298,61 +312,61 @@
             populate_file('berkas_baru', files);
         });
         function populate_file(id_tabel, files) {
-        $('#' + id_tabel).html('');
-        var jumlah_file = files.length;
-        for (var i = 0; i < jumlah_file; i++) {
-            $('#' + id_tabel).append('<tr id="berkas_baru_' + i + '">' +
-                    '<td id="nama_berkas_baru_' + i + '">' + files[i].name +' ' + format_ukuran_file(files[i].size)+ '</td>' +
-                    '<td id="keterangan_' + i + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px">Baru</a></td>' +
-                    '</tr>');
+            $('#' + id_tabel).html('');
+            var jumlah_file = files.length;
+            for (var i = 0; i < jumlah_file; i++) {
+                $('#' + id_tabel).append('<tr id="berkas_baru_' + i + '">' +
+                        '<td id="nama_berkas_baru_' + i + '">' + files[i].name + ' ' + format_ukuran_file(files[i].size) + '</td>' +
+                        '<td id="keterangan_' + i + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px">Baru</a></td>' +
+                        '</tr>');
+            }
         }
-    }
-    function format_ukuran_file(s){
-        var KB = 1024;
-        var spasi=' ';
-        var satuan = 'bytes';
-        if(s>KB){
-            s = s/KB;
-            satuan = 'KB';
+        function format_ukuran_file(s) {
+            var KB = 1024;
+            var spasi = ' ';
+            var satuan = 'bytes';
+            if (s > KB) {
+                s = s / KB;
+                satuan = 'KB';
+            }
+            if (s > KB) {
+                s = s / KB;
+                satuan = 'MB';
+            }
+            return '   [' + Math.round(s) + spasi + satuan + ']';
         }
-        if(s>KB){
-            s = s/KB;
-            satuan = 'MB';
-        }
-        return '   ['+Math.round(s)+spasi+satuan+']';
-    }
         document.title = "Task Management - Edit Pekerjaan";
         var mulai = new Date('<?php echo $pekerjaan[0]->tgl_mulai; ?>');
         var akhir = new Date('<?php echo $pekerjaan[0]->tgl_selesai; ?>');
         $('.dpd1').val(mulai.getDate() + '-' + (mulai.getMonth() + 1) + '-' + mulai.getFullYear());
         $('.dpd2').val(akhir.getDate() + '-' + (akhir.getMonth() + 1) + '-' + akhir.getFullYear());
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-        $('#button_trigger_file').click(function(){
-        $('#pilih_berkas_assign').click();
-    });
-    function hapus_file(id_file, deskripsi)
-    {
-        var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
-        if (c == true) {
-            $.ajax({// create an AJAX call...
-                data: {id_file: id_file,
-                    id_pekerjaan: $('#id_pekerjaan').val()
-                }, // get the form data
-                type: "get", // GET or POST
-                url: "<?php echo site_url(); ?>/pekerjaan/hapus_file", // the file to call
-                success: function(response) { // on success..
-                    var json = jQuery.parseJSON(response);
-                    //alert(response);
-                    if (json.status === "OK") {
-                        $('#berkas_' + id_file).remove();
-                        //$('#tombol_validasi_usulan').remove();
-                    } else {
-                        alert("Gagal menghapus file, " + json.reason);
+        $('#button_trigger_file').click(function() {
+            $('#pilih_berkas_assign').click();
+        });
+        function hapus_file(id_file, deskripsi)
+        {
+            var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
+            if (c == true) {
+                $.ajax({// create an AJAX call...
+                    data: {id_file: id_file,
+                        id_pekerjaan: $('#id_pekerjaan').val()
+                    }, // get the form data
+                    type: "get", // GET or POST
+                    url: "<?php echo site_url(); ?>/pekerjaan/hapus_file", // the file to call
+                    success: function(response) { // on success..
+                        var json = jQuery.parseJSON(response);
+                        //alert(response);
+                        if (json.status === "OK") {
+                            $('#berkas_' + id_file).remove();
+                            //$('#tombol_validasi_usulan').remove();
+                        } else {
+                            alert("Gagal menghapus file, " + json.reason);
+                        }
                     }
-                }
-            });
+                });
+            }
+            else {
+            }
         }
-        else {
-        }
-    }
     </script>

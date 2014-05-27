@@ -63,6 +63,9 @@
                                                     <label for="staff" class="control-label col-lg-3">Staff</label>
                                                     <div class="col-lg-6">
                                                         <div id="span_list_assign_staff">
+                                                            <table id="tabel_assign_staff" class="table table-hover general-table">
+                                                                
+                                                            </table>
                                                         </div>
                                                         <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff();">Tambah Staff</a>
                                                         <input type="hidden" value="::" name="staff" id="staff"/>
@@ -123,8 +126,14 @@
                                                     <label for="prioritas" class="control-label col-lg-3">File</label>
                                                     <div class="col-lg-6">
                                                         <div id="list_file_upload_assign">
+                                                            <div id="file_baru">
+                                                                <table  class="table table-hover general-table" id="berkas_baru"></table>
+                                                            </div>
                                                         </div>
-                                                        <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                        <div style="display:none">
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                        </div>
+                                                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -257,32 +266,34 @@
         var sudah_diproses = false;
         function query_staff() {
             if (list_id.length === 0) {
-                $.ajax({// create an AJAX call...
-                    data: "", // get the form data
-                    type: "GET", // GET or POST
-                    url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
-                    success: function(response) { // on success..
-                        var json = jQuery.parseJSON(response);
-                        //alert(response);
-                        if (json.status === "OK") {
-                            var jumlah_data = json.data.length;
-                            for (var i = 0; i < jumlah_data; i++) {
-                                //var id = json.data[i]["id_akun"];
-                                list_nip[i] = json.data[i]['nip'];
-                                list_nama[i] = json.data[i]['nama'];
-                                list_departemen[i] = json.data[i]['nama_departemen'];
-                                list_id[i] = json.data[i]["id_akun"];
-                                var id = list_id[i];
-                                sudah_diproses = true;
-                                var cell = $('#nama_staff_'+id);
-                                if(cell.length>0){
-                                    cell.html(list_nama[i]);
-                                }
-                            }
-                        } else {
-                        }
+//                $.ajax({// create an AJAX call...
+//                    data: "", // get the form data
+//                    type: "GET", // GET or POST
+//                    url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
+//                    success: function(response) { // on success..
+//                        var json = jQuery.parseJSON(response);
+                var json = jQuery.parseJSON('<?php echo json_encode($my_staff); ?>');
+                //alert(response);
+                //if (json.status === "OK") {
+                var jumlah_data = json.length;
+                for (var i = 0; i < jumlah_data; i++) {
+                    //var id = json.data[i]["id_akun"];
+                    list_nip[i] = json[i]['nip'];
+                    list_nama[i] = json[i]['nama'];
+                    list_departemen[i] = json[i]['nama_departemen'];
+                    list_id[i] = json[i]["id_akun"];
+                    var id = list_id[i];
+                    sudah_diproses = true;
+                    var cell = $('#nama_staff_' + id);
+                    if (cell.length > 0) {
+                        cell.html(list_nama[i]);
                     }
-                });
+                }
+                //} 
+                //else {
+//                        }
+//                    }
+//                });
             }
         }
         query_staff();
@@ -320,26 +331,49 @@
             for (var i = 0; i < jumlah_data; i++) {
                 if ($('#enroll_' + list_id[i]).attr('checked')) {
                     staf.val(staf.val() + list_id[i] + '::');
-                    $('#span_list_assign_staff').append('<div id="div_staff_' + list_id[i] + '"><span><a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="hapus_staff(' + list_id[i] + ');">Hapus</a></span><span style="margin-left: 5px">' + list_nama[i] + '</span></div>');
+                    $('#tabel_assign_staff').append('<tr id="staff_' + list_id[i] + '">' +
+                            '<td id="nama_staff_' + i + '">' + list_nama[i] + '</td>' +
+                            '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(' + list_id[i] + ')">Hapus</a></td>' +
+                            '</tr>');
                 }
             }
             $('#tombol_tutup').click();
         }
         function hapus_staff(id_staff) {
-            $('#div_staff_' + id_staff).remove();
+            $('#staff_' + id_staff).remove();
             $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
         }
 
         $('#pilih_berkas_assign').change(function() {
             var pilih_berkas = document.getElementById('pilih_berkas_assign');
             var files = pilih_berkas.files;
-            populate_file('list_file_upload_assign', files);
+            populate_file('berkas_baru', files);
         });
-        function populate_file(div_id, files) {
-            $('#' + div_id).html('');
+        function populate_file(id_tabel, files) {
+            $('#' + id_tabel).html('');
             var jumlah_file = files.length;
             for (var i = 0; i < jumlah_file; i++) {
-                $('#' + div_id).append(files[i].name + "<br/>");
+                $('#' + id_tabel).append('<tr id="berkas_baru_' + i + '">' +
+                        '<td id="nama_berkas_baru_' + i + '">' + files[i].name + ' ' + format_ukuran_file(files[i].size) + '</td>' +
+                        '<td id="keterangan_' + i + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px">Baru</a></td>' +
+                        '</tr>');
             }
+        }
+        $('#button_trigger_file').click(function() {
+            $('#pilih_berkas_assign').click();
+        });
+        function format_ukuran_file(s) {
+            var KB = 1024;
+            var spasi = ' ';
+            var satuan = 'bytes';
+            if (s > KB) {
+                s = s / KB;
+                satuan = 'KB';
+            }
+            if (s > KB) {
+                s = s / KB;
+                satuan = 'MB';
+            }
+            return '   [' + Math.round(s) + spasi + satuan + ']';
         }
     </script>
