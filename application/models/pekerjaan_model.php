@@ -267,6 +267,16 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
         return $query->result();
     }
 
+    public function get_draft($list_id_draft){
+        $query = 'select pekerjaan.*, pemberi_pekerjaan.* from pekerjaan inner join '
+                . 'pemberi_pekerjaan on pekerjaan.'
+                . 'id_pekerjaan=pemberi_pekerjaan.id_pekerjaan '
+                . 'where pekerjaan.id_pekerjaan in (' . implode(',',$list_id_draft).') '
+                . 'order by pekerjaan.id_pekerjaan';
+        //echo $query;
+        $query=$this->db->query($query);
+        return $query->result();
+    }
     public function get_detil_pekerjaan($list_id_pekerjaan) {
         if (count($list_id_pekerjaan) == 0)
             return NULL;
@@ -277,6 +287,7 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
                 . "detil_pekerjaan.id_pekerjaan in "
                 . "(" . implode(",", $list_id_pekerjaan) . ") "
                 . "order by detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_detil_pekerjaan";
+        echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }

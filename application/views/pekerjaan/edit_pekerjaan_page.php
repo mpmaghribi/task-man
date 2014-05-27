@@ -285,8 +285,6 @@
         document.title = "Task Management - Edit Pekerjaan";
         var mulai = new Date('<?php echo $pekerjaan[0]->tgl_mulai; ?>');
         var akhir = new Date('<?php echo $pekerjaan[0]->tgl_selesai; ?>');
-        //alert (mulai);
-        //alert(akhir);
         $('.dpd1').val(mulai.getDate() + '-' + (mulai.getMonth() + 1) + '-' + mulai.getFullYear());
         $('.dpd2').val(akhir.getDate() + '-' + (akhir.getMonth() + 1) + '-' + akhir.getFullYear());
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');

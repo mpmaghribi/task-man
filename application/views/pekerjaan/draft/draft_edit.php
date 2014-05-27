@@ -1,99 +1,78 @@
-<?php $this->load->view("taskman_header_page") ?> 
-<body>
-    <section id="container" >
-        <!--header start-->
-        <?php $this->load->view("taskman_header2_page") ?>
-        <!--header end-->
-        <?php $this->load->view("taskman_sidebarleft_page") ?>
-        <!--sidebar end-->
-        <!--main content start-->
-        <section id="main-content">
-            <section class="wrapper">
-                <!-- page start-->
-                <div class="row">
-                    <div class="col-md-12">
-                        <section class="panel">
-                            <header class="panel-heading tab-bg-dark-navy-blue ">
-                                <ul class="nav nav-tabs">
-                                    <li class="active">
-                                        <a data-toggle="tab" href="#div_view_draft">Daftar Draft Pekerjaan</a>
-                                    </li>
-                                    <li class="">
-                                        <a data-toggle="tab" href="#div_create_draft">Membuat Draft Pekerjaan</a>
-                                    </li>
-                                </ul>
-                            </header>
-                            <div class="panel-body">
-                                <div class="tab-content">
-                                    <?php 
-                                    //echo $draft_create_submit;
-                                    $this->load->view('pekerjaan/draft/draft_create');
-                                    ?>
-                                </div>
-                            </div>
-                        </section>
+<div id="div_create_draft" class="tab-pane active">
+    <div class="form" style="">
+        <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo $draft_edit_submit; ?>" enctype="multipart/form-data">
+            <input type="hidden" name="jenis_usulan" value="draft"/>
+            <input type="hidden" value="<?php echo $draft[0]->id_pekerjaan; ?>" name="id_draft"/>
+            <div class="form-group ">
+                <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
+                <div class="col-lg-6">
+                    <select name="sifat_pkj" id="sifat_pekerjaan" class="form-control m-bot15">
+                        <option value="1" <?php echo $draft[0]->id_sifat_pekerjaan == '1' ? 'selected' : ''; ?>>Personal</option>
+                        <option value="2" <?php echo $draft[0]->id_sifat_pekerjaan == '2' ? 'selected' : ''; ?>>Umum</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="kategori" class="control-label col-lg-3">Kategori</label>
+                <div class="col-lg-6">
+                    <select name="kategori" id="kategori" class="form-control m-bot15">
+                        <option value="rutin" <?php echo $draft[0]->kategori == 'rutin' ? 'selected' : ''; ?>>Rutin</option>
+                        <option value="project" <?php echo $draft[0]->kategori == 'project' ? 'selected' : ''; ?>>Project</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
+                <div class="col-lg-6">
+                    <input class=" form-control" id="firstname" name="nama_pkj" type="text" value="<?php echo $draft[0]->nama_pekerjaan; ?>"/>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
+                <div class="col-lg-6">
+                    <textarea class="form-control" name="deskripsi_pkj" rows="12"><?php echo $draft[0]->deskripsi_pekerjaan; ?></textarea>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="deadline" class="control-label col-lg-3">Deadline</label>
+                <div class="col-lg-6 ">
+                    <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
+                        <input id="d" readonly type="text" class="form-control dpd1" value="" name="tgl_mulai_pkj">
+                        <span class="input-group-addon">Sampai</span>
+                        <input readonly type="text" class="form-control dpd2" value="" name="tgl_selesai_pkj">
                     </div>
                 </div>
-
-                <!-- page end-->
-            </section>
-        </section>
-        <!--main content end-->
-        <!--right sidebar start-->
-        <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
-
-        <!-- END JAVASCRIPTS -->
-        <script>
-            jQuery(document).ready(function() {
-                EditableTableProgress.init();
-            });
-        </script>
-        <?php $this->load->view('taskman_rightbar_page') ?>
-        <!--right sidebar end-->
-    </section>
-    <?php $this->load->view("taskman_footer_page") ?>
-    <script type="text/javascript">
-        $(function() {
-            var nowTemp = new Date();
-            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-            var checkin = $('.dpd1').datepicker({
-                format: 'dd-mm-yyyy',
-                onRender: function(date) {
-                    return date.valueOf() < now.valueOf() ? 'disabled' : '';
-                }
-            }).on('changeDate', function(ev) {
-                if (ev.date.valueOf() > checkout.date.valueOf()) {
-                    var newDate = new Date(ev.date)
-                    newDate.setDate(newDate.getDate() + 1);
-                    checkout.setValue(newDate);
-                }
-                checkin.hide();
-                $('.dpd2')[0].focus();
-            }).data('datepicker');
-            var checkout = $('.dpd2').datepicker({
-                format: 'dd-mm-yyyy',
-                onRender: function(date) {
-                    return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
-                }
-            }).on('changeDate', function(ev) {
-                checkout.hide();
-            }).data('datepicker');
-        });
-        
-        
-        document.title = "Draft Pekerjaan - Task Management";
-        $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-        
-        $('#pilih_berkas_assign').change(function() {
-            var pilih_berkas = document.getElementById('pilih_berkas_assign');
-            var files = pilih_berkas.files;
-            populate_file('list_file_upload_assign', files);
-        });
-        function populate_file(div_id, files) {
-            $('#' + div_id).html('');
-            var jumlah_file = files.length;
-            for (var i = 0; i < jumlah_file; i++) {
-                $('#' + div_id).append(files[i].name + "<br/>");
-            }
-        }
-    </script>
+            </div>
+            <div class="form-group ">
+                <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
+                <div class="col-lg-6">
+                    <select name="prioritas" id="prioritas" class="form-control m-bot15">
+                        <option value="1" <?php echo $draft[0]->level_prioritas == '1' ? 'selected' : ''; ?>>Urgent</option>
+                        <option value="2" <?php echo $draft[0]->level_prioritas == '2' ? 'selected' : ''; ?>>Tinggi</option>
+                        <option value="3" <?php echo $draft[0]->level_prioritas == '3' ? 'selected' : ''; ?>>Sedang</option>
+                        <option value="4" <?php echo $draft[0]->level_prioritas == '4' ? 'selected' : ''; ?>>Rendah</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="prioritas" class="control-label col-lg-3">File</label>
+                <div class="col-lg-6">
+                    <div id="list_file_upload_assign">
+                    </div>
+                    <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-offset-3 col-lg-6">
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var mulai = new Date('<?php echo $draft[0]->tgl_mulai; ?>');
+    var akhir = new Date('<?php echo $draft[0]->tgl_selesai; ?>');
+    $('.dpd1').val(mulai.getDate() + '-' + (mulai.getMonth() + 1) + '-' + mulai.getFullYear());
+    $('.dpd2').val(akhir.getDate() + '-' + (akhir.getMonth() + 1) + '-' + akhir.getFullYear());
+</script>
