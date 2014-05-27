@@ -93,6 +93,25 @@
                                                     <label for="prioritas" class="control-label col-lg-3">File</label>
                                                     <div class="col-lg-6">
                                                         <div id="list_file_upload_assign">
+                                                            <div id="file_lama">
+                            <table  class="table table-hover general-table">
+                                <?php
+                                if (isset($list_berkas)) {
+                                    foreach ($list_berkas as $berkas) {
+                                        ?>
+                                        <tr id="berkas_<?php echo $berkas->id_file; ?>">
+                                            <td id="nama_file_<?php echo $berkas->id_file; ?>"><?php echo basename($berkas->nama_file); ?></td>
+                                            <td id="aksi_<?php echo $berkas->id_file; ?>" style="width: 10px;text-align:right"><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </table>
+                        </div>
+                        <div id="file_baru">
+                            <table  class="table table-hover general-table" id="berkas_baru"></table>
+                        </div>
                                                         </div>
                                                         <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
                                                     </div>
