@@ -24,7 +24,7 @@
                                     <div id="assignPekerjaan" class="tab-pane active">
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo base_url() ?>pekerjaan/do_edit" enctype="multipart/form-data">
-                                                <input type="hidden" name="id_pekerjaan" value="<?php echo $pekerjaan[0]->id_pekerjaan; ?>"/>
+                                                <input type="hidden" name="id_pekerjaan" id="id_pekerjaan" value="<?php echo $pekerjaan[0]->id_pekerjaan; ?>"/>
                                                 <div class="form-group ">
                                                     <label for="staff" class="control-label col-lg-3">Staff</label>
                                                     <div class="col-lg-6">
@@ -113,7 +113,10 @@
                             <table  class="table table-hover general-table" id="berkas_baru"></table>
                         </div>
                                                         </div>
-                                                        <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                        <div style="display:none">
+                    <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                    </div>
+                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -292,19 +295,64 @@
         $('#pilih_berkas_assign').change(function() {
             var pilih_berkas = document.getElementById('pilih_berkas_assign');
             var files = pilih_berkas.files;
-            populate_file('list_file_upload_assign', files);
+            populate_file('berkas_baru', files);
         });
-        function populate_file(div_id, files) {
-            $('#' + div_id).html('');
-            var jumlah_file = files.length;
-            for (var i = 0; i < jumlah_file; i++) {
-                $('#' + div_id).append(files[i].name + "<br/>");
-            }
+        function populate_file(id_tabel, files) {
+        $('#' + id_tabel).html('');
+        var jumlah_file = files.length;
+        for (var i = 0; i < jumlah_file; i++) {
+            $('#' + id_tabel).append('<tr id="berkas_baru_' + i + '">' +
+                    '<td id="nama_berkas_baru_' + i + '">' + files[i].name +' ' + format_ukuran_file(files[i].size)+ '</td>' +
+                    '<td id="keterangan_' + i + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px">Baru</a></td>' +
+                    '</tr>');
         }
+    }
+    function format_ukuran_file(s){
+        var KB = 1024;
+        var spasi=' ';
+        var satuan = 'bytes';
+        if(s>KB){
+            s = s/KB;
+            satuan = 'KB';
+        }
+        if(s>KB){
+            s = s/KB;
+            satuan = 'MB';
+        }
+        return '   ['+Math.round(s)+spasi+satuan+']';
+    }
         document.title = "Task Management - Edit Pekerjaan";
         var mulai = new Date('<?php echo $pekerjaan[0]->tgl_mulai; ?>');
         var akhir = new Date('<?php echo $pekerjaan[0]->tgl_selesai; ?>');
         $('.dpd1').val(mulai.getDate() + '-' + (mulai.getMonth() + 1) + '-' + mulai.getFullYear());
         $('.dpd2').val(akhir.getDate() + '-' + (akhir.getMonth() + 1) + '-' + akhir.getFullYear());
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+        $('#button_trigger_file').click(function(){
+        $('#pilih_berkas_assign').click();
+    });
+    function hapus_file(id_file, deskripsi)
+    {
+        var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
+        if (c == true) {
+            $.ajax({// create an AJAX call...
+                data: {id_file: id_file,
+                    id_pekerjaan: $('#id_pekerjaan').val()
+                }, // get the form data
+                type: "get", // GET or POST
+                url: "<?php echo site_url(); ?>/pekerjaan/hapus_file", // the file to call
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+                    //alert(response);
+                    if (json.status === "OK") {
+                        $('#berkas_' + id_file).remove();
+                        //$('#tombol_validasi_usulan').remove();
+                    } else {
+                        alert("Gagal menghapus file, " + json.reason);
+                    }
+                }
+            });
+        }
+        else {
+        }
+    }
     </script>

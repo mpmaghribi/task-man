@@ -287,7 +287,7 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
                 . "detil_pekerjaan.id_pekerjaan in "
                 . "(" . implode(",", $list_id_pekerjaan) . ") "
                 . "order by detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_detil_pekerjaan";
-        echo $query;
+        //echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }

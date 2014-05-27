@@ -110,7 +110,6 @@
                     '<td id="nama_berkas_baru_' + i + '">' + files[i].name +' ' + format_ukuran_file(files[i].size)+ '</td>' +
                     '<td id="keterangan_' + i + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px">Baru</a></td>' +
                     '</tr>');
-            console.log(files[i]);
         }
     }
     function format_ukuran_file(s){
