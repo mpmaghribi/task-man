@@ -22,4 +22,8 @@ class draft extends ceklogin {
         //$draft_create_submit=base_url().'pekerjaan/usulan_pekerjaan2';
         $this->load->view('pekerjaan/draft/draft_body', array('draft_create_submit'=>base_url().'pekerjaan/usulan_pekerjaan2','data_akun' => $session, 'list_draft' => $list_draft));
     }
+    public function edit() {
+        $session = $this->session->userdata('logged_in');
+        $this->load->model(array('pekerjaan_model', 'akun'));
+    }
 }

@@ -28,7 +28,7 @@
                                 echo '<td>' . $draft->nama_pekerjaan . '</td>';
                                 echo '<td>' . date("d M Y", strtotime($draft->tgl_mulai)) . ' - '. date("d M Y", strtotime($draft->tgl_selesai)) . '</td>';
                                 echo '<td>' . $prioritas[$draft->level_prioritas] . '</td>';
-                                echo '<td style="text-align: right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px">Assign</a><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px">Edit</a></td>';
+                                echo '<td style="text-align: right"><a class="btn btn-info btn-xs" href="'.base_url().'draft/assign?id_draft='.$draft->id_pekerjaan.'" id="" style="font-size: 10px">Assign</a><a class="btn btn-danger btn-xs" href="'.base_url().'draft/edit?id_draft='.$draft->id_pekerjaan.'" id="" style="font-size: 10px">Edit</a></td>';
                                 echo '</tr>';
                             }
                         }
