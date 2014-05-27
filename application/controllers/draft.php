@@ -36,6 +36,7 @@ class draft extends ceklogin {
         } else {
             $data['draft_edit_submit']=base_url().'draft/do_edit';
             $data['draft'] = $this->pekerjaan_model->get_draft(array($data['id_draft']));
+            $data['list_berkas']=$this->berkas_model->get_berkas_of_pekerjaan($data['id_draft']);
             $this->load->view('pekerjaan/draft/draft_edit_body',$data);
             //print_r($data['draft']);
         }

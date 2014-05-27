@@ -58,6 +58,13 @@
                 <label for="prioritas" class="control-label col-lg-3">File</label>
                 <div class="col-lg-6">
                     <div id="list_file_upload_assign">
+                        <table>
+                            <?php foreach ($list_berkas as $berkas){?>
+                            <tr id="file_<?php echo $berkas->id_file; ?>">
+                                <td id="nama_file_<?php echo $berkas->id_file; ?>"></td>
+                            </tr>
+                            <?php } ?>
+                        </table>
                     </div>
                     <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
                 </div>
