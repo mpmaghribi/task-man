@@ -262,15 +262,18 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
     }
 
     public function get_pekerjaan($id_pekerjaan) {
-        $query = "select * from pekerjaan where id_pekerjaan = $id_pekerjaan";
+        $query = "select pekerjaan.*, pemberi_pekerjaan.* from pekerjaan "
+                . "inner join pemberi_pekerjaan on pemberi_pekerjaan.id_pekerjaan"
+                . "=pekerjaan.id_pekerjaan where pekerjaan.id_pekerjaan = $id_pekerjaan";
         $query = $this->db->query($query);
         return $query->result();
     }
 
     public function get_draft($list_id_draft){
-        $query = 'select pekerjaan.*, pemberi_pekerjaan.* from pekerjaan inner join '
+        $query = 'select * from pekerjaan inner join '
                 . 'pemberi_pekerjaan on pekerjaan.'
-                . 'id_pekerjaan=pemberi_pekerjaan.id_pekerjaan '
+                . 'id_pekerjaan=pemberi_pekerjaan.id_pekerjaan inner join sifat_pekerjaan '
+                . 'on sifat_pekerjaan.id_sifat_pekerjaan=pekerjaan.id_sifat_pekerjaan '
                 . 'where pekerjaan.id_pekerjaan in (' . implode(',',$list_id_draft).') '
                 . 'order by pekerjaan.id_pekerjaan';
         //echo $query;

@@ -153,6 +153,7 @@ class pekerjaan extends ceklogin {
         $update["level_prioritas"] = pg_escape_string($this->input->post("prioritas"));
         $update["asal_pekerjaan"] = 'task management';
         $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
+        $update["kategori"] = pg_escape_string($this->input->post("kategori"));
         if ($this->pekerjaan_model->update_pekerjaan($update, $id_pekerjaan)) {
             $list_staff = $this->input->post("staff");
             $assigned_staff = $this->pekerjaan_model->get_detil_pekerjaan(array($id_pekerjaan));
