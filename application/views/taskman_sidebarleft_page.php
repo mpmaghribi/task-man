@@ -90,6 +90,12 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="<?php echo str_replace("taskmanagement", "integrarsud", site_url()) ?>">
+                        <i class="fa fa-angle-double-left"></i>
+                        <span>Kembali ke Integra</span>
+                    </a>
+                </li>
+                <li>
                     <a href="<?php echo base_url()?>login/logout">
                         <i class="fa fa-angle-double-right"></i>
                         <span>Log Out</span>
