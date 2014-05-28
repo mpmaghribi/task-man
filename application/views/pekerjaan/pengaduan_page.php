@@ -128,11 +128,17 @@
                                                 <label for="staff_rsud" class="control-label col-lg-3">Staff</label>
                                                 <div class="col-lg-8">
                                                     <select multiple name="staff_rsud[]" id="e9" style="width:300px" class="populate">
-                                                        <?php foreach ($pegawai as $value) { ?>                        
-                                                            <option value="<?php echo $value->id_akun ?>">
-                                                                <?php echo $value->nama ?>
-                                                            </option>
-                                                        <?php } ?>
+                                                        <?php foreach ($departemen as $value2) { ?>                        
+                                                        <optgroup label="<?php echo $value2->nama_departemen ?>">
+                                                            <?php foreach ($pegawai as $value) { ?>             
+                                                            <?php if ($value2->id_departemen == $value->id_departemen ){?>
+                                                                <option value="<?php echo $value->id_akun ?>">
+                                                                    <?php echo $value->nama ?> - <?php echo $value->nama_jabatan ?>
+                                                                </option>
+                                                            <?php }?>
+                                                            <?php } ?>
+                                                        </optgroup>
+                                                        <?php }?>
                                                     </select>
                                                 </div>
                                             </div>

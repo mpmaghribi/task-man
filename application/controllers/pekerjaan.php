@@ -22,6 +22,8 @@ class pekerjaan extends ceklogin {
         $data["pengaduan"] = json_decode(file_get_contents($url));
         $url2 = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["pegawai"] = json_decode(file_get_contents($url2));
+        $url3 = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/departemens/format/json";
+        $data["departemen"] = json_decode(file_get_contents($url3));
         $temp = $this->session->userdata('logged_in');
         $data['temp'] = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
