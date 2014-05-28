@@ -133,7 +133,8 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
     }
 
     public function sp_listassign_pekerjaan($id_detail_pkj) {
-        $query = "select * from detil_pekerjaan inner join pekerjaan on "
+        $query = "select detil_pekerjaan.*,pekerjaan.*,sifat_pekerjaan.*"
+                . "from detil_pekerjaan inner join pekerjaan on "
                 . "pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan "
                 . "inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan "
                 . "= pekerjaan.id_sifat_pekerjaan where pekerjaan.id_pekerjaan = "

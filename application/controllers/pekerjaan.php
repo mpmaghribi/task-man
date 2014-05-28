@@ -399,7 +399,11 @@ class pekerjaan extends ceklogin {
             $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
             $data["id_pkj"] = $id_detail_pkj;
             $data['my_staff'] = $this->akun->my_staff($temp["user_id"]);
-            //$staff_array=array();
+            $staff_array=array();
+            foreach ($data['my_staff'] as $s){
+                $staff_array[$s->id_akun]=$s->nama;
+            }
+            $data['staff_array']=$staff_array;
             //$data['my_staff'] = json_encode($data['my_staff']);
             $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
             $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);

@@ -190,7 +190,7 @@
                                     </div>
                                     <?php if ($temp['jmlstaff'] > 0) { ?>
                                         <div id="penilaianPekerjaan" class="tab-pane">
-
+<?php $this->load->view('pekerjaan/penilaian'); ?>
                                         </div>
                                     <?php } ?>
 
