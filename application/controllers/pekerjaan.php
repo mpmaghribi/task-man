@@ -782,7 +782,7 @@ class pekerjaan extends ceklogin {
     public function edit() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
         $temp = $this->session->userdata('logged_in');
-
+        
         $this->load->model(array("pekerjaan_model", 'berkas_model', 'akun'));
         //$this->load->model("berkas_model");
         $id_pekerjaan = pg_escape_string($this->input->get('id_pekerjaan'));
@@ -796,7 +796,16 @@ class pekerjaan extends ceklogin {
         $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_pekerjaan);
         $data["data_akun"] = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja melakukan perubahan pada detail pekerjaan.");
-        $data['my_staff'] = json_encode($this->akun->my_staff($temp['user_id']));
+        //$data['my_staff'] = json_encode($this->akun->my_staff($temp['user_id']));
+        $url3 = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $data['my_staff'] = json_encode(json_decode(file_get_contents($url3)));
+        //print_r($data['my_staff']);
+//        foreach ( $data["detail_pekerjaan"] as $value) {
+//            
+//        }
+//        
+//        $url3 = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/user/id//format/json";
+//        $data["user"] = json_decode(file_get_contents($url3));
         $this->load->view("pekerjaan/edit_pekerjaan_page", $data);
 //        } else {
 //            $this->session->set_flashdata('status', 4);

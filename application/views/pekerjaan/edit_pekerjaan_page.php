@@ -32,7 +32,7 @@
                                                             <table id="tabel_assign_staff" class="table table-hover general-table">
                                                                 <?php foreach ($detail_pekerjaan as $d) { ?>
                                                                     <tr id="staff_<?php echo $d->id_akun; ?>">
-                                                                        <td id="nama_staff_<?php echo $d->id_akun; ?>"></td> 
+                                                                        <td id="nama_staff_<?php echo $d->id_akun; ?>"><div id="nama_<?php echo $d->id_akun;?>"></div></td> 
                                                                         <td id="aksi_" style="width:10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(<?php echo $d->id_akun; ?>)">Hapus</a></td>
                                                                     </tr>
                                                                 <?php } ?>
@@ -226,6 +226,8 @@
         var list_departemen = [];
         var list_id = [];
         var sudah_diproses = false;
+        //var json = jQuery.parseJSON('<?php echo $my_staff; ?>');
+        //alert(json[0]["id_akun"]);
         function query_staff() {
             if (list_id.length === 0) {
 //                $.ajax({// create an AJAX call...
@@ -240,16 +242,17 @@
                 var jumlah_data = json.length;
                 for (var i = 0; i < jumlah_data; i++) {
                     //var id = json.data[i]["id_akun"];
-                    list_nip[i] = json[i]['nip'];
-                    list_nama[i] = json[i]['nama'];
-                    list_departemen[i] = json[i]['nama_departemen'];
+                    list_nip[i] = json[i]["nip"];
+                    list_nama[i] = json[i]["nama"];
+                    list_departemen[i] = json[i]["nama_departemen"];
                     list_id[i] = json[i]["id_akun"];
                     var id = list_id[i];
                     sudah_diproses = true;
-                    var cell = $('#nama_staff_' + id);
-                    if (cell.length > 0) {
-                        cell.html(list_nama[i]);
-                    }
+                    //$('#nama_staff_' + id).html(json[i]["nama"]);
+                    $('#nama_'+id).html(json[i]["nip"]+ " - " +json[i]["nama"]);
+//                    if (cell.length > 0) {
+//                        cell.html(list_nama[i]);
+//                    }
                 }
                 //} 
                 //else {
