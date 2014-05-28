@@ -21,7 +21,7 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#deskripsiPekerjaan">Deskripsi Pekerjaan</a>
                                     </li>
-                                    <?php if ($deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id'] && $deskripsi_pekerjaan[0]->flag_usulan=='2') { ?>
+                                    <?php if ($deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id'] && $deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
                                         <li class="">
                                             <a data-toggle="tab" href="#penilaianPekerjaan">Penilaian Kerja Staff</a>
                                         </li>
@@ -29,10 +29,18 @@
                                 </ul>
                                 <?php if ($deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id']) { ?>
                                     <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                        <?php if($deskripsi_pekerjaan[0]->flag_usulan=='1'){ ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px">Validasi</a><?php } ?>
+                                        <?php if ($deskripsi_pekerjaan[0]->flag_usulan == '1') { ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px">Validasi</a><?php } ?>
                                         <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
                                         <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                     </div>
+                                    <script>
+                                        $('#tombol_batalkan_usulan').click(function(e) {
+                                            var c = confirm('Anda yakin ingin membatalkan pekerjaan "<?php echo $deskripsi_pekerjaan[0]->nama_pekerjaan; ?>"?');
+                                            if (c === false) {
+                                                e.preventDefault();
+                                            }
+                                        });
+                                    </script>
                                 <?php } ?>
                             </header>
                             <div class="panel-body">
@@ -152,7 +160,7 @@
                                                                     <tr>
                                                                         <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td id="nama_staff_<?php //echo $value->id_akun;         ?>"><?php //echo $value->id_akun;         ?><?php foreach ($users as $value2) { ?>
+                                                                        <td id="nama_staff_<?php //echo $value->id_akun;          ?>"><?php //echo $value->id_akun;          ?><?php foreach ($users as $value2) { ?>
                                                                                 <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                                                                             <?php } ?></td>
                                                                         <td>
