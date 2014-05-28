@@ -103,8 +103,11 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
     }
 
     public function sp_deskripsi_pekerjaan($id_detail_pkj) {
-        $query = "select * from pekerjaan inner join sifat_pekerjaan "
+        $query = "select pekerjaan.*,pemberi_pekerjaan.*,sifat_pekerjaan.*"
+                . " from pekerjaan inner join sifat_pekerjaan "
                 . "on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan "
+                . "inner join pemberi_pekerjaan on pemberi_pekerjaan.id_pekerjaan="
+                . "pekerjaan.id_pekerjaan "
                 . "where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
         $query = $this->db->query($query);
         return $query->result();
