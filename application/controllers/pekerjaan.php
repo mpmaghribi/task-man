@@ -373,49 +373,35 @@ class pekerjaan extends ceklogin {
         $data['data_akun'] = $this->session->userdata('logged_in');
         $data['temp'] = $this->session->userdata('logged_in');
         $temp = $this->session->userdata('logged_in');
-//        if ($this->check_session_and_cookie() == 1) {
-        //list pekerjaan, query semua pekerjaan per individu dari tabel detil pekerjaan
-        $this->load->model(array("pekerjaan_model", "berkas_model"));
+
+        $this->load->model(array("pekerjaan_model", "berkas_model", 'akun'));
         $id_detail_pkj = $this->input->get('id_detail_pkj');
         if ($id_detail_pkj == NULL || strlen($id_detail_pkj) == 0) {
             redirect(base_url() . "pekerjaan/karyawan");
-            exit(0);
+            //exit(0);
+        } else {
+
+            /* mengupdate status pekerjaan dilihat dan tanggal read jika pekerjaan itu belum pernah
+             * dibaca
+             */
+            $this->baca_pending_task($id_detail_pkj);
+            //$is_isi_komentar = $this->input->get('is_isi_komentar');
+            $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
+            $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
+            $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+            $data["temp"] = $this->session->userdata('logged_in');
+            $data["users"] = json_decode(file_get_contents($url));
+            $data["display"] = "none";
+            $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat detail tentang pekerjaannya.");
+
+            $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
+            $data["id_pkj"] = $id_detail_pkj;
+            $data['my_staff'] = $this->akun->my_staff($temp["user_id"]);
+            //$staff_array=array();
+            //$data['my_staff'] = json_encode($data['my_staff']);
+            $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
+            $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
         }
-
-        /* mengupdate status pekerjaan dilihat dan tanggal read jika pekerjaan itu belum pernah
-         * dibaca
-         */
-        $this->baca_pending_task($id_detail_pkj);
-        $is_isi_komentar = $this->input->get('is_isi_komentar');
-        $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
-        $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
-        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-        $data["temp"] = $this->session->userdata('logged_in');
-        $data["users"] = json_decode(file_get_contents($url));
-        $data["display"] = "none";
-        $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat detail tentang pekerjaannya.");
-
-//        if (isset($is_isi_komentar)) {
-//            if ($is_isi_komentar == TRUE) {
-//                $isi_komentar = $this->input->get('komentar_pkj');
-//                $id_akun = $temp['user_id'];
-//                $data["tambah_komentar_pekerjaan"] = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_detail_pkj, $id_akun, $isi_komentar);
-//                $data["display"] = "block";
-//                $r = $this->taskman_repository->sp_insert_activity($id_akun, 0, "Aktivitas Komentar", $temp['user_nama'] . " baru saja memberikan komentar : " . $isi_komentar . "");
-//            }
-//        }
-        $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
-        $data["id_pkj"] = $id_detail_pkj;
-        $this->load->model("akun");
-        $data['my_staff'] = $this->akun->my_staff($temp["user_id"]);
-        $data['my_staff'] = json_encode($data['my_staff']);
-        $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
-        $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
-        //redirect("pekerjaan/karyawan/deskripsi_pekerjaan_page?id_detail_pkj=".$id_detail_pkj);
-//        } else {
-//            $this->session->set_flashdata('status', 4);
-//            redirect("login");
-//        }
     }
 
     public function lihat_komentar_pekerjaan($id_pkj = 0) {
@@ -716,7 +702,7 @@ class pekerjaan extends ceklogin {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
         $temp = $this->session->userdata('logged_in');
 
-        $this->load->model(array("pekerjaan_model",'berkas_model','akun'));
+        $this->load->model(array("pekerjaan_model", 'berkas_model', 'akun'));
         //$this->load->model("berkas_model");
         $id_pekerjaan = pg_escape_string($this->input->get('id_pekerjaan'));
         if ($id_pekerjaan == NULL || strlen($id_pekerjaan) == 0) {
@@ -729,7 +715,7 @@ class pekerjaan extends ceklogin {
         $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_pekerjaan);
         $data["data_akun"] = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja melakukan perubahan pada detail pekerjaan.");
-$data['my_staff'] = json_encode($this->akun->my_staff($temp['user_id']));
+        $data['my_staff'] = json_encode($this->akun->my_staff($temp['user_id']));
         $this->load->view("pekerjaan/edit_pekerjaan_page", $data);
 //        } else {
 //            $this->session->set_flashdata('status', 4);

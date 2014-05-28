@@ -470,7 +470,7 @@
                             event.preventDefault();
                         });
                         get_status_usulan(<?php if (isset($id_pkj)) echo $id_pkj; ?>);
-                        var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
+                        var my_staff = jQuery.parseJSON('<?php echo json_encode($my_staff); ?>');
                         console.log(my_staff);
                         var jumlah_staff = my_staff.length;
                         var list_id_akun_detil_pekerjaan = [];

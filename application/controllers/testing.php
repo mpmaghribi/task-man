@@ -42,6 +42,3 @@ class testing extends CI_Controller {
             $this->load->view('testing/upload');
         }
 }
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
