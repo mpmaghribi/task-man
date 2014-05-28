@@ -17,12 +17,13 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
-public function cek_pemberi_pekerjaan($id_pekerjaan){
-    $query = "select * from pemberi_pekerjaan where id_pekerjaan='$id_pekerjaan'";
-    $query = $this->db->query($query);
-    return $query->result();
-}
-    
+
+    public function cek_pemberi_pekerjaan($id_pekerjaan) {
+        $query = "select * from pemberi_pekerjaan where id_pekerjaan='$id_pekerjaan'";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+
     public function finishtask($id_akun) {
         $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "where status = 'finished'";
         $query = $this->db->query($query);
@@ -34,10 +35,12 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
         $query = $this->db->query($query);
         return $query->result();
     }
-    public function isi_pemberi_pekerjaan($user_id,$id_pekerjaan) {
-        $queri ="insert into pemberi_pekerjaan (id_pekerjaan, id_akun) values ('$id_pekerjaan','$user_id')";
+
+    public function isi_pemberi_pekerjaan($user_id, $id_pekerjaan) {
+        $queri = "insert into pemberi_pekerjaan (id_pekerjaan, id_akun) values ('$id_pekerjaan','$user_id')";
         return $this->db->query($queri);
     }
+
     public function list_pekerjaan($id_akun) {
         $id_akun = pg_escape_string($id_akun);
         $query = "select detil_pekerjaan.id_akun, pekerjaan.*, pekerjaan.tgl_selesai"
@@ -63,7 +66,7 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
         return $query->result();
     }
 
-    public function usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj,$kategori) {
+    public function usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj, $kategori) {
         $sifat_pkj = pg_escape_string($sifat_pkj);
         $deskripsi_pkj = pg_escape_string($deskripsi_pkj);
         $prioritas = pg_escape_string($prioritas);
@@ -91,8 +94,9 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
         //echo $query1;
         return NULL;
     }
-    public function usul_pekerjaan2($data){
-        $pekerjaan=$this->db->insert('pekerjaan',$data);
+
+    public function usul_pekerjaan2($data) {
+        $pekerjaan = $this->db->insert('pekerjaan', $data);
     }
 
     public function tambah_detil_pekerjaan($id_akun, $id_pekerjaan) {
@@ -102,6 +106,27 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
         $query = $this->db->query($query);
     }
 
+    public function target_get($id_staff, $id_pekerjaan) {
+        $query = "select detil_pekerjaan.*, nilai_pekerjaan.*,tipe_nilai.* "
+                . "from nilai_pekerjaan inner join tipe_nilai "
+                . "on nilai_pekerjaan.id_tipe_nilai=tipe_nilai.id_tipe_nilai "
+                . "inner join detil_pekerjaan on detil_pekerjaan.id_detil_pekerjaan="
+                . "nilai_pekerjaan.id_detil_pekerjaan "
+                . "where detil_pekerjaan.id_akun=$id_staff and "
+                . "detil_pekerjaan.id_pekerjaan=$id_pekerjaan and "
+                . "detil_pekerjaan.status!='Batal'";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    public function target_set($id_staff, $id_pekerjaan) {
+        
+    }
+    public function realisasi_get($id_staff, $id_pekerjaan) {
+        
+    }
+    public function realisasi_set($id_staff, $id_pekerjaan) {
+        
+    }
     public function sp_deskripsi_pekerjaan($id_detail_pkj) {
         $query = "select pekerjaan.*,pemberi_pekerjaan.*,sifat_pekerjaan.*"
                 . " from pekerjaan inner join sifat_pekerjaan "
@@ -170,6 +195,7 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
         $query = $this->db->query($query);
         return $query->result();
     }
+
     public function get_list_draft($user_id) {
         $query = "select pekerjaan.* from pekerjaan inner join pemberi_pekerjaan"
                 . " on pemberi_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan"
@@ -178,6 +204,7 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
         $query = $this->db->query($query);
         return $query->result();
     }
+
     public function get_list_usulan_pekerjaan($list_id_akun) {
         if (count($list_id_akun) == 0)
             return NULL;
@@ -273,17 +300,18 @@ public function cek_pemberi_pekerjaan($id_pekerjaan){
         return $query->result();
     }
 
-    public function get_draft($list_id_draft){
+    public function get_draft($list_id_draft) {
         $query = 'select pemberi_pekerjaan.*, pekerjaan.*,sifat_pekerjaan.* from pekerjaan inner join '
                 . 'pemberi_pekerjaan on pekerjaan.'
                 . 'id_pekerjaan=pemberi_pekerjaan.id_pekerjaan inner join sifat_pekerjaan '
                 . 'on sifat_pekerjaan.id_sifat_pekerjaan=pekerjaan.id_sifat_pekerjaan '
-                . 'where pekerjaan.id_pekerjaan in (' . implode(',',$list_id_draft).') '
+                . 'where pekerjaan.id_pekerjaan in (' . implode(',', $list_id_draft) . ') '
                 . 'order by pekerjaan.id_pekerjaan';
         //echo $query;
-        $query=$this->db->query($query);
+        $query = $this->db->query($query);
         return $query->result();
     }
+
     public function get_detil_pekerjaan($list_id_pekerjaan) {
         if (count($list_id_pekerjaan) == 0)
             return NULL;

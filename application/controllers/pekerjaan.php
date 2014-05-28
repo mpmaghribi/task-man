@@ -45,6 +45,9 @@ class pekerjaan extends ceklogin {
         echo json_encode(array("status" => "OK", "data" => $data["pengaduan"]));
     }
 
+
+    
+    
     function tambah_pengaduan() {
         $topik = $this->input->post("topik_pengaduan");
         $isi = $this->input->post("isi_pengaduan");
@@ -681,6 +684,73 @@ class pekerjaan extends ceklogin {
 //        } else {
 //            echo json_encode(array("status" => "FAILED", "reason" => "gagal"));
 //        }
+    }
+    public function target_get() {
+        $session= $this->session->userdata('logged_in');
+        $this->load->model(array('pekerjaan_model','akun'));
+        $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
+        $id_staff = pg_escape_string($this->input->post('id_staff'));
+        $query_staff=$this->akun->my_staff($session['user_id']);
+        $my_staff=array();
+        foreach ($query_staff as $s){
+            $my_staff[]=$s->id_akun;
+        }
+        if(in_array($id_staff,$my_staff)){
+            $target = $this->pekerjaan_model->target_get($id_staff,$id_pekerjaan);
+            $data['status']='OK';
+            $data['data']=$target;
+            echo json_encode($data);
+        }else{
+            echo json_encode(array('status'=>'null'));
+        }
+    }
+    public function target_set(){
+        $session= $this->session->userdata('logged_in');
+        $this->load->model(array('pekerjaan_model','akun'));
+        $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
+        $id_staff = pg_escape_string($this->input->post('id_staff'));
+        $query_staff=$this->akun->my_staff($session['user_id']);
+        $my_staff=array();
+        foreach ($query_staff as $s){
+            $my_staff[]=$s->id_akun;
+        }
+        if(in_array($id_staff,$my_staff)){
+            
+        }else{
+            echo json_encode(array('status'=>'null'));
+        }
+    }
+    public function realisasi_get(){
+        $session= $this->session->userdata('logged_in');
+        $this->load->model(array('pekerjaan_model','akun'));
+        $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
+        $id_staff = pg_escape_string($this->input->post('id_staff'));
+        $query_staff=$this->akun->my_staff($session['user_id']);
+        $my_staff=array();
+        foreach ($query_staff as $s){
+            $my_staff[]=$s->id_akun;
+        }
+        if(in_array($id_staff,$my_staff)){
+            
+        }else{
+            echo json_encode(array('status'=>'null'));
+        }
+    }
+    public function realisasi_set(){
+        $session= $this->session->userdata('logged_in');
+        $this->load->model(array('pekerjaan_model','akun'));
+        $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
+        $id_staff = pg_escape_string($this->input->post('id_staff'));
+        $query_staff=$this->akun->my_staff($session['user_id']);
+        $my_staff=array();
+        foreach ($query_staff as $s){
+            $my_staff[]=$s->id_akun;
+        }
+        if(in_array($id_staff,$my_staff)){
+            
+        }else{
+            echo json_encode(array('status'=>'null'));
+        }
     }
 
     public function update_progress() {
