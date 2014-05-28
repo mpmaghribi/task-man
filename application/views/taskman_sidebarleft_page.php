@@ -82,7 +82,7 @@
                     </a>
                     <ul class="sub">
                         <?php $temp = $this->session->userdata('logged_in'); if ($temp['jmlstaff'] > 0){?><li><a href="<?php echo base_url()?>laporan">Laporan Pekerjaan Staff</a></li><?php }?>
-                         <li><a href="<?php echo base_url()?>laporan/laporan_pekerjaan_saya">Laporan Pekerjaan Saya</a></li>
+                         <li><a href="#exportPeriodePkjSaya" data-toggle="modal">Laporan Pekerjaan Saya</a></li>
 <!--                        <li><a href="#">Per Periode</a></li>
                         <li><a href="#">Per Status</a></li>
                         <li><a href="#">Filter Lainnya</a></li>
@@ -99,3 +99,37 @@
         <!-- sidebar menu end-->
     </div>
 </aside>
+<div class="modal fade" id="exportPeriodePkjSaya" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Pilih Periode dan Laporan Pekerjaan yang Ingin Anda Eksport</h4>
+                            </div>
+                            <form action="<?php echo site_url()?>laporan/laporan_pekerjaan_saya" method="GET">
+                            <div class="modal-body">
+                                    <select name="periode" class="form-control m-bot15">
+                                        <option value="6">
+                                            6 Bulan
+                                        </option>
+                                        <option value="12">
+                                            1 Tahun
+                                        </option>
+                                    </select>
+                                    <select name="jenis_laporan" class="form-control m-bot15">
+                                        <option value="1">
+                                            Laporan SKP
+                                        </option>
+                                        <option value="2">
+                                            Laporan CKP
+                                        </option>
+                                    </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
+                                <button class="btn btn-warning" type="submit"> Export PDF</button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
