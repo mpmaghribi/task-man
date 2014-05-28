@@ -19,7 +19,7 @@
                             </header>
                             <div class="panel-body">
                                 <div class="form">
-                                    <table class="table  table-hover general-table" id="tabel_pekerjaan_staff">
+                                    <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_staff">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -57,10 +57,17 @@
         </section>
         <!--main content end-->
         <!--right sidebar start-->
+        <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
+
+        <!-- END JAVASCRIPTS -->
+        <script>
+            jQuery(document).ready(function() {
+                EditableTableProgress.init();
+            });
+        </script>
         <?php $this->load->view('taskman_rightbar_page') ?>
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
-    <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
     <script>
         document.title = "Daftar Pekerjaan <?php echo $nama_staff; ?> - Task Management";
         
@@ -147,5 +154,4 @@
                 $('#status_' + detil_pekerjaan[i]['id_pekerjaan']).html(status);
             }
         }
-        EditableTableProgress.init();
     </script>

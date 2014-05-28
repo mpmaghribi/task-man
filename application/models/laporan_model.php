@@ -10,15 +10,15 @@ class laporan_model extends CI_Model {
     {
         if ($periode == 6){
             if (date("n") <= 6){
-                $query = "select * from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun=".pg_escape_string($id_user)." and EXTRACT(month from tgl_mulai) >= 1 AND EXTRACT(month from tgl_mulai) <= 6 and pekerjaan.flag_usulan = 5";
+                $query = "select * from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun=".pg_escape_string($id_user)." and EXTRACT(month from tgl_mulai) >= 1 AND EXTRACT(month from tgl_mulai) <= 6 and pekerjaan.flag_usulan = '5'";
             }
             else {
-                 $query = "select * from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun=".pg_escape_string($id_user)." and EXTRACT(month from tgl_mulai) >= 7 AND EXTRACT(month from tgl_mulai) <= 12 and pekerjaan.flag_usulan = 5";
+                 $query = "select * from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun=".pg_escape_string($id_user)." and EXTRACT(month from tgl_mulai) >= 7 AND EXTRACT(month from tgl_mulai) <= 12 and pekerjaan.flag_usulan = '5'";
             }
         }
         else
         {
-             $query = "select * from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun=".pg_escape_string($id_user)." and EXTRACT(month from tgl_mulai) >= 1 AND EXTRACT(month from tgl_mulai) <= 12 and pekerjaan.flag_usulan = 5";
+             $query = "select * from pekerjaan inner join detil_pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun=".pg_escape_string($id_user)." and EXTRACT(month from tgl_mulai) >= 1 AND EXTRACT(month from tgl_mulai) <= 12 and pekerjaan.flag_usulan = '5'";
         }
         $query = $this->db->query($query);
         return $query->result();
