@@ -16,6 +16,12 @@ class pengaduan_model extends CI_Model {
         else
             return 0;
     }
+    public function sp_get_idpengaduan()
+    {
+        $query = "select id_pengaduan from pengaduan order by id_pengaduan DESC LIMIT 1";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
 }
 
 ?>

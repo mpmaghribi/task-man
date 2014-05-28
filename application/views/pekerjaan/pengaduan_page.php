@@ -34,6 +34,7 @@
                                     <table class="table table-striped table-hover table-condensed" id="tabel_pengaduan">
                                         <thead>
                                             <tr>
+                                                <th></th>
                                                 <th>No</th>
                                                 <th>Kode Pengaduan</th>
                                                 <th>Topik Pengaduan</th>
@@ -51,6 +52,17 @@
                                                     $counter++;
                                                     ?>
                                                     <tr>
+                                                        <td>
+                                                            <div class="btn-group">
+                                                                <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button">Pilihan <span class="caret"></span></button>
+                                                                <ul role="menu" class="dropdown-menu">
+                                                                    <li><a href="#" id="selesai_pengaduan" onclick="selesai_pengaduan(<?php echo $value->id_pengaduan?>)" >Selesai</a></li>
+                                                                                                        <li><a href="#pengaduan_pkj" onclick="terima_pengaduan('<?php echo $value->id_pengaduan; ?>')" data-toggle="modal" >Terima</a></li> 
+                                                                                                        <li><a href="#tolak_pengaduan" data-toggle="modal" onclick="tolak_pengaduan(<?php echo $value->id_pengaduan?>)" >Tolak</a></li>
+
+                                                                </ul>
+                                                            </div>
+                                                        </td>
                                                         <td><?php echo $counter; ?></td>
                                                         <td><?php echo $value->kode_pengaduan; ?></td>
                                                         <td><?php
@@ -69,9 +81,6 @@
                                                             <?php if($value->id_status_pengaduan == 3){?>
                                                             <div class="btn-group btn-group-sm btn-xs" width="10">
                                                                 
-                                                                <a href="#" id="selesai_pengaduan" class="btn btn-default btn-xs">Selesai</a>
-                                                                <a href="#pengaduan_pkj" id="terima_pengaduan" data-toggle="modal" class="btn btn-primary btn-xs">Terima</a> 
-                                                                <a href="#tolak_pengaduan" data-toggle="modal" onclick="tolak_pengaduan(<?php echo $value->id_pengaduan?>)" class="btn btn-danger btn-xs">Tolak</a>
                                                                 
                                                             </div>
                                                             <?php }?>
@@ -220,41 +229,45 @@
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script>
-            $("#terima_pengaduan").click(function(e){
-                e.preventDefault();
-                $.ajax({// create an AJAX call...
-                            data: "", // get the form data
-                            type: "POST", // GET or POST
-                            url: "<?php echo site_url(); ?>/pekerjaan/get_pengaduan", // the file to call
+        function terima_pengaduan(idp)
+        {
+            //alert(id_pengaduan);
+//            $("#topik_pengaduan").val(topik_pengaduan);
+//            $("#isi_pengaduan").val(isi_pengaduan);
+//            $("#tgl_pengaduan").val(tgl_pengaduan);
+            $.ajax({// create an AJAX call...
+                            data: {
+                                id_pengaduan: idp
+                            }, // get the form data
+                            type: "post", // GET or POST
+                            url: "<?php echo site_url()?>/pekerjaan/get_pengaduan", // the file to call
                             success: function(response) { // on success..
-                                var json = jQuery.parseJSON(response);
-                                //alert(json.data[0]["konten"]);
+                                 var json = jQuery.parseJSON(response);
                                 if (json.status === "OK") {
-                                    $("#topik_pengaduan").val(json.data[0]["topik"]);
-                                    $("#isi_pengaduan").val(json.data[0]["konten"]);
-                                    $("#tgl_pengaduan").val(json.data[0]["tanggal"]);
-                                    $("#notif_sukses").display("block");
+                                    $("#topik_pengaduan").val(json.data["topik"]);
+                                    $("#isi_pengaduan").val(json.data["konten"]);
+                                    $("#tgl_pengaduan").val(json.data["tanggal"]);
                                 } else {
-                                    alert("HTTP 404. Not Found, " + json.reason);
+                                    alert("HTTP 404. Not Found, ");
                                 }
                             }
                         });
-            });
-            $("#simpan_pkj").click(function(e){
-                e.preventDefault();
-                $.ajax({// create an AJAX call...
-                            data: {
-                                    id_pengaduan: idp,
-                                    id_status: 1,
-                                    komentar: "Pengaduan anda sudah kami terima dan telah di follow up ke task management. Terima kasih."
-                                }, // get the form data
-                            type: "POST", // GET or POST
-                            url: "<?php echo site_url(); ?>/pekerjaan/get_pengaduan", // the file to call
-                            success: function(response) { // on success..
-                                //window.location.href= "";
-                            }
-                        });
-            });
+        }
+//            $("#simpan_pkj").click(function(e){
+//                e.preventDefault();
+//                $.ajax({// create an AJAX call...
+//                            data: {
+//                                    id_pengaduan: idp,
+//                                    id_status: 1,
+//                                    komentar: "Pengaduan anda sudah kami terima dan telah di follow up ke task management. Terima kasih."
+//                                }, // get the form data
+//                            type: "POST", // GET or POST
+//                            url: "<?php echo site_url(); ?>/pekerjaan/get_pengaduan", // the file to call
+//                            success: function(response) { // on success..
+//                                //window.location.href= "";
+//                            }
+//                        });
+//            });
             function tolak_pengaduan(idp)
             {
                 $("#tolak_button").click(function(e){
@@ -277,8 +290,8 @@
             
             function selesai_pengaduan(idp)
             {
-                $("#selesai_pengaduan").click(function(e){
-                    e.preventDefault();
+//                $("#selesai_pengaduan").click(function(e){
+//                    e.preventDefault();
                     $.ajax({// create an AJAX call...
                                 data: {
                                     id_pengaduan: idp,
@@ -291,7 +304,7 @@
                                     window.location.href= "";
                                 }
                             });
-                });
+               // });
             }
             
     </script>

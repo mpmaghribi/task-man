@@ -34,10 +34,11 @@ class pekerjaan extends ceklogin {
     function get_pengaduan() {
         //http://localhost:90/integrarsud/helpdesk/index.php/pengaduan/getDelegate/
         //print_r($url);
-        $url = str_replace('taskmanagement', 'integrarsud/helpdesk', str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
+        $id = $this->input->post("id_pengaduan");
+        
+        $url = str_replace('taskmanagement','integrarsud/helpdesk', site_url()) . "/pengaduan/getIdDelegate/".pg_escape_string($id);
         $data["pengaduan"] = json_decode(file_get_contents($url));
-        $url2 = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-        $data["pegawai"] = json_decode(file_get_contents($url2));
+        
         $temp = $this->session->userdata('logged_in');
         $data['temp'] = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
@@ -79,8 +80,12 @@ class pekerjaan extends ceklogin {
         $respon = $this->input->post("respon_pengaduan");
         $alasan = "0";
         $pengaduan = $this->pengaduan_model->sp_tambah_pengaduan($nama_pkj, $deskripsi_pkj, $tgl, $prioritas, $respon, $alasan);
-
-        $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
+        $data_pengaduan = $this->pengaduan_model->sp_get_idpengaduan();
+        foreach ($data_pengaduan as $value) {
+            $id_pengaduan = $value->id_pengaduan;
+        }
+        $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj,$id_pengaduan,"insidentil");
+        $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
         if ($id_pekerjaan != NULL) {
             foreach ($staff as $val) {//val itu nip
 //                if (strlen($val) == 0) {
