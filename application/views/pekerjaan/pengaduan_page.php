@@ -119,7 +119,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title">Tambah Pekerjaan</h4>
+                                        <h4 class="modal-title">Delegasi Pekerjaan dari Pengaduan</h4>
                                     </div>
                                     <form class="cmxform form-horizontal " id="signupForm" action="<?php echo site_url() ?>/pekerjaan/tambah_pengaduan" method="POST">
                                         <div class="modal-body">
@@ -137,13 +137,13 @@
                                                 </div>
                                             </div>
                                             <div class="form-group ">
-                                                <label for="topik_pengaduan" class="control-label col-lg-3">Topik Pengaduan</label>
+                                                <label for="topik_pengaduan" class="control-label col-lg-3">Topik Pekerjaan</label>
                                                 <div class="col-lg-8">
                                                     <input class=" form-control" id="topik_pengaduan" name="topik_pengaduan" type="text" />
                                                 </div>
                                             </div>
                                             <div class="form-group ">
-                                                <label for="isi_pengaduan" class="control-label col-lg-3">Isi Pengaduan</label>
+                                                <label for="isi_pengaduan" class="control-label col-lg-3">Deskripsi Pekerjaan</label>
                                                 <div class="col-lg-8">
                                                     <textarea class=" form-control" id="isi_pengaduan" name="isi_pengaduan" rows="12">
                                                     </textarea>
@@ -156,7 +156,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group ">
-                                                <label for="deadline" class="control-label col-lg-3">Deadline</label>
+                                                <label for="deadline" class="control-label col-lg-3">Deadline Pekerjaan</label>
                                                 <div class="col-lg-8 ">
                                                     <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
                                                         <input id="d" readonly type="text" class="form-control dpd1_pengaduan" value="<?php
