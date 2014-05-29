@@ -21,13 +21,15 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#deskripsiPekerjaan">Deskripsi Pekerjaan</a>
                                     </li>
-                                    <?php if ($deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id'] && $deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
+                                    <?php
+                                    
+                                    if ($deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id'] && $data_akun['hakakses']=='Administrator' && $deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
                                         <li class="">
                                             <a data-toggle="tab" href="#penilaianPekerjaan">Penilaian Kerja Staff</a>
                                         </li>
                                     <?php } ?>
                                 </ul>
-                                <?php if ($deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id']) { ?>
+                                <?php if ($deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id'] && $data_akun['hakakses']=='Administrator') { ?>
                                     <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                         <?php if ($deskripsi_pekerjaan[0]->flag_usulan == '1') { ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi(<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>);">Validasi</a><?php } ?>
                                         <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>

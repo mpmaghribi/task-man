@@ -394,6 +394,7 @@ class pekerjaan extends ceklogin {
             $this->baca_pending_task($id_detail_pkj);
             //$is_isi_komentar = $this->input->get('is_isi_komentar');
             $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
+            //print_r($data['deskripsi_pekerjaan']);
             if (count($data['deskripsi_pekerjaan']) > 0) {
                 $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
                 $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
@@ -404,6 +405,7 @@ class pekerjaan extends ceklogin {
                 $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
                 $data["id_pkj"] = $id_detail_pkj;
                 $data['my_staff'] = $this->akun->my_staff($temp["user_id"]);
+                //print_r($data['my_staff']);
                 $staff_array = array();
                 foreach ($data['my_staff'] as $s) {
                     $staff_array[$s->id_akun] = $s->nama;
@@ -706,7 +708,7 @@ class pekerjaan extends ceklogin {
             $my_staff[] = $s->id_akun;
             $nama_staff[$s->id_akun] = $s->nama;
         }
-        if (in_array($id_staff, $my_staff)) {//jika staff yang dinilai atau bawahannya
+        if (in_array($id_staff, $my_staff) || ($session['user_id'] == $id_staff && $session['hakakses'] == 'Administrator')) {//jika staff yang dinilai atau bawahannya
             $detail_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan_of_staff(array($id_pekerjaan), $id_staff);
             if (count($detail_pekerjaan) > 0) {//jika ada detil pekerjaan yg berkaitan dengan pekerjaan dan staff nya
                 $tipe_nilai = $this->pekerjaan_model->get_tipe_nilai_by_nama($nama_tipe_nilai);
@@ -756,84 +758,96 @@ class pekerjaan extends ceklogin {
         $waktu = pg_escape_string($this->input->post('waktu'));
         $biaya = pg_escape_string($this->input->post('biaya'));
         $nama_tipe_nilai = strtolower(pg_escape_string($this->input->post('tipe_nilai')));
+        if ($nama_tipe_nilai=='target'&&($ak == '0' || $kualitas_mutu == '0' || $kuantitas_output == '0' || $biaya == '0' || $waktu == '0') ){
+            echo json_encode(array('status' => 'null', 'keterangan' => 'nilai tidak boleh 0'));
+        } else {
+            
 
-        $tipe_nilai = $this->pekerjaan_model->get_tipe_nilai_by_nama($nama_tipe_nilai);
-        $detail_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan_of_staff(array($id_pekerjaan), $id_staff);
+            $tipe_nilai = $this->pekerjaan_model->get_tipe_nilai_by_nama($nama_tipe_nilai);
+            $detail_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan_of_staff(array($id_pekerjaan), $id_staff);
 
 
 
-        $query_staff = $this->akun->my_staff($session['user_id']);
-        $my_staff = array();
-        foreach ($query_staff as $s) {
-            $my_staff[] = $s->id_akun;
-        }
-        if (count($detail_pekerjaan) > 0) {
-            //print_r($detail_pekerjaan);
-            if (in_array($id_staff, $my_staff)) {//staff yang dinilai adalah bawahan
-                if (count($tipe_nilai) > 0) {
-                    $tipe_target = 'target';
-                    $tipe_target = $this->pekerjaan_model->get_tipe_nilai_by_nama($tipe_target);
-                    if (count($tipe_target) > 0) {
-                        //mengambil nilai target
-                        $target = $this->pekerjaan_model->nilai_get($detail_pekerjaan[0]->id_detil_pekerjaan, $tipe_target[0]->id_tipe_nilai);
-                        if (count($target) > 0) {//jika target sudah diisi
-                            $existing_nilai = $this->pekerjaan_model->nilai_get($detail_pekerjaan[0]->id_detil_pekerjaan, $tipe_nilai[0]->id_tipe_nilai);
-                            $insert['ak'] = $ak;
-                            $insert['kuatitas_output'] = $kuantitas_output;
-                            $insert['kualitas_mutu'] = $kualitas_mutu;
-                            $insert['waktu'] = $waktu;
-                            $insert['biaya'] = $biaya;
-                            $insert['id_detil_pekerjaan'] = $detail_pekerjaan[0]->id_detil_pekerjaan;
-                            $insert['id_tipe_nilai'] = $tipe_nilai[0]->id_tipe_nilai;
-                            $kuantitas = 100 * $kuantitas_output / $target[0]->kuatitas_output;
-                            $kualitas = 100 * $kualitas_mutu / $target[0]->kualitas_mutu;
-                            $persen_waktu = 100 - (100 * $waktu / $target[0]->waktu);
-                            $nilai_waktu = 0;
-                            if ($persen_waktu > 24) {
-                                $nilai_waktu = 76 - ((((1.76 * $target[0]->waktu - $waktu) / $target[0]->waktu) * 100) - 100);
-                            } else {
-                                $nilai_waktu = ((1.76 * $target[0]->waktu - $waktu) / $target[0]->waktu) * 100;
-                            }
-                            $nilai_biaya = 0;
-                            $persen_biaya = 100 - ($biaya / $target[0]->biaya * 100);
-                            if ($persen_biaya > 24) {
-                                $nilai_biaya = 76 - ((((1.76 * $target[0]->biaya - $biaya) / $target[0]->biaya) * 100) - 100);
-                            } else {
-                                $nilai_biaya = ((1.76 * $target[0]->biaya - $biaya) / $target[0]->biaya) * 100;
-                            }
-                            $insert['penghitungan'] = $kualitas + $kuantitas + $nilai_biaya + $nilai_waktu;
-                            $insert['nilai_skp'] = $insert['penghitungan'] / 4;
-                            if ($target[0]->biaya == 0 && $biaya == 0) {
-                                $insert['nilai_skp'] = $insert['penghitungan'] / 3;
-                            }
-                            if (count($existing_nilai) > 0) {
-                                //print_r($existing_nilai);
-                                $perbarui = $this->pekerjaan_model->nilai_update($insert, $existing_nilai[0]->id_nilai);
-                                if ($perbarui)
-                                    echo json_encode(array('status' => 'OK', 'keterangan' => $nama_tipe_nilai . ' sudah ada, telah diperbarui'));
-                                else
-                                    echo json_encode(array('status' => 'null', 'keterangan' => 'gagal memperbarui nilai'));
-                            } else {
-                                $nilai = $this->pekerjaan_model->nilai_set($insert);
-                                //print_r($nilai);
-                                if ($nilai) {
-                                    echo json_encode(array('status' => 'OK', 'keterangan' => 'berhasil'));
-                                } else {
-                                    echo json_encode(array('status' => 'null', 'keterangan' => 'gagal menambahkan nilai'));
+            $query_staff = $this->akun->my_staff($session['user_id']);
+            $my_staff = array();
+            foreach ($query_staff as $s) {
+                $my_staff[] = $s->id_akun;
+            }
+            if (count($detail_pekerjaan) > 0) {
+                //print_r($detail_pekerjaan);
+                if (in_array($id_staff, $my_staff) || ($session['user_id'] == $id_staff && $session['hakakses'] == 'Administrator')) {//jika staff yang dinilai atau bawahannya
+                    if (count($tipe_nilai) > 0) {//jika tipe nilai valid
+                        $insert['ak'] = $ak;
+                        $insert['kuatitas_output'] = $kuantitas_output;
+                        $insert['kualitas_mutu'] = $kualitas_mutu;
+                        $insert['waktu'] = $waktu;
+                        $insert['biaya'] = $biaya;
+                        $insert['id_tipe_nilai'] = $tipe_nilai[0]->id_tipe_nilai;
+                        $insert['id_detil_pekerjaan'] = $detail_pekerjaan[0]->id_detil_pekerjaan;
+                        $existing_nilai = $this->pekerjaan_model->nilai_get($detail_pekerjaan[0]->id_detil_pekerjaan, $tipe_nilai[0]->id_tipe_nilai);
+                        if ($nama_tipe_nilai == 'realisasi') {//jika merupakan realisasi
+                            $tipe_target = 'target';
+                            $tipe_target = $this->pekerjaan_model->get_tipe_nilai_by_nama($tipe_target);
+                            if (count($tipe_target) > 0) {//nilai target adalah valid
+                                //mengambil nilai target
+                                $target = $this->pekerjaan_model->nilai_get($detail_pekerjaan[0]->id_detil_pekerjaan, $tipe_target[0]->id_tipe_nilai);
+                                if (count($target) > 0) {//jika target sudah diisi
+                                    $kuantitas = 100 * $kuantitas_output / $target[0]->kuatitas_output;
+                                    $kualitas = 100 * $kualitas_mutu / $target[0]->kualitas_mutu;
+                                    $persen_waktu = 100 - (100 * $waktu / $target[0]->waktu);
+                                    $nilai_waktu = 0;
+                                    if ($persen_waktu > 24) {
+                                        $nilai_waktu = 76 - ((((1.76 * $target[0]->waktu - $waktu) / $target[0]->waktu) * 100) - 100);
+                                    } else {
+                                        $nilai_waktu = ((1.76 * $target[0]->waktu - $waktu) / $target[0]->waktu) * 100;
+                                    }
+                                    $nilai_biaya = 0;
+                                    $persen_biaya = 100 - ($biaya / $target[0]->biaya * 100);
+                                    if ($persen_biaya > 24) {
+                                        $nilai_biaya = 76 - ((((1.76 * $target[0]->biaya - $biaya) / $target[0]->biaya) * 100) - 100);
+                                    } else {
+                                        $nilai_biaya = ((1.76 * $target[0]->biaya - $biaya) / $target[0]->biaya) * 100;
+                                    }
+                                    $insert['penghitungan'] = $kualitas + $kuantitas + $nilai_biaya + $nilai_waktu;
+                                    $insert['nilai_skp'] = $insert['penghitungan'] / 4;
+                                    if ($target[0]->biaya == 0 && $biaya == 0) {
+                                        $insert['nilai_skp'] = $insert['penghitungan'] / 3;
+                                    }
+                                } else {//jika target belum diisi
+                                    echo json_encode(array('status' => 'null', 'keterangan' => 'target belum diisi'));
                                 }
+                            } else {//tidak ada tipe nilai target
+                                echo json_encode(array('status' => 'null', 'keterangan' => 'tipe nilai target belum terdaftar'));
                             }
-                        } else {//jika target belum diisi
-                            echo json_encode(array('status' => 'null', 'keterangan' => 'target belum diisi'));
+                        } else {//jika bukan tipe nilai realisasi
                         }
+                        //commit
+                        if (count($existing_nilai) > 0) {
+                            //print_r($existing_nilai);
+                            $perbarui = $this->pekerjaan_model->nilai_update($insert, $existing_nilai[0]->id_nilai);
+                            if ($perbarui)
+                                echo json_encode(array('status' => 'OK', 'keterangan' => $nama_tipe_nilai . ' sudah ada, telah diperbarui'));
+                            else
+                                echo json_encode(array('status' => 'null', 'keterangan' => 'gagal memperbarui nilai'));
+                        } else {
+                            $nilai = $this->pekerjaan_model->nilai_set($insert);
+                            //print_r($nilai);
+                            if ($nilai) {
+                                echo json_encode(array('status' => 'OK', 'keterangan' => 'berhasil'));
+                            } else {
+                                echo json_encode(array('status' => 'null', 'keterangan' => 'gagal menambahkan nilai'));
+                            }
+                        }
+                    }//jika tipe valid
+                    else {//jika tipe tidak valid
+                        echo json_encode(array('status' => 'null', 'keterangan' => 'tipe nilai diperlukan'));
                     }
                 } else {
-                    echo json_encode(array('status' => 'null', 'keterangan' => 'tipe nilai diperlukan'));
+                    echo json_encode(array('status' => 'null', 'keterangan' => 'bukan bawahan anda'));
                 }
             } else {
-                echo json_encode(array('status' => 'null', 'keterangan' => 'bukan bawahan anda'));
+                echo json_encode(array('status' => 'null', 'keterangan' => 'pekerjaan tidak ditemukan'));
             }
-        } else {
-            echo json_encode(array('status' => 'null', 'keterangan' => 'pekerjaan tidak ditemukan'));
         }
     }
 

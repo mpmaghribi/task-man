@@ -7,9 +7,14 @@
         </h4>
         <div >
             <table id="tabel_assign_staff" class="table table-hover general-table">
-                <?php foreach ($listassign_pekerjaan as $detail) { ?>
+                <?php 
+                $list_user=array();
+                foreach ($users as $user){
+                    $list_user[$user->id_akun]=$user->nama;
+                }
+                foreach ($listassign_pekerjaan as $detail) { ?>
                     <tr>
-                        <td style="vertical-align: middle"><?php echo $staff_array[$detail->id_akun]; ?></td>
+                        <td style="vertical-align: middle"><?php echo $list_user[$detail->id_akun]; ?></td>
                         <td>
                             <div class="btn-group btn-group-lg btn-xs" style="float: right; padding: -25px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                 <a class="btn btn-info " href="#modal_" data-toggle="modal" id="target_<?php echo $detail->id_akun; ?>" onclick="load_nilai(<?php echo $detail->id_akun; ?>, 'target');" style="font-size: 12px;padding: 4px 10px;">Target</a>
@@ -91,7 +96,7 @@
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
     var id_pekerjaan = '<?php echo $listassign_pekerjaan[0]->id_pekerjaan; ?>';
-    var staff = jQuery.parseJSON('<?php echo json_encode($staff_array); ?>');
+    var staff = jQuery.parseJSON('<?php echo json_encode($list_user); ?>');
     var tipe_nilai = 'target';
     var prev_tipe_nilai = '';
     var prev_id = 0;
@@ -105,11 +110,11 @@
         if (!(prev_tipe_nilai === tipe_nilai && prev_id === id_staff)) {
             prev_tipe_nilai = tipe_nilai;
             prev_id = id_staff;
-            $('#ak').val('0');
-            $('#kuantitas_output').val('0');
-            $('#kualitas_mutu').val('0');
-            $('#waktu').val('0');
-            $('#biaya').val('0');
+            $('#ak').val('1');
+            $('#kuantitas_output').val('1');
+            $('#kualitas_mutu').val('1');
+            $('#waktu').val('1');
+            $('#biaya').val('1');
         }
         $.ajax({// create an AJAX call...
             data: {
@@ -187,6 +192,7 @@
                 } else {
                     console.log('nilai set error=>' + json.keterangan);
                     alert(json.keterangan);
+                    $('#div_loading').css('display', 'none');
                 }
                 //$('#tombol_close').click();
             },
