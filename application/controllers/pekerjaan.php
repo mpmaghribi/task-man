@@ -720,15 +720,15 @@ class pekerjaan extends ceklogin {
                         //jika yang direquest adalah nilai realisasi tetapi nilai target belum ada
                         $tipe_target = 'target';
                         $tipe_nilai = $this->pekerjaan_model->get_tipe_nilai_by_nama($tipe_target);
-                        if(count($tipe_nilai)>0){
+                        if (count($tipe_nilai) > 0) {
                             //mengambil nilai target
                             $nilai = $this->pekerjaan_model->nilai_get($detail_pekerjaan[0]->id_detil_pekerjaan, $tipe_nilai[0]->id_tipe_nilai);
-                            if(count($nilai)>0){//jika target sudah diisi
+                            if (count($nilai) > 0) {//jika target sudah diisi
                                 echo json_encode(array('status' => 'kosong', 'keterangan' => 'belum ada nilai'));
-                            }else{//jika target belum diisi
+                            } else {//jika target belum diisi
                                 echo json_encode(array('status' => 'null', 'keterangan' => 'harap mengisi target terlebih dahulu'));
                             }
-                        }else{
+                        } else {
                             echo json_encode(array('status' => 'null', 'keterangan' => 'kesalahan pada database tipe nilai'));
                         }
                     } else {
@@ -772,19 +772,20 @@ class pekerjaan extends ceklogin {
             if (in_array($id_staff, $my_staff)) {//staff yang dinilai adalah bawahan
                 if (count($tipe_nilai) > 0) {
                     $existing_nilai = $this->pekerjaan_model->nilai_get($detail_pekerjaan[0]->id_detil_pekerjaan, $tipe_nilai[0]->id_tipe_nilai);
+                    $insert['ak'] = $ak;
+                    $insert['kuatitas_output'] = $kuantitas_output;
+                    $insert['kualitas_mutu'] = $kualitas_mutu;
+                    $insert['waktu'] = $waktu;
+                    $insert['biaya'] = $biaya;
+                    $insert['id_detil_pekerjaan'] = $detail_pekerjaan[0]->id_detil_pekerjaan;
+                    $insert['id_tipe_nilai'] = $tipe_nilai[0]->id_tipe_nilai;
                     if (count($existing_nilai) > 0) {
                         //print_r($existing_nilai);
                         echo json_encode(array('status' => 'null', 'keterangan' => $nama_tipe_nilai . ' sudah ada sebelumnya'));
                     } else {
-                        $insert['ak'] = $ak;
-                        $insert['kuatitas_output'] = $kuantitas_output;
-                        $insert['kualitas_mutu'] = $kualitas_mutu;
-                        $insert['waktu'] = $waktu;
-                        $insert['biaya'] = $biaya;
-                        $insert['id_detil_pekerjaan'] = $detail_pekerjaan[0]->id_detil_pekerjaan;
-                        $insert['id_tipe_nilai'] = $tipe_nilai[0]->id_tipe_nilai;
+
                         $nilai = $this->pekerjaan_model->nilai_set($insert);
-                        print_r($nilai);
+                        //print_r($nilai);
                         if ($nilai) {
                             echo json_encode(array('status' => 'OK', 'keterangan' => 'berhasil'));
                         } else {

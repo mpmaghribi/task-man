@@ -145,7 +145,7 @@
                         console.log('kosong, belum ada nilai');
                     }
                 } else {
-                    console.log('error');
+                    console.log('error=>'+json.keterangan);
                     $('#nilai_body').css('display', 'none');
                     $('#div_nilai_error').css('display', 'block');
                     $('#div_nilai_error').html('error, ' + json.keterangan);
@@ -179,9 +179,10 @@
                     console.log('nilai set ok');
                     $('#tombol_close').click();
                 } else {
-                    console.log('nilai set error');
+                    console.log('nilai set error=>'+json.keterangan);
                     alert(json.keterangan);
                 }
+                //$('#tombol_close').click();
             }
         });
     }
