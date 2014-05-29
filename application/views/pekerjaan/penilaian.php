@@ -132,7 +132,6 @@
                 <img src="<?php echo base_url(); ?>assets/images/ajax-loader.gif"/>
             </div>
             <div id="div_nilai_error" style="display:none;text-align: center;">
-
                 </div>
             <div class="modal-body" id="modal_div_body" style="display: none">
                 <div id="modal_div_1">

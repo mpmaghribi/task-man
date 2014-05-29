@@ -708,16 +708,29 @@ class pekerjaan extends ceklogin {
         }
         if (in_array($id_staff, $my_staff)) {//jika staff yang dinilai atau bawahannya
             $detail_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan_of_staff(array($id_pekerjaan), $id_staff);
-            if (count($detail_pekerjaan) > 0) {
+            if (count($detail_pekerjaan) > 0) {//jika ada detil pekerjaan yg berkaitan dengan pekerjaan dan staff nya
                 $tipe_nilai = $this->pekerjaan_model->get_tipe_nilai_by_nama($nama_tipe_nilai);
-                if (count($tipe_nilai) > 0) {
-                    $target = $this->pekerjaan_model->nilai_get($detail_pekerjaan[0]->id_detil_pekerjaan, $tipe_nilai[0]->id_tipe_nilai);
-                    if (count($target) > 0) {
+                if (count($tipe_nilai) > 0) {//jika tipe penilaian valid
+                    $nilai = $this->pekerjaan_model->nilai_get($detail_pekerjaan[0]->id_detil_pekerjaan, $tipe_nilai[0]->id_tipe_nilai);
+                    if (count($nilai) > 0) {//jika sudah ada sebelumnya
                         $data['status'] = 'OK';
-                        $data['data'] = $target;
+                        $data['data'] = $nilai;
                         echo json_encode($data);
                     } else if ($nama_tipe_nilai == 'realisasi') {
-                        
+                        //jika yang direquest adalah nilai realisasi tetapi nilai target belum ada
+                        $tipe_target = 'target';
+                        $tipe_nilai = $this->pekerjaan_model->get_tipe_nilai_by_nama($tipe_target);
+                        if(count($tipe_nilai)>0){
+                            //mengambil nilai target
+                            $nilai = $this->pekerjaan_model->nilai_get($detail_pekerjaan[0]->id_detil_pekerjaan, $tipe_nilai[0]->id_tipe_nilai);
+                            if(count($nilai)>0){//jika target sudah diisi
+                                echo json_encode(array('status' => 'kosong', 'keterangan' => 'belum ada nilai'));
+                            }else{//jika target belum diisi
+                                echo json_encode(array('status' => 'null', 'keterangan' => 'harap mengisi target terlebih dahulu'));
+                            }
+                        }else{
+                            echo json_encode(array('status' => 'null', 'keterangan' => 'kesalahan pada database tipe nilai'));
+                        }
                     } else {
                         echo json_encode(array('status' => 'kosong', 'keterangan' => 'belum ada nilai'));
                     }
