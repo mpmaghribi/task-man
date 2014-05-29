@@ -143,7 +143,8 @@
 
                                 </div>
 
-                                <div id="PekerjaanStaff" class="tab-pane">hancak</div>
+<!--                                <div id="PekerjaanStaff" class="tab-pane"></div>-->
+<?php $this->load->view('pekerjaan/karyawan/pekerjaan_staff_view');?>
                                 <?php $this->load->view('pekerjaan/draft/draft_view');?>
 </div>
 

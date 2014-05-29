@@ -19,18 +19,18 @@
                                     <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>draft/assign?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">Assign</a>
                                     <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>draft/edit?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-success btn-xs" href="<?php echo base_url(); ?>draft/view?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">View</a>
-                                    <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="" onclick="confirm_batal(<?php echo $draft[0]->id_pekerjaan?>,'<?php echo $draft[0]->nama_pekerjaan; ?>');" style="font-size: 10px">Batalkan</a>
-                                    <script>
-                                        var url_hapus= '<?php echo base_url(); ?>draft/batalkan?id_draft=';
-                                        function confirm_batal(id_draft, judul){
-                                            var myurl = url_hapus+id_draft;
-                                            var c = confirm('apakah anda yakin menghapus draft "' + judul + '"?');
-                                            if(c===true){
-                                                window.location=myurl;
-                                            }
+                                    <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="" onclick="confirm_batal(<?php echo $draft[0]->id_pekerjaan ?>, '<?php echo $draft[0]->nama_pekerjaan; ?>');" style="font-size: 10px">Batalkan</a>
+
+                                </div><script>
+                                    var url_hapus = '<?php echo base_url(); ?>draft/batalkan?id_draft=';
+                                    function confirm_batal(id_draft, judul) {
+                                        var myurl = url_hapus + id_draft;
+                                        var c = confirm('apakah anda yakin menghapus draft "' + judul + '"?');
+                                        if (c === true) {
+                                            window.location = myurl;
                                         }
-                                        </script>
-                                </div>
+                                    }
+                                </script>
                             </header>
                             <div class="panel-body">
                                 <div class="tab-content">
@@ -184,7 +184,7 @@
                     staf.val(staf.val() + list_id[i] + '::');
                     $('#tabel_assign_staff').append('<tr id="staff_' + list_id[i] + '">' +
                             '<td id="nama_staff_baru_' + i + '">' + list_nama[i] + '</td>' +
-                            '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff('+list_id[i]+')">Hapus</a></td>' +
+                            '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(' + list_id[i] + ')">Hapus</a></td>' +
                             '</tr>');
                 }
             }

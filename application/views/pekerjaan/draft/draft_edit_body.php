@@ -20,7 +20,9 @@
                                     <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>draft/edit?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-success btn-xs" href="<?php echo base_url(); ?>draft/view?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">View</a>
                                     <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="" onclick="confirm_batal(<?php echo $draft[0]->id_pekerjaan?>,'<?php echo $draft[0]->nama_pekerjaan; ?>');" style="font-size: 10px">Batalkan</a>
-                                    <script>
+                                    
+                                </div>
+                                <script>
                                         var url_hapus= '<?php echo base_url(); ?>draft/batalkan?id_draft=';
                                         function confirm_batal(id_draft, judul){
                                             var myurl = url_hapus+id_draft;
@@ -30,7 +32,6 @@
                                             }
                                         }
                                         </script>
-                                </div>
                             </header>
                             <div class="panel-body">
                                 <div class="tab-content">

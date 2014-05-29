@@ -47,7 +47,9 @@ class pekerjaan_model extends CI_Model {
         $query = "select detil_pekerjaan.id_akun, pekerjaan.*, pekerjaan.tgl_selesai"
                 . "  from detil_pekerjaan inner join pekerjaan on "
                 . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan "
-                . "where detil_pekerjaan.id_akun in (".implode(",",$id_akun).") and detil_pekerjaan.status!='Batal' "
+                . "where detil_pekerjaan.id_akun in (".implode(",",$id_akun).") "
+                . "and detil_pekerjaan.status!='Batal' "
+                . "and (pekerjaan.flag_usulan='1' or pekerjaan.flag_usulan='2') "
                 . "order by tglasli_mulai desc";
         //echo $query;
         $query = $this->db->query($query);
@@ -293,6 +295,13 @@ class pekerjaan_model extends CI_Model {
                 . "inner join pemberi_pekerjaan on pemberi_pekerjaan.id_pekerjaan"
                 . "=pekerjaan.id_pekerjaan where pekerjaan.id_pekerjaan = $id_pekerjaan";
         $query = $this->db->query($query);
+        return $query->result();
+    }
+    public function get_pekerjaan_staff($id_pemberi_pekerjaan){
+        $query="select pekerjaan.*, pemberi_pekerjaan.* from pekerjaan inner join pemberi_pekerjaan "
+                . "on pekerjaan.id_pekerjaan=pemberi_pekerjaan.id_pekerjaan where (pekerjaan.flag_usulan"
+                . "='1' or pekerjaan.flag_usulan='2') order by pekerjaan.id_pekerjaan";
+        $query=$this->db->query($query);
         return $query->result();
     }
 

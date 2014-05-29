@@ -94,9 +94,17 @@ public function create() {
         $id_draft = pg_escape_string($this->input->get('id_draft'));
         $data['data_akun'] = $session;
         $data['draft'] = $this->pekerjaan_model->get_draft(array($id_draft));
+        //echo 'oeee';
+        //print_r($data['draft']);
+        if(count($data['draft'])>0){
         $data['id_draft'] = $id_draft;
         $data['list_berkas'] = $this->berkas_model->get_berkas_of_pekerjaan($id_draft);
         $this->load->view('pekerjaan/draft/view', $data);
+        }else{
+            $data['judul_kesalahan']='Kesalahan Draft';
+            $data['deskripsi_kesalahan']='Draft tidak dapat ditemukan';
+            $this->load->view('pekerjaan/kesalahan',$data);
+        }
     }
 
     public function assign() {

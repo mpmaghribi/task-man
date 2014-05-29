@@ -1,4 +1,4 @@
-<div id="div_view_draft" class="tab-pane active">
+<div id="div_view_draft" class="tab-pane ">
     <section class="panel">
         <header class="panel-heading">
             Daftar Draft Pekerjaan
@@ -36,16 +36,7 @@
                                     <a class="btn btn-success btn-xs" href="<?php echo base_url(); ?>draft/view?id_draft=<?php echo $draft->id_pekerjaan; ?>" id="" style="font-size: 10px">View</a>
                                     <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="" onclick="confirm_batal(<?php echo $draft->id_pekerjaan ?>, '<?php echo $draft->nama_pekerjaan; ?>');" style="font-size: 10px">Batalkan</a>
                                 </div>
-                                <script>
-                                    var url_hapus = '<?php echo base_url(); ?>draft/batalkan?id_draft=';
-                                    function confirm_batal(id_draft, judul) {
-                                        var myurl = url_hapus + id_draft;
-                                        var c = confirm('apakah anda yakin menghapus draft "' + judul + '"?');
-                                        if (c === true) {
-                                            window.location = myurl;
-                                        }
-                                    }
-                                </script>
+
                             </td>
                             <?php
                             echo '</tr>';
@@ -54,6 +45,16 @@
                     ?>
                     </tbody>
                 </table>
+                <script>
+                    var url_hapus = '<?php echo base_url(); ?>draft/batalkan?id_draft=';
+                    function confirm_batal(id_draft, judul) {
+                        var myurl = url_hapus + id_draft;
+                        var c = confirm('apakah anda yakin menghapus draft "' + judul + '"?');
+                        if (c === true) {
+                            window.location = myurl;
+                        }
+                    }
+                </script>
             </div>
         </div>
     </section></div>
