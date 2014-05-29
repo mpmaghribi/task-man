@@ -139,9 +139,7 @@ class pekerjaan_model extends CI_Model {
         return $query->result();
     }
 
-    public function realisasi_set($id_staff, $id_pekerjaan) {
-        
-    }
+    
     public function sp_deskripsi_pekerjaan($id_detail_pkj) {
         $query = "select pekerjaan.*,pemberi_pekerjaan.*,sifat_pekerjaan.*"
                 . " from pekerjaan inner join sifat_pekerjaan "

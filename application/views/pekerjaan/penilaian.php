@@ -105,11 +105,11 @@
         if (!(prev_tipe_nilai === tipe_nilai && prev_id === id_staff)) {
             prev_tipe_nilai = tipe_nilai;
             prev_id = id_staff;
-            $('#ak').val('');
-            $('#kuantitas_output').val('');
-            $('#kualitas_mutu').val('');
-            $('#waktu').val('');
-            $('#biaya').val('');
+            $('#ak').val('0');
+            $('#kuantitas_output').val('0');
+            $('#kualitas_mutu').val('0');
+            $('#waktu').val('0');
+            $('#biaya').val('0');
         }
         $.ajax({// create an AJAX call...
             data: {
@@ -145,12 +145,18 @@
                         console.log('kosong, belum ada nilai');
                     }
                 } else {
-                    console.log('error=>'+json.keterangan);
+                    console.log('error=>' + json.keterangan);
                     $('#nilai_body').css('display', 'none');
                     $('#div_nilai_error').css('display', 'block');
                     $('#div_nilai_error').html('error, ' + json.keterangan);
                     $('#modal_div_1').css('display', 'none');
                 }
+            },
+            error: function(respone) {
+                $('#nilai_body').css('display', 'none');
+                $('#div_nilai_error').css('display', 'block');
+                $('#div_nilai_error').html(respone);
+                $('#modal_div_1').css('display', 'none');
             }
         });
     }
@@ -179,10 +185,20 @@
                     console.log('nilai set ok');
                     $('#tombol_close').click();
                 } else {
-                    console.log('nilai set error=>'+json.keterangan);
+                    console.log('nilai set error=>' + json.keterangan);
                     alert(json.keterangan);
                 }
                 //$('#tombol_close').click();
+            },
+            error: function(  jqXHR, textStatus, errorThrown ) {
+                $('#nilai_body').css('display', 'none');
+                $('#div_nilai_error').css('display', 'block');
+                //console.log(errorThrown);
+                //console.log(textStatus);
+                //console.log(jqXHR);
+                //console.log(jqXHR.getAllResponseHeaders());
+                $('#div_nilai_error').html(errorThrown);
+                $('#modal_div_1').css('display', 'none');
             }
         });
     }
