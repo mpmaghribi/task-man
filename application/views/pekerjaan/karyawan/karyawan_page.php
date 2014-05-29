@@ -21,11 +21,7 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#ListPekerjaan">List Pekerjaan</a>
                                     </li>
-                                    <?php if (false) { ?>
-                                        <li class="">
-                                            <a data-toggle="tab" href="#assignPekerjaan">Assign Pekerjaan</a>
-                                        </li>
-                                    <?php } ?>
+                                    
                                     <li class="">
                                         <a data-toggle="tab" href="#TambahPekerjaan">Tambah Pekerjaan</a>
                                     </li>

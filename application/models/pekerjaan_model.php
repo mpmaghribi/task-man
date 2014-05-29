@@ -110,7 +110,7 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function nilai_get($id_staff, $id_pekerjaan, $tipe_nilai) {
-        $tipe_nilai=strtolowe($tipe_nilai);
+        $tipe_nilai=strtolower($tipe_nilai);
         $query = "select detil_pekerjaan.*, nilai_pekerjaan.*,tipe_nilai.* "
                 . "from nilai_pekerjaan inner join tipe_nilai "
                 . "on nilai_pekerjaan.id_tipe_nilai=tipe_nilai.id_tipe_nilai "

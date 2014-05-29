@@ -28,28 +28,41 @@
 <script>
     var id_pekerjaan = '<?php echo $listassign_pekerjaan[0]->id_pekerjaan; ?>';
     var staff = jQuery.parseJSON('<?php echo json_encode($staff_array); ?>');
-    var mode='target';
+    var mode = 'target';
     console.log(staff);
     function load_target(id_staff) {
         $('#div_loading').css('display', 'block');
-        mode='target';
-        $('#modal_div_1').html('Target untuk ' + staff[id_staff]);
+        mode = 'target';
+        $('#modal_div_1').html('Target untuk <strong>' + staff[id_staff] + '</strong>');
+        $('#ak').val('');
+        $('#kuantitas_output').val('');
+        $('#kualitas_mutu').val('');
+        $('#waktu').val('');
+        $('#biaya').val('');
         $.ajax({// create an AJAX call...
             data: {
                 id_staff: id_staff,
-                id_pekerjaan: id_pekerjaan
+                id_pekerjaan: id_pekerjaan,
+                tipe_nilai: 'target'
             }, // get the form data
             type: "post", // GET or POST
-            url: "<?php echo site_url(); ?>/pekerjaan/target_get", // the file to call
+            url: "<?php echo site_url(); ?>/pekerjaan/nilai_get", // the file to call
             success: function(response) { // on success..
                 var json = jQuery.parseJSON(response);
                 if (json.status === "OK") {
-                    $('#modal_div_body').css('display','block');
+                    $('#modal_div_body').css('display', 'block');
                     $('#div_loading').css('display', 'none');
                     console.log(json.data);
                     console.log(json.data.length);
-                    if(json.data.length>0){
-                        
+                    if (json.data.length > 0) {
+                        console.log('sudah punya target');
+                        $('#ak').val(json.data[0]['ak']);
+                        $('#kuantitas_output').val(json.data[0]['kuatitas_output']);
+                        $('#kualitas_mutu').val(json.data[0]['kualitas_mutu']);
+                        $('#waktu').val(json.data[0]['waktu']);
+                        $('#biaya').val(json.data[0]['biaya']);
+                    } else {
+                        console.log('belum punya target');
                     }
                 } else {
                 }
@@ -57,7 +70,6 @@
         });
     }
     function load_realisasi(id_staff) {
-        loading.css('display', 'block');
     }
 </script>
 <div class="modal fade" id="modal_" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -74,8 +86,39 @@
                 <div id="modal_div_1">
                     Body goes here...
                 </div>
-                <div>
-
+                <div class="form">
+                    <div class=" cmxform form-horizontal " style="margin-top: 15px">
+                        <div class="form-group ">
+                            <label for="ak" class="control-label col-lg-3">AK</label>
+                            <div class="col-lg-6">
+                                <input class=" form-control" id="ak" name="ak" type="text" />
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="kuantitas_output" class="control-label col-lg-3">Kuantitas Output</label>
+                            <div class="col-lg-6">
+                                <input class=" form-control" id="kuantitas_output" name="kuantitas_output" type="text" />
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="kualitas_mutu" class="control-label col-lg-3">Kualitas Mutu</label>
+                            <div class="col-lg-6">
+                                <input class=" form-control" id="kualitas_mutu" name="kualitas_mutu" type="text" />
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="waktu" class="control-label col-lg-3">Waktu</label>
+                            <div class="col-lg-6">
+                                <input class=" form-control" id="waktu" name="waktu" type="text" />
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="biaya" class="control-label col-lg-3">Biaya</label>
+                            <div class="col-lg-6">
+                                <input class=" form-control" id="biaya" name="biaya" type="text" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

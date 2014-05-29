@@ -705,7 +705,7 @@ class pekerjaan extends ceklogin {
             $my_staff[] = $s->id_akun;
         }
         if (in_array($id_staff, $my_staff)) {//jika staff yang dinilai atau bawahannya
-            $target = $this->pekerjaan_model->target_get($id_staff, $id_pekerjaan, $tipe_nilai);
+            $target = $this->pekerjaan_model->nilai_get($id_staff, $id_pekerjaan, $tipe_nilai);
             $data['status'] = 'OK';
             $data['data'] = $target;
             echo json_encode($data);
