@@ -61,10 +61,11 @@
             url: "<?php echo site_url(); ?>/pekerjaan/nilai_get", // the file to call
             success: function(response) { // on success..
                 var json = jQuery.parseJSON(response);
-                $('#div_loading').css('display', 'none');
-                if (json.status === "OK") {
+                
+                if (json.status === "OK" || json.status==='kosong') {
+                    $('#div_loading').css('display', 'none');
                     $('#modal_div_body').css('display', 'block');
-                    //$('#modal_div_1').css('display', 'block');
+                    $('#modal_div_1').css('display', 'block');
                     $('#nilai_body').css('display', 'block');
                     $('#div_nilai_error').css('display', 'none');
                     console.log(json.data);
@@ -84,9 +85,11 @@
                             
                     });
                 } else {
+                    console.log('sini');
                     $('#nilai_body').css('display', 'none');
                     $('#div_nilai_error').css('display', 'block');
                     $('#div_nilai_error').html('error, ' + json.keterangan);
+                    $('#modal_div_1').css('display','none');
                 }
             }
         });
@@ -128,13 +131,14 @@
             <div class="modal-body" id="div_loading"  style="display: none; text-align: center; vertical-align: middle;">
                 <img src="<?php echo base_url(); ?>assets/images/ajax-loader.gif"/>
             </div>
+            <div id="div_nilai_error" style="display:none;text-align: center;">
+
+                </div>
             <div class="modal-body" id="modal_div_body" style="display: none">
                 <div id="modal_div_1">
                     Body goes here...
                 </div>
-                <div id="div_nilai_error" style="display:none">
-
-                </div>
+                
                 <div class="form" id="nilai_body">
                     <div class=" cmxform form-horizontal " style="margin-top: 15px">
                         <div class="form-group ">

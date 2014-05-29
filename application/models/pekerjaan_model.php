@@ -109,17 +109,15 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
     }
 
-    public function     nilai_get($id_staff, $id_pekerjaan, $tipe_nilai) {
+    public function     nilai_get($id_detil_pekerjaan, $tipe_nilai) {
         $tipe_nilai=strtolower($tipe_nilai);
         $query = "select detil_pekerjaan.*, nilai_pekerjaan.*,tipe_nilai.* "
                 . "from nilai_pekerjaan inner join tipe_nilai "
                 . "on nilai_pekerjaan.id_tipe_nilai=tipe_nilai.id_tipe_nilai "
                 . "inner join detil_pekerjaan on detil_pekerjaan.id_detil_pekerjaan="
                 . "nilai_pekerjaan.id_detil_pekerjaan "
-                . "where detil_pekerjaan.id_akun=$id_staff and "
-                . "detil_pekerjaan.id_pekerjaan=$id_pekerjaan and "
-                . "detil_pekerjaan.status!='Batal' and "
-                . "lower(tipe_nilai.nama_tipe)='$tipe_nilai'";
+                . "where detil_pekerjaan.id_detil_pekerjaan=$id_detil_pekerjaan and "
+                . "tipe_nilai.id_tipe_nilai=$tipe_nilai";
         
         $query = $this->db->query($query);
         return $query->result();
@@ -129,7 +127,7 @@ class pekerjaan_model extends CI_Model {
         return $pekerjaan;
     }
     public function get_tipe_nilai_by_nama($nama_tipe_nilai){
-        $nama_tipe_nilai=strtolower($nama_tipe_nilai);
+        //$nama_tipe_nilai=strtolower($nama_tipe_nilai);
         $query="select tipe_nilai.* from tipe_nilai where lower(tipe_nilai.nama_tipe)"
                 . " like '%$nama_tipe_nilai%' ";
         $query=$this->db->query($query);
