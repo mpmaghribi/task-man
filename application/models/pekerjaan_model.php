@@ -126,7 +126,14 @@ class pekerjaan_model extends CI_Model {
     public function nilai_set($id_staff, $id_pekerjaan,$id_tipe_nilai) {
         
     }
-    
+    public function get_tipe_nilai_by_nama($nama_tipe_nilai){
+        $nama_tipe_nilai=strtolower($nama_tipe_nilai);
+        $query="select tipe_nilai.* from tipe_nilai where lower(tipe_nilai.nama_tipe)"
+                . " like '%$nama_tipe_nilai%' ";
+        $query=$this->db->query($query);
+        return $query->result();
+    }
+
     public function realisasi_set($id_staff, $id_pekerjaan) {
         
     }
@@ -324,6 +331,21 @@ class pekerjaan_model extends CI_Model {
                 . "detil_pekerjaan.id_pekerjaan where detil_pekerjaan.status!='Batal' and "
                 . "detil_pekerjaan.id_pekerjaan in "
                 . "(" . implode(",", $list_id_pekerjaan) . ") "
+                . "and detil_pekerjaan.status!='Batal' "
+                . "order by detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_detil_pekerjaan";
+        //echo $query;
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    public function get_detil_pekerjaan_of_staff($list_id_pekerjaan,$id_staff) {
+        if (count($list_id_pekerjaan) == 0)
+            return NULL;
+        $query = "select detil_pekerjaan.*, pekerjaan.*"
+                . "from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan="
+                . "detil_pekerjaan.id_pekerjaan where detil_pekerjaan.status!='Batal' and "
+                . "detil_pekerjaan.id_pekerjaan in "
+                . "(" . implode(",", $list_id_pekerjaan) . ") and detil_pekerjaan.id_akun=$id_staff "
+                . "and detil_pekerjaan.status!='Batal' "
                 . "order by detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_detil_pekerjaan";
         //echo $query;
         $query = $this->db->query($query);

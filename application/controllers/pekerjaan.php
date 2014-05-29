@@ -413,9 +413,9 @@ class pekerjaan extends ceklogin {
                 $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
                 $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
             } else {
-                $data['judul_kesalahan']='Kesalahan membaca pekerjaan';
-                $data['deskripsi_kesalahan']='Tidak dapat menemukan pekerjaan yang diminta';
-                $this->load->view('pekerjaan/kesalahan',$data);
+                $data['judul_kesalahan'] = 'Kesalahan membaca pekerjaan';
+                $data['deskripsi_kesalahan'] = 'Tidak dapat menemukan pekerjaan yang diminta';
+                $this->load->view('pekerjaan/kesalahan', $data);
             }
         }
     }
@@ -698,7 +698,7 @@ class pekerjaan extends ceklogin {
         $this->load->model(array('pekerjaan_model', 'akun'));
         $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
         $id_staff = pg_escape_string($this->input->post('id_staff'));
-        $tipe_nilai=pg_escape_string($this->input->post('tipe_nilai'));
+        $tipe_nilai = pg_escape_string($this->input->post('tipe_nilai'));
         $query_staff = $this->akun->my_staff($session['user_id']);
         $my_staff = array();
         foreach ($query_staff as $s) {
@@ -710,7 +710,7 @@ class pekerjaan extends ceklogin {
             $data['data'] = $target;
             echo json_encode($data);
         } else {
-            echo json_encode(array('status' => 'null','keterangan'=>'bukan bawahan anda'));
+            echo json_encode(array('status' => 'null', 'keterangan' => 'bukan bawahan anda'));
         }
     }
 
@@ -719,19 +719,45 @@ class pekerjaan extends ceklogin {
         $this->load->model(array('pekerjaan_model', 'akun'));
         $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
         $id_staff = pg_escape_string($this->input->post('id_staff'));
+        $ak = pg_escape_string($this->input->post('ak'));
+        $kuantitas_output = pg_escape_string($this->input->post('kuantitas_output'));
+        $kualitas_mutu = pg_escape_string($this->input->post('kualitas_mutu'));
+        $waktu = pg_escape_string($this->input->post('waktu'));
+        $biaya = pg_escape_string($this->input->post('biaya'));
+        $nama_tipe_nilai = pg_escape_string($this->input->post('tipe_nilai'));
+
+        $tipe_nilai = $this->pekerjaan_model->get_tipe_nilai_by_nama($nama_tipe_nilai);
+        $detail_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan_of_staff(array($id_pekerjaan),$id_staff);
+
+
+
         $query_staff = $this->akun->my_staff($session['user_id']);
         $my_staff = array();
         foreach ($query_staff as $s) {
             $my_staff[] = $s->id_akun;
         }
-        if (in_array($id_staff, $my_staff)) {
-            
-        } else {
-            echo json_encode(array('status' => 'null'));
+        if (count($detail_pekerjaan) > 0) {
+            print_r($detail_pekerjaan);
+            if (in_array($id_staff, $my_staff)) {//staff yang dinilai adalah bawahan
+                if (count($tipe_nilai) > 0) {
+                    $insert['ak'] = $ak;
+                    $insert['kuatitas_output'] = $kuantitas_output;
+                    $insert['kualitas_mutu'] = $kualitas_mutu;
+                    $insert['waktu'] = $waktu;
+                    $insert['biaya'] = $biaya;
+                    $insert['id_detil_pekerjaan'] = $detail_pekerjaan[0]->id_detil_pekerjaan;
+                    
+                    echo json_encode(array('status' => 'OK', 'keterangan' => 'berhasil'));
+                } else {
+                    echo json_encode(array('status' => 'null', 'keterangan' => 'tipe nilai diperlukan'));
+                }
+            } else {
+                echo json_encode(array('status' => 'null', 'keterangan' => 'bukan bawahan anda'));
+            }
+        }else{
+            echo json_encode(array('status' => 'null', 'keterangan' => 'pekerjaan tidak ditemukan'));
         }
     }
-
-    
 
     public function update_progress() {
 //        if ($this->check_session_and_cookie() == 1) {

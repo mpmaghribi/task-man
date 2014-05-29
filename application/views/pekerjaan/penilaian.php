@@ -80,9 +80,8 @@
                         console.log('belum punya ' + tipe_nilai);
                     }
                     $('#tombol_confirm').click(function(e) {
-                        if (nilai_set(id_staff) === true) {
-                            $('#tombol_close').click();
-                        }
+                        nilai_set(id_staff);
+                            
                     });
                 } else {
                     $('#nilai_body').css('display', 'none');
@@ -111,6 +110,9 @@
             success: function(response) { // on success..
                 var json = jQuery.parseJSON(response);
                 if (json.status === "OK") {
+                    $('#tombol_close').click();
+                }else{
+                    alert(json.keterangan);
                 }
             }
         });
