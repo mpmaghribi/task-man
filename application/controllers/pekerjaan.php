@@ -781,7 +781,11 @@ class pekerjaan extends ceklogin {
                     $insert['id_tipe_nilai'] = $tipe_nilai[0]->id_tipe_nilai;
                     if (count($existing_nilai) > 0) {
                         //print_r($existing_nilai);
-                        echo json_encode(array('status' => 'null', 'keterangan' => $nama_tipe_nilai . ' sudah ada sebelumnya'));
+                        $perbarui = $this->pekerjaan_model->nilai_update($insert,$existing_nilai[0]->id_nilai);
+                        if($perbarui)
+                        echo json_encode(array('status' => 'OK', 'keterangan' => $nama_tipe_nilai . ' sudah ada, telah diperbarui'));
+                        else
+                            echo json_encode(array('status' => 'null', 'keterangan' => 'gagal memperbarui nilai'));
                     } else {
 
                         $nilai = $this->pekerjaan_model->nilai_set($insert);

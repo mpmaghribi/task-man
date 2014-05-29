@@ -126,6 +126,11 @@ class pekerjaan_model extends CI_Model {
         $pekerjaan = $this->db->insert('nilai_pekerjaan', $insert);
         return $pekerjaan;
     }
+    public function nilai_update($data,$id){
+        $this->db->where('id_nilai',$id);
+        $pekerjaan = $this->db->update('nilai_pekerjaan',$data);
+        return $pekerjaan;
+    }
     public function get_tipe_nilai_by_nama($nama_tipe_nilai){
         //$nama_tipe_nilai=strtolower($nama_tipe_nilai);
         $query="select tipe_nilai.* from tipe_nilai where lower(tipe_nilai.nama_tipe)"
