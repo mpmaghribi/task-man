@@ -109,7 +109,7 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
     }
 
-    public function nilai_get($id_staff, $id_pekerjaan, $tipe_nilai) {
+    public function     nilai_get($id_staff, $id_pekerjaan, $tipe_nilai) {
         $tipe_nilai=strtolower($tipe_nilai);
         $query = "select detil_pekerjaan.*, nilai_pekerjaan.*,tipe_nilai.* "
                 . "from nilai_pekerjaan inner join tipe_nilai "
@@ -120,11 +120,13 @@ class pekerjaan_model extends CI_Model {
                 . "detil_pekerjaan.id_pekerjaan=$id_pekerjaan and "
                 . "detil_pekerjaan.status!='Batal' and "
                 . "lower(tipe_nilai.nama_tipe)='$tipe_nilai'";
+        
         $query = $this->db->query($query);
         return $query->result();
     }
-    public function nilai_set($id_staff, $id_pekerjaan,$id_tipe_nilai) {
-        
+    public function nilai_set($insert) {
+        $pekerjaan = $this->db->insert('nilai_pekerjaan', $insert);
+        return $pekerjaan;
     }
     public function get_tipe_nilai_by_nama($nama_tipe_nilai){
         $nama_tipe_nilai=strtolower($nama_tipe_nilai);

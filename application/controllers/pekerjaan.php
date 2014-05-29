@@ -727,7 +727,7 @@ class pekerjaan extends ceklogin {
         $nama_tipe_nilai = pg_escape_string($this->input->post('tipe_nilai'));
 
         $tipe_nilai = $this->pekerjaan_model->get_tipe_nilai_by_nama($nama_tipe_nilai);
-        $detail_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan_of_staff(array($id_pekerjaan),$id_staff);
+        $detail_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan_of_staff(array($id_pekerjaan), $id_staff);
 
 
 
@@ -737,24 +737,36 @@ class pekerjaan extends ceklogin {
             $my_staff[] = $s->id_akun;
         }
         if (count($detail_pekerjaan) > 0) {
-            print_r($detail_pekerjaan);
+            //print_r($detail_pekerjaan);
             if (in_array($id_staff, $my_staff)) {//staff yang dinilai adalah bawahan
                 if (count($tipe_nilai) > 0) {
-                    $insert['ak'] = $ak;
-                    $insert['kuatitas_output'] = $kuantitas_output;
-                    $insert['kualitas_mutu'] = $kualitas_mutu;
-                    $insert['waktu'] = $waktu;
-                    $insert['biaya'] = $biaya;
-                    $insert['id_detil_pekerjaan'] = $detail_pekerjaan[0]->id_detil_pekerjaan;
-                    
-                    echo json_encode(array('status' => 'OK', 'keterangan' => 'berhasil'));
+                    $existing_nilai = $this->pekerjaan_model->nilai_get($id_staff, $id_pekerjaan, $nama_tipe_nilai);
+                    if (count($existing_nilai) > 0) {
+                        //print_r($existing_nilai);
+                        echo json_encode(array('status' => 'null', 'keterangan' => $nama_tipe_nilai.' sudah ada sebelumnya'));
+                    } else {
+                        $insert['ak'] = $ak;
+                        $insert['kuatitas_output'] = $kuantitas_output;
+                        $insert['kualitas_mutu'] = $kualitas_mutu;
+                        $insert['waktu'] = $waktu;
+                        $insert['biaya'] = $biaya;
+                        $insert['id_detil_pekerjaan'] = $detail_pekerjaan[0]->id_detil_pekerjaan;
+                        $insert['id_tipe_nilai']=$tipe_nilai[0]->id_tipe_nilai;
+                        $nilai = $this->pekerjaan_model->nilai_set($insert);
+                        print_r($nilai);
+                        if($nilai)
+                        {echo json_encode(array('status' => 'OK', 'keterangan' => 'berhasil'));}
+                        else{
+                            echo json_encode(array('status' => 'null', 'keterangan' => 'gagal menambahkan nilai'));
+                        }
+                    }
                 } else {
                     echo json_encode(array('status' => 'null', 'keterangan' => 'tipe nilai diperlukan'));
                 }
             } else {
                 echo json_encode(array('status' => 'null', 'keterangan' => 'bukan bawahan anda'));
             }
-        }else{
+        } else {
             echo json_encode(array('status' => 'null', 'keterangan' => 'pekerjaan tidak ditemukan'));
         }
     }
