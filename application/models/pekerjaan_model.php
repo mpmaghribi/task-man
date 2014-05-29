@@ -109,7 +109,8 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
     }
 
-    public function target_get($id_staff, $id_pekerjaan) {
+    public function nilai_get($id_staff, $id_pekerjaan, $tipe_nilai) {
+        $tipe_nilai=strtolowe($tipe_nilai);
         $query = "select detil_pekerjaan.*, nilai_pekerjaan.*,tipe_nilai.* "
                 . "from nilai_pekerjaan inner join tipe_nilai "
                 . "on nilai_pekerjaan.id_tipe_nilai=tipe_nilai.id_tipe_nilai "
@@ -117,16 +118,15 @@ class pekerjaan_model extends CI_Model {
                 . "nilai_pekerjaan.id_detil_pekerjaan "
                 . "where detil_pekerjaan.id_akun=$id_staff and "
                 . "detil_pekerjaan.id_pekerjaan=$id_pekerjaan and "
-                . "detil_pekerjaan.status!='Batal'";
+                . "detil_pekerjaan.status!='Batal' and "
+                . "lower(tipe_nilai.nama_tipe)='$tipe_nilai'";
         $query = $this->db->query($query);
         return $query->result();
     }
-    public function target_set($id_staff, $id_pekerjaan) {
+    public function nilai_set($id_staff, $id_pekerjaan,$id_tipe_nilai) {
         
     }
-    public function realisasi_get($id_staff, $id_pekerjaan) {
-        
-    }
+    
     public function realisasi_set($id_staff, $id_pekerjaan) {
         
     }

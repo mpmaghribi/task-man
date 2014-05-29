@@ -35,10 +35,10 @@ class pekerjaan extends ceklogin {
         //http://localhost:90/integrarsud/helpdesk/index.php/pengaduan/getDelegate/
         //print_r($url);
         $id = $this->input->post("id_pengaduan");
-        
-        $url = str_replace('taskmanagement','integrarsud/helpdesk', site_url()) . "/pengaduan/getIdDelegate/".pg_escape_string($id);
+
+        $url = str_replace('taskmanagement', 'integrarsud/helpdesk', site_url()) . "/pengaduan/getIdDelegate/" . pg_escape_string($id);
         $data["pengaduan"] = json_decode(file_get_contents($url));
-        
+
         $temp = $this->session->userdata('logged_in');
         $data['temp'] = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
@@ -46,9 +46,6 @@ class pekerjaan extends ceklogin {
         echo json_encode(array("status" => "OK", "data" => $data["pengaduan"]));
     }
 
-
-    
-    
     function tambah_pengaduan() {
         $topik = $this->input->post("topik_pengaduan");
         $isi = $this->input->post("isi_pengaduan");
@@ -84,7 +81,7 @@ class pekerjaan extends ceklogin {
         foreach ($data_pengaduan as $value) {
             $id_pengaduan = $value->id_pengaduan;
         }
-        $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj,$id_pengaduan,"insidentil");
+        $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj, $id_pengaduan, "insidentil");
         $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
         if ($id_pekerjaan != NULL) {
             foreach ($staff as $val) {//val itu nip
@@ -397,24 +394,29 @@ class pekerjaan extends ceklogin {
             $this->baca_pending_task($id_detail_pkj);
             //$is_isi_komentar = $this->input->get('is_isi_komentar');
             $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
-            $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
-            $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-            $data["temp"] = $this->session->userdata('logged_in');
-            $data["users"] = json_decode(file_get_contents($url));
-            $data["display"] = "none";
-            $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat detail tentang pekerjaannya.");
-
-            $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
-            $data["id_pkj"] = $id_detail_pkj;
-            $data['my_staff'] = $this->akun->my_staff($temp["user_id"]);
-            $staff_array=array();
-            foreach ($data['my_staff'] as $s){
-                $staff_array[$s->id_akun]=$s->nama;
+            if (count($data['deskripsi_pekerjaan']) > 0) {
+                $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
+                $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+                $data["temp"] = $this->session->userdata('logged_in');
+                $data["users"] = json_decode(file_get_contents($url));
+                $data["display"] = "none";
+                $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat detail tentang pekerjaannya.");
+                $data["lihat_komentar_pekerjaan"] = $this->pekerjaan_model->sp_lihat_komentar_pekerjaan($id_detail_pkj);
+                $data["id_pkj"] = $id_detail_pkj;
+                $data['my_staff'] = $this->akun->my_staff($temp["user_id"]);
+                $staff_array = array();
+                foreach ($data['my_staff'] as $s) {
+                    $staff_array[$s->id_akun] = $s->nama;
+                }
+                $data['staff_array'] = $staff_array;
+                //$data['my_staff'] = json_encode($data['my_staff']);
+                $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
+                $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
+            } else {
+                $data['judul_kesalahan']='Kesalahan membaca pekerjaan';
+                $data['deskripsi_kesalahan']='Tidak dapat menemukan pekerjaan yang diminta';
+                $this->load->view('pekerjaan/kesalahan',$data);
             }
-            $data['staff_array']=$staff_array;
-            //$data['my_staff'] = json_encode($data['my_staff']);
-            $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
-            $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
         }
     }
 
@@ -690,73 +692,46 @@ class pekerjaan extends ceklogin {
 //            echo json_encode(array("status" => "FAILED", "reason" => "gagal"));
 //        }
     }
-    public function target_get() {
-        $session= $this->session->userdata('logged_in');
-        $this->load->model(array('pekerjaan_model','akun'));
+
+    public function nilai_get() {
+        $session = $this->session->userdata('logged_in');
+        $this->load->model(array('pekerjaan_model', 'akun'));
         $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
         $id_staff = pg_escape_string($this->input->post('id_staff'));
-        $query_staff=$this->akun->my_staff($session['user_id']);
-        $my_staff=array();
-        foreach ($query_staff as $s){
-            $my_staff[]=$s->id_akun;
+        $tipe_nilai=pg_escape_string($this->input->post('tipe_nilai'));
+        $query_staff = $this->akun->my_staff($session['user_id']);
+        $my_staff = array();
+        foreach ($query_staff as $s) {
+            $my_staff[] = $s->id_akun;
         }
-        if(in_array($id_staff,$my_staff)){
-            $target = $this->pekerjaan_model->target_get($id_staff,$id_pekerjaan);
-            $data['status']='OK';
-            $data['data']=$target;
+        if (in_array($id_staff, $my_staff)) {//jika staff yang dinilai atau bawahannya
+            $target = $this->pekerjaan_model->target_get($id_staff, $id_pekerjaan, $tipe_nilai);
+            $data['status'] = 'OK';
+            $data['data'] = $target;
             echo json_encode($data);
-        }else{
-            echo json_encode(array('status'=>'null'));
+        } else {
+            echo json_encode(array('status' => 'null','keterangan'=>'bukan bawahan anda'));
         }
     }
-    public function target_set(){
-        $session= $this->session->userdata('logged_in');
-        $this->load->model(array('pekerjaan_model','akun'));
+
+    public function nilai_set() {
+        $session = $this->session->userdata('logged_in');
+        $this->load->model(array('pekerjaan_model', 'akun'));
         $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
         $id_staff = pg_escape_string($this->input->post('id_staff'));
-        $query_staff=$this->akun->my_staff($session['user_id']);
-        $my_staff=array();
-        foreach ($query_staff as $s){
-            $my_staff[]=$s->id_akun;
+        $query_staff = $this->akun->my_staff($session['user_id']);
+        $my_staff = array();
+        foreach ($query_staff as $s) {
+            $my_staff[] = $s->id_akun;
         }
-        if(in_array($id_staff,$my_staff)){
+        if (in_array($id_staff, $my_staff)) {
             
-        }else{
-            echo json_encode(array('status'=>'null'));
+        } else {
+            echo json_encode(array('status' => 'null'));
         }
     }
-    public function realisasi_get(){
-        $session= $this->session->userdata('logged_in');
-        $this->load->model(array('pekerjaan_model','akun'));
-        $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
-        $id_staff = pg_escape_string($this->input->post('id_staff'));
-        $query_staff=$this->akun->my_staff($session['user_id']);
-        $my_staff=array();
-        foreach ($query_staff as $s){
-            $my_staff[]=$s->id_akun;
-        }
-        if(in_array($id_staff,$my_staff)){
-            
-        }else{
-            echo json_encode(array('status'=>'null'));
-        }
-    }
-    public function realisasi_set(){
-        $session= $this->session->userdata('logged_in');
-        $this->load->model(array('pekerjaan_model','akun'));
-        $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
-        $id_staff = pg_escape_string($this->input->post('id_staff'));
-        $query_staff=$this->akun->my_staff($session['user_id']);
-        $my_staff=array();
-        foreach ($query_staff as $s){
-            $my_staff[]=$s->id_akun;
-        }
-        if(in_array($id_staff,$my_staff)){
-            
-        }else{
-            echo json_encode(array('status'=>'null'));
-        }
-    }
+
+    
 
     public function update_progress() {
 //        if ($this->check_session_and_cookie() == 1) {
@@ -782,7 +757,7 @@ class pekerjaan extends ceklogin {
     public function edit() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
         $temp = $this->session->userdata('logged_in');
-        
+
         $this->load->model(array("pekerjaan_model", 'berkas_model', 'akun'));
         //$this->load->model("berkas_model");
         $id_pekerjaan = pg_escape_string($this->input->get('id_pekerjaan'));
