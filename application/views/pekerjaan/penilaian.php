@@ -25,102 +25,7 @@
         </div>
     </section>
 </div>
-<script>
-    function capitaliseFirstLetter(string)
-    {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-    var id_pekerjaan = '<?php echo $listassign_pekerjaan[0]->id_pekerjaan; ?>';
-    var staff = jQuery.parseJSON('<?php echo json_encode($staff_array); ?>');
-    var tipe_nilai = 'target';
-    var prev_tipe_nilai = '';
-    var prev_id = 0;
-    console.log(staff);
-    function load_nilai(id_staff, tipeNilai) {
-        tipe_nilai = tipeNilai;
-        $('#div_loading').css('display', 'block');
-        $('#judul_modal').html('Isi ' + capitaliseFirstLetter(tipe_nilai) + ' <strong><?php echo $deskripsi_pekerjaan[0]->nama_pekerjaan; ?></strong>');
-        $('#modal_div_1').html(capitaliseFirstLetter(tipe_nilai) + ' untuk <strong>' + staff[id_staff] + '</strong>');
 
-        if (!(prev_tipe_nilai === tipe_nilai && prev_id === id_staff)) {
-            prev_tipe_nilai = tipe_nilai;
-            prev_id = id_staff;
-            $('#ak').val('');
-            $('#kuantitas_output').val('');
-            $('#kualitas_mutu').val('');
-            $('#waktu').val('');
-            $('#biaya').val('');
-        }
-        $.ajax({// create an AJAX call...
-            data: {
-                id_staff: id_staff,
-                id_pekerjaan: id_pekerjaan,
-                tipe_nilai: tipe_nilai
-            }, // get the form data
-            type: "post", // GET or POST
-            url: "<?php echo site_url(); ?>/pekerjaan/nilai_get", // the file to call
-            success: function(response) { // on success..
-                var json = jQuery.parseJSON(response);
-                
-                if (json.status === "OK" || json.status==='kosong') {
-                    $('#div_loading').css('display', 'none');
-                    $('#modal_div_body').css('display', 'block');
-                    $('#modal_div_1').css('display', 'block');
-                    $('#nilai_body').css('display', 'block');
-                    $('#div_nilai_error').css('display', 'none');
-                    console.log(json.data);
-                    console.log(json.data.length);
-                    if (json.data.length > 0) {
-                        console.log('sudah punya ' + tipe_nilai);
-                        $('#ak').val(json.data[0]['ak']);
-                        $('#kuantitas_output').val(json.data[0]['kuatitas_output']);
-                        $('#kualitas_mutu').val(json.data[0]['kualitas_mutu']);
-                        $('#waktu').val(json.data[0]['waktu']);
-                        $('#biaya').val(json.data[0]['biaya']);
-                    } else {
-                        console.log('belum punya ' + tipe_nilai);
-                    }
-                    $('#tombol_confirm').click(function(e) {
-                        nilai_set(id_staff);
-                            
-                    });
-                } else {
-                    console.log('sini');
-                    $('#nilai_body').css('display', 'none');
-                    $('#div_nilai_error').css('display', 'block');
-                    $('#div_nilai_error').html('error, ' + json.keterangan);
-                    $('#modal_div_1').css('display','none');
-                }
-            }
-        });
-    }
-
-    function nilai_set(id_staff) {
-        $('#div_loading').css('display', 'block');
-        $.ajax({// create an AJAX call...
-            data: {
-                id_staff: id_staff,
-                id_pekerjaan: id_pekerjaan,
-                tipe_nilai: tipe_nilai,
-                ak: $('#ak').val(),
-                kuantitas_output: $('#kuantitas_output').val(),
-                kualitas_mutu: $('#kualitas_mutu').val(),
-                waktu: $('#waktu').val(),
-                biaya: $('#biaya').val()
-            }, // get the form data
-            type: "post", // GET or POST
-            url: "<?php echo site_url(); ?>/pekerjaan/nilai_set", // the file to call
-            success: function(response) { // on success..
-                var json = jQuery.parseJSON(response);
-                if (json.status === "OK") {
-                    $('#tombol_close').click();
-                }else{
-                    alert(json.keterangan);
-                }
-            }
-        });
-    }
-</script>
 <div class="modal fade" id="modal_" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -132,12 +37,12 @@
                 <img src="<?php echo base_url(); ?>assets/images/ajax-loader.gif"/>
             </div>
             <div id="div_nilai_error" style="display:none;text-align: center;">
-                </div>
+            </div>
             <div class="modal-body" id="modal_div_body" style="display: none">
                 <div id="modal_div_1">
                     Body goes here...
                 </div>
-                
+
                 <div class="form" id="nilai_body">
                     <div class=" cmxform form-horizontal " style="margin-top: 15px">
                         <div class="form-group ">
@@ -180,3 +85,104 @@
         </div>
     </div>
 </div>
+<script>
+    function capitaliseFirstLetter(string)
+    {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    var id_pekerjaan = '<?php echo $listassign_pekerjaan[0]->id_pekerjaan; ?>';
+    var staff = jQuery.parseJSON('<?php echo json_encode($staff_array); ?>');
+    var tipe_nilai = 'target';
+    var prev_tipe_nilai = '';
+    var prev_id = 0;
+    console.log(staff);
+    function load_nilai(id_staff, tipeNilai) {
+        tipe_nilai = tipeNilai;
+        $('#div_loading').css('display', 'block');
+        $('#judul_modal').html('Isi ' + capitaliseFirstLetter(tipe_nilai) + ' <strong><?php echo $deskripsi_pekerjaan[0]->nama_pekerjaan; ?></strong>');
+        $('#modal_div_1').html(capitaliseFirstLetter(tipe_nilai) + ' untuk <strong>' + staff[id_staff] + '</strong>');
+
+        if (!(prev_tipe_nilai === tipe_nilai && prev_id === id_staff)) {
+            prev_tipe_nilai = tipe_nilai;
+            prev_id = id_staff;
+            $('#ak').val('');
+            $('#kuantitas_output').val('');
+            $('#kualitas_mutu').val('');
+            $('#waktu').val('');
+            $('#biaya').val('');
+        }
+        $.ajax({// create an AJAX call...
+            data: {
+                id_staff: id_staff,
+                id_pekerjaan: id_pekerjaan,
+                tipe_nilai: tipe_nilai
+            }, // get the form data
+            type: "post", // GET or POST
+            url: "<?php echo site_url(); ?>/pekerjaan/nilai_get", // the file to call
+            success: function(response) { // on success..
+                var json = jQuery.parseJSON(response);
+
+                if (json.status === "OK" || json.status === 'kosong') {
+                    $('#div_loading').css('display', 'none');
+                    $('#modal_div_body').css('display', 'block');
+                    $('#modal_div_1').css('display', 'block');
+                    $('#nilai_body').css('display', 'block');
+                    $('#div_nilai_error').css('display', 'none');
+                    if (json.status === 'OK') {
+                        console.log(json.data);
+                        console.log(json.data.length);
+                        if (json.data.length > 0) {
+                            console.log('sudah punya ' + tipe_nilai);
+                            $('#ak').val(json.data[0]['ak']);
+                            $('#kuantitas_output').val(json.data[0]['kuatitas_output']);
+                            $('#kualitas_mutu').val(json.data[0]['kualitas_mutu']);
+                            $('#waktu').val(json.data[0]['waktu']);
+                            $('#biaya').val(json.data[0]['biaya']);
+                        } else {
+                            console.log('belum punya ' + tipe_nilai);
+                        }
+                    } else {
+                        console.log('kosong, belum ada nilai');
+                    }
+                } else {
+                    console.log('error');
+                    $('#nilai_body').css('display', 'none');
+                    $('#div_nilai_error').css('display', 'block');
+                    $('#div_nilai_error').html('error, ' + json.keterangan);
+                    $('#modal_div_1').css('display', 'none');
+                }
+            }
+        });
+    }
+    $('#tombol_confirm').click(function(e) {
+        nilai_set();
+    });
+    function nilai_set() {
+        $('#div_loading').css('display', 'block');
+        $.ajax({// create an AJAX call...
+            data: {
+                id_staff: prev_id,
+                id_pekerjaan: id_pekerjaan,
+                tipe_nilai: tipe_nilai,
+                ak: $('#ak').val(),
+                kuantitas_output: $('#kuantitas_output').val(),
+                kualitas_mutu: $('#kualitas_mutu').val(),
+                waktu: $('#waktu').val(),
+                biaya: $('#biaya').val()
+            }, // get the form data
+            type: "post", // GET or POST
+            url: "<?php echo site_url(); ?>/pekerjaan/nilai_set", // the file to call
+            success: function(response) { // on success..
+                console.log('parsing nilai set json object');
+                var json = jQuery.parseJSON(response);
+                if (json.status === "OK") {
+                    console.log('nilai set ok');
+                    $('#tombol_close').click();
+                } else {
+                    console.log('nilai set error');
+                    alert(json.keterangan);
+                }
+            }
+        });
+    }
+</script>
