@@ -407,7 +407,10 @@ class pekerjaan extends ceklogin {
                 $data['my_staff'] = $this->akun->my_staff($temp["user_id"]);
                 //print_r($data['my_staff']);
                 $staff_array = array();
+                
                 foreach ($data['my_staff'] as $s) {
+                    //print_r($s);
+                    if(is_array($s))
                     $staff_array[$s->id_akun] = $s->nama;
                 }
                 $data['staff_array'] = $staff_array;
@@ -633,17 +636,20 @@ class pekerjaan extends ceklogin {
         foreach ($staff as $s) {
             $id_staff[] = $s->id_akun;
         }
-        echo "id staff ";
-        print_r($id_staff);
+        //echo "id staff ";
+        //print_r($id_staff);
+        $update['flag_usulan']='9';
+        
         foreach ($id_pekerjaan as $key => $val) {
             if (strlen($val) > 0) {
                 $cur_id_pekerjaan = pg_escape_string($val);
-                echo 'id pekerjaan yang akan dibatalkan untuk staffku=' . $cur_id_pekerjaan . "<br>\n";
+                $this->pekerjaan_model->update_pekerjaan($update,$cur_id_pekerjaan);
+                //echo 'id pekerjaan yang akan dibatalkan untuk staffku=' . $cur_id_pekerjaan . "<br>\n";
                 $this->pekerjaan_model->batalkan_task($cur_id_pekerjaan, $id_staff);
             }
         }
-        echo 'id pekerjaan ';
-        print_r($id_pekerjaan);
+        //echo 'id pekerjaan ';
+        //print_r($id_pekerjaan);
         echo json_encode(array('status' => 'OK'));
 //        $list_detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
 //        echo 'detil pekerjaan pekerjaan ';
@@ -773,6 +779,7 @@ class pekerjaan extends ceklogin {
             foreach ($query_staff as $s) {
                 $my_staff[] = $s->id_akun;
             }
+            $error='';
             if (count($detail_pekerjaan) > 0) {
                 //print_r($detail_pekerjaan);
                 if (in_array($id_staff, $my_staff) || ($session['user_id'] == $id_staff && $session['hakakses'] == 'Administrator')) {//jika staff yang dinilai atau bawahannya
@@ -814,22 +821,24 @@ class pekerjaan extends ceklogin {
                                         $insert['nilai_skp'] = $insert['penghitungan'] / 3;
                                     }
                                 } else {//jika target belum diisi
-                                    echo json_encode(array('status' => 'null', 'keterangan' => 'target belum diisi'));
+                                    //echo json_encode(array('status' => 'null', 'keterangan' => 'target belum diisi XX'));
+                                    $error='target belum diisi ';
                                 }
                             } else {//tidak ada tipe nilai target
-                                echo json_encode(array('status' => 'null', 'keterangan' => 'tipe nilai target belum terdaftar'));
+                                //echo json_encode(array('status' => 'null', 'keterangan' => 'tipe nilai target belum terdaftar'));
+                                $error='tipe nilai target belum terdaftar';
                             }
                         } else {//jika bukan tipe nilai realisasi
                         }
                         //commit
-                        if (count($existing_nilai) > 0) {
+                        if (count($existing_nilai) > 0 && $error=='') {
                             //print_r($existing_nilai);
                             $perbarui = $this->pekerjaan_model->nilai_update($insert, $existing_nilai[0]->id_nilai);
                             if ($perbarui)
                                 echo json_encode(array('status' => 'OK', 'keterangan' => $nama_tipe_nilai . ' sudah ada, telah diperbarui'));
                             else
                                 echo json_encode(array('status' => 'null', 'keterangan' => 'gagal memperbarui nilai'));
-                        } else {
+                        } else if($error==''){
                             $nilai = $this->pekerjaan_model->nilai_set($insert);
                             //print_r($nilai);
                             if ($nilai) {
@@ -837,6 +846,8 @@ class pekerjaan extends ceklogin {
                             } else {
                                 echo json_encode(array('status' => 'null', 'keterangan' => 'gagal menambahkan nilai'));
                             }
+                        }else{
+                            echo json_encode(array('status' => 'null', 'keterangan' => $error));
                         }
                     }//jika tipe valid
                     else {//jika tipe tidak valid

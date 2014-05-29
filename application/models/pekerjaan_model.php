@@ -121,7 +121,7 @@ class pekerjaan_model extends CI_Model {
                 . "nilai_pekerjaan.id_detil_pekerjaan "
                 . "where detil_pekerjaan.id_detil_pekerjaan=$id_detil_pekerjaan and "
                 . "tipe_nilai.id_tipe_nilai=$tipe_nilai";
-        
+        //echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }

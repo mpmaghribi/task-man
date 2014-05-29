@@ -85,7 +85,7 @@
             </div>
             <div class="modal-footer">
                 <button data-dismiss="modal" class="btn btn-default" id="tombol_close" type="button">Close</button>
-                <button class="btn btn-warning" id="tombol_confirm" type="button">Confirm</button>
+                <button class="btn btn-warning" id="tombol_confirm" type="button" style="visibility: visible">Confirm</button>
             </div>
         </div>
     </div>
@@ -106,8 +106,9 @@
         $('#div_loading').css('display', 'block');
         $('#judul_modal').html('Isi ' + capitaliseFirstLetter(tipe_nilai) + ' <strong><?php echo $deskripsi_pekerjaan[0]->nama_pekerjaan; ?></strong>');
         $('#modal_div_1').html(capitaliseFirstLetter(tipe_nilai) + ' untuk <strong>' + staff[id_staff] + '</strong>');
+        $('#tombol_confirm').css('visibility','visible');
 
-        if (!(prev_tipe_nilai === tipe_nilai && prev_id === id_staff)) {
+        //if (!(prev_tipe_nilai === tipe_nilai && prev_id === id_staff)) {
             prev_tipe_nilai = tipe_nilai;
             prev_id = id_staff;
             $('#ak').val('1');
@@ -115,7 +116,7 @@
             $('#kualitas_mutu').val('1');
             $('#waktu').val('1');
             $('#biaya').val('1');
-        }
+        //}
         $.ajax({// create an AJAX call...
             data: {
                 id_staff: id_staff,
@@ -155,6 +156,7 @@
                     $('#div_nilai_error').css('display', 'block');
                     $('#div_nilai_error').html('error, ' + json.keterangan);
                     $('#modal_div_1').css('display', 'none');
+                    $('#tombol_confirm').css('visibility','hidden');
                 }
             },
             error: function(respone) {
@@ -162,6 +164,7 @@
                 $('#div_nilai_error').css('display', 'block');
                 $('#div_nilai_error').html(respone);
                 $('#modal_div_1').css('display', 'none');
+                $('#tombol_confirm').css('visibility','hidden');
             }
         });
     }
