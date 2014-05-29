@@ -376,4 +376,5 @@
             }
             return '   [' + Math.round(s) + spasi + satuan + ']';
         }
+        $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     </script>

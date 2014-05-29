@@ -42,11 +42,12 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function list_pekerjaan($id_akun) {
-        $id_akun = pg_escape_string($id_akun);
+        //$id_akun = pg_escape_string($id_akun);
+        if(count($id_akun)==0)return NULL;
         $query = "select detil_pekerjaan.id_akun, pekerjaan.*, pekerjaan.tgl_selesai"
                 . "  from detil_pekerjaan inner join pekerjaan on "
                 . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan "
-                . "where detil_pekerjaan.id_akun=$id_akun and detil_pekerjaan.status!='Batal' "
+                . "where detil_pekerjaan.id_akun in (".implode(",",$id_akun).") and detil_pekerjaan.status!='Batal' "
                 . "order by tglasli_mulai desc";
         //echo $query;
         $query = $this->db->query($query);
@@ -247,25 +248,7 @@ class pekerjaan_model extends CI_Model {
      * query pekerjaan yang pernah dan sedang dikerjakan oleh staff pada suatu departemen
      */
 
-    public function list_pekerjaan_staff($id_departemen) {
-        /* if ($id_departemen != NULL && strlen($id_departemen) > 0) {
-          $this->load->model("jabatan_model");
-          $id_jabatan_staff = $this->jabatan_model->get_id_jabatan("staff");
-          if ($id_jabatan_staff == NULL) {
-          return NULL;
-          }
-          $query = "select pekerjaan.*,detil_pekerjaan.progress,detil_pekerjaan.status, akun.nama, detil_pekerjaan.tgl_read, now() "
-          . "as sekarang from pekerjaan left outer join detil_pekerjaan on pekerjaan.id_pekerjaan="
-          . "detil_pekerjaan.id_pekerjaan inner join akun on akun.id_akun=detil_pekerjaan.id_akun"
-          . " where akun."
-          . "id_jabatan=$id_jabatan_staff and akun.id_departemen=$id_departemen"
-          . " order by pekerjaan.id_pekerjaan desc";
-          //echo $query;
-          return $this->db->query($query)->result();
-          }
-          return NULL; */
-        $this->load->model("akun");
-    }
+    
 
     public function staff_progress($id_pekerjaan) {
         if ($id_pekerjaan == NULL || strlen($id_pekerjaan) == 0) {

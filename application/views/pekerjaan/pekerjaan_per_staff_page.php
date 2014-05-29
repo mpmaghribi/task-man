@@ -38,7 +38,7 @@
                                                 ?><tr>
                                                     <td><?php echo $counter; ?></td>
                                                     <td><?php echo $pekerjaan->nama_pekerjaan; ?></td>
-                                                    <td><?php echo $pekerjaan->tgl_mulai . ' - ' . $pekerjaan->tgl_selesai; ?></td>
+                                                    <td><?php echo date("d M Y", strtotime($pekerjaan->tgl_mulai)) . ' - ' . date("d M Y", strtotime($pekerjaan->tgl_selesai)); ?></td>
                                                     <td id="assigh_to_<?php echo $pekerjaan->id_pekerjaan; ?>"></td>
                                                     <td id="status_<?php echo $pekerjaan->id_pekerjaan; ?>">status</td>
                                                     <td><form method="get" action="<?php echo base_url();?>pekerjaan/deskripsi_pekerjaan"><input type="hidden" name="id_detail_pkj" value="<?php echo $pekerjaan->id_pekerjaan; ?>"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>
@@ -154,4 +154,5 @@
                 $('#status_' + detil_pekerjaan[i]['id_pekerjaan']).html(status);
             }
         }
+        $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     </script>

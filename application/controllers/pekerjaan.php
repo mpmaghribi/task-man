@@ -360,7 +360,7 @@ class pekerjaan extends ceklogin {
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
         $this->load->model("pekerjaan_model");
-        $data["list_pekerjaan"] = $this->pekerjaan_model->list_pekerjaan();
+        $data["list_pekerjaan"] = $this->pekerjaan_model->list_pekerjaan(array($temp['user_id']));
         $this->load->view('pekerjaan/taskman_listpekerjaan_page', $data);
 //        } else {
 //            $this->session->set_flashdata('status', 4);
@@ -566,7 +566,7 @@ class pekerjaan extends ceklogin {
         $data["data_akun"] = $session;
         $id_staff = $this->input->get("id_akun");
         $this->session->set_userdata('prev', 'pekerjaan_per_staff?id_akun=' . $id_staff);
-        $data["pekerjaan_staff"] = $this->pekerjaan_model->list_pekerjaan($id_staff);
+        $data["pekerjaan_staff"] = $this->pekerjaan_model->list_pekerjaan(array($id_staff));
         $data["my_staff"] = $this->akun->my_staff($session["user_id"]);
         $data["id_staff"] = $id_staff;
         $data["nama_staff"] = "";
