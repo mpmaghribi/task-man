@@ -37,7 +37,7 @@
                                 ?>
                             <td style="text-align: right">
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: 0px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_detail_pkj=<?php echo $kerja->id_pekerjaan; ?>" id="" style="font-size: 10px">Edit</a>
+                                    <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $kerja->id_pekerjaan; ?>" id="" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-success btn-xs" href="<?php echo base_url(); ?>pekerjaan/deskripsi_pekerjaan?id_detail_pkj=<?php echo $kerja->id_pekerjaan; ?>" id="" style="font-size: 10px">View</a>
                                 </div>
                             </td>
