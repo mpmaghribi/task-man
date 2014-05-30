@@ -382,6 +382,8 @@ class pekerjaan extends ceklogin {
         $temp = $this->session->userdata('logged_in');
 
         $this->load->model(array("pekerjaan_model", "berkas_model", 'akun'));
+        
+        
         $id_detail_pkj = $this->input->get('id_detail_pkj');
         if ($id_detail_pkj == NULL || strlen($id_detail_pkj) == 0) {
             redirect(base_url() . "pekerjaan/karyawan");
