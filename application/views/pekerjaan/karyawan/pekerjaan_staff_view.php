@@ -25,7 +25,11 @@
                             $label_status = array(1 => 'label-danger', 2 => 'label-success');
                             //var_dump($my_staff);
                             $counter = 0;
+                            $list_id_pekerjaan=array();
                             foreach ($pekerjaan_staff as $kerja) {
+                                if(in_array($kerja->id_pekerjaan,$list_id_pekerjaan))
+                                    continue;
+                                $list_id_pekerjaan[]=$kerja->id_pekerjaan;
                                 $counter++;
                                 echo '<tr>';
                                 echo '<td >' . $counter . '</td>';

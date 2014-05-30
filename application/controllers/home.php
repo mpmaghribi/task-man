@@ -69,12 +69,17 @@ class home extends ceklogin {
             $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'],0, "Aktivitas Login", $temp['user_nama']." sedang berada di halaman dashboard.");
             $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
             $staff=$this->akun->my_staff($temp['user_id']);
-//            $my_staff=array();
-//            foreach ($staff as $s){
-//                $my_staff[]=$s->id_akun;
-//            }
-            $data['pekerjaan_staff']=$this->pekerjaan_model->get_pekerjaan_staff($temp['user_id']);
+            $my_staff=array();
+            //print_r($staff);
+            foreach ($staff as $s){
+                //print_r($s);
+                //if(is_array($s))
+                $my_staff[]=$s->id_akun;
+            }
+            //print_r($my_staff);
+            $data['pekerjaan_staff']=$this->pekerjaan_model->get_pekerjaan_staff($temp['user_id'],$my_staff);
             $list_id_pekerjaan = array();
+            if($data['pekerjaan_staff']!=NULL)
             foreach ($data['pekerjaan_staff'] as $job){
                 $list_id_pekerjaan[]=$job->id_pekerjaan;
             }

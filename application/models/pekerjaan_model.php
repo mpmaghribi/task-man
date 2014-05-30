@@ -297,10 +297,17 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
-    public function get_pekerjaan_staff($id_pemberi_pekerjaan){
-        $query="select pekerjaan.*, pemberi_pekerjaan.* from pekerjaan inner join pemberi_pekerjaan "
-                . "on pekerjaan.id_pekerjaan=pemberi_pekerjaan.id_pekerjaan where (pekerjaan.flag_usulan"
-                . "='1' or pekerjaan.flag_usulan='2') order by pekerjaan.id_pekerjaan";
+    public function get_pekerjaan_staff($id_pemberi_pekerjaan,$list_staff){
+        if(count($list_staff)==0)
+            return NULL;
+        $query="select pekerjaan.*, pemberi_pekerjaan.*,detil_pekerjaan.* "
+                . "from pekerjaan inner join pemberi_pekerjaan "
+                . "on pekerjaan.id_pekerjaan=pemberi_pekerjaan.id_pekerjaan "
+                . "inner join detil_pekerjaan on "
+                . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan "
+                . "where (pekerjaan.flag_usulan='1' or pekerjaan.flag_usulan='2') "
+                . "and detil_pekerjaan.id_akun in (".implode(",",$list_staff).")"
+                . "order by pekerjaan.id_pekerjaan";
         $query=$this->db->query($query);
         return $query->result();
     }
