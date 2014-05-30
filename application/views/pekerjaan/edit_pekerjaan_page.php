@@ -32,7 +32,7 @@
                                                             <table id="tabel_assign_staff" class="table table-hover general-table">
                                                                 <?php foreach ($detail_pekerjaan as $d) { ?>
                                                                     <tr id="staff_<?php echo $d->id_akun; ?>">
-                                                                        <td id="nama_staff_<?php echo $d->id_akun; ?>"><div id="nama_<?php echo $d->id_akun;?>"></div></td> 
+                                                                        <td id="nama_staff_<?php echo $d->id_akun; ?>"><div id="nama_<?php echo $d->id_akun; ?>"></div></td> 
                                                                         <td id="aksi_" style="width:10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(<?php echo $d->id_akun; ?>)">Hapus</a></td>
                                                                     </tr>
                                                                 <?php } ?>
@@ -217,6 +217,7 @@
                 checkout.hide();
             }).data('datepicker');
         });
+
     </script>
     <?php $this->load->view("taskman_footer_page");
     ?>
@@ -249,7 +250,7 @@
                     var id = list_id[i];
                     sudah_diproses = true;
                     //$('#nama_staff_' + id).html(json[i]["nama"]);
-                    $('#nama_'+id).html(json[i]["nip"]+ " - " +json[i]["nama"]);
+                    $('#nama_' + id).html(json[i]["nip"] + " - " + json[i]["nama"]);
 //                    if (cell.length > 0) {
 //                        cell.html(list_nama[i]);
 //                    }
@@ -339,10 +340,18 @@
             return '   [' + Math.round(s) + spasi + satuan + ']';
         }
         document.title = "Task Management - Edit Pekerjaan";
-        var mulai = new Date('<?php echo $pekerjaan[0]->tgl_mulai; ?>');
-        var akhir = new Date('<?php echo $pekerjaan[0]->tgl_selesai; ?>');
+        <?php 
+        $mulai=date('Y-m-d',strtotime($pekerjaan[0]->tgl_mulai));
+        $akhir=date('Y-m-d',strtotime($pekerjaan[0]->tgl_selesai));
+        ?>
+        var mulai = new Date('<?php echo $mulai;?>');
+        var akhir = new Date('<?php echo $akhir; ?>');
         $('.dpd1').val(mulai.getDate() + '-' + (mulai.getMonth() + 1) + '-' + mulai.getFullYear());
         $('.dpd2').val(akhir.getDate() + '-' + (akhir.getMonth() + 1) + '-' + akhir.getFullYear());
+        console.log(mulai);
+        console.log(mulai.getDate());
+        console.log(mulai.getMonth());
+        console.log(mulai.getFullYear());
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
         $('#button_trigger_file').click(function() {
             $('#pilih_berkas_assign').click();
@@ -373,3 +382,5 @@
             }
         }
     </script>
+<?php //print_r($mulai);
+?>
