@@ -99,4 +99,5 @@
                 $('#' + div_id).append(files[i].name + "<br/>");
             }
         }
+        $('#div_view_draft').attr('class','tab-pane active');
     </script>

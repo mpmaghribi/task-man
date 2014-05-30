@@ -63,7 +63,7 @@ class pekerjaan_model extends CI_Model {
                 . "pekerjaan.tgl_selesai from detil_pekerjaan inner join pekerjaan on "
                 . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan  "
                 . "where id_akun=$id_akun "
-                . "and progress<100";
+                . "and progress<100 and detil_pekerjaan.status!='Batal'";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
