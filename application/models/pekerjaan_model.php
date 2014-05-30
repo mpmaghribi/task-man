@@ -23,6 +23,21 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
+    public function create_draft($param) {
+        
+        //$query = "insert into pekerjaan ($colom) values ($isi)";
+        //$q=$this->db->query($query);
+        $q=$this->db->insert('pekerjaan',$param);
+        if($q===true){
+            $query = "select currval('tbl_pekerjaan_id') as id_baru";
+            $query=$this->db->query($query);
+            //print_r($query);
+            $row =$query->result();
+            //print_r($row);
+            return $row[0]->id_baru;
+        }
+        return NULL;
+    }
 
     public function finishtask($id_akun) {
         $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "where status = 'finished'";
@@ -69,7 +84,9 @@ class pekerjaan_model extends CI_Model {
         return $query->result();
     }
 
-    public function usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj,$id_pengaduan,$kategori) {
+    public function usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, 
+            $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, 
+            $status_pkj, $asal_pkj,$id_pengaduan,$kategori) {
 
         $sifat_pkj = pg_escape_string($sifat_pkj);
         $deskripsi_pkj = pg_escape_string($deskripsi_pkj);

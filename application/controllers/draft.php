@@ -23,53 +23,52 @@ class draft extends ceklogin {
         //$draft_create_submit=base_url().'pekerjaan/usulan_pekerjaan2';
         $this->load->view('pekerjaan/draft/draft_body', array('draft_create_submit' => base_url() . 'draft/create', 'data_akun' => $session, 'list_draft' => $list_draft));
     }
-public function create() {
-    $temp = $this->session->userdata('logged_in');
-        $sifat_pkj = $this->input->post('sifat_pkj');
-        $parent_pkj = 0;
-        $nama_pkj = $this->input->post('nama_pkj');
-        $deskripsi_pkj = $this->input->post('deskripsi_pkj');
-        $tgl_mulai_pkj = $this->input->post('tgl_mulai_pkj');
-        $tgl_selesai_pkj = $this->input->post('tgl_selesai_pkj');
-        $prioritas = $this->input->post('prioritas');
-        $status_pkj = '5';
-        $asal_pkj = 'task management';
-        $kategori = pg_escape_string(strtolower($this->input->post('kategori')));
+
+    public function create() {
+        $temp = $this->session->userdata('logged_in');
+        $insert['id_sifat_pekerjaan'] = pg_escape_string($this->input->post('sifat_pkj'));
+        $insert['parent_pekerjaan'] = 0;
+        $insert['nama_pekerjaan'] = pg_escape_string($this->input->post('nama_pkj'));
+        $insert['deskripsi_pekerjaan'] = $this->input->post('deskripsi_pkj');
+        $insert['tgl_mulai'] = pg_escape_string($this->input->post('tgl_mulai_pkj'));
+        $insert['tgl_selesai'] = pg_escape_string($this->input->post('tgl_selesai_pkj'));
+        $insert['level_prioritas'] = pg_escape_string($this->input->post('prioritas'));
+        $insert['flag_usulan'] = '5';
+        $insert['asal_pekerjaan'] = 'task management';
+        $insert['kategori'] = pg_escape_string(strtolower($this->input->post('kategori')));
 
 
-        if (!($kategori == 'project' || $kategori == 'rutin')) {
-            $kategori = null;
-        }
-
-
-        $list_staff = $this->input->post("staff");
-        $jenis_usulan = $this->input->post('jenis_usulan');
 
         $lempar = 'draft';
 
         $this->load->model("akun");
         $this->load->model("pekerjaan_model");
         $my_staff = $this->akun->my_staff($temp['user_id']);
+        if (!isset($my_staff->error)) {
+            $id_pekerjaan = $this->pekerjaan_model->create_draft($insert);
+            if ($id_pekerjaan != NULL) {
 
-        $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj, $kategori);
-        if ($id_pekerjaan != NULL) {
-            
 
-            //echo "path = $path<br/>";
-            if (isset($_FILES["berkas"])) {
-                $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
-                //$this->load->library('upload');
-                if (!file_exists($path)) {
-                    mkdir($path, 0777, true);
+                //echo "path = $path<br/>";
+                if (isset($_FILES["berkas"])) {
+                    $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
+                    //$this->load->library('upload');
+                    if (!file_exists($path)) {
+                        mkdir($path, 0777, true);
+                    }
+                    $files = $_FILES["berkas"];
+                    $this->upload_file($files, $path, $id_pekerjaan);
                 }
-                $files = $_FILES["berkas"];
-                $this->upload_file($files, $path, $id_pekerjaan);
+                $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja membuat draft pekerjaan.");
+                $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
+            }else{
+                echo 'id draft null';
             }
-            $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja membuat draft pekerjaan.");
-            $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
+            
         }
-        redirect($lempar);
-}
+        redirect(base_url().'draft');
+    }
+
     public function edit() {
         $session = $this->session->userdata('logged_in');
         $this->load->model(array('pekerjaan_model', 'akun', 'berkas_model'));
@@ -96,14 +95,14 @@ public function create() {
         $data['draft'] = $this->pekerjaan_model->get_draft(array($id_draft));
         //echo 'oeee';
         //print_r($data['draft']);
-        if(count($data['draft'])>0){
-        $data['id_draft'] = $id_draft;
-        $data['list_berkas'] = $this->berkas_model->get_berkas_of_pekerjaan($id_draft);
-        $this->load->view('pekerjaan/draft/view', $data);
-        }else{
-            $data['judul_kesalahan']='Kesalahan Draft';
-            $data['deskripsi_kesalahan']='Draft tidak dapat ditemukan';
-            $this->load->view('pekerjaan/kesalahan',$data);
+        if (count($data['draft']) > 0) {
+            $data['id_draft'] = $id_draft;
+            $data['list_berkas'] = $this->berkas_model->get_berkas_of_pekerjaan($id_draft);
+            $this->load->view('pekerjaan/draft/view', $data);
+        } else {
+            $data['judul_kesalahan'] = 'Kesalahan Draft';
+            $data['deskripsi_kesalahan'] = 'Draft tidak dapat ditemukan';
+            $this->load->view('pekerjaan/kesalahan', $data);
         }
     }
 
@@ -233,16 +232,16 @@ public function create() {
         if (strlen($id_draft) == 0) {
             
         } else {
-            $this->load->model(array('pekerjaan_model','berkas_model'));
+            $this->load->model(array('pekerjaan_model', 'berkas_model'));
             $detail_draft = $this->pekerjaan_model->get_draft(array($id_draft));
             if ($detail_draft[0]->id_akun == $session['user_id']) {
                 $list_berkas = $this->berkas_model->get_berkas_of_pekerjaan($id_draft);
-                foreach ($list_berkas as $berkas){
+                foreach ($list_berkas as $berkas) {
                     $this->berkas_model->hapus_file($berkas->id_file);
                     unlink($berkas->nama_file);
                 }
-                $update['flag_usulan']='7';
-                $this->pekerjaan_model->update_pekerjaan($update,$id_draft);
+                $update['flag_usulan'] = '6';
+                $this->pekerjaan_model->update_pekerjaan($update, $id_draft);
             }
             redirect(base_url() . 'draft');
         }
