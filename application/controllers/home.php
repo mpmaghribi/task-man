@@ -13,43 +13,7 @@ class home extends ceklogin {
         $this->load->model('pekerjaan_model');
     }
 
-//    private function check_session_and_cookie() {
-//        //$usernamecookie = $this->input->cookie("cookie_user", TRUE);
-//        //$passwordcookie = $this->input->cookie("cookie_password", TRUE);
-//        $usernamecookie = get_cookie("cookie_user");
-//        $passwordcookie = get_cookie("cookie_password");
-//        $username = $this->session->userdata("user_nip");
-//        $password = $this->session->userdata("user_password");
-//        if (strlen($username) > 0 && strlen($password) > 0) {
-//            if ($this->authenticate($username, $password) == 1) {
-//                //echo "login by session";
-//                return 1;
-//            } else {
-//                if (strlen($usernamecookie) > 0 && strlen($passwordcookie) > 0) {
-//                    if ($this->authenticate($usernamecookie, $passwordcookie) == 1) {
-//                        //echo "login by cookie";
-//                        return 1;
-//                    } else {
-//                        return 0;
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    private function authenticate($username, $password) {
-//        $result = $this->taskman_repository->sp_login_sistem($username, $password);
-//        if ($result["kode"] == 1) {
-//            
-//            $this->session->set_userdata(array('user_jabatan' => strtolower($result["nama_jabatan"])));
-//            return 1;
-//        }
-//        return 0;
-//    }
-
     public function index() {
-//        if($this->session->userdata('logged_in'))
-//        {
         $this->load->model(array('akun'));
         $temp = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
@@ -67,25 +31,28 @@ class home extends ceklogin {
         $data["temp"] = $this->session->userdata('logged_in');
         $data["users"] = json_decode(file_get_contents($url));
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Login", $temp['user_nama'] . " sedang berada di halaman dashboard.");
-        $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
-        $staff = $this->akun->my_staff($temp['user_id']);
-        $my_staff = array();
-        //print_r($staff);
-        if (!isset($staff->error)) {
-            foreach ($staff as $s) {
-                //print_r($s);
-                //if(is_array($s))
-                $my_staff[] = $s->id_akun;
+        if ($temp['jmlstaff'] > 0) {
+            $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
+            $staff = $this->akun->my_staff($temp['user_id']);
+
+            $my_staff = array();
+            //print_r($staff);
+            if (!isset($staff->error)) {
+                foreach ($staff as $s) {
+                    //print_r($s);
+                    //if(is_array($s))
+                    $my_staff[] = $s->id_akun;
+                }
             }
+            //print_r($my_staff);
+            $data['pekerjaan_staff'] = $this->pekerjaan_model->get_pekerjaan_staff($temp['user_id'], $my_staff);
+            $list_id_pekerjaan = array();
+            if ($data['pekerjaan_staff'] != NULL)
+                foreach ($data['pekerjaan_staff'] as $job) {
+                    $list_id_pekerjaan[] = $job->id_pekerjaan;
+                }
+            $data['detil_pekerjaan_staff'] = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
         }
-        //print_r($my_staff);
-        $data['pekerjaan_staff'] = $this->pekerjaan_model->get_pekerjaan_staff($temp['user_id'], $my_staff);
-        $list_id_pekerjaan = array();
-        if ($data['pekerjaan_staff'] != NULL)
-            foreach ($data['pekerjaan_staff'] as $job) {
-                $list_id_pekerjaan[] = $job->id_pekerjaan;
-            }
-        //$data['detil_pekerjaan'] = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
         $this->load->view('homepage/taskman_home_page', $data);
         //var_dump($data["pkj_karyawan"]);
     }

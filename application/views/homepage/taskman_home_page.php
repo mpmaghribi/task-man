@@ -78,12 +78,14 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#PekerjaanSaya">Pekerjaan Saya</a>
                                     </li>
+                                    <?php if ($data_akun['jmlstaff']>0){?>
                                     <li class="">
                                         <a data-toggle="tab" href="#PekerjaanStaff">Pekerjaan Staff</a>
                                     </li>
                                     <li class="">
                                         <a data-toggle="tab" href="#div_view_draft">Draft Pekerjaan</a>
                                     </li>
+                                    <?php } ?>
                                 </ul>
                             </header>
                             <div class="panel-body">
