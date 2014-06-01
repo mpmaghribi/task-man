@@ -805,6 +805,9 @@ class pekerjaan extends ceklogin {
                     $status = 'kosong';
                     $keterangan = 'Belum ada nilai';
                 }
+            }else{
+                $status='1';
+                $keterangan='Tipe nilai yang diminta tidak dikenal';
             }
         }
 
