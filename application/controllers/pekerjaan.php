@@ -138,10 +138,12 @@ class pekerjaan extends ceklogin {
         //var_dump($staff);
         //echo "temp";
         //var_dump($temp);
-        $data["detil_pekerjaan"] = json_encode($detil_pekerjaan);
+        $data["detil_pekerjaan"] = $detil_pekerjaan;
         $data["my_staff"] = json_encode($staff);
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang berada di halaman pekerjaan.");
         //var_dump($data["pkj_karyawan"]);
+        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $data["users"] = json_decode(file_get_contents($url));
         $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
 //        } else {
 //            $this->session->set_flashdata('status', 4);
@@ -161,6 +163,7 @@ class pekerjaan extends ceklogin {
         $update["asal_pekerjaan"] = 'task management';
         $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
         $update["kategori"] = pg_escape_string($this->input->post("kategori"));
+        
         if ($this->pekerjaan_model->update_pekerjaan($update, $id_pekerjaan)) {
             $list_staff = $this->input->post("staff");
             $assigned_staff = $this->pekerjaan_model->get_detil_pekerjaan(array($id_pekerjaan));

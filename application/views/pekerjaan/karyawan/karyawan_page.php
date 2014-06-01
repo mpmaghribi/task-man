@@ -21,7 +21,7 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#ListPekerjaan">List Pekerjaan</a>
                                     </li>
-                                    
+
                                     <li class="">
                                         <a data-toggle="tab" href="#TambahPekerjaan">Tambah Pekerjaan</a>
                                     </li>
@@ -273,9 +273,13 @@
                                                 <div class="form-group ">
                                                     <label for="prioritas" class="control-label col-lg-3">File</label>
                                                     <div class="col-lg-6">
-                                                        <div id="list_file_upload_usul">
+                                                        <div id="file_baru">
+                                                            <table  class="table table-hover general-table" id="berkas_baru"></table>
                                                         </div>
-                                                        <input type="file" multiple="" name="berkas[]" id="pilih_berkas_usul"/>
+                                                        <div style="display:none">
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                        </div>
+                                                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -486,85 +490,66 @@
                 $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
             }
 
-            $('#pilih_berkas_assign').change(function() {
-                var pilih_berkas = document.getElementById('pilih_berkas_assign');
-                var files = pilih_berkas.files;
-                populate_file('list_file_upload_assign', files);
-            });
-            function populate_file(div_id, files) {
-                $('#' + div_id).html('');
-                var jumlah_file = files.length;
-                for (var i = 0; i < jumlah_file; i++) {
-                    $('#' + div_id).append(files[i].name + "<br/>");
-                }
-            }
+
+
             document.title = "Task Management - Edit Pekerjaan";
-            var mulai = new Date('<?php echo $pekerjaan[0]->tgl_mulai; ?>');
-            var akhir = new Date('<?php echo $pekerjaan[0]->tgl_selesai; ?>');
-            //alert (mulai);
-            //alert(akhir);
-            $('.dpd1').val(mulai.getDate() + '-' + (mulai.getMonth() + 1) + '-' + mulai.getFullYear());
-            $('.dpd2').val(akhir.getDate() + '-' + (akhir.getMonth() + 1) + '-' + akhir.getFullYear());
+
         </script>
     <?php } ?>
     <script>
-        var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
-        var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
-        var jumlah_staff = my_staff.length;
-        var jumlah_detil_pekerjaan = detil_pekerjaan.length;
-        for (var i = 0; i < jumlah_detil_pekerjaan; i++) {
-            var cell = $("#pekerjaan_nama_staff_" + detil_pekerjaan[i]["id_pekerjaan"]);
-            if (cell === null)
-                continue;
-            var id_akun = detil_pekerjaan[i]["id_akun"];
-            var nama_staff = "";
-            if (id_akun === '<?php echo $temp["user_id"]; ?>') {
-                nama_staff = '<?php echo $temp["nama"]; ?>';
-            } else {
-                for (var j = 0; j < jumlah_staff; j++) {
-                    if (my_staff[j]["id_akun"] === id_akun) {
-                        nama_staff = my_staff[j]["nama"];
-                        break;
-                    }
-                }
-            }
-            //var isi_html = cell.html();
-            //console.log(cell);
-            if (cell.length > 0 && cell.html().trim().length === 0) {
-                cell.html(nama_staff);
-            } else if (cell.length > 0) {
-                cell.html(cell.html() + ", " + nama_staff);
-            }
+        function pekerjaan_saya_set_nama(id, isi) {
+            var sep = '';
+            var element = $('#' + id);
+            if (element.html().length > 0)
+                sep = ", ";
+            element.html(element.html() + sep + isi);
         }
-        $('#pilih_berkas_usul').change(function() {
-            var pilih_berkas = document.getElementById('pilih_berkas_usul');
-            var files = pilih_berkas.files;
-            populate_file('list_file_upload_usul', files);
+<?php
+if (isset($users)) {
+    $id_nama_user = array();
+    foreach ($users as $user) {
+        $id_nama_user[$user->id_akun] = $user->nama;
+    }
+    foreach ($detil_pekerjaan as $detil) {
+        ?>pekerjaan_saya_set_nama("pekerjaan_nama_staff_<?php echo $detil->id_pekerjaan; ?>", '<?php if (isset($id_nama_user[$detil->id_akun])) echo $id_nama_user[$detil->id_akun]; ?>');
+        <?php
+    }
+}
+?>
+        $('#button_trigger_file').click(function() {
+            $('#pilih_berkas_assign').click();
         });
-
-        function populate_file(div_id, files) {
-            $('#' + div_id).html('');
+        $('#pilih_berkas_assign').change(function() {
+            var pilih_berkas = document.getElementById('pilih_berkas_assign');
+            var files = pilih_berkas.files;
+            populate_file('berkas_baru', files);
+        });
+        function populate_file(id_tabel, files) {
+            $('#' + id_tabel).html('');
             var jumlah_file = files.length;
             for (var i = 0; i < jumlah_file; i++) {
-                //$('#'+div_id).append('<div id="' + div_id + '_file_' + i + '"><span><a class="btn btn-primary btn-xs" href="#" onclick="return hapus_file(\'pilih_berkas_assign\',\'' + div_id + '_file_' + i + '\',\'' + files[i].name + '\');">Hapus</a></span><span style="margin-left: 5px">' + files[i].name + '</span></div>');
-                $('#' + div_id).append(files[i].name + "<br/>");
+                $('#' + id_tabel).append('<tr id="berkas_baru_' + i + '">' +
+                        '<td id="nama_berkas_baru_' + i + '">' + files[i].name + ' ' + format_ukuran_file(files[i].size) + '</td>' +
+                        '<td id="keterangan_' + i + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px">Baru</a></td>' +
+                        '</tr>');
             }
         }
-        function hapus_file(file_input_id, div_id, value) {
-            var element = document.getElementById(file_input_id);
-            //var files = element.files;
-            for (var i = element.files.length - 1; i >= 0; i--) {
-                if (element.files[i].name === value) {
-                    alert('mencoba mengahpus ' + value);
-                    element.files.splice(i, 1);
-                    console.log(element.files);
-                    alert('mengahpus ' + value);
-                    populate_file(div_id, element.files);
-                    break;
-                }
+        function format_ukuran_file(s) {
+            var KB = 1024;
+            var spasi = ' ';
+            var satuan = 'bytes';
+            if (s > KB) {
+                s = s / KB;
+                satuan = 'KB';
             }
-            return false;
+            if (s > KB) {
+                s = s / KB;
+                satuan = 'MB';
+            }
+            return '   [' + Math.round(s) + spasi + satuan + ']';
         }
+
+
         document.title = "Pekerjaan Saya - Task Management";
         //$('#submenu_pekerjaan_li').click();
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
