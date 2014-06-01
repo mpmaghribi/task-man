@@ -385,9 +385,8 @@ class pekerjaan_model extends CI_Model {
         return $this->db->query($query);
     }
 
-    public function batalkan_task($id_pekerjaan, $staffku) {
-        $query = "update detil_pekerjaan set status='Batal' where id_pekerjaan='$id_pekerjaan' and "
-                . "id_akun in (" . implode(",", $staffku) . ")";
+    public function batalkan_task($id_pekerjaan) {
+        $query = "update detil_pekerjaan set status='Batal' where id_pekerjaan='$id_pekerjaan' ";
         $query2 = "update pekerjaan set flag_usulan='3' where id_pekerjaan='$id_pekerjaan'";
         return $this->db->query($query) && $this->db->query($query2);
     }

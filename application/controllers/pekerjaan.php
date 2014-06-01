@@ -163,7 +163,7 @@ class pekerjaan extends ceklogin {
         $update["asal_pekerjaan"] = 'task management';
         $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
         $update["kategori"] = pg_escape_string($this->input->post("kategori"));
-        
+
         if ($this->pekerjaan_model->update_pekerjaan($update, $id_pekerjaan)) {
             $list_staff = $this->input->post("staff");
             $assigned_staff = $this->pekerjaan_model->get_detil_pekerjaan(array($id_pekerjaan));
@@ -643,14 +643,20 @@ class pekerjaan extends ceklogin {
         }
         //echo "id staff ";
         //print_r($id_staff);
-        $update['flag_usulan'] = '9';
+        $update['flag_usulan'] = '3';
 
         foreach ($id_pekerjaan as $key => $val) {
             if (strlen($val) > 0) {
                 $cur_id_pekerjaan = pg_escape_string($val);
-                $this->pekerjaan_model->update_pekerjaan($update, $cur_id_pekerjaan);
-                //echo 'id pekerjaan yang akan dibatalkan untuk staffku=' . $cur_id_pekerjaan . "<br>\n";
-                $this->pekerjaan_model->batalkan_task($cur_id_pekerjaan, $id_staff);
+                $pekerjaan = $this->pekerjaan_model->get_pekerjaan($cur_id_pekerjaan);
+                if (count($pekerjaan) > 0) {
+                    $berhak = ($session ['user_id'] == $pekerjaan[0]->id_akun && $session['hakakses'] == 'Administrator');
+                    if ($berhak) {
+                        $this->pekerjaan_model->update_pekerjaan($update, $cur_id_pekerjaan);
+                        //echo 'id pekerjaan yang akan dibatalkan untuk staffku=' . $cur_id_pekerjaan . "<br>\n";
+                        $this->pekerjaan_model->batalkan_task($cur_id_pekerjaan);
+                    }
+                }
             }
         }
         //echo 'id pekerjaan ';
@@ -989,13 +995,13 @@ class pekerjaan extends ceklogin {
             } else {//nilai baru
                 $status_nilai = $this->pekerjaan_model->nilai_set($insert);
             }
-            if($status_nilai){
+            if ($status_nilai) {
                 echo json_encode(array('status' => 'OK', 'keterangan' => 'berhasil'));
             }
-        }else{
+        } else {
             echo json_encode(array('status' => $status, 'keterangan' => $keterangan));
         }
-        
+
 
 
 //        if ($nama_tipe_nilai == 'target' && ( $ak == '0' || $kualitas_mutu == '0' || $kuantitas_output == '0' || $biaya == '0' || $waktu == '0')) {

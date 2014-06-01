@@ -48,11 +48,14 @@
                                                     url: "<?php echo site_url(); ?>/pekerjaan/batalkan_pekerjaan", // the file to call
                                                     success: function(response) { // on success..
                                                         var json = jQuery.parseJSON(response);
-                                                        //alert(response);
                                                         if (json.status === "OK") {
-                                                            //$('#div_acc_edit_cancel_usulan_pekerjaan').remove();
-                                                            //$('#tombol_validasi_usulan').remove();
-                                                            window.location='<?php echo base_url(); ?>pekerjaan';
+                                                            <?php 
+                                                            $lempar_url = 'karyawan';
+                                                            if($this->session->userdata('prev')!=null){
+                                                                $lempar_url=$this->session->userdata('prev');
+                                                            }
+                                                            ?>
+                                                            window.location='<?php echo base_url().'pekerjaan/'. $lempar_url; ?>';
                                                         } else {
                                                             alert("Gagal membatalkan pekerjaan, " + json.reason);
                                                         }
