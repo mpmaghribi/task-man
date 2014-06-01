@@ -715,14 +715,23 @@ class pekerjaan extends ceklogin {
         $keterangan = '';
         $id_target = null;
         $id_realisasi = null;
-        
-        if(strlen($id_pekerjaan)>0){}else{$status='1';$keterangan='ID pekerjaan diperlukan';}
-        
-        if (strlen($id_staff) > 0) {
-            
-        } else {
-            $status = '1';
-            $keterangan = 'staff yang dinilai tidak ditentukan';
+
+        if ($status == 'OK') {
+            if (strlen($id_pekerjaan) > 0) {
+                //echo 'panjang id pekerjaan'.strlen($id_pekerjaan);
+            } else {
+                $status = '1';
+                $keterangan = 'ID pekerjaan diperlukan';
+            }
+        }
+
+        if ($status == 'OK') {
+            if (strlen($id_staff) > 0) {
+                
+            } else {
+                $status = '1';
+                $keterangan = 'staff yang dinilai tidak ditentukan';
+            }
         }
 
 
@@ -739,7 +748,7 @@ class pekerjaan extends ceklogin {
 
         $list_id_staff = array();
         $nama_staff = array();
-        if ($id_target == null || $id_realisasi == null) {
+        if ($status == 'OK' && ($id_target == null || $id_realisasi == null)) {
             $status = '1';
             $keterangan = 'Data tipe nilai tidak dapat ditemukan';
         } else {
@@ -755,7 +764,7 @@ class pekerjaan extends ceklogin {
             $staff_ku = in_array($id_staff, $list_id_staff);
             $berhak = ($session ['user_id'] == $id_staff && $session['hakakses'] == 'Administrator');
             //if (in_array($id_staff, $list_id_staff) || ($session ['user_id'] == $id_staff && $session['hakakses'] == 'Administrator')) {
-            if($staff_ku||$berhak){
+            if ($staff_ku || $berhak) {
                 
             } else {
                 $status = '1';
@@ -805,9 +814,9 @@ class pekerjaan extends ceklogin {
                     $status = 'kosong';
                     $keterangan = 'Belum ada nilai';
                 }
-            }else{
-                $status='1';
-                $keterangan='Tipe nilai yang diminta tidak dikenal';
+            } else {
+                $status = '1';
+                $keterangan = 'Tipe nilai yang diminta tidak dikenal';
             }
         }
 
@@ -831,6 +840,7 @@ class pekerjaan extends ceklogin {
         $waktu = pg_escape_string($this->input->post('waktu'));
         $biaya = pg_escape_string($this->input->post('biaya'));
         $nama_tipe_nilai = strtolower(pg_escape_string($this->input->post('tipe_nilai')));
+
         if ($nama_tipe_nilai == 'target' && ( $ak == '0' || $kualitas_mutu == '0' || $kuantitas_output == '0' || $biaya == '0' || $waktu == '0')) {
             echo json_encode(array('status' => 'null', 'keterangan' => 'nilai tidak boleh 0'));
         } else {
@@ -925,9 +935,7 @@ class pekerjaan extends ceklogin {
                     echo json_encode(array('status' => 'null', 'keterangan' => 'bukan bawahan anda'));
                 }
             } else {
-                echo json_encode(array('status' => 'null', 'keterangan' => 'pekerjaan tidak ditemukan'))
-
-                ;
+                echo json_encode(array('status' => 'null', 'keterangan' => 'pekerjaan tidak ditemukan'));
             }
         }
     }

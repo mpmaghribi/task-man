@@ -135,6 +135,7 @@
                     $('#nilai_body').css('display', 'block');
                     $('#div_nilai_error').css('display', 'none');
                     if (json.status === 'OK') {
+                        $('#judul_modal').html('Update ' + capitaliseFirstLetter(tipe_nilai) + ' <strong><?php echo $deskripsi_pekerjaan[0]->nama_pekerjaan; ?></strong>');
                         console.log(json.data);
                         console.log(json.data.length);
                         if (json.data.length > 0) {
@@ -148,6 +149,7 @@
                             console.log('belum punya ' + tipe_nilai);
                         }
                     } else {
+                        $('#judul_modal').html('Isi ' + capitaliseFirstLetter(tipe_nilai) + ' <strong><?php echo $deskripsi_pekerjaan[0]->nama_pekerjaan; ?></strong>');
                         console.log('kosong, belum ada nilai');
                     }
                 } else {
