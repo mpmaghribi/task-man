@@ -120,6 +120,16 @@ class pekerjaan_model extends CI_Model {
 
     public function usul_pekerjaan2($data) {
         $pekerjaan = $this->db->insert('pekerjaan', $data);
+        if ($pekerjaan === true) {
+            $query1 = "select currval('tbl_pekerjaan_id') as id_baru";
+            $query2 = $this->db->query($query1);
+            //return $query2->result()[0]->id_baru;
+            foreach ($query2->result() as $row) {
+                return $row->id_baru;
+            }
+        }
+        //echo $query1;
+        return NULL;
     }
 
     public function tambah_detil_pekerjaan($id_akun, $id_pekerjaan) {

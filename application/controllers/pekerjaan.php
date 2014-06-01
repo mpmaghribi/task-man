@@ -229,7 +229,7 @@ class pekerjaan extends ceklogin {
 
 
         if (!($kategori == 'project' || $kategori == 'rutin')) {
-            $kategori = null;
+            //$kategori = null;
         }
 
 
@@ -261,7 +261,20 @@ class pekerjaan extends ceklogin {
         foreach ($my_staff as $s) {
             $mystaff[] = $s->id_akun;
         }
-        $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj, $kategori);
+        
+        $insert['id_sifat_pekerjaan'] = $sifat_pkj;
+        $insert['parent_pekerjaan'] = 0;
+        $insert['nama_pekerjaan'] = $nama_pkj;
+        $insert['deskripsi_pekerjaan'] = $deskripsi_pkj;
+        $insert['tgl_mulai'] = $tgl_mulai_pkj;
+        $insert['tgl_selesai'] = $tgl_selesai_pkj;
+        $insert['level_prioritas'] = $prioritas;
+        $insert['flag_usulan'] = '2';
+        $insert['asal_pekerjaan'] = 'task management';
+        $insert['kategori'] = $kategori;
+        
+        //$id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj, '',$kategori);
+        $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan2($insert);
         if ($id_pekerjaan != NULL) {
             if ($jenis_usulan == 'usulan') {
                 foreach ($staff as $index => $val) {//val itu nip
@@ -577,6 +590,7 @@ class pekerjaan extends ceklogin {
         $id_staff = $this->input->get("id_akun");
         $this->session->set_userdata('prev', 'pekerjaan_per_staff?id_akun=' . $id_staff);
         $data["pekerjaan_staff"] = $this->pekerjaan_model->list_pekerjaan(array($id_staff));
+        //print_r($data['pekerjaan_staff']);
         $data["my_staff"] = $this->akun->my_staff($session["user_id"]);
         $data["id_staff"] = $id_staff;
         $data["nama_staff"] = "";
