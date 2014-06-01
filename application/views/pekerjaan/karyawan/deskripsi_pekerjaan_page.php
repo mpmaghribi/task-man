@@ -21,7 +21,10 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#deskripsiPekerjaan">Deskripsi Pekerjaan</a>
                                     </li>
-                                    <?php if ($deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id'] && $data_akun['hakakses'] == 'Administrator' && $deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
+                                    <?php 
+                                    //print_r($deskripsi_pekerjaan[0]);
+                                    //print_r($data_akun);
+                                    if ($deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id'] && $data_akun['hakakses'] == 'Administrator' && $deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
                                         <li class="">
                                             <a data-toggle="tab" href="#penilaianPekerjaan">Penilaian Kerja Staff</a>
                                         </li>

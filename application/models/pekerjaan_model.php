@@ -237,7 +237,10 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
-
+    public function  get_list_tipe_nilai(){
+        $qeury = $this->db->get('tipe_nilai');
+        return $qeury->result();
+    }
     public function get_list_usulan_pekerjaan($list_id_akun) {
         if (count($list_id_akun) == 0)
             return NULL;
