@@ -560,7 +560,7 @@ class pekerjaan extends ceklogin {
         $this->load->model("pekerjaan_model");
         if ($this->pekerjaan_model->validasi_pekerjaan($id_pekerjaan) == 1) {
             $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja melakukan validasi terhadap usulan pekerjaan dari staffnya");
-            $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
+            //$this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
             echo json_encode(array("status" => "OK"));
         } else {
             echo json_encode(array("status" => "FAILED", "reason" => "failed to update"));
