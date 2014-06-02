@@ -148,7 +148,10 @@ if (isset($list_berkas)) {
                                                                         <td><?php echo basename($berkas->nama_file); ?></td>
                                                                         <td style="text-align: right">
                                                                             <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() . $berkas->nama_file ?>');">Download</a>
+                                                                           <?php 
+                                                                           if ($atasan || $pengusul) { ?>
                                                                             <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
+                                                                           <?php } ?>
                                                                         </td>
                                                                     </tr>
         <?php
@@ -300,7 +303,7 @@ if (isset($listassign_pekerjaan)) {
             if (c == true) {
                 $.ajax({// create an AJAX call...
                     data: {id_file: id_file,
-                        id_pekerjaan: document.getElementById('id_detail_pkj').value
+                        id_pekerjaan: <?php echo $id_pkj; ?>
                     }, // get the form data
                     type: "get", // GET or POST
                     url: "<?php echo site_url(); ?>/pekerjaan/hapus_file", // the file to call

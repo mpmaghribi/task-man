@@ -573,7 +573,7 @@ echo "check upload";
         $cek = $this->pekerjaan_model->cek_pemberi_pekerjaan($id_pekerjaan);
         $hasil['status'] = 'error';
         //print_r($cek);
-        if (count($cek) == 0 || (count($cek) > 0 && $cek[0]->id_akun == $session['user_id'])) {
+        if  (count($cek) > 0 && $cek[0]->id_akun == $session['user_id']) {
             $berkas = $this->berkas_model->get_berkas($id_file);
             $hapus = $this->berkas_model->hapus_file($id_file);
             if ($hapus == true) {
@@ -582,7 +582,7 @@ echo "check upload";
             } else
                 $hasil['reason'] = 'gagal menghapus';
         }else {
-            $hasil['reason'] = 'bukan milik anda';
+            $hasil['reason'] = 'Anda tidak berhak menghapus berkas';
         }
 
 
