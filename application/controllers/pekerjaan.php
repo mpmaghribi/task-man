@@ -348,6 +348,8 @@ class pekerjaan extends ceklogin {
         $result = $this->taskman_repository->sp_tambah_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
         $id_pekerjaan_baru = $result[0]->kode;
         if ($id_pekerjaan_baru >= 0) {
+            $atasan_url=str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $id_akun . "/format/json";
+            
             $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $temp['user_id']);
             if (isset($_FILES["berkas"])) {
                 $path = './uploads/pekerjaan/' . $id_pekerjaan_baru . '/';
