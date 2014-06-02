@@ -25,7 +25,7 @@
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo base_url() ?>pekerjaan/do_edit" enctype="multipart/form-data">
                                                 <input type="hidden" name="id_pekerjaan" id="id_pekerjaan" value="<?php echo $pekerjaan[0]->id_pekerjaan; ?>"/>
-                                                <div class="form-group ">
+                                                <?php if($atasan){ ?><div class="form-group ">
                                                     <label for="staff" class="control-label col-lg-3">Staff</label>
                                                     <div class="col-lg-6">
                                                         <div id="span_list_assign_staff">
@@ -46,6 +46,7 @@
                                                         ?>" name="staff" id="staff"/>
                                                     </div>
                                                 </div>
+                                                <?php } ?>
 
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
@@ -227,19 +228,9 @@
         var list_departemen = [];
         var list_id = [];
         var sudah_diproses = false;
-        //var json = jQuery.parseJSON('<?php echo $my_staff; ?>');
-        //alert(json[0]["id_akun"]);
         function query_staff() {
             if (list_id.length === 0) {
-//                $.ajax({// create an AJAX call...
-//                    data: "", // get the form data
-//                    type: "GET", // GET or POST
-//                    url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
-//                    success: function(response) { // on success..
-//                        var json = jQuery.parseJSON(response);
-                var json = jQuery.parseJSON('<?php echo $my_staff; ?>');
-                //alert(response);
-                //if (json.status === "OK") {
+                var json = jQuery.parseJSON('<?php echo json_encode($my_staff); ?>');
                 var jumlah_data = json.length;
                 for (var i = 0; i < jumlah_data; i++) {
                     //var id = json.data[i]["id_akun"];
@@ -249,17 +240,8 @@
                     list_id[i] = json[i]["id_akun"];
                     var id = list_id[i];
                     sudah_diproses = true;
-                    //$('#nama_staff_' + id).html(json[i]["nama"]);
                     $('#nama_' + id).html(json[i]["nip"] + " - " + json[i]["nama"]);
-//                    if (cell.length > 0) {
-//                        cell.html(list_nama[i]);
-//                    }
                 }
-                //} 
-                //else {
-//                        }
-//                    }
-//                });
             }
         }
         query_staff();

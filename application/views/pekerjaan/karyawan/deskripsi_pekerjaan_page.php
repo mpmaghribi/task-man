@@ -22,7 +22,7 @@
                                         <a data-toggle="tab" href="#deskripsiPekerjaan">Deskripsi Pekerjaan</a>
                                     </li>
                                     <?php 
-                                    print_r($deskripsi_pekerjaan[0]);
+                                    //print_r($deskripsi_pekerjaan[0]);
                                     //print_r($data_akun);
                                     if ($deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id'] && $data_akun['hakakses'] == 'Administrator' && $deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
                                         <li class="">
@@ -31,18 +31,12 @@
 <?php } ?>
                                 </ul>
                                     <?php 
-                                    $atasan = $deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id'] && $data_akun['hakakses'] == 'Administrator';
-                                    $terlibat = false;
-                                    foreach ($listassign_pekerjaan as $detil){
-                                        if($detil->id_akun==$data_akun['user_id']){
-                                            $terlibat=true;
-                                            break;
-                                        }
-                                    }
-                                    $pengusul = $deskripsi_pekerjaan[0]->flag_usulan='1' && $terlibat;
+
+                                    $pengusul = $deskripsi_pekerjaan[0]->flag_usulan=='1' && $ikut_serta;
+                                    //echo "pengusul = $pengusul";
                                     if ($atasan || $pengusul) { ?>
                                     <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    <?php if ($deskripsi_pekerjaan[0]->flag_usulan == '1') { ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi(<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>);">Validasi</a><?php } ?>
+                                    <?php if ($deskripsi_pekerjaan[0]->flag_usulan == '1' && $atasan) { ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi(<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>);">Validasi</a><?php } ?>
                                         <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
                                         <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                     </div>
@@ -194,7 +188,7 @@ if (isset($listassign_pekerjaan)) {
                                                                         <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                                         <td><?php echo $i; ?></td>
                                                                         <td id="nama_staff_<?php //echo $value->id_akun;           ?>"><?php //echo $value->id_akun;           ?><?php foreach ($users as $value2) { ?>
-            <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
+            <?php if ($value->id_akun == $value2->id_akun) {  echo $value2->nama ?><?php } ?>
                                                                             <?php } ?></td>
                                                                         <td>
                                                                             <div class="progress progress-striped progress-xs">
