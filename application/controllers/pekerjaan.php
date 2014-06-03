@@ -142,6 +142,8 @@ class pekerjaan extends ceklogin {
         $data["my_staff"] = json_encode($staff);
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang berada di halaman pekerjaan.");
         //var_dump($data["pkj_karyawan"]);
+         $atasan = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/".$temp["user_id"]."/format/json";
+        $data["atasan"] = json_decode(file_get_contents($atasan));
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["users"] = json_decode(file_get_contents($url));
         $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
@@ -386,6 +388,7 @@ echo "check upload";
 
     public function usulan_pekerjaan() {
         $data['data_akun'] = $this->session->userdata("logged_in");
+        $this->load->model("pekerjaan_model");
         $temp = $this->session->userdata('logged_in');
         $sifat_pkj = $this->input->post('sifat_pkj2');
         $parent_pkj = 0; //$this->input->post('parent_pkj');
@@ -394,6 +397,7 @@ echo "check upload";
         $tgl_mulai_pkj = $this->input->post('tgl_mulai_pkj2');
         $tgl_selesai_pkj = $this->input->post('tgl_selesai_pkj2');
         $prioritas = $this->input->post('prioritas2');
+        $idatasan = $this->input->post('atasan');
         $status_pkj = '1'; //$this->input->post('status_pkj');
         if (strtolower($temp['hakakses']) == 'administrator')
             $status_pkj = '2';
@@ -401,9 +405,10 @@ echo "check upload";
         $result = $this->taskman_repository->sp_tambah_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
         $id_pekerjaan_baru = $result[0]->kode;
         if ($id_pekerjaan_baru >= 0) {
-            $atasan_url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $id_akun . "/format/json";
+            //$atasan_url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $id_akun . "/format/json";
 
             $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $temp['user_id']);
+            $result2 = $this->pekerjaan_model->isi_pemberi_pekerjaan($idatasan,$id_pekerjaan_baru);
             if (isset($_FILES["berkas"])) {
                 $path = './uploads/pekerjaan/' . $id_pekerjaan_baru . '/';
                 $this->load->library('upload');

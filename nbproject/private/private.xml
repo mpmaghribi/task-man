@@ -3,21 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/config/database.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/lihat_daftar_pekerjaan_staff_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/lihat_usulan_pekerjaan_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/laporan/laporan_pekerjaan_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/assets/js/validation-init.js</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/models/pengaduan_model.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/pengaduan_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/karyawan/karyawan_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/models/laporan_model.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/laporan.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/taskman_header2_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/homepage/taskman_home_page.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/models/pekerjaan_model.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/pekerjaan.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/laporan/laporan_pekerjaan_pdf.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/assets/js/table-editable-progress.js</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/edit_pekerjaan_page.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/views/taskman_sidebarleft_page.php</file>
         </group>
     </open-files>
