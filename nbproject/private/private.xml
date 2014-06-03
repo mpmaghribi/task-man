@@ -6,6 +6,7 @@
             <file>file:/C:/xampp/htdocs/taskmanagement/application/models/pekerjaan_model.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/pekerjaan.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/edit_pekerjaan_page.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/karyawan/karyawan_page.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/views/taskman_sidebarleft_page.php</file>
         </group>
     </open-files>

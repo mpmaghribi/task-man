@@ -226,17 +226,21 @@
                                     <div id="TambahPekerjaan" class="tab-pane">
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan" enctype="multipart/form-data">
+                                                <?php if ($atasan != null || isset($atasan)){?>
                                                 <div class="form-group ">
                                                     <label for="atasan" class="control-label col-lg-3">Atasan</label>
                                                     <div class="col-lg-6">
                                                         
                                                         <select name="atasan" class="form-control m-bot15">
+                                                            
                                                             <?php foreach ($atasan as $value) { ?>              
                                                               <option value="<?php echo $value->id_akun?>"><?php echo $value->nama?> - <?php echo $value->nama_jabatan?></option>  
                                                             <?php }?>
+                                                              
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <?php }?>
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                     <div class="col-lg-6">
