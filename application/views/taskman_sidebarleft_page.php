@@ -18,44 +18,49 @@
                         <li><a href="<?php echo base_url() ?>profil">Akun</a></li>
                     </ul>
                 </li>
+                 <?php if($data_akun['hakakses'] == "Administrator" || $data_akun['hakakses'] == "Operator" || $data_akun['hakakses'] == "Manager" || $data_akun['hakakses'] == "Pegawai"){?>
                 <li class="sub-menu" id="submenu_pekerjaan_li">
                     <a href="javascript:;" id="submenu_pekerjaan">
                         <i class="fa fa-book" ></i>
                         <span>Pekerjaan</span>
                     </a>
                     <ul class="sub" id="submenu_pekerjaan_ul">
+                         <?php if($data_akun['hakakses'] == "Administrator" || $data_akun['hakakses'] == "Operator" || $data_akun['hakakses'] == "Manager"){?>
                         <li class="sub-menu">
                             <a href="<?php echo base_url(); ?>pekerjaan/pengaduan">
                                 <i class="fa fa-book"></i>
                                 <span>Pengaduan</span>
                             </a>
                         </li>
+                         <?php }?>
                         <li class="sub-menu">
                             <a href="<?php echo base_url()?>pekerjaan/karyawan">
                                 <i class="fa fa-book"></i>
                                 <span>Pekerjaan Saya</span>
                             </a>
                         </li>
-                        <?php if($data_akun['jmlstaff'] > 0){?>
+                       
                         <li class="sub-menu">
                             <a href="<?php echo base_url(); ?>pekerjaan/lihat_usulan">
                                 <i class="fa fa-book"></i>
                                 <span>Usulan Pekerjaan</span>
                             </a>
                         </li>
+                        <?php if($data_akun['hakakses'] == "Administrator" || $data_akun['hakakses'] == "Operator" || $data_akun['hakakses'] == "Manager"){?>
                         <li class="sub-menu">
                             <a href="<?php echo base_url(); ?>pekerjaan/pekerjaan_staff">
                                 <i class="fa fa-book"></i>
                                 <span>Pekerjaan Staff</span>
                             </a>
                         </li>
+                        <?php }?>
                         <li class="sub-menu">
                             <a href="<?php echo base_url(); ?>draft">
                                 <i class="fa fa-book"></i>
                                 <span>Draft Pekerjaan</span>
                             </a>
                         </li>
-                        <?php } ?>
+                        
 <!--                        <li class="sub-menu">
                             <a href="javascript:;">
                                 <i class="fa fa-book"></i>
@@ -75,13 +80,14 @@
                         </li>-->
                     </ul>
                 </li>
+                 <?php }?>
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-laptop"></i>
                         <span>Rekap Pekerjaan</span>
                     </a>
                     <ul class="sub">
-                        <?php $temp = $this->session->userdata('logged_in'); if ($temp['jmlstaff'] > 0){?><li><a href="<?php echo base_url()?>laporan">Laporan Pekerjaan Staff</a></li><?php }?>
+                        <?php $temp = $this->session->userdata('logged_in'); if ($temp['hakakses'] == "Manager" || $temp['hakakses'] == "Administrator"){?><li><a href="<?php echo base_url()?>laporan">Laporan Pekerjaan Staff</a></li><?php }?>
                          <li><a href="#exportPeriodePkjSaya" data-toggle="modal">Laporan Pekerjaan Saya</a></li>
 <!--                        <li><a href="#">Per Periode</a></li>
                         <li><a href="#">Per Status</a></li>
