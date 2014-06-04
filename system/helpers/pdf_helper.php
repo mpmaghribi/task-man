@@ -20,9 +20,9 @@ function generate_pdf($object, $filename='', $direct_download=TRUE)
     //return $dompdf->output();
     
     $dompdf->stream($filename);
-    if ($direct_download == TRUE)
-        $dompdf->stream($filename);
-    else
-        return $dompdf->output();
+//    if ($direct_download == TRUE)
+//        $dompdf->stream($filename);
+//    else
+//        return $dompdf->output();
 }
 ?>  

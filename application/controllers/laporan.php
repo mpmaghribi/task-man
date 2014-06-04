@@ -93,10 +93,10 @@ class laporan extends CI_Controller {
                         str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/".$id."/format/json"
                         ));
         
-            $data["jabatan_penilai"] = $atasan->nama_jabatan;
-            $data["departemen_penilai"] = $atasan->nama_departemen;
-            $data["nama_penilai"] = $atasan->nama;
-            $data["nip_penilai"] = $atasan->nip;
+            $data["jabatan_penilai"] = $atasan[0]->nama_jabatan;
+            $data["departemen_penilai"] = $atasan[0]->nama_departemen;
+            $data["nama_penilai"] = $atasan[0]->nama;
+            $data["nip_penilai"] = $atasan[0]->nip;
         
         $this->load->helper(array('pdf', 'date'));
         $filename = 'Laporan SKP '.$data['nama'].'.pdf';
@@ -128,10 +128,10 @@ class laporan extends CI_Controller {
                         str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/".$id."/format/json"
                         ));
         
-            $data["jabatan_penilai"] = $atasan->nama_jabatan;
-            $data["departemen_penilai"] = $atasan->nama_departemen;
-            $data["nama_penilai"] = $atasan->nama;
-            $data["nip_penilai"] = $atasan->nip;
+            $data["jabatan_penilai"] = $atasan[0]->nama_jabatan;
+            $data["departemen_penilai"] = $atasan[0]->nama_departemen;
+            $data["nama_penilai"] = $atasan[0]->nama;
+            $data["nip_penilai"] = $atasan[0]->nip;
             
         $data["jabatan"] = $jabatan[0]->nama_jabatan;
         $data["departemen"] = $jabatan[0]->nama_departemen;
