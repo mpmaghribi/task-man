@@ -17,6 +17,11 @@ class home extends ceklogin {
         $this->load->model(array('akun'));
         $temp = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
+        $list_id_pekerjaan_saya = array();
+        foreach ($result as $pekerjaan_saya){
+            $list_id_pekerjaan_saya[]=$pekerjaan_saya->id_pekerjaan;
+        }
+        $data['detil_pekerjaan_saya']=$this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan_saya);
         $data['data_akun'] = $this->session->userdata('logged_in');
         $data['pkj_karyawan'] = $result;
         $result1 = $this->pekerjaan_model->alltask($temp['user_id']);
@@ -34,7 +39,6 @@ class home extends ceklogin {
         if ($temp['jmlstaff'] > 0) {
             $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
             $staff = $this->akun->my_staff($temp['user_id']);
-
             $my_staff = array();
             //print_r($staff);
             if (!isset($staff->error)) {

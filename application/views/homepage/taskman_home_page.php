@@ -78,100 +78,78 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#PekerjaanSaya">Pekerjaan Saya</a>
                                     </li>
-                                    <?php if ($data_akun['jmlstaff']>0){?>
-                                    <li class="">
-                                        <a data-toggle="tab" href="#PekerjaanStaff">Pekerjaan Staff</a>
-                                    </li>
-                                    <li class="">
-                                        <a data-toggle="tab" href="#div_view_draft">Draft Pekerjaan</a>
-                                    </li>
+                                    <?php if ($data_akun['jmlstaff'] > 0) { ?>
+                                        <li class="">
+                                            <a data-toggle="tab" href="#PekerjaanStaff">Pekerjaan Staff</a>
+                                        </li>
+                                        <li class="">
+                                            <a data-toggle="tab" href="#div_view_draft">Draft Pekerjaan</a>
+                                        </li>
                                     <?php } ?>
                                 </ul>
                             </header>
                             <div class="panel-body">
 
                                 <div class="tab-content">
-                                <div id="PekerjaanSaya" class="tab-pane active">
+                                    <div id="PekerjaanSaya" class="tab-pane active">
 
 
-                                    <div class="form">
-                                        <table class="table table-striped table-hover table-condensed" id="tabel_home">
-                                            <thead>
-                                                <tr>
-                                                    <th> No</th>
-                                                    <th class="hidden-phone">Pekerjaan</th>
-                                                    <th>Deadline</th>
-                                                    <th>Assign To</th>
-                                                    <th>Status</th>
-                                                    <th></th>
-        <!--                                                            <th>Progress</th>-->
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php if (isset($pkj_karyawan)) { ?>
-                                                    <?php
-                                                    $i = 1;
-                                                    foreach ($pkj_karyawan as $value) {
-                                                        ?>
-                                                        <tr>
-                                                            <td>
-                                                                <a href="#">
-                                                                    <?php echo $i; ?>
-                                                                </a>
-                                                            </td>
-                                                            <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
-                                                            <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                            <td id="assign_to_<?php //echo $value->id_pekerjaan;    ?>"><?php foreach ($users as $value2) { ?>
-                                                                    <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
-                                                                <?php } ?></td>
-                                                            <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
-                                                            <td>
-                                                                <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
-                                                                    <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
-                                                                    <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
-                                                                </form>
-                                                            </td>
-                                                        </tr>
+                                        <div class="form">
+                                            <table class="table table-striped table-hover table-condensed" id="tabel_home">
+                                                <thead>
+                                                    <tr>
+                                                        <th> No</th>
+                                                        <th class="hidden-phone">Pekerjaan</th>
+                                                        <th>Deadline</th>
+                                                        <th>Assign To</th>
+                                                        <th>Status</th>
+                                                        <th></th>
+            <!--                                                            <th>Progress</th>-->
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php if (isset($pkj_karyawan)) { ?>
                                                         <?php
-                                                        $i++;
-                                                    }
-                                                    ?>
-                                                <?php } ?>
-
-                                            </tbody>
-                                        </table>
+                                                        $i = 1;
+                                                        foreach ($pkj_karyawan as $value) {
+                                                            ?>
+                                                            <tr>
+                                                                <td>
+                                                                    <a href="#">
+                                                                        <?php echo $i; ?>
+                                                                    </a>
+                                                                </td>
+                                                                <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
+                                                                <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
+                                                                <td id="assign_to_<?php //echo $value->id_pekerjaan;         ?>"><?php foreach ($users as $value2) { ?>
+                                                                        <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
+                                                                    <?php } ?></td>
+                                                                <td id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
+                                                                <td>
+                                                                    <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
+                                                                        <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
+                                                                        <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
+                                                                    </form>
+                                                                </td>
+                                                            </tr>
+                                                            <?php
+                                                            $i++;
+                                                        }
+                                                        ?>
+                                                    <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-
-
+                                    <?php $this->load->view('pekerjaan/karyawan/pekerjaan_staff_view'); ?>
+                                    <?php $this->load->view('pekerjaan/draft/draft_view'); ?>
                                 </div>
-
-<!--                                <div id="PekerjaanStaff" class="tab-pane"></div>-->
-<?php $this->load->view('pekerjaan/karyawan/pekerjaan_staff_view');?>
-                                <?php $this->load->view('pekerjaan/draft/draft_view');?>
-</div>
-
                             </div>
                         </section>
                     </div>
-                    <!--div class="col-md-4">
-                        <div class="profile-nav alt">
-                            <section class="panel">
-                                <div class="user-heading alt clock-row terques-bg">
-                                    <h4><?php echo date("Y F l d"); ?></h4>
-                                    <p class="text-left">Week <?php echo date("W"); ?></p>
-                                </div>
-                                <ul id="clock">
-                                    <li id="sec"></li>
-                                    <li id="hour"></li>
-                                    <li id="min"></li>
-                                </ul>
-                            </section>
-                        </div>
-                    </div-->
                 </div>
             </section>
         </section>
-
         <!--main content end-->
         <!--right sidebar start-->
         <?php $this->load->view('taskman_rightbar_page') ?>
@@ -179,89 +157,54 @@
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script>
-        var my_staff = [];
-        function get_my_staff() {
-            $.ajax({// create an AJAX call...
-                type: "get", // GET or POST
-                url: "<?php echo base_url(); ?>user/my_staff", // the file to call
-                success: function(response) { // on success..
-                    var json = jQuery.parseJSON(response);
-                    //alert(response);
-                    if (json.status === "OK") {
-                        //alert("aku punya staff");
-                        var jumlah_staff = json.data.length;
-                        for (var i = 0; i < jumlah_staff; i++) {
-                            my_staff.push(json.data[i]);
-                        }
-                    } else {
-                        //alert("aku tidak punya staff");
-                    }
-                    get_staff_yang_mengerjakan();
-                }
-            });
-        }
-        var list_detil_pekerjaan = [];
-        function get_staff_yang_mengerjakan() {
-            $.ajax({// create an AJAX call...
-                data: {list_id_pekerjaan: array_id_pekerjaan},
-                type: "post", // GET or POST
-                url: "<?php echo base_url(); ?>pekerjaan/get_detil_pekerjaan", // the file to call
-                success: function(response) { // on success..
-                    var json = jQuery.parseJSON(response);
-                    //alert(response);
-                    if (json.status === "OK") {
-                        var jumlah_detil = json.data.length;
-                        for (var i = 0; i < jumlah_detil; i++) {
-                            list_detil_pekerjaan.push(json.data[i]);
-                        }
-                    } else {
-                    }
-                    update_tabel_home();
-                }
-            });
-        }
-        get_my_staff();
-        var array_id_pekerjaan = [];
+        var detil_pekerjaan_saya = jQuery.parseJSON('<?php if (isset($detil_pekerjaan_saya)) echo json_encode($detil_pekerjaan_saya); ?>');
+        var tgl_selesai_pekerjaan_saya = [];
+        var flag_usulan_pekerjaan_saya = [];
 <?php
-if (isset($pkj_karyawan)) {
-    foreach ($pkj_karyawan as $pekerjaan) {
-        ?>
-                array_id_pekerjaan.push(<?php echo $pekerjaan->id_pekerjaan; ?>);
-        <?php
-    }
+foreach ($pkj_karyawan as $pekerjaan_saya) {
+    ?>tgl_selesai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_selesai; ?>';
+            flag_usulan_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->flag_usulan; ?>';<?php
 }
 ?>
+        console.log(tgl_selesai_pekerjaan_saya);
+        console.log(flag_usulan_pekerjaan_saya);
+        document.title = "DashBoard - Task Management";
+        var status_nama = ["Not Approved", "Belum Dibaca", "Sudah Dibaca", "Selesai", "Dikerjakan", "Terlambat"];
+        var status_label = ["danger", "primary", "info", "success", "inverse", "default"];
+        console.log(status_nama);
+        console.log(status_label);
+        function ubah_status_pekerjaan(id, flag, sekarang, tgl_selesai, tgl_read, status_, progress) {
+            console.log('update status saya ' + id + ' ' + flag + ' ' + sekarang + ' ' + tgl_selesai + ' ' + tgl_read + ' ' + status_ + ' ' + progress);
+            var status_id = 0;
+            if (flag == 1) {
 
-        function update_tabel_home() {
-            var n = list_detil_pekerjaan.length;
-            var m = my_staff.length;
-            console.log("list my staff");
-            console.log(my_staff);
-            for (var i = 0; i < n; i++) {
-                var id_akun = list_detil_pekerjaan[i]["id_akun"];
-                var id_pekerjaan = list_detil_pekerjaan[i]["id_pekerjaan"];
-                //alert(id_akun + " " + id_pekerjaan);
-                var isi_lama = $("#assign_to_" + id_pekerjaan).html();
-                var nama = "";
-                if (id_akun === '<?php echo $data_akun["user_id"]; ?>') {
-                    nama = '<?php echo $data_akun["nama"]; ?>';
-                } else {
-                    for (var x = 0; x < m; x++) {
-                        if (my_staff[x]["id_akun"] === id_akun) {
-                            nama = my_staff[x]["nama"];
-                            break;
+            } else if (flag == 2) {
+                if (sekarang <= tgl_selesai) {
+                    if (tgl_read == null) {
+                        status_id = 1;
+                    }
+                    else {
+                        if (progress == 0) {
+                            status_id = 2;
+                        } else if (progress == 100) {
+                            status_id = 3;
+                        } else {
+                            status_id = 4;
                         }
                     }
-                }
-
-                if (isi_lama.trim().length > 0) {
-                    $("#assign_to_" + id_pekerjaan).html(isi_lama + ", " + nama);
                 } else {
-                    $("#assign_to_" + id_pekerjaan).html(nama);
+                    status_id = 5;
                 }
             }
+            var new_label = '<span class="label label-' + status_label[status_id] + ' label-mini">' + status_nama[status_id] + '</span>';
+            console.log(new_label);
+            $('#' + id).html(new_label);
         }
-        document.title = "DashBoard - Task Management";
+        var jumlah_detil_saya = detil_pekerjaan_saya.length;
+        for (var i = 0; i < jumlah_detil_saya; i++) {
+            var detil = detil_pekerjaan_saya[i];
+            ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);
+        }
     </script>
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
 
