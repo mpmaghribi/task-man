@@ -230,6 +230,11 @@
         var list_departemen = [];
         var list_id = [];
         var sudah_diproses = false;
+        <?php 
+        foreach ($users as $user){
+            ?>$('#nama_<?php echo $user->id_akun;?>').html('<?php echo $user->nip; ?> - <?php echo $user->nama; ?>');<?php
+        }
+        ?>
         function query_staff() {
             if (list_id.length === 0) {
                 var json = jQuery.parseJSON('<?php echo json_encode($my_staff); ?>');
@@ -242,7 +247,7 @@
                     list_id[i] = json[i]["id_akun"];
                     var id = list_id[i];
                     sudah_diproses = true;
-                    $('#nama_' + id).html(json[i]["nip"] + " - " + json[i]["nama"]);
+                    //$('#nama_' + id).html(json[i]["nip"] + " - " + json[i]["nama"]);
                 }
             }
         }
@@ -257,7 +262,7 @@
             var assigned = $('#staff').val();
             var crow = 0;
             for (var i = 0; i < jumlah_staff; i++) {
-                if (assigned.indexOf('::' + list_id[i] + '::') >= 0 || list_id[i]==<?php echo $data_akun['user_id']; ?>)
+                if (assigned.indexOf('::' + list_id[i] + '::') >= 0 )
                     continue;
                 crow++;
                 tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');

@@ -36,9 +36,11 @@ class home extends ceklogin {
         $data["temp"] = $this->session->userdata('logged_in');
         $data["users"] = json_decode(file_get_contents($url));
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Login", $temp['user_nama'] . " sedang berada di halaman dashboard.");
-        if ($temp['jmlstaff'] > 0) {
+        $staff = $this->akun->my_staff($temp['user_id']);
+        $data['my_staff']=$staff;
+        if (count($data['my_staff']) > 0) {
             $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
-            $staff = $this->akun->my_staff($temp['user_id']);
+            
             $my_staff = array();
             //print_r($staff);
             if (!isset($staff->error)) {
@@ -59,6 +61,8 @@ class home extends ceklogin {
         }
         $this->load->view('homepage/taskman_home_page', $data);
         //print_r($data);
+        
+        
     }
 
     public function recent_activity() {

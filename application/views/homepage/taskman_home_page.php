@@ -111,7 +111,7 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#PekerjaanSaya">Pekerjaan Saya</a>
                                     </li>
-                                    <?php if ($data_akun['jmlstaff'] > 0) { ?>
+                                    <?php if (count($my_staff) > 0) { ?>
                                         <li class="">
                                             <a data-toggle="tab" href="#PekerjaanStaff">Pekerjaan Staff</a>
                                         </li>

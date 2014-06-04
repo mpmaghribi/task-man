@@ -24,7 +24,7 @@
                                     <?php 
                                     //print_r($deskripsi_pekerjaan[0]);
                                     //print_r($data_akun);
-                                    if ($deskripsi_pekerjaan[0]->id_akun == $data_akun['user_id'] && $data_akun['hakakses'] == 'Administrator' && $deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
+                                    if ($atasan&& $deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
                                         <li class="">
                                             <a data-toggle="tab" href="#penilaianPekerjaan">Penilaian Kerja Staff</a>
                                         </li>
@@ -33,9 +33,9 @@
                                     <?php 
                                     $pengusul = $deskripsi_pekerjaan[0]->flag_usulan=='1' && $ikut_serta;
                                     //echo "pengusul = $pengusul";
-                                    if ($atasan || $pengusul) { ?>
+                                    if ($bisa_validasi || $bisa_edit || $bisa_batalkan) { ?>
                                     <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    <?php if ($deskripsi_pekerjaan[0]->flag_usulan == '1' && $atasan) { ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi(<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>);">Validasi</a><?php } ?>
+                                    <?php if ($bisa_validasi) { ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi(<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>);">Validasi</a><?php } ?>
                                         <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
                                         <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                     </div>
@@ -217,7 +217,7 @@ if (isset($listassign_pekerjaan)) {
                                             </section>
                                         </div>
                                     </div>
-<?php if ($temp['jmlstaff'] > 0) { ?>
+<?php if (count($my_staff) > 0) { ?>
                                         <div id="penilaianPekerjaan" class="tab-pane">
                                         <?php $this->load->view('pekerjaan/penilaian'); ?>
                                         </div>
