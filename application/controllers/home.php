@@ -58,7 +58,7 @@ class home extends ceklogin {
             $data['detil_pekerjaan_staff'] = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
         }
         $this->load->view('homepage/taskman_home_page', $data);
-        //var_dump($data["pkj_karyawan"]);
+        //print_r($data);
     }
 
     public function recent_activity() {

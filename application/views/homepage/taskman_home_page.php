@@ -1,4 +1,37 @@
 <?php $this->load->view("taskman_header_page") ?> 
+<script>
+    var status_nama = ["Not Approved", "Belum Dibaca", "Sudah Dibaca", "Selesai", "Dikerjakan", "Terlambat"];
+    var status_label = ["danger", "primary", "info", "success", "inverse", "default"];
+    console.log(status_nama);
+    console.log(status_label);
+    function ubah_status_pekerjaan(id, flag, sekarang, tgl_selesai, tgl_read, status_, progress) {
+        console.log('update status  ' + id + ' ' + flag + ' ' + sekarang + ' ' + tgl_selesai + ' ' + tgl_read + ' ' + status_ + ' ' + progress);
+        var status_id = 0;
+        if (flag == 1) {
+
+        } else if (flag == 2) {
+            if (sekarang <= tgl_selesai) {
+                if (tgl_read == null) {
+                    status_id = 1;
+                }
+                else {
+                    if (progress == 0) {
+                        status_id = 2;
+                    } else if (progress == 100) {
+                        status_id = 3;
+                    } else {
+                        status_id = 4;
+                    }
+                }
+            } else {
+                status_id = 5;
+            }
+        }
+        var new_label = '<span class="label label-' + status_label[status_id] + ' label-mini">' + status_nama[status_id] + '</span>';
+        //console.log(new_label);
+        $('#' + id).html(new_label);
+    }
+</script>
 <body>
     <section id="container">
         <!--header start-->
@@ -121,7 +154,7 @@
                                                                 </td>
                                                                 <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                                 <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                                <td id="assign_to_<?php //echo $value->id_pekerjaan;         ?>"><?php foreach ($users as $value2) { ?>
+                                                                <td id="assign_to_<?php //echo $value->id_pekerjaan;          ?>"><?php foreach ($users as $value2) { ?>
                                                                         <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                                                                     <?php } ?></td>
                                                                 <td id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
@@ -169,37 +202,7 @@ foreach ($pkj_karyawan as $pekerjaan_saya) {
         console.log(tgl_selesai_pekerjaan_saya);
         console.log(flag_usulan_pekerjaan_saya);
         document.title = "DashBoard - Task Management";
-        var status_nama = ["Not Approved", "Belum Dibaca", "Sudah Dibaca", "Selesai", "Dikerjakan", "Terlambat"];
-        var status_label = ["danger", "primary", "info", "success", "inverse", "default"];
-        console.log(status_nama);
-        console.log(status_label);
-        function ubah_status_pekerjaan(id, flag, sekarang, tgl_selesai, tgl_read, status_, progress) {
-            console.log('update status saya ' + id + ' ' + flag + ' ' + sekarang + ' ' + tgl_selesai + ' ' + tgl_read + ' ' + status_ + ' ' + progress);
-            var status_id = 0;
-            if (flag == 1) {
 
-            } else if (flag == 2) {
-                if (sekarang <= tgl_selesai) {
-                    if (tgl_read == null) {
-                        status_id = 1;
-                    }
-                    else {
-                        if (progress == 0) {
-                            status_id = 2;
-                        } else if (progress == 100) {
-                            status_id = 3;
-                        } else {
-                            status_id = 4;
-                        }
-                    }
-                } else {
-                    status_id = 5;
-                }
-            }
-            var new_label = '<span class="label label-' + status_label[status_id] + ' label-mini">' + status_nama[status_id] + '</span>';
-            console.log(new_label);
-            $('#' + id).html(new_label);
-        }
         var jumlah_detil_saya = detil_pekerjaan_saya.length;
         for (var i = 0; i < jumlah_detil_saya; i++) {
             var detil = detil_pekerjaan_saya[i];

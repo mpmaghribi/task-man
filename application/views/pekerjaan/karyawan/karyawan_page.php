@@ -1,4 +1,37 @@
 <?php $this->load->view("taskman_header_page") ?> 
+<script>
+    var status_nama = ["Not Approved", "Belum Dibaca", "Sudah Dibaca", "Selesai", "Dikerjakan", "Terlambat"];
+    var status_label = ["danger", "primary", "info", "success", "inverse", "default"];
+    console.log(status_nama);
+    console.log(status_label);
+    function ubah_status_pekerjaan(id, flag, sekarang, tgl_selesai, tgl_read, status_, progress) {
+        console.log('update status  ' + id + ' ' + flag + ' ' + sekarang + ' ' + tgl_selesai + ' ' + tgl_read + ' ' + status_ + ' ' + progress);
+        var status_id = 0;
+        if (flag == 1) {
+
+        } else if (flag == 2) {
+            if (sekarang <= tgl_selesai) {
+                if (tgl_read == null) {
+                    status_id = 1;
+                }
+                else {
+                    if (progress == 0) {
+                        status_id = 2;
+                    } else if (progress == 100) {
+                        status_id = 3;
+                    } else {
+                        status_id = 4;
+                    }
+                }
+            } else {
+                status_id = 5;
+            }
+        }
+        var new_label = '<span class="label label-' + status_label[status_id] + ' label-mini">' + status_nama[status_id] + '</span>';
+        //console.log(new_label);
+        $('#' + id).html(new_label);
+    }
+</script>
 <body>
 
     <section id="container" >
@@ -49,8 +82,8 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <?php if (isset($pkj_karyawan)) { ?>
-                                                                <?php
+                                                            <?php if (isset($pkj_karyawan)) { 
+                                                                $sekarang = date('Y-m-d');
                                                                 $i = 1;
                                                                 foreach ($pkj_karyawan as $value) {
                                                                     ?>
@@ -64,8 +97,7 @@
                                                                             <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                                             <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
                                                                             <td id="pekerjaan_nama_staff_<?php echo $value->id_pekerjaan; ?>"></td>
-                                                                            <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
-
+                                                                            <td id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
                                                                             <td>
                                                                                 <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
                                                                                     <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
@@ -73,8 +105,13 @@
                                                                                 </form>
                                                                             </td>
                                                                         </tr>
-                                                                    <?php } ?>
-                                                                    <?php
+                                                        <script>
+                                                            ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', 
+                        <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', 
+                            '<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>',
+                                        '<?php echo $value->status; ?>', <?php                echo $value->progress;?>);
+                                                        </script>
+                                                                    <?php } 
                                                                     $i++;
                                                                 }
                                                                 ?>
