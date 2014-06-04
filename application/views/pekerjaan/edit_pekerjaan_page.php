@@ -255,7 +255,7 @@
             var assigned = $('#staff').val();
             var crow = 0;
             for (var i = 0; i < jumlah_staff; i++) {
-                if (assigned.indexOf('::' + list_id[i] + '::') >= 0)
+                if (assigned.indexOf('::' + list_id[i] + '::') >= 0 || list_id[i]==<?php echo $data_akun['user_id']; ?>)
                     continue;
                 crow++;
                 tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');

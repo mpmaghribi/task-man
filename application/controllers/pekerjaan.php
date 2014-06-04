@@ -142,7 +142,7 @@ class pekerjaan extends ceklogin {
         $data["my_staff"] = json_encode($staff);
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang berada di halaman pekerjaan.");
         //var_dump($data["pkj_karyawan"]);
-         $atasan = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/".$temp["user_id"]."/format/json";
+        $atasan = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $temp["user_id"] . "/format/json";
         $data["atasan"] = json_decode(file_get_contents($atasan));
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["users"] = json_decode(file_get_contents($url));
@@ -199,11 +199,11 @@ class pekerjaan extends ceklogin {
                 $keterangan = "anda tidak berhak mengubah pekerjaan";
             }
         }
-        
-        if($status==1){
-            $data['judul_kesalahan']=$nama_status;
-            $data['deskripsi_kesalahan']=$keterangan;
-            $this->load->view('pekerjaan/kesalahan',$data);
+
+        if ($status == 1) {
+            $data['judul_kesalahan'] = $nama_status;
+            $data['deskripsi_kesalahan'] = $keterangan;
+            $this->load->view('pekerjaan/kesalahan', $data);
         }
 
         if ($status == 0) {
@@ -233,7 +233,7 @@ class pekerjaan extends ceklogin {
                         echo "menambahkan $val <br/>";
                     }
                 }
-echo "check upload";
+                echo "check upload";
                 if (isset($_FILES["berkas"])) {
                     echo "uploading";
                     $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
@@ -377,10 +377,10 @@ echo "check upload";
                 if (move_uploaded_file($files["tmp_name"][$i], $new_file_path)) {
                     $this->berkas_model->upload_file($temp['user_id'], $new_file_path, $id_pekerjaan);
                     echo "berhasil memindah file";
-                }else{
+                } else {
                     echo "gagal memindah file";
                 }
-            }else{
+            } else {
                 echo "nama file kosong";
             }
         }
@@ -408,7 +408,7 @@ echo "check upload";
             //$atasan_url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $id_akun . "/format/json";
 
             $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $temp['user_id']);
-            $result2 = $this->pekerjaan_model->isi_pemberi_pekerjaan($idatasan,$id_pekerjaan_baru);
+            $result2 = $this->pekerjaan_model->isi_pemberi_pekerjaan($idatasan, $id_pekerjaan_baru);
             if (isset($_FILES["berkas"])) {
                 $path = './uploads/pekerjaan/' . $id_pekerjaan_baru . '/';
                 $this->load->library('upload');
@@ -578,7 +578,7 @@ echo "check upload";
         $cek = $this->pekerjaan_model->cek_pemberi_pekerjaan($id_pekerjaan);
         $hasil['status'] = 'error';
         //print_r($cek);
-        if  (count($cek) > 0 && $cek[0]->id_akun == $session['user_id']) {
+        if (count($cek) > 0 && $cek[0]->id_akun == $session['user_id']) {
             $berkas = $this->berkas_model->get_berkas($id_file);
             $hapus = $this->berkas_model->hapus_file($id_file);
             if ($hapus == true) {
@@ -1262,32 +1262,45 @@ echo "check upload";
         $data["data_akun"] = $temp;
         if ($status == 0) {
             $data['atasan'] = false;
-            $data['usulan']=false;
+            $data['usulan'] = false;
             $p = $data['pekerjaan'];
             if ($p[0]->id_akun == $temp['user_id']) {
                 $data['atasan'] = true;
             }
-            if($p[0]->flag_usulan=='1'){
-                $data['usulan']=true;
+            if ($p[0]->flag_usulan == '1') {
+                $data['usulan'] = true;
             }
             $data["detail_pekerjaan"] = $this->pekerjaan_model->get_detil_pekerjaan(array($id_pekerjaan));
             $detil_pekerjaan = $data['detail_pekerjaan'];
-            $data['terlibat']=false;;
-            foreach ($detil_pekerjaan as $detil){
-                if($detil->id_akun==$temp['user_id']){
-                    $data['terlibat']=true;
+            $data['terlibat'] = false;
+            
+            foreach ($detil_pekerjaan as $detil) {
+                if ($detil->id_akun == $temp['user_id']) {
+                    $data['terlibat'] = true;
                 }
             }
-            if(!($data['atasan'] || ($data['usulan'] && $data['terlibat']))){
-                $status=1;
-                $nama_status="Tidak berhak";
-                $keterangan="anda tidak berhak mengubah pekerjaan";
+            if (!($data['atasan'] || ($data['usulan'] && $data['terlibat']))) {
+                $status = 1;
+                $nama_status = "Tidak berhak";
+                $keterangan = "anda tidak berhak mengubah pekerjaan";
             }
         }
-        if($status==0){
+        if ($status == 0) {
             $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_pekerjaan);
             $result = $this->taskman_repository->sp_insert_activity($temp ['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja melakukan perubahan pada detail pekerjaan.");
             $data['my_staff'] = $this->akun->my_staff($temp['user_id']);
+            $aku = new stdClass();
+            $aku->id_akun=$temp['user_id'];
+            $aku->nip=$temp['nip'];
+            $aku->nama=$temp['nama'];
+            $aku->telepon='';
+            $aku->hp=$temp['hp'];
+            $aku->email=$temp['user_email'];
+            $aku->nama_jabatan='';
+            $aku->nama_departemen='';
+            //print_r($temp);
+            $data['my_staff'][]=$aku;
+            //print_r($data['my_staff']);
             $this->load->view("pekerjaan/edit_pekerjaan_page", $data);
         }
         if ($status == 1) {
