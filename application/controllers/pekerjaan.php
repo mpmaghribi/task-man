@@ -399,8 +399,7 @@ class pekerjaan extends ceklogin {
         $prioritas = $this->input->post('prioritas2');
         $idatasan = $this->input->post('atasan');
         $status_pkj = '1'; //$this->input->post('status_pkj');
-        if (strtolower($temp['hakakses']) == 'administrator')
-            $status_pkj = '2';
+        
         $asal_pkj = 'task management'; //$this->input->post('asal_pkj');
         $result = $this->taskman_repository->sp_tambah_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
         $id_pekerjaan_baru = $result[0]->kode;

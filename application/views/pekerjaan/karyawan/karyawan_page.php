@@ -150,13 +150,13 @@
                                                                         <tr>
                                                                             <td>
                                                                                 <a href="#">
-                                                                                    <?php echo $i; ?>
+                                                                                    <?php echo $i; $i++;?>
                                                                                 </a>
                                                                             </td>
                                                                             <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                                             <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
                                                                             <td id="pekerjaan_nama_staff_<?php echo $value->id_pekerjaan; ?>"></td>
-                                                                            <td><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
+                                                                            <td id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
 
                                                                             <td>
                                                                                 <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
@@ -165,9 +165,14 @@
                                                                                 </form>
                                                                             </td>
                                                                         </tr>
-                                                                    <?php } ?>
-                                                                    <?php
-                                                                    $i++;
+                                                                        <script>
+                                                            ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', 
+                        <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', 
+                            '<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>',
+                                        '<?php echo $value->status; ?>', <?php                echo $value->progress;?>);
+                                                        </script>
+                                                                    <?php } 
+                                                                    
                                                                 }
                                                                 ?>
 
