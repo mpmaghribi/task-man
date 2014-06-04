@@ -882,9 +882,11 @@ class pekerjaan extends ceklogin {
 //cek berhak atau tidak untuk menilai seseorang
         if ($status == 'OK') {
             $staff_ku = in_array($id_staff, $list_id_staff);
-            $berhak = ($session ['user_id'] == $id_staff && $session['hakakses'] == 'Administrator');
+            $admin = $session['hakakses'] == 'Administrator';
+            $manager=$session['hakakses'] == 'Manager';
+            
             //if (in_array($id_staff, $list_id_staff) || ($session ['user_id'] == $id_staff && $session['hakakses'] == 'Administrator')) {
-            if ($staff_ku || $berhak) {
+            if (($staff_ku &&$manager)||$admin) {
                 
             } else {
                 $status = '1';
@@ -1010,9 +1012,11 @@ class pekerjaan extends ceklogin {
 //cek berhak atau tidak untuk menilai seseorang
         if ($status == 'OK') {
             $staff_ku = in_array($id_staff, $list_id_staff);
-            $berhak = ($session ['user_id'] == $id_staff && $session['hakakses'] == 'Administrator');
+            $admin = $session['hakakses'] == 'Administrator';
+            $manager=$session['hakakses'] == 'Manager';
+            
             //if (in_array($id_staff, $list_id_staff) || ($session ['user_id'] == $id_staff && $session['hakakses'] == 'Administrator')) {
-            if ($staff_ku || $berhak) {
+            if (($staff_ku && $manager)||$admin) {
                 
             } else {
                 $status = '1';

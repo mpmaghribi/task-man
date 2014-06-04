@@ -31,7 +31,6 @@
 <?php } ?>
                                 </ul>
                                     <?php 
-
                                     $pengusul = $deskripsi_pekerjaan[0]->flag_usulan=='1' && $ikut_serta;
                                     //echo "pengusul = $pengusul";
                                     if ($atasan || $pengusul) { ?>
