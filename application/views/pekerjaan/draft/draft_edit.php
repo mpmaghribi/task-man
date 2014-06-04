@@ -93,8 +93,8 @@
     </div>
 </div>
 <script>
-    var mulai = new Date('<?php echo $draft[0]->tgl_mulai; ?>');
-    var akhir = new Date('<?php echo $draft[0]->tgl_selesai; ?>');
+    var mulai = new Date('<?php echo date('Y-m-d',strtotime($draft[0]->tgl_mulai)); ?>');
+    var akhir = new Date('<?php echo date('Y-m-d',strtotime($draft[0]->tgl_selesai)); ?>');
     $('.dpd1').val(mulai.getDate() + '-' + (mulai.getMonth() + 1) + '-' + mulai.getFullYear());
     $('.dpd2').val(akhir.getDate() + '-' + (akhir.getMonth() + 1) + '-' + akhir.getFullYear());
     $('#pilih_berkas_assign').change(function() {
