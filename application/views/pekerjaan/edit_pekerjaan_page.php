@@ -17,7 +17,9 @@
                     <div class="col-md-12">
                         <section class="panel">
                             <header class="panel-heading ">
-                                Edit Usulan Pekerjaan
+                                Edit <?php 
+                                if($pekerjaan[0]->flag_usulan=='1')                                {
+                                ?>Usulan<?php } ?> Pekerjaan
                             </header>
                             <div class="panel-body">
                                 <div class="tab-content">
