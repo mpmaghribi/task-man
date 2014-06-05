@@ -163,16 +163,23 @@
                 if (assigned.indexOf('::' + list_id[i] + '::') >= 0)
                     continue;
                 crow++;
-                tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');
-                var row = $('#tabel_list_enroll_staff_row_' + list_id[i]);
-                row.append('<td>' + crow + '</td>');
-                row.append('<td>' + list_nip[i] + '</td>');
-                row.append('<td>' + list_departemen[i] + '</td>');
-                row.append('<td>' + list_nama[i] + '</td>');
-                //row.append('<td>0</td>');
-                row.append('<td><input type="checkbox" id="enroll_' + list_id[i] + '" name="enroll_' + list_id[i] + '"/></td>');
-                //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
-                $('#enroll_' + list_id[i]).attr('checked', false);
+                var row_id = 'tabel_list_enroll_staff_row_' + list_id[i];
+                var row_baru = true;
+                if ($('#' + row_id).length > 0) {
+                    row_baru = false;
+                }
+                if (row_baru) {
+                    tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');
+                    var row = $('#tabel_list_enroll_staff_row_' + list_id[i]);
+                    row.append('<td>' + crow + '</td>');
+                    row.append('<td>' + list_nip[i] + '</td>');
+                    row.append('<td>' + list_departemen[i] + '</td>');
+                    row.append('<td>' + list_nama[i] + '</td>');
+                    //row.append('<td>0</td>');
+                    row.append('<td><input type="checkbox" id="enroll_' + list_id[i] + '" name="enroll_' + list_id[i] + '"/></td>');
+                    //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
+                    $('#enroll_' + list_id[i]).attr('checked', false);
+                }
             }
             //var assigned = $('#staff').val().split('::');
         }

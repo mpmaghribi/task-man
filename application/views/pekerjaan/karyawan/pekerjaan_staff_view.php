@@ -28,8 +28,8 @@
                             $list_id_pekerjaan = array();
                             $sekarang = date('Y-m-d');
                             foreach ($pekerjaan_staff as $kerja) {
-                                if (in_array($kerja->id_pekerjaan, $list_id_pekerjaan))
-                                    continue;
+                                if (!in_array($kerja->id_pekerjaan, $list_id_pekerjaan)){
+                                    
                                 $list_id_pekerjaan[] = $kerja->id_pekerjaan;
                                 $counter++;
                                 ?>
@@ -48,6 +48,7 @@
                                         </div>
                                     </td>
                                     </tr>
+                                <?php } ?>
                     <script>
                         ubah_status_pekerjaan('pekerjaan_staff_status_<?php echo $kerja->id_pekerjaan; ?>', 
                         <?php echo $kerja->flag_usulan; ?>, '<?php echo $sekarang; ?>', 

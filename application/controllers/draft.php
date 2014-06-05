@@ -14,11 +14,13 @@ class draft extends ceklogin {
     public function index() {
         $session = $this->session->userdata('logged_in');
         $this->load->model(array('pekerjaan_model', 'akun'));
-//        $my_staff = $this->akun->my_staff($session['user_id']);
-//        $staff_ = array();
-//        foreach ($my_staff as $s) {
-//            $staff_[] = $s->id_akun;
-//        }
+        $my_staff = $this->akun->my_staff($session['user_id']);
+        if (isset($my_staff->error))
+            $my_staff = array();
+        $staff_ = array();
+        foreach ($my_staff as $s) {
+            $staff_[] = $s->id_akun;
+        }
         $list_draft = $this->pekerjaan_model->get_list_draft($session['user_id']);
         //$draft_create_submit=base_url().'pekerjaan/usulan_pekerjaan2';
         $this->load->view('pekerjaan/draft/draft_body', array('draft_create_submit' => base_url() . 'draft/create', 'data_akun' => $session, 'list_draft' => $list_draft));
@@ -61,12 +63,11 @@ class draft extends ceklogin {
                 }
                 $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja membuat draft pekerjaan.");
                 $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
-            }else{
+            } else {
                 echo 'id draft null';
             }
-            
         }
-        redirect(base_url().'draft');
+        redirect(base_url() . 'draft');
     }
 
     public function edit() {
@@ -74,16 +75,36 @@ class draft extends ceklogin {
         $this->load->model(array('pekerjaan_model', 'akun', 'berkas_model'));
         $data['id_draft'] = pg_escape_string($this->input->get('id_draft'));
         $data['data_akun'] = $session;
+        $status = 0;
+        $judul = '';
+        $keterangan = '';
         if (strlen($data['id_draft']) == 0) {
-            $data['judul_kesalahan'] = 'id_draft tidak valid';
-            $data['deskripsi_kesalahan'] = 'id_draft tidak valid';
-            $this->load->view('pekerjaan/kesalahan', $data);
-        } else {
+            $status = 1;
+            $judul = 'id draft tidak valid';
+            $keterangan = 'id draft yang diminta tidak valid';
+        }
+        if ($status == 0) {
             $data['draft_edit_submit'] = base_url() . 'draft/do_edit';
             $data['draft'] = $this->pekerjaan_model->get_draft(array($data['id_draft']));
+            if ($data['draft'][0]->id_akun == $session['id_akun']) {
+                
+            } else {
+                $status = 1;
+                $judul = 'Kesalahan';
+                $keterangan = "anda tidak berhak untuk mengedit draft ini";
+            }
+        }
+        if ($status == 0) {
             $data['list_berkas'] = $this->berkas_model->get_berkas_of_pekerjaan($data['id_draft']);
-            $this->load->view('pekerjaan/draft/draft_edit_body', $data);
             //print_r($data['draft']);
+        }
+        if ($status == 1) {
+            $data['judul_kesalahan'] = $judul;
+            $data['deskripsi_kesalahan'] = $keterangan;
+            $this->load->view('pekerjaan/kesalahan', $data);
+        }
+        if ($status == 0) {
+            $this->load->view('pekerjaan/draft/draft_edit_body', $data);
         }
     }
 
@@ -113,10 +134,34 @@ class draft extends ceklogin {
         $detail_draft = $this->pekerjaan_model->get_draft(array($id_draft));
         $data['draft'] = $detail_draft;
         $data['data_akun'] = $session;
-        $data['id_draft'] = $id_draft;
-        $data['list_berkas'] = $this->berkas_model->get_berkas_of_pekerjaan($data['id_draft']);
-        //$data['my_staff']=$this->akun->my_staff($session['user_id']);
-        $this->load->view('pekerjaan/draft/assign', $data);
+        $status = 0;
+        $judul = '';
+        $keterangan = '';
+        if (count($data['draft']) > 0) {
+            
+        } else {
+            $status = 1;
+            $judul = 'Kesalahan Draft';
+            $keterangan = 'draft tidak dapat ditemukan';
+        }
+        if($status==0){
+            if($detail_draft[0]->id_akun!=$session['id_akun']){
+                $status=1;
+                $judul='Tidak Berhak';
+                $keterangan="Anda tidak berhak mengakses draft ini";
+            }
+        }
+        if ($status == 0) {
+            $data['id_draft'] = $id_draft;
+            $data['list_berkas'] = $this->berkas_model->get_berkas_of_pekerjaan($data['id_draft']);
+            //$data['my_staff']=$this->akun->my_staff($session['user_id']);
+            $this->load->view('pekerjaan/draft/assign', $data);
+        }
+        if($status==1){
+            $data['judul_kesalahan']=$judul;
+            $data['deskripsi_kesalahan']=$keterangan;
+            $this->load->view('pekerjaan/kesalahan', $data);
+        }
     }
 
     public function do_assign() {

@@ -1,37 +1,5 @@
 <?php $this->load->view("taskman_header_page") ?> 
-<script>
-    var status_nama = ["Not Approved", "Belum Dibaca", "Sudah Dibaca", "Selesai", "Dikerjakan", "Terlambat"];
-    var status_label = ["danger", "primary", "info", "success", "inverse", "default"];
-    console.log(status_nama);
-    console.log(status_label);
-    function ubah_status_pekerjaan(id, flag, sekarang, tgl_selesai, tgl_read, status_, progress) {
-        console.log('update status  ' + id + ' ' + flag + ' ' + sekarang + ' ' + tgl_selesai + ' ' + tgl_read + ' ' + status_ + ' ' + progress);
-        var status_id = 0;
-        if (flag == 1) {
-
-        } else if (flag == 2) {
-            if (sekarang <= tgl_selesai) {
-                if (tgl_read == null || tgl_read.length==0) {
-                    status_id = 1;
-                }
-                else {
-                    if (progress == 0) {
-                        status_id = 2;
-                    } else if (progress == 100) {
-                        status_id = 3;
-                    } else {
-                        status_id = 4;
-                    }
-                }
-            } else {
-                status_id = 5;
-            }
-        }
-        var new_label = '<span class="label label-' + status_label[status_id] + ' label-mini">' + status_nama[status_id] + '</span>';
-        //console.log(new_label);
-        $('#' + id).html(new_label);
-    }
-</script>
+<script src="<?php echo base_url()?>/assets/js/status_pekerjaan.js"></script>
 <body>
     <section id="container">
         <!--header start-->
@@ -144,7 +112,11 @@
                                                     <?php if (isset($pkj_karyawan)) { ?>
                                                         <?php
                                                         $i = 1;
+                                                        $list_id_pekerjaan=array();
                                                         foreach ($pkj_karyawan as $value) {
+                                                            if(in_array($value->id_pekerjaan,$list_id_pekerjaan))
+                                                                continue;
+                                                            $list_id_pekerjaan[]=$value->id_pekerjaan;
                                                             ?>
                                                             <tr>
                                                                 <td>
@@ -206,6 +178,7 @@ foreach ($pkj_karyawan as $pekerjaan_saya) {
         var jumlah_detil_saya = detil_pekerjaan_saya.length;
         for (var i = 0; i < jumlah_detil_saya; i++) {
             var detil = detil_pekerjaan_saya[i];
+            if(detil['id_akun']=='<?php echo $data_akun['id_akun'];?>')
             ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);
         }
     </script>

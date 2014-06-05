@@ -174,6 +174,11 @@ class pekerjaan extends ceklogin {
             $nama_status = "kesalahan";
             $keterangan = "pekerjaan tidak ditemukan";
         }
+        if($pekerjaan[0]->flag_usulan=='3' || $pekerjaan[0]->flag_usulan=='6'){
+            $status = 1;
+            $nama_status = "kesalahan";
+            $keterangan = "Pekerjaan ini telah dibatalkan";
+        }
         $atasan = true;
         $terlibat = false;
         $usulan = false;
@@ -186,14 +191,17 @@ class pekerjaan extends ceklogin {
             }
         }
         if ($status == 0) {
+            echo "mencari siapa yang terlibat, siapa yang atasan";
             $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan(array($id_pekerjaan));
             foreach ($detil_pekerjaan as $detil) {
                 if ($detil->id_akun == $session['user_id']) {
                     $terlibat = true;
-                    break;
+                    echo "terlibat";
+                    //break;
                 }
                 if(!in_array($detil->id_akun,$list_id_staff)){
                     $atasan=false;
+                    echo "bukan atasan";
                 }
             }
             $atasan = $atasan || ($session['hakakses']=='Administrator');
@@ -1307,6 +1315,11 @@ class pekerjaan extends ceklogin {
                 $keterangan = "pekerjaan tidak ditermukan";
             }
         }
+        if($data["pekerjaan"][0]->flag_usulan=='3' || $data["pekerjaan"][0]->flag_usulan=='6'){
+            $status = 1;
+            $nama_status = "kesalahan";
+            $keterangan = "Pekerjaan ini telah dibatalkan";
+        }
         $data["data_akun"] = $temp;
 
         if ($status == 0) {
@@ -1326,14 +1339,21 @@ class pekerjaan extends ceklogin {
 //            if ($p[0]->id_akun == $temp['user_id'] || in_array($p[0]->id_akun, $list_id_staff) || $temp['hakakses'] == 'Administrator') {
 //                $data['atasan'] = true;
 //            }
+            //var_dump($list_id_staff);
             foreach ($detil_pekerjaan as $detil) {
                 if (!in_array($detil->id_akun, $list_id_staff)) {
                     $data['atasan']=false;
+                    //var_dump($data['atasan']);
                 }
             }
             if ($p[0]->flag_usulan == '1') {
                 $data['usulan'] = true;
+                //var_dump($data['atasan']);
+                $data['atasan']=$data['atasan']&&$p[0]->id_akun==$temp['id_akun'];
+                //var_dump($data['atasan']);
             }
+            $data['atasan']=$data['atasan']||$temp['hakakses']=='Administrator';
+            //var_dump($data['atasan']);
 
             $data['terlibat'] = false;
 
@@ -1349,6 +1369,8 @@ class pekerjaan extends ceklogin {
                 $keterangan = "anda tidak berhak mengubah pekerjaan";
             }
         }
+        
+        //var_dump($data);
         if ($status == 0) {
             $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_pekerjaan);
             $result = $this->taskman_repository->sp_insert_activity($temp ['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja melakukan perubahan pada detail pekerjaan.");

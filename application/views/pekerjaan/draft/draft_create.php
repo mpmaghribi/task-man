@@ -56,9 +56,13 @@
             <div class="form-group ">
                 <label for="prioritas" class="control-label col-lg-3">File</label>
                 <div class="col-lg-6">
-                    <div id="list_file_upload_assign">
+                    <div id="file_baru">
+                        <table  class="table table-hover general-table" id="berkas_baru"></table>
                     </div>
-                    <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                    <div style="display:none">
+                        <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                    </div>
+                    <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
                 </div>
             </div>
             <div class="form-group">
@@ -69,3 +73,8 @@
         </form>
     </div>
 </div>
+<script>
+    $('#button_trigger_file').click(function() {
+        $('#pilih_berkas_assign').click();
+    });
+</script>
