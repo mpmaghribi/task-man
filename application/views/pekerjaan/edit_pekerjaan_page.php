@@ -17,9 +17,9 @@
                     <div class="col-md-12">
                         <section class="panel">
                             <header class="panel-heading ">
-                                Edit <?php 
-                                if($pekerjaan[0]->flag_usulan=='1')                                {
-                                ?>Usulan<?php } ?> Pekerjaan
+                                Edit <?php
+                                if ($pekerjaan[0]->flag_usulan == '1') {
+                                    ?>Usulan<?php } ?> Pekerjaan
                             </header>
                             <div class="panel-body">
                                 <div class="tab-content">
@@ -27,27 +27,37 @@
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo base_url() ?>pekerjaan/do_edit" enctype="multipart/form-data">
                                                 <input type="hidden" name="id_pekerjaan" id="id_pekerjaan" value="<?php echo $pekerjaan[0]->id_pekerjaan; ?>"/>
-                                                <?php if($atasan){ ?><div class="form-group ">
-                                                    <label for="staff" class="control-label col-lg-3">Staff</label>
-                                                    <div class="col-lg-6">
-                                                        <div id="span_list_assign_staff">
-                                                            <table id="tabel_assign_staff" class="table table-hover general-table">
-                                                                <?php foreach ($detail_pekerjaan as $d) { ?>
-                                                                    <tr id="staff_<?php echo $d->id_akun; ?>">
-                                                                        <td id="nama_staff_<?php echo $d->id_akun; ?>"><div id="nama_<?php echo $d->id_akun; ?>"></div></td> 
-                                                                        <td id="aksi_" style="width:10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(<?php echo $d->id_akun; ?>)">Hapus</a></td>
-                                                                    </tr>
-                                                                <?php } ?>
-                                                            </table>
+                                                <?php if ($atasan) { ?><div class="form-group ">
+                                                        <label for="staff" class="control-label col-lg-3">Staff</label>
+                                                        <div class="col-lg-6">
+                                                            <div id="span_list_assign_staff">
+                                                                <table id="tabel_assign_staff" class="table table-hover general-table">
+                                                                    <?php
+                                                                    $list_staff_sudah_ditampilkan = array();
+                                                                    foreach ($detail_pekerjaan as $d) {
+                                                                        if (in_array($d->id_akun, $list_staff_sudah_ditampilkan))
+                                                                            continue;
+                                                                        $list_staff_sudah_ditampilkan[] = $d->id_akun;
+                                                                        ?>
+                                                                        <tr id="staff_<?php echo $d->id_akun; ?>">
+                                                                            <td id="nama_staff_<?php echo $d->id_akun; ?>"><div id="nama_<?php echo $d->id_akun; ?>"></div></td> 
+                                                                            <td id="aksi_" style="width:10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(<?php echo $d->id_akun; ?>)">Hapus</a></td>
+                                                                        </tr>
+                                                                    <?php } ?>
+                                                                </table>
+                                                            </div>
+                                                            <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff();">Tambah Staff</a>
+                                                            <input type="hidden" value="::<?php
+                                                            $list_staff_sudah_ditampilkan = array();
+                                                            foreach ($detail_pekerjaan as $d) {
+                                                                if (in_array($d->id_akun, $list_staff_sudah_ditampilkan))
+                                                                    continue;
+                                                                $list_staff_sudah_ditampilkan[] = $d->id_akun;
+                                                                echo $d->id_akun . '::';
+                                                            }
+                                                            ?>" name="staff" id="staff"/>
                                                         </div>
-                                                        <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff();">Tambah Staff</a>
-                                                        <input type="hidden" value="::<?php
-                                                        foreach ($detail_pekerjaan as $d) {
-                                                            echo $d->id_akun . '::';
-                                                        }
-                                                        ?>" name="staff" id="staff"/>
                                                     </div>
-                                                </div>
                                                 <?php } ?>
 
                                                 <div class="form-group ">
@@ -230,11 +240,11 @@
         var list_departemen = [];
         var list_id = [];
         var sudah_diproses = false;
-        <?php 
-        foreach ($users as $user){
-            ?>$('#nama_<?php echo $user->id_akun;?>').html('<?php echo $user->nip; ?> - <?php echo $user->nama; ?>');<?php
-        }
-        ?>
+<?php
+foreach ($users as $user) {
+    ?>$('#nama_<?php echo $user->id_akun; ?>').html('<?php echo $user->nip; ?> - <?php echo $user->nama; ?>');<?php
+}
+?>
         function query_staff() {
             if (list_id.length === 0) {
                 var json = jQuery.parseJSON('<?php echo json_encode($my_staff); ?>');
@@ -262,19 +272,28 @@
             var assigned = $('#staff').val();
             var crow = 0;
             for (var i = 0; i < jumlah_staff; i++) {
-                if (assigned.indexOf('::' + list_id[i] + '::') >= 0 )
+                if (assigned.indexOf('::' + list_id[i] + '::') >= 0)
                     continue;
-                crow++;
-                tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');
-                var row = $('#tabel_list_enroll_staff_row_' + list_id[i]);
-                row.append('<td>' + crow + '</td>');
-                row.append('<td>' + list_nip[i] + '</td>');
-                row.append('<td>' + list_departemen[i] + '</td>');
-                row.append('<td>' + list_nama[i] + '</td>');
-                //row.append('<td>0</td>');
-                row.append('<td><input type="checkbox" id="enroll_' + list_id[i] + '" name="enroll_' + list_id[i] + '"/></td>');
-                //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
-                $('#enroll_' + list_id[i]).attr('checked', false);
+                
+                var row_id = 'tabel_list_enroll_staff_row_' + list_id[i];
+                var row_baru = false;
+                if ($('#' + row_id).length == 0) {
+                    tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');
+                    row_baru = true;
+                    crow++;
+                }
+                if (row_baru) {
+                    var row = $('#tabel_list_enroll_staff_row_' + list_id[i]);
+                    row.append('<td>' + crow + '</td>');
+                    row.append('<td>' + list_nip[i] + '</td>');
+                    row.append('<td>' + list_departemen[i] + '</td>');
+                    row.append('<td>' + list_nama[i] + '</td>');
+
+                    //row.append('<td>0</td>');
+                    row.append('<td><input type="checkbox" id="enroll_' + list_id[i] + '" name="enroll_' + list_id[i] + '"/></td>');
+                    //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
+                    $('#enroll_' + list_id[i]).attr('checked', false);
+                }
             }
             //var assigned = $('#staff').val().split('::');
         }
@@ -283,11 +302,19 @@
             var staf = $('#staff');
             //staf.val('::');
             //$('#span_list_assign_staff').html('');
+            var list_id_yg_ditambahkan='::';
             for (var i = 0; i < jumlah_data; i++) {
+                var check_id = list_id[i]+'::';
+                console.log(list_id_yg_ditambahkan);
+                console.log(check_id);
+                if(list_id_yg_ditambahkan.indexOf(check_id)>=0)
+                    continue;
+                console.log("processing");
                 if ($('#enroll_' + list_id[i]).attr('checked')) {
+                    list_id_yg_ditambahkan+=check_id;
                     staf.val(staf.val() + list_id[i] + '::');
                     $('#tabel_assign_staff').append('<tr id="staff_' + list_id[i] + '">' +
-                            '<td id="nama_staff_' + i + '">' + list_nama[i] + '</td>' +
+                            '<td id="nama_staff_' + list_id[i] + '">' + list_nip[i]+' - ' +list_nama[i] + '</td>' +
                             '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(' + list_id[i] + ')">Hapus</a></td>' +
                             '</tr>');
                 }
@@ -329,11 +356,11 @@
             return '   [' + Math.round(s) + spasi + satuan + ']';
         }
         document.title = "Task Management - Edit Pekerjaan";
-        <?php 
-        $mulai=date('Y-m-d',strtotime($pekerjaan[0]->tgl_mulai));
-        $akhir=date('Y-m-d',strtotime($pekerjaan[0]->tgl_selesai));
-        ?>
-        var mulai = new Date('<?php echo $mulai;?>');
+<?php
+$mulai = date('Y-m-d', strtotime($pekerjaan[0]->tgl_mulai));
+$akhir = date('Y-m-d', strtotime($pekerjaan[0]->tgl_selesai));
+?>
+        var mulai = new Date('<?php echo $mulai; ?>');
         var akhir = new Date('<?php echo $akhir; ?>');
         $('.dpd1').val(mulai.getDate() + '-' + (mulai.getMonth() + 1) + '-' + mulai.getFullYear());
         $('.dpd2').val(akhir.getDate() + '-' + (akhir.getMonth() + 1) + '-' + akhir.getFullYear());
@@ -371,5 +398,5 @@
             }
         }
     </script>
-<?php //print_r($mulai);
-?>
+    <?php //print_r($mulai);
+    ?>

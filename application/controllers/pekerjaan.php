@@ -174,28 +174,29 @@ class pekerjaan extends ceklogin {
             $nama_status = "kesalahan";
             $keterangan = "pekerjaan tidak ditemukan";
         }
-        $atasan = false;
+        $atasan = true;
         $terlibat = false;
         $usulan = false;
         $detil_pekerjaan = "";
         $my_staff = $this->akun->my_staff($session['user_id']);
-        $lit_id_staff = array();
+        $list_id_staff = array();
         if (!isset($my_staff->error)) {
             foreach ($my_staff as $staff) {
-                $lit_id_staff[] = $staff->id_akun;
+                $list_id_staff[] = $staff->id_akun;
             }
         }
         if ($status == 0) {
-            if ($pekerjaan[0]->id_akun == $session['user_id'] || in_array($session['user_id'], $lit_id_staff) || ($session['hakakses'] == 'Administrator' && $pekerjaan[0]->flag_usulan == '2')) {
-                $atasan = true;
-            }
             $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan(array($id_pekerjaan));
             foreach ($detil_pekerjaan as $detil) {
                 if ($detil->id_akun == $session['user_id']) {
                     $terlibat = true;
                     break;
                 }
+                if(!in_array($detil->id_akun,$list_id_staff)){
+                    $atasan=false;
+                }
             }
+            $atasan = $atasan || ($session['hakakses']=='Administrator');
             if ($pekerjaan[0]->flag_usulan == '1')
                 $usulan = true;
         }
@@ -505,23 +506,23 @@ class pekerjaan extends ceklogin {
             }
 
             $desk = $data["deskripsi_pekerjaan"];
-            $data['list_my_staff']=$list_my_staff;
+            $data['list_my_staff'] = $list_my_staff;
             $usulan = $desk[0]->flag_usulan == '1';
             $admin = $temp['hakakses'] == 'Administrator';
             $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
             $detil_pekerjaan = $data['listassign_pekerjaan'];
-            $ikut_serta=false;
-            $diassign_ke_bawahan_saya=true; //menandakan bahwa yang mengerjakan suatu pekerjaan seluruhnya adalah bawahanku
+            $ikut_serta = false;
+            $diassign_ke_bawahan_saya = true; //menandakan bahwa yang mengerjakan suatu pekerjaan seluruhnya adalah bawahanku
             foreach ($detil_pekerjaan as $detil) {
                 if ($detil->id_akun == $temp['user_id']) {
                     $ikut_serta = true;
                     break;
                 }
-                if(!in_array($detil->id_akun,$list_my_staff)){
-                    $diassign_ke_bawahan_saya=false;
+                if (!in_array($detil->id_akun, $list_my_staff)) {
+                    $diassign_ke_bawahan_saya = false;
                 }
             }
-            $data['ikut_serta']=$ikut_serta;
+            $data['ikut_serta'] = $ikut_serta;
             if ($desk[0]->id_akun == $temp['user_id'] && $usulan) {//pemberi pekerjaan, atasan yg dituju pada pengusulan, atau atasan yg mengusulkan
                 $data['bisa_validasi'] = $usulan;
                 $data['bisa_edit'] = true;
@@ -535,7 +536,7 @@ class pekerjaan extends ceklogin {
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;
             }
-            $sifat_terbuka = strtolower($deskripsi_pekerjaan[0]->nama_sifat_pekerjaan) == 'umum';            
+            $sifat_terbuka = strtolower($deskripsi_pekerjaan[0]->nama_sifat_pekerjaan) == 'umum';
             if ($data['bisa_validasi'] || $data['bisa_edit'] || $data['bisa_batalkan'] || $sifat_terbuka || $ikut_serta) {
                 
             } else {
@@ -568,7 +569,6 @@ class pekerjaan extends ceklogin {
             $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
             $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
         }
-        
     }
 
     public function lihat_komentar_pekerjaan($id_pkj = 0) {
@@ -1310,7 +1310,7 @@ class pekerjaan extends ceklogin {
         $data["data_akun"] = $temp;
 
         if ($status == 0) {
-            $data['atasan'] = false;
+            $data['atasan'] = true;
             $data['usulan'] = false;
             $p = $data['pekerjaan'];
             $data['my_staff'] = $this->akun->my_staff($temp['user_id']);
@@ -1323,8 +1323,13 @@ class pekerjaan extends ceklogin {
             }
             $data["detail_pekerjaan"] = $this->pekerjaan_model->get_detil_pekerjaan(array($id_pekerjaan));
             $detil_pekerjaan = $data['detail_pekerjaan'];
-            if ($p[0]->id_akun == $temp['user_id'] || in_array($p[0]->id_akun, $list_id_staff) || $temp['hakakses'] == 'Administrator') {
-                $data['atasan'] = true;
+//            if ($p[0]->id_akun == $temp['user_id'] || in_array($p[0]->id_akun, $list_id_staff) || $temp['hakakses'] == 'Administrator') {
+//                $data['atasan'] = true;
+//            }
+            foreach ($detil_pekerjaan as $detil) {
+                if (!in_array($detil->id_akun, $list_id_staff)) {
+                    $data['atasan']=false;
+                }
             }
             if ($p[0]->flag_usulan == '1') {
                 $data['usulan'] = true;
@@ -1335,6 +1340,7 @@ class pekerjaan extends ceklogin {
             foreach ($detil_pekerjaan as $detil) {
                 if ($detil->id_akun == $temp['user_id']) {
                     $data['terlibat'] = true;
+                    break;
                 }
             }
             if (!($data['atasan'] || ($data['usulan'] && $data['terlibat']))) {
@@ -1348,22 +1354,6 @@ class pekerjaan extends ceklogin {
             $result = $this->taskman_repository->sp_insert_activity($temp ['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja melakukan perubahan pada detail pekerjaan.");
             $url2 = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
             $data["users"] = json_decode(file_get_contents($url2));
-//            $aku = new stdClass();
-//            $aku->id_akun = $temp['user_id'];
-//            $aku->nip = $temp['nip'];
-//            $aku->nama = $temp['nama'];
-//            $aku->telepon = '';
-//            $aku->hp = $temp['hp'];
-//            $aku->email = $temp['user_email'];
-//            $aku->nama_jabatan = '';
-//            $aku->nama_departemen = '';
-            //print_r($temp);
-            //print_r($aku);
-            //if(isset($data['my_staff']->error)){
-            //$data['my_staff']=array();
-            //}
-            //$data['my_staff'][] = $aku;
-            //print_r($data['my_staff']);
             $this->load->view("pekerjaan/edit_pekerjaan_page", $data);
         }
         if ($status == 1) {
