@@ -64,7 +64,7 @@
                                                     <div class="col-lg-6">
                                                         <div id="span_list_assign_staff">
                                                             <table id="tabel_assign_staff" class="table table-hover general-table">
-                                                                
+
                                                             </table>
                                                         </div>
                                                         <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff();">Tambah Staff</a>
@@ -81,14 +81,14 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
-                <label for="kategori" class="control-label col-lg-3">Kategori</label>
-                <div class="col-lg-6">
-                    <select name="kategori" class="form-control m-bot15">
-                        <option value="rutin">Rutin</option>
-                        <option value="project">Project</option>
-                    </select>
-                </div>
-            </div>
+                                                    <label for="kategori" class="control-label col-lg-3">Kategori</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="kategori" class="form-control m-bot15">
+                                                            <option value="rutin">Rutin</option>
+                                                            <option value="project">Project</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 <div class="form-group ">
                                                     <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
                                                     <div class="col-lg-6">
@@ -203,9 +203,9 @@
 
         <!-- END JAVASCRIPTS -->
         <script>
-            jQuery(document).ready(function() {
-                EditableTableProgress.init();
-            });
+                                                            jQuery(document).ready(function() {
+                                                                EditableTableProgress.init();
+                                                            });
         </script>
         <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
@@ -256,7 +256,7 @@
                 }
             });
         }
-        
+
         document.title = "Daftar Pekerjaan Staff - Task Management";
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
         var list_nip = [];
@@ -305,19 +305,27 @@
             //alert("jumlah data" + jumlah_staff)
             tubuh.html("");
             var assigned = $('#staff').val();
-            var crow=0;
+            var crow = 0;
             for (var i = 0; i < jumlah_staff; i++) {
-                if(assigned.indexOf('::'+list_id[i]+'::')>=0)
+                if (assigned.indexOf('::' + list_id[i] + '::') >= 0)
                     continue;
-                crow++;
-                tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');
-                var row = $('#tabel_list_enroll_staff_row_' + list_id[i]);
-                row.append('<td>' + crow + '</td>');
-                row.append('<td>' + list_nip[i] + '</td>');
-                row.append('<td>' + list_departemen[i] + '</td>');
-                row.append('<td>' + list_nama[i] + '</td>');
-                //row.append('<td>0</td>');
-                row.append('<td><input type="checkbox" id="enroll_' + list_id[i] + '" name="enroll_' + list_id[i] + '"/></td>');
+
+                var row_id = 'tabel_list_enroll_staff_row_' + list_id[i];
+                var new_row = true;
+                if ($('#' + row_id).length == 0) {
+                    tubuh.append('<tr id="' + row_id + '"></tr>');
+                    crow++;
+                } else {
+                    new_row = false;
+                }
+                var row = $('#' + row_id);
+                if (new_row) {
+                    row.append('<td>' + crow + '</td>');
+                    row.append('<td>' + list_nip[i] + '</td>');
+                    row.append('<td>' + list_departemen[i] + '</td>');
+                    row.append('<td>' + list_nama[i] + '</td>');
+                    row.append('<td><input type="checkbox" id="enroll_' + list_id[i] + '" name="enroll_' + list_id[i] + '"/></td>');
+                }
                 //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
                 $('#enroll_' + list_id[i]).attr('checked', false);
             }

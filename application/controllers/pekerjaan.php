@@ -713,6 +713,7 @@ class pekerjaan extends ceklogin {
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat progress pekerjaan dari para staffnya.");
         $this->load->model("akun");
         $data["my_staff"] = $this->akun->my_staff($temp["user_id"]);
+        //print_r($data);
         $this->load->view("pekerjaan/lihat_daftar_pekerjaan_staff_page", $data);
     }
 
