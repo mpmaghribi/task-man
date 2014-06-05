@@ -11,7 +11,7 @@
 
         } else if (flag == 2) {
             if (sekarang <= tgl_selesai) {
-                if (tgl_read == null) {
+                if (tgl_read == null || tgl_read.length==0) {
                     status_id = 1;
                 }
                 else {
