@@ -525,6 +525,11 @@ class pekerjaan extends ceklogin {
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;
                 $atasan=true;
+            }else if ($desk[0]->id_akun == $temp['user_id'] && !$usulan) {
+                $data['bisa_validasi'] = false;
+                $data['bisa_edit'] = true;
+                $data['bisa_batalkan'] = true;
+                $atasan=true;
             }else if($desk[0]->flag_usulan == '2' && (in_array($desk[0]->id_akun,$list_my_staff)||$admin)){//berkuasa atas pekerjaan
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;

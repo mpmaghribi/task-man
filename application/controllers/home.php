@@ -40,7 +40,6 @@ class home extends ceklogin {
         $data['my_staff']=$staff;
         if (count($data['my_staff']) > 0) {
             $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
-            
             $my_staff = array();
             //print_r($staff);
             if (!isset($staff->error)) {
