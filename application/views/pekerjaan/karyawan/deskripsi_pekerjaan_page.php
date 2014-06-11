@@ -222,6 +222,63 @@ if (isset($listassign_pekerjaan)) {
                                         <?php $this->load->view('pekerjaan/penilaian'); ?>
                                         </div>
                                         <?php } ?>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    <div class="panel-body">
+                                        <form class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()       ?>/pekerjaan/usulan_pekerjaan">
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div id="box_komentar" style="display: <?php echo $display ?>">
+                                            <div class="form">
+
+                                                <form class="cmxform form-horizontal " id="signupForm" method="post" action="#<?php //echo $_SERVER['REQUEST_URI'];       ?>">
+                                                    <?php //echo $_SERVER['REQUEST_URI']; ?>
+                                                    <input type="hidden" id="is_isi_komentar" name="is_isi_komentar" value="true"/>
+                                                    <input type="hidden" id="id_detail_pkj" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
+                                                    <div class="form-group">
+                                                        <div id="lihat_komen" class="col-lg-12">
+
+                                                        </div>
+                                                        <div id="tes" class="col-lg-12">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group ">
+                                                        <div class="col-lg-12">
+                                                            <textarea class="form-control" id="komentar_pkj" name="komentar_pkj" rows="12"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="col-lg-12">
+                                                            <button id="save_komen" class="btn btn-primary" type="button">Save</button>
+                                                        </div>
+                                                    </div>
+
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
 
                                 </div>
                             </div>
