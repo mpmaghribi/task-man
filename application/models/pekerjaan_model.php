@@ -18,11 +18,11 @@ class pekerjaan_model extends CI_Model {
         return $query->result();
     }
 
-    public function cek_pemberi_pekerjaan($id_pekerjaan) {
-        $query = "select * from pemberi_pekerjaan where id_pekerjaan='$id_pekerjaan'";
-        $query = $this->db->query($query);
-        return $query->result();
-    }
+//    public function cek_pemberi_pekerjaan($id_pekerjaan) {
+//        $query = "select * from pemberi_pekerjaan where id_pekerjaan='$id_pekerjaan'";
+//        $query = $this->db->query($query);
+//        return $query->result();
+//    }
     public function create_draft($param) {
         
         //$query = "insert into pekerjaan ($colom) values ($isi)";
@@ -51,10 +51,10 @@ class pekerjaan_model extends CI_Model {
         return $query->result();
     }
 
-    public function isi_pemberi_pekerjaan($user_id, $id_pekerjaan) {
-        $queri = "insert into pemberi_pekerjaan (id_pekerjaan, id_akun) values ('$id_pekerjaan','$user_id')";
-        return $this->db->query($queri);
-    }
+//    public function isi_pemberi_pekerjaan($user_id, $id_pekerjaan) {
+//        $queri = "insert into pemberi_pekerjaan (id_pekerjaan, id_akun) values ('$id_pekerjaan','$user_id')";
+//        return $this->db->query($queri);
+//    }
 
     public function list_pekerjaan($id_akun) {
         //$id_akun = pg_escape_string($id_akun);
@@ -171,11 +171,9 @@ class pekerjaan_model extends CI_Model {
 
     
     public function sp_deskripsi_pekerjaan($id_detail_pkj) {
-        $query = "select pekerjaan.*,pemberi_pekerjaan.*,sifat_pekerjaan.*"
+        $query = "select pekerjaan.*,sifat_pekerjaan.*"
                 . " from pekerjaan inner join sifat_pekerjaan "
                 . "on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan "
-                . "inner join pemberi_pekerjaan on pemberi_pekerjaan.id_pekerjaan="
-                . "pekerjaan.id_pekerjaan "
                 . "where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
         //echo $query;
         $query = $this->db->query($query);
@@ -241,9 +239,8 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function get_list_draft($user_id) {
-        $query = "select pekerjaan.* from pekerjaan inner join pemberi_pekerjaan"
-                . " on pemberi_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan"
-                . " where flag_usulan='5' and pemberi_pekerjaan.id_akun='$user_id' "
+        $query = "select pekerjaan.* from pekerjaan "
+                . " where flag_usulan='5' and id_penanggung_jawab='$user_id' "
                 . "order by pekerjaan.level_prioritas";
         $query = $this->db->query($query);
         return $query->result();
@@ -322,19 +319,16 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function get_pekerjaan($id_pekerjaan) {
-        $query = "select pekerjaan.*, pemberi_pekerjaan.* from pekerjaan "
-                . "inner join pemberi_pekerjaan on pemberi_pekerjaan.id_pekerjaan"
-                . "=pekerjaan.id_pekerjaan where pekerjaan.id_pekerjaan = $id_pekerjaan";
+        $query = "select pekerjaan.* from pekerjaan "
+                . "where pekerjaan.id_pekerjaan = $id_pekerjaan";
         $query = $this->db->query($query);
         return $query->result();
     }
-    public function get_pekerjaan_staff($id_pemberi_pekerjaan,$list_staff){
+    public function get_pekerjaan_staff($list_staff){
         if(count($list_staff)==0)
             return NULL;
-        $query="select pekerjaan.*, pemberi_pekerjaan.*,detil_pekerjaan.* "
-                . "from pekerjaan inner join pemberi_pekerjaan "
-                . "on pekerjaan.id_pekerjaan=pemberi_pekerjaan.id_pekerjaan "
-                . "inner join detil_pekerjaan on "
+        $query="select pekerjaan.*,detil_pekerjaan.* "
+                . "from pekerjaan inner join detil_pekerjaan on "
                 . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan "
                 . "where (pekerjaan.flag_usulan='1' or pekerjaan.flag_usulan='2') "
                 . "and detil_pekerjaan.id_akun in (".implode(",",$list_staff).")"
@@ -344,9 +338,8 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function get_draft($list_id_draft) {
-        $query = 'select pemberi_pekerjaan.*, pekerjaan.*,sifat_pekerjaan.* from pekerjaan inner join '
-                . 'pemberi_pekerjaan on pekerjaan.'
-                . 'id_pekerjaan=pemberi_pekerjaan.id_pekerjaan inner join sifat_pekerjaan '
+        $query = 'select pekerjaan.*,sifat_pekerjaan.* from pekerjaan inner join '
+                . ' sifat_pekerjaan '
                 . 'on sifat_pekerjaan.id_sifat_pekerjaan=pekerjaan.id_sifat_pekerjaan '
                 . 'where pekerjaan.id_pekerjaan in (' . implode(',', $list_id_draft) . ') '
                 . 'order by pekerjaan.id_pekerjaan';
