@@ -54,7 +54,7 @@ class home extends ceklogin {
                 
             }
             //print_r($my_staff);
-            $data['pekerjaan_staff'] = $this->pekerjaan_model->get_pekerjaan_staff($temp['user_id'], $my_staff);
+            $data['pekerjaan_staff'] = $this->pekerjaan_model->get_pekerjaan_staff( $my_staff);
             $list_id_pekerjaan = array();
             if ($data['pekerjaan_staff'] != NULL)
                 foreach ($data['pekerjaan_staff'] as $job) {
