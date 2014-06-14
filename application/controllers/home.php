@@ -70,6 +70,7 @@ class home extends ceklogin {
     }
 
     public function recent_activity() {
+        $data['temp'] = $this->session->userdata("logged_in");
         $data['activity'] = $this->taskman_repository->sp_recent_activity();
 
         $this->load->view('recent_activity_page', $data);

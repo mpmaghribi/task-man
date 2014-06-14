@@ -13,6 +13,82 @@ class laporan extends CI_Controller {
         $this->load->model('taskman_repository');
         $this->load->model('akun');
     }
+    
+    public function cetak_form_skp()
+    {
+        $id = $this->input->get('id_akun');
+        $data["jabatan"] = $this->input->get('jabatan');
+        $data["departemen"] = $this->input->get('departemen');
+        $data["nama"] = $this->input->get('nama');
+        $data["nip"] = $this->input->get('nip');
+        $this->load->helper(array('pdf', 'date'));
+        $filename = 'Laporan SKP.pdf';
+        $data['state'] = 'Report';
+        $temp = $this->session->userdata('logged_in');
+        $data['data_akun'] = $temp;
+        $data['temp'] = $temp;
+        $id_penilai = $temp["user_id"];
+        $jabatan = json_decode(
+                file_get_contents(
+                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id_penilai."/format/json"
+                        ));
+        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
+        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
+        $data["nama_penilai"] = $jabatan[0]->nama;
+        $data["nip_penilai"] = $jabatan[0]->nip;
+        $this->load->model("pekerjaan_model");
+        $result = $this->taskman_repository->sp_view_pekerjaan($id);
+        $data['pkj_karyawan'] = $result;
+        $list_id_pekerjaan = array();
+        foreach ($result as $pekerjaan) {
+            $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
+        }
+        //var_dump($list_id_pekerjaan);
+        $staff = $this->akun->my_staff($temp["user_id"]);
+        $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
+        $data["detil_pekerjaan"] = json_encode($detil_pekerjaan);
+        $data["my_staff"] = json_encode($staff);
+
+        $this->load->view('laporan/cetak_form_skp', $data);
+    }
+    
+    public function cetak_form_ckp()
+    {
+        $id = $this->input->get('id_akun');
+        $data["jabatan"] = $this->input->get('jabatan');
+        $data["departemen"] = $this->input->get('departemen');
+        $data["nama"] = $this->input->get('nama');
+        $data["nip"] = $this->input->get('nip');
+        $this->load->helper(array('pdf', 'date'));
+        $filename = 'Laporan Capaian Kerja Staff.pdf';
+        $data['state'] = 'Report';
+        $temp = $this->session->userdata('logged_in');
+        $data['data_akun'] = $temp;
+        $data['temp'] = $temp;
+        $id_penilai = $temp["user_id"];
+        $jabatan = json_decode(
+                file_get_contents(
+                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id_penilai."/format/json"
+                        ));
+        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
+        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
+        $data["nama_penilai"] = $jabatan[0]->nama;
+        $data["nip_penilai"] = $jabatan[0]->nip;
+        $this->load->model("pekerjaan_model");
+        $result = $this->taskman_repository->sp_view_pekerjaan($id);
+        $data['pkj_karyawan'] = $result;
+        $list_id_pekerjaan = array();
+        foreach ($result as $pekerjaan) {
+            $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
+        }
+        //var_dump($list_id_pekerjaan);
+        $staff = $this->akun->my_staff($temp["user_id"]);
+        $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
+        $data["detil_pekerjaan"] = json_encode($detil_pekerjaan);
+        $data["my_staff"] = json_encode($staff);
+
+        $this->load->view('laporan/cetak_form_ckp', $data);
+    }
 
     public function index() {
         $temp = $this->session->userdata('logged_in');
@@ -92,11 +168,19 @@ class laporan extends CI_Controller {
                 file_get_contents(
                         str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/".$id."/format/json"
                         ));
-        
+       if ($atasan != NULL){
             $data["jabatan_penilai"] = $atasan[0]->nama_jabatan;
             $data["departemen_penilai"] = $atasan[0]->nama_departemen;
             $data["nama_penilai"] = $atasan[0]->nama;
             $data["nip_penilai"] = $atasan[0]->nip;
+        }
+        else
+        {
+            $data["jabatan_penilai"] = "-";
+            $data["departemen_penilai"] = "-";
+            $data["nama_penilai"] = "-";
+            $data["nip_penilai"] = "-";
+        }
         
         $this->load->helper(array('pdf', 'date'));
         $filename = 'Laporan SKP '.$data['nama'].'.pdf';
@@ -127,12 +211,20 @@ class laporan extends CI_Controller {
                 file_get_contents(
                         str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/".$id."/format/json"
                         ));
-        
+                        //print_r($atasan);
+        if ($atasan != NULL){
             $data["jabatan_penilai"] = $atasan[0]->nama_jabatan;
             $data["departemen_penilai"] = $atasan[0]->nama_departemen;
             $data["nama_penilai"] = $atasan[0]->nama;
             $data["nip_penilai"] = $atasan[0]->nip;
-            
+        }
+        else
+        {
+            $data["jabatan_penilai"] = "-";
+            $data["departemen_penilai"] = "-";
+            $data["nama_penilai"] = "-";
+            $data["nip_penilai"] = "-";
+        }
         $data["jabatan"] = $jabatan[0]->nama_jabatan;
         $data["departemen"] = $jabatan[0]->nama_departemen;
         $data["nama"] = $jabatan[0]->nama;
@@ -143,7 +235,7 @@ class laporan extends CI_Controller {
         $this->load->model("pekerjaan_model");
         $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
         $data['pkj_karyawan'] = $result;
-        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, true);
+        $html = $this->load->view('laporan/laporan_ckp_pdf', $data,TRUE );
         //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
         header("Content-type:application/pdf");
 

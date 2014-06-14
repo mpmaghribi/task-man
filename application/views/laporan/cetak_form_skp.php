@@ -14,149 +14,161 @@ and open the template in the editor.
         <link rel="shortcut icon" href="images/favicon.png">
 
         <title>Dashboard</title>
-        <style type="text/css"><?php echo file_get_contents(base_url().APPPATH.'assets/bs3/css/bootstrap.min.css');?></style>
+        <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.11.0.min.js"></script>
+        <link href="<?php echo base_url() ?>/assets/bs3/css/bootstrap.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/css/bootstrap-reset.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/jquery-ui/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/css/bootstrap-reset.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/jvector-map/jquery-jvectormap-1.2.2.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/css/clndr.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/js/bootstrap-datepicker/css/datepicker.css" />
+        <link href="<?php echo base_url()?>/assets/css/simplePagination.css" rel="stylesheet"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>/assets/js/gritter/css/jquery.gritter.css" />
+        <!--icheck-->
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/red.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/green.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/blue.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/yellow.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/purple.css" rel="stylesheet">
+
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/square.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/red.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/green.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/blue.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/yellow.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/purple.css" rel="stylesheet">
+
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/grey.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/red.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/green.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/blue.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/yellow.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/purple.css" rel="stylesheet">
+
+        <!--clock css-->
+        <link href="<?php echo base_url() ?>/assets/js/css3clock/css/style.css" rel="stylesheet">
+        <!--Morris Chart CSS -->
+        <link rel="stylesheet" href="<?php echo base_url() ?>/assets/js/morris-chart/morris.css">
+        <!-- Custom styles for this template -->
+        <link href="<?php echo base_url() ?>/assets/css/style.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>/assets/css/style-responsive.css" rel="stylesheet"/>
+
+        <!--Notification style-->
+        <link rel="stylesheet" href="<?php echo base_url() ?>/assets/css/notification.css">
+        <!--End of notification style-->
+    <!--    <link rel="stylesheet" href="<?php echo base_url() ?>/assets/css/bootstrap-switch.css" />-->
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/js/jquery-multi-select/css/multi-select.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/js/jquery-tags-input/jquery.tagsinput.css" />
+
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/js/select2/select2.css" />
+        
+        <link href="<?php echo base_url() ?>/assets/js/advanced-datatable/css/demo_page.css" rel="stylesheet" />
+    <link href="<?php echo base_url() ?>/assets/js/advanced-datatable/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?php echo base_url() ?>/assets/js/data-tables/DT_bootstrap.css" />
         <style>
             .tabel_pdf_staff{
                 //border: #000 thin thin;
                 width: 100%;
             }
-            thead th{
+            @media print {
+                #toolButton {
+                    display: none;
+                }
+            }
+/*            thead th{
                 border: #000 solid thin;
             }
             tbody td{
                 border: #000 solid thin;
-            }
+            }*/
         </style>
     </head>
 
 <body>
 
-    <section id="container" >
-        <section id="main-content">
-            <section class="wrapper" >
+    <section id="main">
+<!--        <section id="main-content">-->
+<!--            <section class="wrapper" >-->
                 <!-- page start-->
                 <div class="row">
-                    <div class="col-md-6">
-                        <section class="panel">
-                            <div class="form">
+                    <div class="col-md-12">
+                            <div class="panel-body">
                                 <h2 align="center">Formulir Sasaran Kerja Pegawai Negeri Sipil <?php if (isset($periode))echo "Selama ".$periode." Bulan"?></h2>
+                                <div id="toolButton" class="btn-group pull-right">
+                                    <button onclick="window.print()" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-print"></i>&nbsp; Cetak</button>
+                                </div>
                             </div>
-
-                        </section>
+                            
                     </div>
                 </div>
                 <br/>
                 <div class="row">
                     <div class="col-md-12">
-                        <section class="panel">
-                            <div class="form">
+                            <div class="panel-body">
                                 <table>
                                         <tr>
-                                            <th width="372" align="left">Pejabat Penilai</th>
-                                            <th width="370" align="left">Pegawai yang Dinilai</th>
+                                            <th width="500" align="left">Pejabat Penilai</th>
+                                            <th width="500" align="left">Pegawai yang Dinilai</th>
                                         </tr>
                                 </table>
-                            </div>
-
-                        </section>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <section class="panel">
-                            <div class="form">
                                 <table>
                                         <tr>
-                                            <th width="70" align="left">NIP</th>
-                                            <td width="300" align="left">: <?php if(isset($nip_penilai)) echo $nip_penilai?></td>
-                                            <th width="70" align="left">NIP</th>
-                                            <td width="300" align="left">: <?php echo $nip?></td>
+                                            <th width="90" align="left">NIP</th>
+                                            <td width="385" align="left">: <?php if(isset($nip_penilai)) echo $nip_penilai?></td>
+                                            <th width="90" align="left">NIP</th>
+                                            <td width="385" align="left">: <?php echo $nip?></td>
                                         </tr>
                                 </table>
-                            </div>
-
-                        </section>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <section class="panel">
-                            <div class="form">
                                 <table>
                                         <tr>
-                                            <th width="70" align="left">Nama</th>
-                                            <td width="300" align="left">: <?php if(isset($nama_penilai)) echo $nama_penilai?></td>
-                                            <th width="70" align="left">Nama</th>
-                                            <td width="300" align="left">: <?php echo $nama?></td>
+                                            <th width="90" align="left">Nama</th>
+                                            <td width="385" align="left">: <?php if(isset($nama_penilai)) echo $nama_penilai?></td>
+                                            <th width="90" align="left">Nama</th>
+                                            <td width="385" align="left">: <?php echo $nama?></td>
                                         </tr>
                                 </table>
-                            </div>
-
-                        </section>
-                    </div>
-                    <div class="col-md-6">
-                        <section class="panel">
-                            <div class="form">
                                 <table>
                                         <tr>
-                                            <th width="70" align="left">Departemen</th>
-                                            <td width="300" align="left">: <?php if (isset($departemen_penilai)) echo $departemen_penilai?></td>
-                                            <th width="70" align="left">Departemen</th>
-                                            <td width="300" align="left">: <?php if (isset($departemen)) echo $departemen?></td>
+                                            <th width="90" align="left">Departemen</th>
+                                            <td width="385" align="left">: <?php if (isset($departemen_penilai)) echo $departemen_penilai?></td>
+                                            <th width="90" align="left">Departemen</th>
+                                            <td width="385" align="left">: <?php if (isset($departemen)) echo $departemen?></td>
                                         </tr>
                                 </table>
-                            </div>
-
-                        </section>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <section class="panel">
-                            <div class="form">
-                                <table>
+                                 <table>
                                         <tr>
-                                            <th width="70" align="left">Jabatan</th>
-                                            <td width="300" align="left">: <?php if(isset($jabatan_penilai)) echo $jabatan_penilai?></td>
-                                            <th width="70" align="left">Jabatan</th>
-                                            <td width="300" align="left">: <?php echo $jabatan?></td>
+                                            <th width="90" align="left">Jabatan</th>
+                                            <td width="385" align="left">: <?php if(isset($jabatan_penilai)) echo $jabatan_penilai?></td>
+                                            <th width="90" align="left">Jabatan</th>
+                                            <td width="385" align="left">: <?php echo $jabatan?></td>
                                         </tr>
                                 </table>
-                            </div>
-
-                        </section>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <section class="panel">
-                            <div class="form">
                                 <table>
                                         <tr>
-                                            <th width="70" align="left">Tanggal</th>
+                                            <th width="90" align="left">Tanggal</th>
                                             <td>: <?php echo date("d M Y")?></td>
                                         </tr>
                                 </table>
                             </div>
 
-                        </section>
                     </div>
                 </div>
-                <div class="row">
+<!--                <div class="row">
                     <div class="col-md-12">
-                        <section class="panel">
-                            <div class="form">
+                            <div class="panel-body">
                                 <br/>
                             </div>
 
-                        </section>
                     </div>
-                </div>
+                </div>-->
                 <div class="row" style="height: 40%;">
                     <div class="col-md-12">
-                        <section class="panel">
-                            <div class="form">
-                                <table class="tabel_pdf_staff">
+<!--                        <section class="panel">-->
+                            <div class="panel-body">
+                                <table class="tabel_pdf_staff table table-bordered">
                                     <thead>
                                         <tr>
                                             <th rowspan="2" width="30">No</th>
@@ -201,21 +213,20 @@ and open the template in the editor.
                                 </table>
                             </div>
 
-                        </section>
+<!--                        </section>-->
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <section class="panel">
-                            <div class="form">
+                            <div class="panel-body">
                                 <table>
                                         <tr>
-                                            <th width="100" align="left"></th>
+                                            <th width="2000" align="left"></th>
                                             <th width="100" align="left">Surabaya, <?php echo date("d M Y")?></th>
                                         </tr>
                                         <tr>
-                                            <th style="padding-bottom: 50px;" width="500" align="left">Pejabat Penilai</th>
-                                            <th style="padding-bottom: 50px;" width="500" align="left">Pegawai yang Dinilai</th>
+                                            <th style="padding-bottom: 50px;" width="600" align="left">Pejabat Penilai</th>
+                                            <th style="padding-bottom: 50px;" width="800" align="left">Pegawai yang Dinilai</th>
                                         </tr>
                                         <tr>
                                             <td style="text-decoration: underline;" width="200" align="left"> <?php if(isset($nama_penilai)) echo  $nama_penilai?></td>
@@ -228,7 +239,6 @@ and open the template in the editor.
                                 </table>
                             </div>
 
-                        </section>
                     </div>
                 </div>
 
@@ -242,11 +252,11 @@ and open the template in the editor.
                     });
                 </script>
                 <!-- page end-->
-            </section>
-            <section class="footer-section">
+<!--            </section>-->
+<!--            <section class="footer-section">
                 
-            </section>
-        </section>
+            </section>-->
+<!--        </section>-->
     </section>
 <!--Core js-->
 <script src="<?php echo base_url()?>/assets/js/jquery.simplePagination.js"></script>

@@ -40,7 +40,7 @@
                                             if (isset($my_staff)) {
                                                 //var_dump($my_staff);
                                                 $counter = 0;
-												print_r($my_staff);
+												//print_r($my_staff);
                                                 foreach ($my_staff as $staff) {
 												
                                                     $counter++;
@@ -50,30 +50,34 @@
                                                     echo '<td>' . $staff->nama . '</td>';
                                                     echo '<td>' . $staff->nama_jabatan . '</td>';
                                                     echo '<td>' . $staff->nama_departemen. '</td>';
-                                                    echo '<td>' . $staff->email . '</td>';
-                                                    echo '<td ><form method="get" action="' . base_url() . 'pekerjaan/pekerjaan_per_staff"><input type="hidden" name="id_akun" value="' . $staff->id_akun . '"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>';
-                                                    ?>
-                                            
-                                        <td>
+                                                    echo '<td>' . $staff->email . '</td>';?>
+                                            <td>
                                             <div class="btn-group">
-                                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button"> Download Laporan <span class="caret"></span> </button>
+                                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button"> Print <span class="caret"></span> </button>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/exportToPDF?id_akun='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" >Download Form SKP</a></li>
-                                                    <li><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/exportFormCKP?id_akun='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" >Download Form CKP</a></li>
-                                                    <li></li>
+                                                    <li><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/cetak_form_skp?id_akun='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" >Form SKP</a></li>
+                                                    <li><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/cetak_form_ckp?id_akun='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" >Form CKP</a></li>
+                                                    
                                                 </ul>
                                             </div>
                                         </td>
-                                        <td>
+                                         <td>
                                             <div class="btn-group">
-                                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button"> Download Laporan Per Periode<span class="caret"></span> </button>
+                                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button"> Simpan PDF<span class="caret"></span> </button>
                                                 <ul class="dropdown-menu">
+                                                    <li><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/exportToPDF?id_akun='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" >Form SKP</a></li>
+                                                    <li><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/exportFormCKP?id_akun='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" >Form CKP</a></li>
                                                     <li><a href="#exportPeriode" data-toggle="modal"  onclick="exportPeriode('<?php echo $staff->id_akun?>','<?php echo $staff->nama?>','<?php echo $staff->nama_jabatan?>','<?php echo $staff->nama_departemen?>','<?php echo $staff->nip?>')" >Laporan SKP per Periode</a></li>
                                                     <li><a href="#exportPeriode2" data-toggle="modal"  onclick="exportPeriode2('<?php echo $staff->id_akun?>','<?php echo $staff->nama?>','<?php echo $staff->nama_jabatan?>','<?php echo $staff->nama_departemen?>','<?php echo $staff->nip?>')" >Laporan CKP per Periode</a></li>
                                                     <li></li>
                                                 </ul>
                                             </div>
                                         </td>
+                                            <?php        echo '<td ><form method="get" action="' . base_url() . 'pekerjaan/pekerjaan_per_staff"><input type="hidden" name="id_akun" value="' . $staff->id_akun . '"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>';
+                                                    ?>
+                                           
+                                        
+                                        
                                                     <?php echo '</tr>';
                                                 }
                                             }
