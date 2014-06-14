@@ -193,10 +193,34 @@ class pekerjaan_model extends CI_Model {
 
     public function sp_updateprogress_pekerjaan($data, $id_detail_pkj) {
         $query = "update detil_pekerjaan set progress =" . $data . " where id_detil_pekerjaan =" . $id_detail_pkj;
-        if ($this->db->query($query)) {
+        //$query2 = "insert into detil_progress (id_detil_pekerjaan,deskripsi,progress,total_progress,waktu) values ('".$id_detail_pkj."','".$deskripsi."','".$data."','100','now()');";
+        if ($this->db->query($query) ) {
             return 1;
         }
         return 0;
+    }
+    
+    public function sp_tambah_progress($data, $id_detail_pkj, $deskripsi) {
+        //$query = "update detil_pekerjaan set progress =" . $data . " where id_detil_pekerjaan =" . $id_detail_pkj;
+        $query = "insert into detil_progress (id_detil_pekerjaan,deksripsi,progress,total_progress,waktu) values ('".$id_detail_pkj."','".$deskripsi."','".$data."','100','now()');";
+        if ($this->db->query($query) ) {
+            return 1;
+        }
+        return 0;
+    }
+    
+    public function sp_lihat_progress($id_akun,$id_detail_pkj) {
+        $query = "select * from detil_pekerjaan".
+                " where detil_pekerjaan.id_akun = $id_akun and detil_pekerjaan.id_detil_pekerjaan = $id_detail_pkj";
+        
+        return $this->db->query($query)->result();
+    }
+    
+    public function sp_history_progress($id_akun,$id_detail_pkj) {
+        $query = "select *, detil_progress.progress from detil_progress inner join detil_pekerjaan on detil_pekerjaan.id_detil_pekerjaan = detil_progress.id_detil_pekerjaan".
+                " inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun = $id_akun and detil_progress.id_detil_pekerjaan = $id_detail_pkj order by detil_progress.waktu DESC";
+        
+        return $this->db->query($query)->result();
     }
 
     public function sp_listassign_pekerjaan($id_detail_pkj) {

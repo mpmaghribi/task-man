@@ -15,6 +15,7 @@ class pekerjaan extends ceklogin {
         redirect(base_url() . 'pekerjaan/karyawan');
     }
 
+    
     function pengaduan() {
         //http://localhost:90/integrarsud/helpdesk/index.php/pengaduan/getDelegate/
         //print_r($url);
@@ -1306,12 +1307,14 @@ class pekerjaan extends ceklogin {
 //        if ($this->check_session_and_cookie() == 1) {
         $temp = $this->session->userdata('logged_in');
         $id_detail_pkj = $this->input->post('id_detail_pkj');
-        $data = $this->input->post('data_baru');
+        $data = $this->input->post('data_progress');
+        $perubahan = $this->input->post('perubahan');
         $this->load->model("pekerjaan_model");
         $result = $this->pekerjaan_model->sp_updateprogress_pekerjaan($data, $id_detail_pkj);
+        $result2 = $this->pekerjaan_model->sp_tambah_progress($data, $id_detail_pkj,$perubahan);
 
 
-        if ($result == 1)
+        if ($result == 1 && $result2 == 1)
             $status = array(
                 'status' => 'OK');
         else
@@ -1323,6 +1326,33 @@ class pekerjaan extends ceklogin {
 //            $this->session->set_flashdata('status', 4);
 //            redirect("login");
 //        }
+    }
+    public function show_log_progress()
+    {
+        $temp = $this->session->userdata('logged_in');
+        $id_detail_pkj = 157;//$this->input->post('id_detail_pkj');
+        $id_akun = 20;//$this->input->post('user_id');
+        $this->load->model("pekerjaan_model");
+        $result = $this->pekerjaan_model->sp_history_progress($id_akun,$id_detail_pkj);
+        //var_dump($result);
+        $status = array(
+                'status' => 'OK', 'data' => $result);
+
+        echo json_encode($status);
+    }
+
+    public function show_progress() {
+//        if ($this->check_session_and_cookie() == 1) {
+        $temp = $this->session->userdata('logged_in');
+        $id_detail_pkj = $this->input->post('id_detail_pkj');
+        $id_akun = $this->input->post('user_id');
+        $this->load->model("pekerjaan_model");
+        $result = $this->pekerjaan_model->sp_lihat_progress($id_akun,$id_detail_pkj);
+        //var_dump($result);
+        $status = array(
+                'status' => 'OK', 'data' => $result);
+
+        echo json_encode($status);
     }
 
     public function edit() {

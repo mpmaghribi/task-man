@@ -191,6 +191,7 @@ foreach ($users as $u) {
                                                                 <th>Progress</th>
                                                                 <th></th>
                                                                 <th></th>
+<!--                                                                <th></th>-->
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -217,11 +218,14 @@ foreach ($users as $u) {
                                                                                 </div>
                                                                             </div>
                                                                         </td>
+                                                                         <?php if ($value->id_akun == $temp['user_id'] && $value->flag_usulan == 2) { ?>
                                                                         <td>
-                                                                            <?php if ($value->id_akun == $temp['user_id'] && $value->flag_usulan == 2) { ?>
-                                                                                <a class="edit btn btn-primary btn-xs" href="javascript:;">Ubah Progress</a>
-                                                                            <?php } ?>
+                                                                            <a class=" btn btn-primary btn-xs" href="#UbahProgress" data-toggle="modal" onclick="show_progress('<?php echo  $value->id_detil_pekerjaan?>','<?php echo $value2->id_akun?>')">Ubah Progress</a>
+                                                                            <a class=" btn btn-primary btn-xs" href="#LogProgress" data-toggle="modal" onclick="history_progress('<?php echo  $value->id_detil_pekerjaan?>','<?php echo $value2->id_akun?>')">History Progress</a>
+                                                                         
                                                                         </td>
+                                                                        <?php } ?>
+                                                                        
                                                                         <td></td>
                                                                     </tr>
                                                                     <?php
@@ -233,10 +237,214 @@ foreach ($users as $u) {
                                                     </table>
                                                 </div>
                                             </section>
+                                            <script>
+                                                function ubah_progress()
+                                                {
+                                                    var data_progress = document.getElementById("progress").value;
+                                                    var idp = document.getElementById("idp").value;
+                                                    var log_perubahan = document.getElementById("perubahan").value;
+                                                    //alert(log_perubahan);
+                                                    $.ajax({// create an AJAX call...
+                                                        data:
+                                                                {
+                                                                    id_detail_pkj: idp,
+                                                                    data_progress: data_progress,
+                                                                    perubahan: log_perubahan
+                                                                }, // get the form data
+                                                        type: "POST", // GET or POST
+                                                        url: "http://localhost:90/taskmanagement/index.php/pekerjaan/update_progress", // the file to call
+                                                        cache: false,
+                                                        success: function(response) { // on success..
+                                                            var json = jQuery.parseJSON(response);
+
+                                                            if (json.status === "OK") {
+                                                                alert("Progress berhasil diupdate!");
+                                                                window.location.href = "";
+                                                            } else {
+                                                                alert("Data gagal di update");
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                                function show_progress(id_detail_pkj,id_user)
+                                                {
+
+                                                    $.ajax({// create an AJAX call...
+                                                        data:
+                                                                {
+                                                                    user_id: id_user,
+                                                                    id_detail_pkj: id_detail_pkj
+                                                                }, // get the form data
+                                                        type: "POST", // GET or POST
+                                                        url: "http://localhost:90/taskmanagement/index.php/pekerjaan/show_progress", // the file to call
+                                                        cache: false,
+                                                        success: function(response) { // on success..
+                                                            var json = jQuery.parseJSON(response);
+
+                                                            if (json.status === "OK") {
+                                                                $("#progress").val(json.data[0].progress);
+                                                                $("#idp").val(json.data[0].id_detil_pekerjaan);
+                                                            } else {
+                                                                alert("Data gagal di update");
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                                function history_progress(id_detail_pkj,id_user)
+                                                {
+
+                                                    $.ajax({// create an AJAX call...
+                                                        data:
+                                                                {
+                                                                    user_id: id_user,
+                                                                    id_detail_pkj: id_detail_pkj
+                                                                }, // get the form data
+                                                        type: "POST", // GET or POST
+                                                        url: "http://localhost:90/taskmanagement/index.php/pekerjaan/show_log_progress", // the file to call
+                                                        cache: false,
+                                                        success: function(response) { // on success..
+                                                            var json = jQuery.parseJSON(response);
+                                                            if (json.status === "OK") {
+                                                                var count = 1;
+                                                                    var html = "";
+                                                                    html += "<table id='table_log_progress' class='table table-bordered'><thead><tr><th>No</th><th>Nama Pekerjaan</th><th>Log Perubahan</th><th> Progress</th><th> Tanggal</tr></thead>";
+                                                                    html += "<tbody>";
+                                                                for(var i=0;i<5;i++)
+                                                                {
+                                                                    var tgl = json.data[i].waktu;
+                                                                    //tgl = tgl.replace(/-/gi,"/");
+                                                                    tgl = tgl.substring(19,0);
+                                                                    var d = Date.parse(tgl);
+                                                                    html += "<tr>";
+                                                                    html += "<td>"+count+"";
+                                                                    html += "</td>";
+                                                                    html += "<td>"+json.data[i].nama_pekerjaan+"";
+                                                                    html += "</td>";
+                                                                    html += "<td>"+json.data[i].deksripsi+"";
+                                                                    html += "</td>";
+                                                                    html += "<td>"+json.data[i].progress+"";
+                                                                    html += "</td>";
+                                                                    html += "<td>"+tgl+"";
+                                                                    html += "</td>";
+                                                                    html += "</tr>";
+                                                                    
+                                                                    count++;
+//                                                                    $("#log_progress").val(json.data[i].progress);
+//                                                                    $("#tanggal").val(json.data[i].tanggal);
+//                                                                    $("#nama_pkj").val(json.data[i].nama_pekerjaan);
+                                                                }
+                                                                html += "</tbody></table>";
+                                                                $("#history_progress").html(html);
+                                                                //window.location.href = "";
+                                                            } else {
+                                                                alert("Data gagal di update");
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            </script>
+                                            <div class="modal fade" id="LogProgress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            <h4 class="modal-title">History Progress</h4>
+                                                        </div>
+                                                        
+                                                        <div class="form modal-body">
+                                                                <div id="history_progress"></div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button data-dismiss="modal" class="btn btn-default" type="button">Tutup</button>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal fade" id="UbahProgress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            <h4 class="modal-title">Ubah Progress</h4>
+                                                        </div>
+                                                        <form class="cmxform form-horizontal" id="signupForm" action="#" method="POST">
+                                                        <div class="form modal-body">
+                                                            <input type="hidden" id="idp" name="idp" value="" />
+                                                            <div class="form-group ">
+                                                                <label for="progress" class="control-label col-lg-3">Progress</label>
+                                                                <div class="col-lg-8">
+                                                                    <select class="form-control" id="progress" name="progress">
+                                                                        <option if value="0">
+                                                                            0% Selesai
+                                                                        </option>
+                                                                        <option value="10">
+                                                                            10% Selesai
+                                                                        </option>
+                                                                        <option value="20">
+                                                                            20% Selesai
+                                                                        </option>
+                                                                        <option value="30">
+                                                                            30% Selesai
+                                                                        </option>
+                                                                        <option value="40">
+                                                                            40% Selesai
+                                                                        </option>
+                                                                        <option value="50">
+                                                                            50% Selesai
+                                                                        </option>
+                                                                        <option value="60">
+                                                                            60% Selesai
+                                                                        </option>
+                                                                        <option value="70">
+                                                                            70% Selesai
+                                                                        </option>
+                                                                        <option value="80">
+                                                                            80% Selesai
+                                                                        </option>
+                                                                        <option value="90">
+                                                                            90% Selesai
+                                                                        </option>
+                                                                        <option value="100">
+                                                                            100% Selesai
+                                                                        </option>
+                                                                    </select>
+                                                                     </div>
+                                                            </div>
+                                                            <div class="form-group ">
+                                                                <label for="perubahan" class="control-label col-lg-3">Log Perubahan</label>
+                                                                <div class="col-lg-8">
+                                                                    <textarea class="form-control" type="text" id="perubahan" name="perubahan" rows="12" value="">
+                                                                    </textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group ">
+                                                                <label for="total_progress" class="control-label col-lg-3">Total Progress</label>
+                                                                <div class="col-lg-8">
+                                                                    <input readonly class="form-control" type="text" id="total_progress" name="total_progress" value="100" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group ">
+                                                                <label for="waktu_progress" class="control-label col-lg-3">Waktu Progress</label>
+                                                                <div class="col-lg-8">
+                                                                    <input readonly class="form-control" type="text" id="waktu_progress" name="waktu_progress" value="<?php date_default_timezone_set("Asia/Jakarta"); echo date("Y-m-d h:i:s");?>" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
+                                                            <button class="btn btn-warning" data-dismiss="modal" onclick="ubah_progress()" type="button"> Ubah Progress</button>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
+
                                         <div class="col-md-12">
                                             <div id="visualisasi_grafik"></div>
                                         </div>
+
 
 
 
