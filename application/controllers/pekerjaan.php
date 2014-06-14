@@ -1330,8 +1330,8 @@ class pekerjaan extends ceklogin {
     public function show_log_progress()
     {
         $temp = $this->session->userdata('logged_in');
-        $id_detail_pkj = 157;//$this->input->post('id_detail_pkj');
-        $id_akun = 20;//$this->input->post('user_id');
+        $id_detail_pkj = $this->input->post('id_detail_pkj');
+        $id_akun = $this->input->post('user_id');
         $this->load->model("pekerjaan_model");
         $result = $this->pekerjaan_model->sp_history_progress($id_akun,$id_detail_pkj);
         //var_dump($result);

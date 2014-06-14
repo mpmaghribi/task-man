@@ -243,7 +243,7 @@ foreach ($users as $u) {
                                                     var data_progress = document.getElementById("progress").value;
                                                     var idp = document.getElementById("idp").value;
                                                     var log_perubahan = document.getElementById("perubahan").value;
-                                                    //alert(log_perubahan);
+                                                    alert(idp);
                                                     $.ajax({// create an AJAX call...
                                                         data:
                                                                 {
@@ -283,7 +283,7 @@ foreach ($users as $u) {
 
                                                             if (json.status === "OK") {
                                                                 $("#progress").val(json.data[0].progress);
-                                                                $("#idp").val(json.data[0].id_detil_pekerjaan);
+                                                                $("#idp").val(id_detail_pkj);
                                                             } else {
                                                                 alert("Data gagal di update");
                                                             }
