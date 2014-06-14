@@ -29,56 +29,16 @@
                     </li>
                 </ul>
             </li>
-            
-            <!-- inbox dropdown end -->
-            <!-- notification dropdown start-->
-<!--            <li id="header_notification_bar" class="dropdown">
-                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
 
-                    <i class="fa fa-bell-o"></i>
-                    <span class="badge bg-warning">3</span>
-                </a>
-                <ul class="dropdown-menu extended notification">
-                    <li>
-                        <p>Notifications</p>
-                    </li>
-                    <li>
-                        <div class="alert alert-info clearfix">
-                            <span class="alert-icon"><i class="fa fa-bolt"></i></span>
-                            <div class="noti-info">
-                                <a href="#"> March 2014. You have tasks which is not completed.</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="alert alert-danger clearfix">
-                            <span class="alert-icon"><i class="fa fa-bolt"></i></span>
-                            <div class="noti-info">
-                                <a href="#"> Februari 2014. You have tasks which is not completed.</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="alert alert-success clearfix">
-                            <span class="alert-icon"><i class="fa fa-bolt"></i></span>
-                            <div class="noti-info">
-                                <a href="#"> January 2014. You have tasks which is not completed.</a>
-                            </div>
-                        </div>
-                    </li>
-
-                </ul>
-            </li>-->
-            <!-- notification dropdown end -->
         </ul>
         <!--  notification end -->
     </div>
     <div class="top-nav clearfix">
         <!--search & user info start-->
         <ul class="nav pull-right top-menu">
-<!--            <li>
-                <input type="text" class="form-control search" placeholder=" Search">
-            </li>-->
+            <!--            <li>
+                            <input type="text" class="form-control search" placeholder=" Search">
+                        </li>-->
             <!-- user login dropdown start-->
             <li class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -93,9 +53,9 @@
             </li>
             <!-- user login dropdown end -->
             <li>
-                            <div class="toggle-right-box">
-                                <div class="fa fa-bars"></div>
-                            </div>
+                <div class="toggle-right-box">
+                    <div class="fa fa-bars"></div>
+                </div>
             </li>
         </ul>
         <!--search & user info end-->

@@ -40,7 +40,9 @@
                                             if (isset($my_staff)) {
                                                 //var_dump($my_staff);
                                                 $counter = 0;
+												print_r($my_staff);
                                                 foreach ($my_staff as $staff) {
+												
                                                     $counter++;
                                                     echo '<tr>';
                                                     echo '<td >' . $counter . '</td>';
