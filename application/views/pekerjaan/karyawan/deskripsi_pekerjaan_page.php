@@ -220,8 +220,8 @@ foreach ($users as $u) {
                                                                         </td>
                                                                          <?php if ($value->id_akun == $temp['user_id'] && $value->flag_usulan == 2) { ?>
                                                                         <td>
-                                                                            <a class=" btn btn-primary btn-xs" href="#UbahProgress" data-toggle="modal" onclick="show_progress('<?php echo  $value->id_detil_pekerjaan?>','<?php echo $value2->id_akun?>')">Ubah Progress</a>
-                                                                            <a class=" btn btn-primary btn-xs" href="#LogProgress" data-toggle="modal" onclick="history_progress('<?php echo  $value->id_detil_pekerjaan?>','<?php echo $value2->id_akun?>')">History Progress</a>
+                                                                            <a class=" btn btn-primary btn-xs" href="#UbahProgress" data-toggle="modal" onclick="show_progress('<?php echo  $value->id_detil_pekerjaan?>','<?php echo $value->id_akun?>')">Ubah Progress</a>
+                                                                            <a class=" btn btn-primary btn-xs" href="#LogProgress" data-toggle="modal" onclick="history_progress('<?php echo  $value->id_detil_pekerjaan?>','<?php echo $value->id_akun?>')">History Progress</a>
                                                                          
                                                                         </td>
                                                                         <?php } ?>
