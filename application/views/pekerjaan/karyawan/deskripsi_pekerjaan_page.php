@@ -243,7 +243,7 @@ foreach ($users as $u) {
                                                     var data_progress = document.getElementById("progress").value;
                                                     var idp = document.getElementById("idp").value;
                                                     var log_perubahan = document.getElementById("perubahan").value;
-                                                    alert(idp);
+                                                   
                                                     $.ajax({// create an AJAX call...
                                                         data:
                                                                 {
@@ -252,7 +252,7 @@ foreach ($users as $u) {
                                                                     perubahan: log_perubahan
                                                                 }, // get the form data
                                                         type: "POST", // GET or POST
-                                                        url: "http://localhost:90/taskmanagement/index.php/pekerjaan/update_progress", // the file to call
+                                                        url: "<?php echo site_url()?>/pekerjaan/update_progress", // the file to call
                                                         cache: false,
                                                         success: function(response) { // on success..
                                                             var json = jQuery.parseJSON(response);
@@ -276,7 +276,7 @@ foreach ($users as $u) {
                                                                     id_detail_pkj: id_detail_pkj
                                                                 }, // get the form data
                                                         type: "POST", // GET or POST
-                                                        url: "http://localhost:90/taskmanagement/index.php/pekerjaan/show_progress", // the file to call
+                                                        url: "<?php echo site_url()?>/pekerjaan/show_progress", // the file to call
                                                         cache: false,
                                                         success: function(response) { // on success..
                                                             var json = jQuery.parseJSON(response);
@@ -300,7 +300,7 @@ foreach ($users as $u) {
                                                                     id_detail_pkj: id_detail_pkj
                                                                 }, // get the form data
                                                         type: "POST", // GET or POST
-                                                        url: "http://localhost:90/taskmanagement/index.php/pekerjaan/show_log_progress", // the file to call
+                                                        url: "<?php echo site_url()?>/pekerjaan/show_log_progress", // the file to call
                                                         cache: false,
                                                         success: function(response) { // on success..
                                                             var json = jQuery.parseJSON(response);

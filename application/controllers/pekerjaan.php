@@ -1306,9 +1306,9 @@ class pekerjaan extends ceklogin {
     public function update_progress() {
 //        if ($this->check_session_and_cookie() == 1) {
         $temp = $this->session->userdata('logged_in');
-        $id_detail_pkj = $this->input->post('id_detail_pkj');
-        $data = $this->input->post('data_progress');
-        $perubahan = $this->input->post('perubahan');
+        $id_detail_pkj = $this->input->post("id_detail_pkj");
+        $data = $this->input->post("data_progress");
+        $perubahan = $this->input->post("perubahan");
         $this->load->model("pekerjaan_model");
         $result = $this->pekerjaan_model->sp_updateprogress_pekerjaan($data, $id_detail_pkj);
         $result2 = $this->pekerjaan_model->sp_tambah_progress($data, $id_detail_pkj,$perubahan);
