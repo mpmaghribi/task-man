@@ -322,7 +322,7 @@ foreach ($users as $u) {
                                                                     html += "</td>";
                                                                     html += "<td>"+json.data[i].deksripsi+"";
                                                                     html += "</td>";
-                                                                    html += "<td>"+json.data[i].progress+"";
+                                                                    html += "<td>"+json.data[i].progress+"% Selesai";
                                                                     html += "</td>";
                                                                     html += "<td>"+tgl+"";
                                                                     html += "</td>";
