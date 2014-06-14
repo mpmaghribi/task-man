@@ -80,10 +80,12 @@
         var pekerjaan_flag = [];
         var pekerjaan_id = [];
         var pekerjaan_tanggal_selesai = [];
+        var pekerjaan_tanggal_mulai = [];
 <?php foreach ($pekerjaan_staff as $pekerjaan) { ?>
             pekerjaan_id.push('<?php echo $pekerjaan->id_pekerjaan ?>');
             pekerjaan_flag.push('<?php echo $pekerjaan->flag_usulan; ?>');
-            pekerjaan_tanggal_selesai.push('<?php echo date('Y-m-d',strtotime($pekerjaan->tgl_selesai));?>')
+            pekerjaan_tanggal_selesai.push('<?php echo date('Y-m-d',strtotime($pekerjaan->tgl_selesai));?>');
+            pekerjaan_tanggal_mulai.push('<?php echo date('Y-m-d',strtotime($pekerjaan->tgl_mulai));?>');
 <?php } ?>
         function get_flag(id_pekerjaan) {
             var jumlah_pekerjaan = pekerjaan_id.length;
@@ -98,6 +100,13 @@
             for (var i = 0; i < jumlah_pekerjaan; i++) {
                 if (pekerjaan_id[i] == id_pekerjaan)
                     return pekerjaan_tanggal_selesai[i];
+            }
+        }
+        function get_tanggal_mulai(id_pekerjaan) {
+            var jumlah_pekerjaan = pekerjaan_id.length;
+            for (var i = 0; i < jumlah_pekerjaan; i++) {
+                if (pekerjaan_id[i] == id_pekerjaan)
+                    return pekerjaan_tanggal_mulai[i];
             }
         }
         var jumlah_detil = detil_pekerjaan.length;
@@ -122,7 +131,7 @@
                     cell.html(nama_staff);
                 }
                 var flag = get_flag(detil_pekerjaan[i]['id_pekerjaan']);
-                ubah_status_pekerjaan('status_' + detil_pekerjaan[i]['id_pekerjaan'], get_flag(detil_pekerjaan[i]['id_pekerjaan']), detil_pekerjaan[i]['sekarang'], get_tanggal_selesai(detil_pekerjaan[i]['id_pekerjaan']), detil_pekerjaan[i]['tgl_read'], detil_pekerjaan[i]['status'], detil_pekerjaan[i]['progress']);
+                ubah_status_pekerjaan('status_' + detil_pekerjaan[i]['id_pekerjaan'], get_flag(detil_pekerjaan[i]['id_pekerjaan']), detil_pekerjaan[i]['sekarang'], get_tanggal_mulai(detil_pekerjaan[i]['id_pekerjaan']),get_tanggal_selesai(detil_pekerjaan[i]['id_pekerjaan']), detil_pekerjaan[i]['tgl_read'], detil_pekerjaan[i]['status'], detil_pekerjaan[i]['progress']);
             }
         }
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');

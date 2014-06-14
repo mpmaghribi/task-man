@@ -74,10 +74,7 @@
                                                                             </td>
                                                                         </tr>
                                                         <script>
-                                                            ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', 
-                        <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', 
-                            '<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>',
-                                        '<?php echo $value->status; ?>', <?php                echo $value->progress;?>);
+                                                            ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $value->tgl_mulai; ?>','<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>','<?php echo $value->status; ?>', <?php echo $value->progress;?>);
                                                         </script>
                                                                     <?php } 
                                                                     $i++;
@@ -135,9 +132,9 @@
                                                                         </tr>
                                                                         <script>
                                                             ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', 
-                        <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', 
+                        <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $value->tgl_mulai; ?>',
                             '<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>',
-                                        '<?php echo $value->status; ?>', <?php                echo $value->progress;?>);
+                                        '<?php echo $value->status; ?>', <?php  echo $value->progress;?>);
                                                         </script>
                                                                     <?php } 
                                                                     
