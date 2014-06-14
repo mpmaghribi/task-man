@@ -433,13 +433,28 @@ class pekerjaan extends ceklogin {
         $status_pkj = '1'; //$this->input->post('status_pkj');
 
         $asal_pkj = 'task management'; //$this->input->post('asal_pkj');
-        $result = $this->taskman_repository->sp_tambah_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
-        $id_pekerjaan_baru = $result[0]->kode;
+        $insert['id_sifat_pekerjaan'] = $sifat_pkj;
+        $insert['parent_pekerjaan'] = 0;
+        $insert['nama_pekerjaan'] = $nama_pkj;
+        $insert['deskripsi_pekerjaan'] = $deskripsi_pkj;
+        $insert['tgl_mulai'] = $tgl_mulai_pkj;
+        $insert['tgl_selesai'] = $tgl_selesai_pkj;
+        $insert['level_prioritas'] = $prioritas;
+        $insert['flag_usulan'] = '1';
+        $insert['asal_pekerjaan'] = 'task management';
+        $insert["id_penanggung_jawab"] = $idatasan;
+        $insert["id_pengusul"] = $temp['id_akun'];
+
+        //$result = $this->taskman_repository->sp_tambah_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
+        $result = $this->pekerjaan_model->usul_pekerjaan2($insert);
+        $id_pekerjaan_baru = -1;
+        if ($result != NULL)
+            $id_pekerjaan_baru = $result;
         if ($id_pekerjaan_baru >= 0) {
             //$atasan_url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $id_akun . "/format/json";
 
             $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $temp['user_id']);
-            $result2 = $this->pekerjaan_model->isi_pemberi_pekerjaan($idatasan, $id_pekerjaan_baru);
+
             if (isset($_FILES["berkas"])) {
                 $path = './uploads/pekerjaan/' . $id_pekerjaan_baru . '/';
                 $this->load->library('upload');
@@ -639,7 +654,7 @@ class pekerjaan extends ceklogin {
             } else if ($cek[0]->flag == '1' && $cek[0]->id_pengusul == $session['id_akun']) {
                 $berhak = true;
             } else {
-                $data['reason']="Anda tidak berhak menghapus berkas";
+                $data['reason'] = "Anda tidak berhak menghapus berkas";
             }
             if ($berhak) {
                 $berkas = $this->berkas_model->get_berkas($id_file);
@@ -651,7 +666,7 @@ class pekerjaan extends ceklogin {
                     $hasil['reason'] = 'gagal menghapus';
             }
         }else {
-            $hasil['reason'] = 'Anda tidak berhak menghapus berkas';
+            $hasil['reason'] = 'Pekerjaan tidak ditemukan';
         }
 
         echo json_encode($hasil);
@@ -718,16 +733,31 @@ class pekerjaan extends ceklogin {
         $temp = $this->session->userdata('logged_in');
         $id_pekerjaan = $this->input->post("id_pekerjaan");
         $this->load->model("pekerjaan_model");
-        if ($this->pekerjaan_model->validasi_pekerjaan($id_pekerjaan) == 1) {
-            $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja melakukan validasi terhadap usulan pekerjaan dari staffnya");
-            //$this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
-            echo json_encode(array("status" => "OK"));
+        $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
+        $status = 0;
+        if (count($pekerjaan) > 0) {
+            
         } else {
-            echo json_encode(array("status" => "FAILED", "reason" => "failed to update"));
+            echo json_encode(array("status" => "error", "reason" => "pekerjaan tidak ditemukan"));
+            $status = 1;
         }
-//        } else {
-//            echo json_encode(array("status" => "FAILED", "reason" => "failed to authenticate"));
-//        }
+        if ($status == 0) {
+            if ($pekerjaan[0]->id_penanggung_jawab == $temp['id_akun']) {
+                
+            } else {
+                $status = 1;
+                echo json_encode(array("status" => "error", "reason" => "anda tidak berhak memvalidasi usulan ini"));
+            }
+        }
+        if ($status == 0) {
+            if ($this->pekerjaan_model->validasi_pekerjaan($id_pekerjaan) == 1) {
+                $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja melakukan validasi terhadap usulan pekerjaan dari staffnya");
+                //$this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
+                echo json_encode(array("status" => "OK"));
+            } else {
+                echo json_encode(array("status" => "FAILED", "reason" => "failed to update"));
+            }
+        }
     }
 
     /*
@@ -837,9 +867,10 @@ class pekerjaan extends ceklogin {
                         }
                     }
                     $usulan = $pekerjaan[0]->flag_usulan == '1';
-                    $berhak_usulan = ($session ['user_id'] == $pekerjaan[0]->id_akun && $usulan);
+                    $berhak_usulan = ($session ['user_id'] == $pekerjaan[0]->id_penanggung_jawab && $usulan);
+                    $berhak_usulan = ($session ['user_id'] == $pekerjaan[0]->id_pengusul && $usulan);
                     $admin = $session['hakakses'] == 'Administrator';
-                    if (($berhak_pekerjaan && !$usulan) || $berhak_usulan || ($admin && !$usulan)) {
+                    if (($berhak_pekerjaan && !$usulan) || $berhak_usulan || ($admin)) {
                         $this->pekerjaan_model->update_pekerjaan($update, $cur_id_pekerjaan);
                         //echo 'id pekerjaan yang akan dibatalkan untuk staffku=' . $cur_id_pekerjaan . "<br>\n";
                         $this->pekerjaan_model->batalkan_task($cur_id_pekerjaan);
@@ -850,30 +881,6 @@ class pekerjaan extends ceklogin {
         //echo 'id pekerjaan ';
         //print_r($id_pekerjaan);
         echo json_encode(array('status' => 'OK'));
-//        $list_detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
-//        echo 'detil pekerjaan pekerjaan ';
-//        print_r($list_detil_pekerjaan);
-//        $cur_id_pekerjaan="";
-//        $cur_jumlah_staff_ku=0;
-//        $cur_jumlah_staff_orang_lain=0;
-//        foreach($list_detil_pekerjaan as $detil_pekerjaan){
-//            //print_r($detil_pekerjaan);
-//            if($cur_id_pekerjaan==$detil_pekerjaan->id_pekerjaan){
-//                if(in_array($detil_pekerjaan->id_akun,$id_staff)){
-//                    /* jika pekerjaan ini dikerjakan oleh staff ku*/
-//                    $cur_jumlah_staff_ku++;
-//                }else{/*selain itu*/
-//                    $cur_jumlah_staff_orang_lain++;
-//                }
-//            }else{
-//                /*
-//                 * aksi untuk membatalkan pekerjaan
-//                 */
-//                $cur_jumlah_staff_ku=0;
-//                $cur_jumlah_staff_orang_lain=0;
-//                $cur_id_pekerjaan=$detil_pekerjaan->id_pekerjaan;
-//            }
-//        }
     }
 
     public function progress() {

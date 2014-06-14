@@ -431,7 +431,7 @@
             EditableTableProgress.init();
         });
     </script>
-    <?php if ($temp['jmlstaff'] > 0) { ?>
+    <?php if (count($my_staff) > 0) { ?>
         <script>
             var list_nip = [];
             var list_nama = [];

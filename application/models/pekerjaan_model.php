@@ -390,8 +390,9 @@ class pekerjaan_model extends CI_Model {
 
     public function batalkan_task($id_pekerjaan) {
         $query = "delete from detil_pekerjaan where id_pekerjaan='$id_pekerjaan' ";
-        $query2 = "update pekerjaan set flag_usulan='3' where id_pekerjaan='$id_pekerjaan'";
-        return $this->db->query($query) && $this->db->query($query2);
+        $query = "update detil_pekerjaan set status='Batal' where id_pekerjaan='$id_pekerjaan' ";
+        //$query2 = "update pekerjaan set flag_usulan='3' where id_pekerjaan='$id_pekerjaan'";
+        return $this->db->query($query) ;//&& $this->db->query($query2);
     }
 
 }
