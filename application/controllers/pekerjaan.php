@@ -651,10 +651,10 @@ class pekerjaan extends ceklogin {
             $berhak = false;
             if ($cek[0]->id_penanggung_jawab == $session['user_id']) {
                 $berhak = true;
-            } else if ($cek[0]->flag == '1' && $cek[0]->id_pengusul == $session['id_akun']) {
+            } else if ($cek[0]->flag_usulan == '1' && $cek[0]->id_pengusul == $session['id_akun']) {
                 $berhak = true;
             } else {
-                $data['reason'] = "Anda tidak berhak menghapus berkas";
+                $hasil['reason'] = "Anda tidak berhak menghapus berkas";
             }
             if ($berhak) {
                 $berkas = $this->berkas_model->get_berkas($id_file);
