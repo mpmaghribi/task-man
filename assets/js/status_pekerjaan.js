@@ -5,12 +5,20 @@ console.log(status_label);
 var min_element_status = [];
 var total_progress = [];
 var jumlah_data_progress = [];
-function ubah_status_pekerjaan(id, flag, sekarang, tgl_selesai, tgl_read, status_, progress) {
+function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai,tgl_selesai, tgl_read, status_, progress) {
     if (!min_element_status[id]) {
         min_element_status[id] = 5;
         total_progress[id] = 0;
         jumlah_data_progress[id] = 0;
     }
+    console.log('mulai    = ' + tgl_mulai);
+    console.log('sekarang = ' + sekarang);
+    console.log('deadline = ' + tgl_selesai);
+    if(sekarang<tgl_selesai)
+        console.log("masih bisa dikerjakan");
+    else
+        console.log("terlambat");
+    //console.log(tgl_selesai-sekarang);
     jumlah_data_progress[id]++;
     var status_id = min_element_status[id];
     if (flag == 1) {//masih usulan, belum di-acc
@@ -49,7 +57,8 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_selesai, tgl_read, status
     var new_label = '';
     if (total_progress[id]>0) {
         var nilai_progress = total_progress[id] / jumlah_data_progress[id];
-        new_label = '<div class="progress progress-striped active progress-sm" style="margin:0px;">'
+        nilai_progress=(new Number(nilai_progress)).toPrecision(4);
+        new_label = '<div class="progress progress-striped active progress-sm" style="margin:0px;" title="'+nilai_progress+'% Complete">'
                 + '<div  class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="' + nilai_progress
                 + '" aria-valuemin="0" aria-valuemax="100" style="width: '+nilai_progress+'%">'
                 + '<span class="sr-only">'+nilai_progress+'% Complete</span>'

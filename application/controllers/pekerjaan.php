@@ -567,7 +567,7 @@ class pekerjaan extends ceklogin {
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;
                 $atasan = true;
-            } else if ($desk[0]->flag_usulan == '2' && ($diassign_ke_bawahan_saya || $admin || $desk[0]->id_akun == $temp['user_id'])) {//berkuasa atas pekerjaan
+            } else if ($desk[0]->flag_usulan == '2' && ($diassign_ke_bawahan_saya || $admin || $desk[0]->id_penanggung_jawab == $temp['user_id'])) {//berkuasa atas pekerjaan
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;
                 $atasan = true;

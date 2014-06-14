@@ -1,5 +1,5 @@
 <?php $this->load->view("taskman_header_page") ?> 
-<script src="<?php echo base_url()?>/assets/js/status_pekerjaan.js"></script>
+<script src="<?php echo base_url() ?>/assets/js/status_pekerjaan.js"></script>
 <body>
     <section id="container">
         <!--header start-->
@@ -112,11 +112,11 @@
                                                     <?php if (isset($pkj_karyawan)) { ?>
                                                         <?php
                                                         $i = 1;
-                                                        $list_id_pekerjaan=array();
+                                                        $list_id_pekerjaan = array();
                                                         foreach ($pkj_karyawan as $value) {
-                                                            if(in_array($value->id_pekerjaan,$list_id_pekerjaan))
+                                                            if (in_array($value->id_pekerjaan, $list_id_pekerjaan))
                                                                 continue;
-                                                            $list_id_pekerjaan[]=$value->id_pekerjaan;
+                                                            $list_id_pekerjaan[] = $value->id_pekerjaan;
                                                             ?>
                                                             <tr>
                                                                 <td style="vertical-align: middle">
@@ -126,7 +126,7 @@
                                                                 </td>
                                                                 <td style="vertical-align: middle" class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                                 <td style="vertical-align: middle"> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                                <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;          ?>"><?php foreach ($users as $value2) { ?>
+                                                                <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;           ?>"><?php foreach ($users as $value2) { ?>
                                                                         <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                                                                     <?php } ?></td>
                                                                 <td style="vertical-align: middle" id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
@@ -164,11 +164,13 @@
     <script>
         var detil_pekerjaan_saya = jQuery.parseJSON('<?php if (isset($detil_pekerjaan_saya)) echo json_encode($detil_pekerjaan_saya); ?>');
         var tgl_selesai_pekerjaan_saya = [];
+        var tgl_mulai_pekerjaan_saya = [];
         var flag_usulan_pekerjaan_saya = [];
 <?php
 foreach ($pkj_karyawan as $pekerjaan_saya) {
     ?>tgl_selesai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_selesai; ?>';
-            flag_usulan_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->flag_usulan; ?>';<?php
+            flag_usulan_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->flag_usulan; ?>';
+            tgl_mulai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_mulai; ?>';<?php
 }
 ?>
         console.log(tgl_selesai_pekerjaan_saya);
@@ -178,8 +180,8 @@ foreach ($pkj_karyawan as $pekerjaan_saya) {
         var jumlah_detil_saya = detil_pekerjaan_saya.length;
         for (var i = 0; i < jumlah_detil_saya; i++) {
             var detil = detil_pekerjaan_saya[i];
-            if(detil['id_akun']=='<?php echo $data_akun['id_akun'];?>')
-            ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);
+            if (detil['id_akun'] == '<?php echo $data_akun['id_akun']; ?>')
+                ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'],tgl_mulai_pekerjaan_saya[detil['id_pekerjaan']], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);
         }
     </script>
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>

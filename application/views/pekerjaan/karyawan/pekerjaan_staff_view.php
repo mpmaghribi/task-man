@@ -51,7 +51,7 @@
                                 <?php } ?>
                     <script>
                         ubah_status_pekerjaan('pekerjaan_staff_status_<?php echo $kerja->id_pekerjaan; ?>', 
-                        <?php echo $kerja->flag_usulan; ?>, '<?php echo $sekarang; ?>', 
+                        <?php echo $kerja->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $kerja->tgl_mulai; ?>',
                             '<?php echo $kerja->tgl_selesai; ?>', '<?php echo $kerja->tgl_read; ?>',
                                         '<?php echo $kerja->status; ?>', <?php                echo $kerja->progress;?>);
                     </script>
