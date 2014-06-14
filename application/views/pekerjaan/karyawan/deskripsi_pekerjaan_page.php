@@ -182,7 +182,7 @@ foreach ($users as $u) {
                                                     Anggota Tim
                                                 </h4>
                                                 <div class="panel-body">
-                                                    <table class="table table-striped table-hover table-condensed" id="editable-sample">
+                                                    <table class="table table-striped table-hover table-condensed">
                                                         <thead>
                                                             <tr>
                                                                 <th style="display: none">id</th>
@@ -292,7 +292,6 @@ foreach ($users as $u) {
                                                 }
                                                 function history_progress(id_detail_pkj,id_user)
                                                 {
-
                                                     $.ajax({// create an AJAX call...
                                                         data:
                                                                 {
@@ -300,7 +299,7 @@ foreach ($users as $u) {
                                                                     id_detail_pkj: id_detail_pkj
                                                                 }, // get the form data
                                                         type: "POST", // GET or POST
-                                                        url: "<?php echo site_url()?>/pekerjaan/show_log_progress", // the file to call
+                                                        url: "<?php echo site_url();?>/pekerjaan/show_log_progress", // the file to call
                                                         cache: false,
                                                         success: function(response) { // on success..
                                                             var json = jQuery.parseJSON(response);
@@ -309,12 +308,18 @@ foreach ($users as $u) {
                                                                     var html = "";
                                                                     html += "<table id='table_log_progress' class='table table-bordered'><thead><tr><th>No</th><th>Nama Pekerjaan</th><th>Log Perubahan</th><th> Progress</th><th> Tanggal</tr></thead>";
                                                                     html += "<tbody>";
-                                                                for(var i=0;i<5;i++)
+                                                                    var jml = "";
+                                                                    if (json.data.length > 5)
+                                                                    {
+                                                                        jml = 5;
+                                                                    }else{
+                                                                        jml = json.data.length;
+                                                                    }
+                                                                for(var i=0;i<jml;i++)
                                                                 {
                                                                     var tgl = json.data[i].waktu;
                                                                     //tgl = tgl.replace(/-/gi,"/");
                                                                     tgl = tgl.substring(19,0);
-                                                                    var d = Date.parse(tgl);
                                                                     html += "<tr>";
                                                                     html += "<td>"+count+"";
                                                                     html += "</td>";
