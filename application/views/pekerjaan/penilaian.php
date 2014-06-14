@@ -100,6 +100,7 @@
     var tipe_nilai = 'target';
     var prev_tipe_nilai = '';
     var prev_id = 0;
+    console.log("peniliaian=>list user");
     console.log(staff);
     function load_nilai(id_staff, tipeNilai) {
         tipe_nilai = tipeNilai;

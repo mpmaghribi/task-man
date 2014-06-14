@@ -174,7 +174,7 @@ class pekerjaan extends ceklogin {
             $nama_status = "kesalahan";
             $keterangan = "pekerjaan tidak ditemukan";
         }
-        if($pekerjaan[0]->flag_usulan=='3' || $pekerjaan[0]->flag_usulan=='6'){
+        if ($pekerjaan[0]->flag_usulan == '3' || $pekerjaan[0]->flag_usulan == '6') {
             $status = 1;
             $nama_status = "kesalahan";
             $keterangan = "Pekerjaan ini telah dibatalkan";
@@ -199,12 +199,12 @@ class pekerjaan extends ceklogin {
                     echo "terlibat";
                     //break;
                 }
-                if(!in_array($detil->id_akun,$list_id_staff)){
-                    $atasan=false;
+                if (!in_array($detil->id_akun, $list_id_staff)) {
+                    $atasan = false;
                     echo "bukan atasan";
                 }
             }
-            $atasan = $atasan || ($session['hakakses']=='Administrator');
+            $atasan = $atasan || ($session['hakakses'] == 'Administrator');
             if ($pekerjaan[0]->flag_usulan == '1')
                 $usulan = true;
         }
@@ -294,9 +294,13 @@ class pekerjaan extends ceklogin {
         $asal_pkj = 'task management';
         $kategori = pg_escape_string(strtolower($this->input->post('kategori')));
 
-
+        $status = 0;
+        $deskripsi_kesalahan = "";
+        $judul_kesalahan = "";
         if (!($kategori == 'project' || $kategori == 'rutin')) {
-            //$kategori = null;
+            $status = 1;
+            $judul_kesalahan = "kategori pekerjaan tidak valid";
+            $deskripsi_kesalahan = 'Harap isi kategori pekerjaan dengan "project" atau "rutin"';
         }
 
 
@@ -315,8 +319,11 @@ class pekerjaan extends ceklogin {
         }
 
         if ($jenis_usulan == 'usulan' && count($staff) == 0) {
-            $this->load->view('pekerjaan/kesalahan', array('judul_kesalahan' => 'Kesalahan Menambahkan Pekerjaan', 'deskripsi_kesalahan' => 'Tidak ada staff yang ditugaskan'));
-            exit(0);
+            //$this->load->view('pekerjaan/kesalahan', array('judul_kesalahan' => 'Kesalahan Menambahkan Pekerjaan', 'deskripsi_kesalahan' => 'Tidak ada staff yang ditugaskan'));
+            //exit(0);
+            $status = 1;
+            $judul_kesalahan = "Data tidak lengkap";
+            $deskripsi_kesalahan = "pilih staff yang akan mengerjakan pekerjaan";
         }
 
 
@@ -329,6 +336,15 @@ class pekerjaan extends ceklogin {
             $mystaff[] = $s->id_akun;
         }
 
+        foreach ($staff as $s) {
+            if (!in_array($s, $mystaff)) {
+                $status = 1;
+                $judul_kesalahan = "tidak berhak";
+                $deskripsi_kesalahan = "anda hanya dapat memberi pekerjaan kepada staff anda";
+                break;
+            }
+        }
+
         $insert['id_sifat_pekerjaan'] = $sifat_pkj;
         $insert['parent_pekerjaan'] = 0;
         $insert['nama_pekerjaan'] = $nama_pkj;
@@ -339,35 +355,36 @@ class pekerjaan extends ceklogin {
         $insert['flag_usulan'] = '2';
         $insert['asal_pekerjaan'] = 'task management';
         $insert['kategori'] = $kategori;
-
-        //$id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj, '',$kategori);
-        $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan2($insert);
-        if ($id_pekerjaan != NULL) {
-            if ($jenis_usulan == 'usulan') {
-                foreach ($staff as $index => $val) {//val itu nip
-                    if (strlen($val) == 0) {
-                        continue;
-                    }
-                    if (in_array($val, $mystaff))
-                        $this->pekerjaan_model->tambah_detil_pekerjaan($val, $id_pekerjaan);
-                }
-            }
-
-
-            //echo "path = $path<br/>";
-            if (isset($_FILES["berkas"])) {
-                $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
-                //$this->load->library('upload');
-                if (!file_exists($path)) {
-                    mkdir($path, 0777, true);
-                }
-                $files = $_FILES["berkas"];
-                $this->upload_file($files, $path, $id_pekerjaan);
-            }
-            $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja memberikan pekerjaan kepada staffnya.");
-            $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
+        if ($status == 1) {
+            $data['judul_kesalahan'] = $judul_kesalahan;
+            $data['deskripsi_kesalahan'] = $deskripsi_kesalahan;
+            $data['data_akun']=$temp;
+            $this->load->view('pekerjaan/kesalahan', $data);
         }
-        redirect($lempar);
+        if ($status == 0) {
+            $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan2($insert);
+            if ($id_pekerjaan != NULL) {
+
+                foreach ($staff as $index => $val) {//val itu nip
+                    $this->pekerjaan_model->tambah_detil_pekerjaan($val, $id_pekerjaan);
+                }
+
+
+                //echo "path = $path<br/>";
+                if (isset($_FILES["berkas"])) {
+                    $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
+                    //$this->load->library('upload');
+                    if (!file_exists($path)) {
+                        mkdir($path, 0777, true);
+                    }
+                    $files = $_FILES["berkas"];
+                    $this->upload_file($files, $path, $id_pekerjaan);
+                }
+                $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja memberikan pekerjaan kepada staffnya.");
+                $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
+            }
+            redirect($lempar);
+        }
 //        } else {
 //            $this->session->set_flashdata('status', 4);
 //            redirect("login");
@@ -1315,7 +1332,7 @@ class pekerjaan extends ceklogin {
                 $keterangan = "pekerjaan tidak ditermukan";
             }
         }
-        if($data["pekerjaan"][0]->flag_usulan=='3' || $data["pekerjaan"][0]->flag_usulan=='6'){
+        if ($data["pekerjaan"][0]->flag_usulan == '3' || $data["pekerjaan"][0]->flag_usulan == '6') {
             $status = 1;
             $nama_status = "kesalahan";
             $keterangan = "Pekerjaan ini telah dibatalkan";
@@ -1342,17 +1359,17 @@ class pekerjaan extends ceklogin {
             //var_dump($list_id_staff);
             foreach ($detil_pekerjaan as $detil) {
                 if (!in_array($detil->id_akun, $list_id_staff)) {
-                    $data['atasan']=false;
+                    $data['atasan'] = false;
                     //var_dump($data['atasan']);
                 }
             }
             if ($p[0]->flag_usulan == '1') {
                 $data['usulan'] = true;
                 //var_dump($data['atasan']);
-                $data['atasan']=$data['atasan']&&$p[0]->id_akun==$temp['id_akun'];
+                $data['atasan'] = $data['atasan'] && $p[0]->id_akun == $temp['id_akun'];
                 //var_dump($data['atasan']);
             }
-            $data['atasan']=$data['atasan']||$temp['hakakses']=='Administrator';
+            $data['atasan'] = $data['atasan'] || $temp['hakakses'] == 'Administrator';
             //var_dump($data['atasan']);
 
             $data['terlibat'] = false;
@@ -1369,7 +1386,7 @@ class pekerjaan extends ceklogin {
                 $keterangan = "anda tidak berhak mengubah pekerjaan";
             }
         }
-        
+
         //var_dump($data);
         if ($status == 0) {
             $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_pekerjaan);

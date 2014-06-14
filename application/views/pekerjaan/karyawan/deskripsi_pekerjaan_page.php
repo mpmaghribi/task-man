@@ -190,12 +190,15 @@
                                                                     <tr>
                                                                         <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td id="nama_staff_<?php //echo $value->id_akun;              ?>"><?php //echo $value->id_akun;              ?><?php foreach ($users as $value2) { ?>
+                                                                        <td id="nama_staff_<?php //echo $value->id_akun;                ?>"><?php //echo $value->id_akun;                ?><?php foreach ($users as $value2) { ?>
                                                                                 <?php
                                                                                 if ($value->id_akun == $value2->id_akun) {
-                                                                                    echo $value2->nama
-                                                                                    ?><?php } ?>
-                                                                            <?php } ?></td>
+                                                                                    echo $value2->nama;
+                                                                                    
+                                                                                }
+                                                                            }
+                                                                            ?>
+                                                                        </td>
                                                                         <td>
                                                                             <div class="progress progress-striped progress-xs">
                                                                                 <div style="width: <?php echo $value->progress; ?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress; ?>" role="progressbar" class="progress-bar progress-bar-warning">
@@ -206,7 +209,7 @@
                                                                         <td>
                                                                             <?php if ($value->id_akun == $temp['user_id'] && $value->flag_usulan == 2) { ?>
                                                                                 <a class="edit btn btn-primary btn-xs" href="javascript:;">Ubah Progress</a>
-                                                                            <?php } ?>
+        <?php } ?>
                                                                         </td>
                                                                         <td></td>
                                                                     </tr>
@@ -220,56 +223,69 @@
                                                 </div>
                                             </section>
                                         </div>
-                                    </div>
-                                    <?php if (count($my_staff) > 0) { ?>
-                                        <div id="penilaianPekerjaan" class="tab-pane">
-                                            <?php $this->load->view('pekerjaan/penilaian'); ?>
-                                        </div>
-                                    <?php } ?>
 
 
 
 
 
+                                        <div class="panel-body">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()             ?>/pekerjaan/usulan_pekerjaan">
+                                                <div class="form-group">
+                                                    <div class="col-lg-12">
+                                                        <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div id="box_komentar" style="display: block">
+                                                <div class="form">
+                                                    <form class="cmxform form-horizontal " id="signupForm" method="post" action="javascript:void(0)">
+                                                        <input type="hidden" id="is_isi_komentar" name="is_isi_komentar" value="true"/>
+                                                        <input type="hidden" id="id_detail_pkj" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
+                                                        <div class="form-group">
+                                                            <div id="lihat_komen" class="col-lg-12">
 
-                                    <div class="panel-body">
-                                        <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()           ?>/pekerjaan/usulan_pekerjaan">
-                                            <div class="form-group">
-                                                <div class="col-lg-12">
-                                                    <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
+                                                            </div>
+                                                            <div id="tes" class="col-lg-12">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group ">
+                                                            <div class="col-lg-12">
+                                                                <textarea class="form-control" id="komentar_pkj" name="komentar_pkj" rows="12"></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-lg-12">
+                                                                <button id="save_komen" class="btn btn-primary" type="button">Tambah Komentar</button>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </form>
                                                 </div>
                                             </div>
-                                        </form>
-                                        <div id="box_komentar" style="display: block">
-                                            <div class="form">
-                                                <form class="cmxform form-horizontal " id="signupForm" method="post" action="javascript:void(0)">
-                                                    <input type="hidden" id="is_isi_komentar" name="is_isi_komentar" value="true"/>
-                                                    <input type="hidden" id="id_detail_pkj" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
-                                                    <div class="form-group">
-                                                        <div id="lihat_komen" class="col-lg-12">
-
-                                                        </div>
-                                                        <div id="tes" class="col-lg-12">
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group ">
-                                                        <div class="col-lg-12">
-                                                            <textarea class="form-control" id="komentar_pkj" name="komentar_pkj" rows="12"></textarea>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <div class="col-lg-12">
-                                                            <button id="save_komen" class="btn btn-primary" type="button">Tambah Komentar</button>
-                                                        </div>
-                                                    </div>
-
-
-                                                </form>
-                                            </div>
                                         </div>
+
+
+
+
+
+
+
                                     </div>
+                                        <?php if (count($my_staff) > 0) { ?>
+                                        <div id="penilaianPekerjaan" class="tab-pane">
+                                        <?php $this->load->view('pekerjaan/penilaian'); ?>
+                                        </div>
+<?php } ?>
+
+
+
+
+
+
+
 
 
 
@@ -311,7 +327,7 @@
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-        <?php $this->load->view('taskman_rightbar_page') ?>
+<?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>

@@ -42,6 +42,7 @@ class home extends ceklogin {
             $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
             $my_staff = array();
             //print_r($staff);
+            var_dump($staff);
             if (isset($staff->error)) 
             {
                 $staff=array();
