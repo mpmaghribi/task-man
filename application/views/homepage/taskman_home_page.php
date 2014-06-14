@@ -119,18 +119,18 @@
                                                             $list_id_pekerjaan[]=$value->id_pekerjaan;
                                                             ?>
                                                             <tr>
-                                                                <td>
+                                                                <td style="vertical-align: middle">
                                                                     <a href="#">
                                                                         <?php echo $i; ?>
                                                                     </a>
                                                                 </td>
-                                                                <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
-                                                                <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
-                                                                <td id="assign_to_<?php //echo $value->id_pekerjaan;          ?>"><?php foreach ($users as $value2) { ?>
+                                                                <td style="vertical-align: middle" class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
+                                                                <td style="vertical-align: middle"> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
+                                                                <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;          ?>"><?php foreach ($users as $value2) { ?>
                                                                         <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                                                                     <?php } ?></td>
-                                                                <td id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
-                                                                <td>
+                                                                <td style="vertical-align: middle" id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
+                                                                <td style="vertical-align: middle">
                                                                     <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
                                                                         <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
                                                                         <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
