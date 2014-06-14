@@ -42,7 +42,7 @@ class home extends ceklogin {
             $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
             $my_staff = array();
             //print_r($staff);
-            var_dump($staff);
+            //var_dump($staff);
             if (isset($staff->error)) 
             {
                 $staff=array();
@@ -65,8 +65,8 @@ class home extends ceklogin {
         }
         $this->load->view('homepage/taskman_home_page', $data);
         //print_r($data);
-        
-        
+        $this->session->set_userdata("prev","home");
+        $this->session->set_userdata("prev_text","Kembali ke Dashboard");
     }
 
     public function recent_activity() {

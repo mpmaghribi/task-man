@@ -38,7 +38,7 @@ class testing extends CI_Controller {
     }
 
     public function session() {
-        $session = $this->session->userdata('logged_in');
+        $session = $this->session->all_userdata();
         var_dump($session);
         print_r($session);
     }

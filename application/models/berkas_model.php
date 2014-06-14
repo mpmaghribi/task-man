@@ -15,14 +15,14 @@ class berkas_model extends CI_Model {
                 }
         $id_pekerjaan=  pg_escape_string($id_pekerjaan);
         $path = pg_escape_string($path);
-        $query = "insert into file (id_pekerjaan, nama_file) values ('$id_pekerjaan','$path')";
+        $query = "insert into file (id_pekerjaan, nama_file, waktu) values ('$id_pekerjaan','$path',now())";
         //echo $query;
         $this->db->query($query);
     }
     public function get_berkas_of_pekerjaan($id_pekerjaan) {
         if($id_pekerjaan==NULL||  strlen($id_pekerjaan)==0)
             return NULL;
-        $query = "select * from file where id_pekerjaan=$id_pekerjaan";
+        $query = "select * from file where id_pekerjaan=$id_pekerjaan order by waktu";
         $query = $this->db->query($query);
         return $query->result();
     }

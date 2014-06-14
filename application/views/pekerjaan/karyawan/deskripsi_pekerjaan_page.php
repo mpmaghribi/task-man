@@ -1,4 +1,10 @@
 <?php $this->load->view("taskman_header_page") ?> 
+<?php
+$user = array();
+foreach ($users as $u) {
+    $user[$u->id_akun] = $u->nama;
+}
+?>
 <body>
 
     <section id="container" >
@@ -79,6 +85,12 @@
                                         <div class="col-md-12">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
+                                                    Penanggung Jawab
+                                                </h4>
+                                                <p style="font-size: larger" id="nama_penanggung_jawab">
+                                                    <?php if ($deskripsi_pekerjaan[0]->id_penanggung_jawab != null) echo $user[$deskripsi_pekerjaan[0]->id_penanggung_jawab]; ?>
+                                                </p>
+                                                <h4 style="color: #1FB5AD;">
                                                     Nama Pekerjaan
                                                 </h4>
                                                 <p style="font-size: larger">
@@ -144,7 +156,7 @@
                                                                 $i = 1;
                                                                 foreach ($list_berkas as $berkas) {
                                                                     ?>
-                                                                    <tr id="berkas_<?php echo $berkas->id_file; ?>">
+                                                                    <tr id="berkas_<?php echo $berkas->id_file; ?>" title="diupload pada <?php echo date("d M Y H:i", strtotime($berkas->waktu)); ?>">
                                                                         <td><?php echo $i; ?></td>
                                                                         <td><?php echo basename($berkas->nama_file); ?></td>
                                                                         <td style="text-align: right">
@@ -190,11 +202,10 @@
                                                                     <tr>
                                                                         <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td id="nama_staff_<?php //echo $value->id_akun;                ?>"><?php //echo $value->id_akun;                ?><?php foreach ($users as $value2) { ?>
+                                                                        <td id="nama_staff_"><?php foreach ($users as $value2) { ?>
                                                                                 <?php
                                                                                 if ($value->id_akun == $value2->id_akun) {
                                                                                     echo $value2->nama;
-                                                                                    
                                                                                 }
                                                                             }
                                                                             ?>
@@ -209,7 +220,7 @@
                                                                         <td>
                                                                             <?php if ($value->id_akun == $temp['user_id'] && $value->flag_usulan == 2) { ?>
                                                                                 <a class="edit btn btn-primary btn-xs" href="javascript:;">Ubah Progress</a>
-        <?php } ?>
+                                                                            <?php } ?>
                                                                         </td>
                                                                         <td></td>
                                                                     </tr>
@@ -229,7 +240,7 @@
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()             ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()              ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -274,11 +285,11 @@
 
 
                                     </div>
-                                        <?php if (count($my_staff) > 0) { ?>
+                                    <?php if (count($my_staff) > 0) { ?>
                                         <div id="penilaianPekerjaan" class="tab-pane">
-                                        <?php $this->load->view('pekerjaan/penilaian'); ?>
+                                            <?php $this->load->view('pekerjaan/penilaian'); ?>
                                         </div>
-<?php } ?>
+                                    <?php } ?>
 
 
 
@@ -318,16 +329,16 @@
 
                 <!-- END JAVASCRIPTS -->
                 <script>
-                                                                                    jQuery(document).ready(function() {
-                                                                                        EditableTableProgress.init();
-                                                                                    });
+                                                                        jQuery(document).ready(function() {
+                                                                            EditableTableProgress.init();
+                                                                        });
                 </script>
                 <!-- page end-->
             </section>
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-<?php $this->load->view('taskman_rightbar_page') ?>
+        <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
@@ -487,29 +498,7 @@
                 }
             });
         }
-        var my_staff = jQuery.parseJSON('<?php echo json_encode($my_staff); ?>');
-        var jumlah_staff = my_staff.length;
-        var list_id_akun_detil_pekerjaan = [];
-<?php foreach ($listassign_pekerjaan as $detil) { ?>list_id_akun_detil_pekerjaan.push('<?php echo $detil->id_akun; ?>');<?php } ?>
-        var jumlah_id_akun_detil_pekerjaan = list_id_akun_detil_pekerjaan.length;
-        for (var i = 0; i < jumlah_id_akun_detil_pekerjaan; i++) {
-            var nama = "";
-            var id_akun = list_id_akun_detil_pekerjaan[i];
-            //alert('id akun = ' + id_akun);
-            if (id_akun === '<?php echo $temp["user_id"]; ?>') {
-                nama = '<?php echo $temp["nama"]; ?>';
-            } else {
-                for (var j = 0; j < jumlah_staff; j++) {
-                    //alert('id staff = ' + my_staff[j]["id_akun"]);
-                    if (id_akun === my_staff[j]["id_akun"]) {
-                        nama = my_staff[j]["nama"];
-                        break;
-                    }
-                }
-            }
-            $('#nama_staff_' + id_akun).html(nama);
-            $('#komentar_nama_' + id_akun).html(nama);
-        }
+
         document.title = 'Deskripsi Pekerjaan: <?php echo $nama_pekerjaan; ?> - Task Management';
         //$('#komentar').trigger();
         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + document.getElementById('id_detail_pkj').value);

@@ -358,7 +358,7 @@ class pekerjaan extends ceklogin {
         if ($status == 1) {
             $data['judul_kesalahan'] = $judul_kesalahan;
             $data['deskripsi_kesalahan'] = $deskripsi_kesalahan;
-            $data['data_akun']=$temp;
+            $data['data_akun'] = $temp;
             $this->load->view('pekerjaan/kesalahan', $data);
         }
         if ($status == 0) {
@@ -368,7 +368,6 @@ class pekerjaan extends ceklogin {
                 foreach ($staff as $index => $val) {//val itu nip
                     $this->pekerjaan_model->tambah_detil_pekerjaan($val, $id_pekerjaan);
                 }
-
 
                 //echo "path = $path<br/>";
                 if (isset($_FILES["berkas"])) {
@@ -630,22 +629,30 @@ class pekerjaan extends ceklogin {
         $id_pekerjaan = pg_escape_string($this->input->get("id_pekerjaan"));
         $this->load->model(array('pekerjaan_model', 'berkas_model'));
         $session = $this->session->userdata('logged_in');
-        $cek = $this->pekerjaan_model->cek_pemberi_pekerjaan($id_pekerjaan);
+        $cek = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
         $hasil['status'] = 'error';
         //print_r($cek);
-        if (count($cek) > 0 && $cek[0]->id_akun == $session['user_id']) {
-            $berkas = $this->berkas_model->get_berkas($id_file);
-            $hapus = $this->berkas_model->hapus_file($id_file);
-            if ($hapus == true) {
-                $hasil['status'] = 'OK';
-                unlink($berkas[0]->nama_file);
-            } else
-                $hasil['reason'] = 'gagal menghapus';
+        if (count($cek) > 0) {
+            $berhak = false;
+            if ($cek[0]->id_penanggung_jawab == $session['user_id']) {
+                $berhak = true;
+            } else if ($cek[0]->flag == '1' && $cek[0]->id_pengusul == $session['id_akun']) {
+                $berhak = true;
+            } else {
+                $data['reason']="Anda tidak berhak menghapus berkas";
+            }
+            if ($berhak) {
+                $berkas = $this->berkas_model->get_berkas($id_file);
+                $hapus = $this->berkas_model->hapus_file($id_file);
+                if ($hapus == true) {
+                    $hasil['status'] = 'OK';
+                    unlink($berkas[0]->nama_file);
+                } else
+                    $hasil['reason'] = 'gagal menghapus';
+            }
         }else {
             $hasil['reason'] = 'Anda tidak berhak menghapus berkas';
         }
-
-
 
         echo json_encode($hasil);
     }
@@ -1366,7 +1373,7 @@ class pekerjaan extends ceklogin {
             if ($p[0]->flag_usulan == '1') {
                 $data['usulan'] = true;
                 //var_dump($data['atasan']);
-                $data['atasan'] = $data['atasan'] && $p[0]->id_akun == $temp['id_akun'];
+                $data['atasan'] = $data['atasan'] && $p[0]->id_penanggung_jawab == $temp['id_akun'];
                 //var_dump($data['atasan']);
             }
             $data['atasan'] = $data['atasan'] || $temp['hakakses'] == 'Administrator';
@@ -1402,9 +1409,7 @@ class pekerjaan extends ceklogin {
         }
     }
 
-    public function
-
-    get_idModule() {
+    public function get_idModule() {
         
     }
 
