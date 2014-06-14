@@ -63,14 +63,37 @@ class home extends ceklogin {
                 }
             $data['detil_pekerjaan_staff'] = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
         }
+        $data['bawahan'] = json_decode(
+                file_get_contents(
+                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/".$temp['user_id']."/format/json"
+                        ));
         $this->load->view('homepage/taskman_home_page', $data);
         //print_r($data);
         $this->session->set_userdata("prev","home");
         $this->session->set_userdata("prev_text","Kembali ke Dashboard");
     }
 
+    public function recent_activity_staff() {
+        $temp = $this->session->userdata("logged_in");
+        $data['temp'] = $temp;
+        $id = $temp["user_id"];
+        $data['bawahan'] = json_decode(
+                file_get_contents(
+                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/".$id."/format/json"
+                        ));
+        $data['activity'] = $this->taskman_repository->sp_recent_activity();
+
+        $this->load->view('recent_activity_staff', $data);
+    }
+    
     public function recent_activity() {
-        $data['temp'] = $this->session->userdata("logged_in");
+        $temp = $this->session->userdata("logged_in");
+        $data['temp'] = $temp;
+        $id = $temp["user_id"];
+        $data['bawahan'] = json_decode(
+                file_get_contents(
+                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/".$id."/format/json"
+                        ));
         $data['activity'] = $this->taskman_repository->sp_recent_activity();
 
         $this->load->view('recent_activity_page', $data);

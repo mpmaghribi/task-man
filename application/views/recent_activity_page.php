@@ -1,4 +1,5 @@
 <?php foreach ($activity as $value){?>
+<?php if ($temp['user_id'] == $value->id_akun){?>
 <div class="prog-row">
     <div class="user-thumb rsn-activity">
         <i class="fa fa-clock-o"></i>
@@ -17,4 +18,4 @@
         </p>
     </div>
 </div>
-<?php }?>
+<?php }}?>
