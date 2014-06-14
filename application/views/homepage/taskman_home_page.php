@@ -103,7 +103,7 @@
                                                         <th class="hidden-phone">Pekerjaan</th>
                                                         <th>Deadline</th>
                                                         <th>Assign To</th>
-                                                        <th>Status</th>
+                                                        <th style="min-width: 150px">Status</th>
                                                         <th></th>
             <!--                                                            <th>Progress</th>-->
                                                     </tr>

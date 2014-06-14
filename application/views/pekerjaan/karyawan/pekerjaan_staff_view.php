@@ -13,8 +13,8 @@
                             <th>Deadline</th>
                             <th>Assign To</th>
                             <th>Prioritas</th>
-                            <th>Status</th>
-                            <th style="text-align: right"></th>
+                            <th style="min-width: 150px">Status</th>
+                            <th style="text-align: right;min-width: 140px"></th>
                         </tr>
                     </thead>
                     <tbody>

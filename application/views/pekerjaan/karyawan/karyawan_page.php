@@ -1,5 +1,5 @@
 <?php $this->load->view("taskman_header_page") ?> 
-<script src="<?php echo base_url()?>/assets/js/status_pekerjaan.js"></script>
+<script src="<?php echo base_url() ?>/assets/js/status_pekerjaan.js"></script>
 <body>
 
     <section id="container" >
@@ -44,18 +44,20 @@
                                                                 <th class="hidden-phone">Pekerjaan</th>
                                                                 <th>Deadline</th>
                                                                 <th>Assign To</th>
-                                                                <th>Status</th>
+                                                                <th style="min-width: 150px">Status</th>
                                                                 <th></th>
     <!--                                                            <th>Progress</th>-->
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <?php if (isset($pkj_karyawan)) { 
+                                                            <?php
+                                                            if (isset($pkj_karyawan)) {
                                                                 $sekarang = date('Y-m-d');
-                                                                $i = 1;
+                                                                $i = 0;
                                                                 foreach ($pkj_karyawan as $value) {
                                                                     ?>
-                                                                    <?php if ($value->flag_usulan == 2) { ?>
+                                                                    <?php if ($value->flag_usulan == 2) { 
+                                                                        $i++;?>
                                                                         <tr>
                                                                             <td>
                                                                                 <a href="#">
@@ -73,14 +75,15 @@
                                                                                 </form>
                                                                             </td>
                                                                         </tr>
-                                                        <script>
-                                                            ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $value->tgl_mulai; ?>','<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>','<?php echo $value->status; ?>', <?php echo $value->progress;?>);
-                                                        </script>
-                                                                    <?php } 
-                                                                    $i++;
+                                                                    <script>
+                                                                        ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $value->tgl_mulai; ?>', '<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>', '<?php echo $value->status; ?>', <?php echo $value->progress; ?>);
+                                                                    </script>
+                                                                    <?php
                                                                 }
-                                                                ?>
-                                                            <?php } ?>
+                                                                
+                                                            }
+                                                            ?>
+                                                        <?php } ?>
 
                                                         </tbody>
                                                     </table>
@@ -100,7 +103,7 @@
                                                                 <th class="hidden-phone">Pekerjaan</th>
                                                                 <th>Deadline</th>
                                                                 <th>Assign To</th>
-                                                                <th>Status</th>
+                                                                <th style="min-width: 150px">Status</th>
                                                                 <th></th>
     <!--                                                            <th>Progress</th>-->
                                                             </tr>
@@ -115,7 +118,9 @@
                                                                         <tr>
                                                                             <td>
                                                                                 <a href="#">
-                                                                                    <?php echo $i; $i++;?>
+                                                                                    <?php echo $i;
+                                                                                    $i++;
+                                                                                    ?>
                                                                                 </a>
                                                                             </td>
                                                                             <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
@@ -130,18 +135,14 @@
                                                                                 </form>
                                                                             </td>
                                                                         </tr>
-                                                                        <script>
-                                                            ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', 
-                        <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $value->tgl_mulai; ?>',
-                            '<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>',
-                                        '<?php echo $value->status; ?>', <?php  echo $value->progress;?>);
-                                                        </script>
-                                                                    <?php } 
-                                                                    
+                                                                    <script>
+                                                                        ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $value->tgl_mulai; ?>', '<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>', '<?php echo $value->status; ?>', <?php echo $value->progress; ?>);
+                                                                    </script>
+                                                                    <?php
                                                                 }
-                                                                ?>
-
-                                                            <?php } ?>
+                                                            }
+                                                        }
+                                                        ?>
 
                                                         </tbody>
                                                     </table>
@@ -149,7 +150,7 @@
                                             </div>
                                         </section>
                                     </div>
-                                    <?php if (false) { ?>
+<?php if (false) { ?>
                                         <div id="assignPekerjaan" class="tab-pane">
                                             <div class="form">
                                                 <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan2" enctype="multipart/form-data">
@@ -229,25 +230,25 @@
                                                 </form>
                                             </div>                                            
                                         </div>
-                                    <?php } ?>
+<?php } ?>
                                     <div id="TambahPekerjaan" class="tab-pane">
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan" enctype="multipart/form-data">
-                                                <?php if ($atasan != null || isset($atasan)){?>
-                                                <div class="form-group ">
-                                                    <label for="atasan" class="control-label col-lg-3">Atasan</label>
-                                                    <div class="col-lg-6">
-                                                        
-                                                        <select name="atasan" class="form-control m-bot15">
-                                                            
-                                                            <?php foreach ($atasan as $value) { ?>              
-                                                              <option value="<?php echo $value->id_akun?>"><?php echo $value->nama?> - <?php echo $value->nama_jabatan?></option>  
-                                                            <?php }?>
-                                                              
-                                                        </select>
+<?php if ($atasan != null || isset($atasan)) { ?>
+                                                    <div class="form-group ">
+                                                        <label for="atasan" class="control-label col-lg-3">Atasan</label>
+                                                        <div class="col-lg-6">
+
+                                                            <select name="atasan" class="form-control m-bot15">
+
+                                                                <?php foreach ($atasan as $value) { ?>              
+                                                                    <option value="<?php echo $value->id_akun ?>"><?php echo $value->nama ?> - <?php echo $value->nama_jabatan ?></option>  
+    <?php } ?>
+
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <?php }?>
+<?php } ?>
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                     <div class="col-lg-6">
@@ -363,7 +364,7 @@
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-        <?php $this->load->view('taskman_rightbar_page') ?>
+<?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
@@ -419,7 +420,7 @@
         });
     </script>
 
-    <?php $this->load->view("taskman_footer_page") ?>
+<?php $this->load->view("taskman_footer_page") ?>
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
 
     <!-- END JAVASCRIPTS -->
@@ -428,7 +429,7 @@
             EditableTableProgress.init();
         });
     </script>
-    <?php if (count($my_staff) > 0) { ?>
+<?php if (count($my_staff) > 0) { ?>
         <script>
             var list_nip = [];
             var list_nama = [];
@@ -517,7 +518,7 @@
             document.title = "Task Management - Edit Pekerjaan";
 
         </script>
-    <?php } ?>
+<?php } ?>
     <script>
         function pekerjaan_saya_set_nama(id, isi) {
             var sep = '';
