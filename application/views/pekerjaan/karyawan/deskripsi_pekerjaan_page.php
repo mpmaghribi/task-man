@@ -21,21 +21,23 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#deskripsiPekerjaan">Deskripsi Pekerjaan</a>
                                     </li>
-                                    <?php 
+                                    <?php
                                     //print_r($deskripsi_pekerjaan[0]);
                                     //print_r($data_akun);
-                                    if ($atasan&& $deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
+                                    if ($atasan && $deskripsi_pekerjaan[0]->flag_usulan == '2') {
+                                        ?>
                                         <li class="">
                                             <a data-toggle="tab" href="#penilaianPekerjaan">Penilaian Kerja Staff</a>
                                         </li>
-<?php } ?>
+                                    <?php } ?>
                                 </ul>
-                                    <?php 
-                                    $pengusul = $deskripsi_pekerjaan[0]->flag_usulan=='1' && $ikut_serta;
-                                    //echo "pengusul = $pengusul";
-                                    if ($bisa_validasi || $bisa_edit || $bisa_batalkan) { ?>
+                                <?php
+                                $pengusul = $deskripsi_pekerjaan[0]->flag_usulan == '1' && $ikut_serta;
+                                //echo "pengusul = $pengusul";
+                                if ($bisa_validasi || $bisa_edit || $bisa_batalkan) {
+                                    ?>
                                     <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    <?php if ($bisa_validasi) { ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi(<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>);">Validasi</a><?php } ?>
+                                        <?php if ($bisa_validasi) { ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi(<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>);">Validasi</a><?php } ?>
                                         <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
                                         <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                     </div>
@@ -52,13 +54,13 @@
                                                     success: function(response) { // on success..
                                                         var json = jQuery.parseJSON(response);
                                                         if (json.status === "OK") {
-                                                            <?php 
-                                                            $lempar_url = 'karyawan';
-                                                            if($this->session->userdata('prev')!=null){
-                                                                $lempar_url=$this->session->userdata('prev');
-                                                            }
-                                                            ?>
-                                                            window.location='<?php echo base_url().'pekerjaan/'. $lempar_url; ?>';
+    <?php
+    $lempar_url = 'karyawan';
+    if ($this->session->userdata('prev') != null) {
+        $lempar_url = $this->session->userdata('prev');
+    }
+    ?>
+                                                            window.location = '<?php echo base_url() . 'pekerjaan/' . $lempar_url; ?>';
                                                         } else {
                                                             alert("Gagal membatalkan pekerjaan, " + json.reason);
                                                         }
@@ -67,7 +69,7 @@
                                             }
                                         });
                                     </script>
-<?php } ?>
+                                <?php } ?>
                             </header>
                             <div class="panel-body">
                                 <div class="tab-content">
@@ -80,10 +82,10 @@
                                                     Nama Pekerjaan
                                                 </h4>
                                                 <p style="font-size: larger">
-<?php
-if (isset($deskripsi_pekerjaan)) {
-    $nama_pekerjaan = "";
-    ?>
+                                                    <?php
+                                                    if (isset($deskripsi_pekerjaan)) {
+                                                        $nama_pekerjaan = "";
+                                                        ?>
                                                         <?php
                                                         foreach ($deskripsi_pekerjaan as $value) {
                                                             echo $value->nama_pekerjaan;
@@ -96,7 +98,7 @@ if (isset($deskripsi_pekerjaan)) {
                                                     Penjelasan Pekerjaan
                                                 </h4>
                                                 <p style="font-size: larger">
-<?php if (isset($deskripsi_pekerjaan)) { ?>
+                                                    <?php if (isset($deskripsi_pekerjaan)) { ?>
                                                         <?php foreach ($deskripsi_pekerjaan as $value) { ?>
                                                             <?php echo $value->deskripsi_pekerjaan; ?>
                                                             <?php
@@ -108,17 +110,17 @@ if (isset($deskripsi_pekerjaan)) {
                                                     Jenis Pekerjaan
                                                 </h4>
                                                 <p style="font-size: larger">
-<?php echo $deskripsi_pekerjaan[0]->nama_sifat_pekerjaan; ?>
+                                                    <?php echo $deskripsi_pekerjaan[0]->nama_sifat_pekerjaan; ?>
                                                 </p>
                                                 <h4 style="color: #1FB5AD;">
                                                     Deadline
                                                 </h4>
                                                 <p style="font-size: larger">
-<?php
-echo date("d M Y", strtotime($deskripsi_pekerjaan[0]->tgl_mulai));
-echo " - ";
-echo date("d M Y", strtotime($deskripsi_pekerjaan[0]->tgl_selesai));
-?>
+                                                    <?php
+                                                    echo date("d M Y", strtotime($deskripsi_pekerjaan[0]->tgl_mulai));
+                                                    echo " - ";
+                                                    echo date("d M Y", strtotime($deskripsi_pekerjaan[0]->tgl_selesai));
+                                                    ?>
                                                 </p>
                                             </section>
                                         </div>
@@ -137,27 +139,26 @@ echo date("d M Y", strtotime($deskripsi_pekerjaan[0]->tgl_selesai));
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-<?php
-if (isset($list_berkas)) {
-    $i = 1;
-    foreach ($list_berkas as $berkas) {
-        ?>
+                                                            <?php
+                                                            if (isset($list_berkas)) {
+                                                                $i = 1;
+                                                                foreach ($list_berkas as $berkas) {
+                                                                    ?>
                                                                     <tr id="berkas_<?php echo $berkas->id_file; ?>">
                                                                         <td><?php echo $i; ?></td>
                                                                         <td><?php echo basename($berkas->nama_file); ?></td>
                                                                         <td style="text-align: right">
                                                                             <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() . $berkas->nama_file ?>');">Download</a>
-                                                                           <?php 
-                                                                           if ($atasan || $pengusul) { ?>
-                                                                            <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
-                                                                           <?php } ?>
+                                                                            <?php if ($atasan || $pengusul) { ?>
+                                                                                <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
+                                                                            <?php } ?>
                                                                         </td>
                                                                     </tr>
-        <?php
-        $i++;
-    }
-}
-?>
+                                                                    <?php
+                                                                    $i++;
+                                                                }
+                                                            }
+                                                            ?>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -181,16 +182,19 @@ if (isset($list_berkas)) {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-<?php
-if (isset($listassign_pekerjaan)) {
-    $i = 1;
-    foreach ($listassign_pekerjaan as $value) {
-        ?>
+                                                            <?php
+                                                            if (isset($listassign_pekerjaan)) {
+                                                                $i = 1;
+                                                                foreach ($listassign_pekerjaan as $value) {
+                                                                    ?>
                                                                     <tr>
                                                                         <td style="display: none"><?php echo $value->id_detil_pekerjaan ?></td>
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td id="nama_staff_<?php //echo $value->id_akun;           ?>"><?php //echo $value->id_akun;           ?><?php foreach ($users as $value2) { ?>
-            <?php if ($value->id_akun == $value2->id_akun) {  echo $value2->nama ?><?php } ?>
+                                                                        <td id="nama_staff_<?php //echo $value->id_akun;              ?>"><?php //echo $value->id_akun;              ?><?php foreach ($users as $value2) { ?>
+                                                                                <?php
+                                                                                if ($value->id_akun == $value2->id_akun) {
+                                                                                    echo $value2->nama
+                                                                                    ?><?php } ?>
                                                                             <?php } ?></td>
                                                                         <td>
                                                                             <div class="progress progress-striped progress-xs">
@@ -200,47 +204,45 @@ if (isset($listassign_pekerjaan)) {
                                                                             </div>
                                                                         </td>
                                                                         <td>
-        <?php if ($value->id_akun == $temp['user_id'] && $value->flag_usulan == 2) { ?>
+                                                                            <?php if ($value->id_akun == $temp['user_id'] && $value->flag_usulan == 2) { ?>
                                                                                 <a class="edit btn btn-primary btn-xs" href="javascript:;">Ubah Progress</a>
                                                                             <?php } ?>
                                                                         </td>
                                                                         <td></td>
                                                                     </tr>
-        <?php
-        $i++;
-    }
-}
-?>
+                                                                    <?php
+                                                                    $i++;
+                                                                }
+                                                            }
+                                                            ?>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </section>
                                         </div>
                                     </div>
-<?php if (count($my_staff) > 0) { ?>
+                                    <?php if (count($my_staff) > 0) { ?>
                                         <div id="penilaianPekerjaan" class="tab-pane">
-                                        <?php $this->load->view('pekerjaan/penilaian'); ?>
+                                            <?php $this->load->view('pekerjaan/penilaian'); ?>
                                         </div>
-                                        <?php } ?>
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
+                                    <?php } ?>
+
+
+
+
+
+
                                     <div class="panel-body">
-                                        <form class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()       ?>/pekerjaan/usulan_pekerjaan">
+                                        <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()           ?>/pekerjaan/usulan_pekerjaan">
                                             <div class="form-group">
                                                 <div class="col-lg-12">
                                                     <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
                                                 </div>
                                             </div>
                                         </form>
-                                        <div id="box_komentar" style="display: <?php echo $display ?>">
+                                        <div id="box_komentar" style="display: block">
                                             <div class="form">
-
-                                                <form class="cmxform form-horizontal " id="signupForm" method="post" action="#<?php //echo $_SERVER['REQUEST_URI'];       ?>">
-                                                    <?php //echo $_SERVER['REQUEST_URI']; ?>
+                                                <form class="cmxform form-horizontal " id="signupForm" method="post" action="javascript:void(0)">
                                                     <input type="hidden" id="is_isi_komentar" name="is_isi_komentar" value="true"/>
                                                     <input type="hidden" id="id_detail_pkj" name="id_detail_pkj" value="<?php echo $id_pkj ?>"/>
                                                     <div class="form-group">
@@ -259,7 +261,7 @@ if (isset($listassign_pekerjaan)) {
 
                                                     <div class="form-group">
                                                         <div class="col-lg-12">
-                                                            <button id="save_komen" class="btn btn-primary" type="button">Save</button>
+                                                            <button id="save_komen" class="btn btn-primary" type="button">Tambah Komentar</button>
                                                         </div>
                                                     </div>
 
@@ -267,18 +269,18 @@ if (isset($listassign_pekerjaan)) {
                                                 </form>
                                             </div>
                                         </div>
-                                        </div>
+                                    </div>
 
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
+
+
+
+
+
+
+
+
+
+
 
                                 </div>
                             </div>
@@ -300,27 +302,16 @@ if (isset($listassign_pekerjaan)) {
 
                 <!-- END JAVASCRIPTS -->
                 <script>
-                                                                                jQuery(document).ready(function() {
-                                                                                    EditableTableProgress.init();
-                                                                                });
-                </script>
-                <script>
-
-                    $(function() {
-                        $('#komentar').click(function(e) {
-                            e.preventDefault();
-                            var id_pkj = document.getElementById('id_detail_pkj').value;
-                            $('#box_komentar').show();
-                            $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
-                        });
-                    });
+                                                                                    jQuery(document).ready(function() {
+                                                                                        EditableTableProgress.init();
+                                                                                    });
                 </script>
                 <!-- page end-->
             </section>
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-<?php $this->load->view('taskman_rightbar_page') ?>
+        <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
@@ -452,14 +443,15 @@ if (isset($listassign_pekerjaan)) {
                 url: "<?php echo site_url(); ?>/pekerjaan/komentar_pekerjaan", // the file to call
                 success: function(response) { // on success..
                     $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
+                    document.getElementById('komentar_pkj').value = '';
                 }
             });
         });
-        $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+
     </script>
-<?php
-$this->load->view("taskman_footer_page");
-?>
+    <?php
+    $this->load->view("taskman_footer_page");
+    ?>
     <script>
         function validasi(id_pekerjaan) {
             //alert("pekerjaan yg divalidasi " + id_pekerjaan);
@@ -503,6 +495,8 @@ $this->load->view("taskman_footer_page");
             $('#komentar_nama_' + id_akun).html(nama);
         }
         document.title = 'Deskripsi Pekerjaan: <?php echo $nama_pekerjaan; ?> - Task Management';
-
+        //$('#komentar').trigger();
+        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + document.getElementById('id_detail_pkj').value);
+        $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     </script>
 

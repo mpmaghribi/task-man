@@ -531,7 +531,7 @@ class pekerjaan extends ceklogin {
                 }
             }
             $data['ikut_serta'] = $ikut_serta;
-            if ($desk[0]->id_akun == $temp['user_id'] && $usulan) {//pemberi pekerjaan, atasan yg dituju pada pengusulan, atau atasan yg mengusulkan
+            if ($desk[0]->id_penanggung_jawab == $temp['user_id'] && $usulan) {//pemberi pekerjaan, atasan yg dituju pada pengusulan, atau atasan yg mengusulkan
                 $data['bisa_validasi'] = $usulan;
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;

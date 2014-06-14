@@ -61,23 +61,6 @@
                             </a>
                         </li>
                         
-<!--                        <li class="sub-menu">
-                            <a href="javascript:;">
-                                <i class="fa fa-book"></i>
-                                <span>Pekerjaan Karyawan</span>
-                            </a>
-                            <ul class="sub">
-                                <li><a href="<?php echo base_url()."pekerjaan/karyawan"?>">List Pekerjaan</a></li>
-                                <li><a href="#">Penilaian Kinerja</a></li>
-                                <li><a href="#">Grafik Kinerja Karyawan</a></li>
-                            </ul>
-                        </li>-->
-<!--                        <li class="sub-menu">
-                            <a href="javascript:;">
-                                <i class="fa fa-book"></i>
-                                <span>Usulan Pekerjaan</span>
-                            </a>
-                        </li>-->
                     </ul>
                 </li>
                  <?php }?>
