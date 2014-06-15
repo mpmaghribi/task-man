@@ -1,5 +1,5 @@
-var status_nama = ["Not Approved", "Belum Dibaca", "Sudah Dibaca", "Dikerjakan", "Selesai", "Terlambat"];
-var status_label = ["danger", "primary", "info", "success", "inverse", "default"];
+var status_nama = ["Not Approved", "Belum Dibaca", "Sudah Dibaca", "Dikerjakan", "Selesai", "Terlambat","Request Perpanjang"];
+var status_label = ["danger", "primary", "info", "success", "inverse", "default","default"];
 //console.log(status_nama);
 //console.log(status_label);
 var min_element_status = [];
@@ -60,6 +60,8 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_r
         } else {
             status_id = 5;
         }
+    }else if(flag==9){
+        status_id=6;
     }
     var new_label = '';
     console.log("total progress = " + total_progress[id]);
@@ -100,6 +102,6 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_r
         new_label = '<span class="label label-' + status_label[status_id] + ' label-mini">' + status_nama[status_id] + '</span>';
         //console.log('status adalah label');
     }
-    //console.log('set ' + id + ' to id status ' + status_id + ' => ' + status_nama[status_id] + '  |||||  ' + min_element_status[id]);
+    console.log('set ' + id + ' to id status ' + status_id + ' => ' + status_nama[status_id] + '  |||||  ' + min_element_status[id]);
     $('#' + id).html(new_label);
 }
