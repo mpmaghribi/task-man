@@ -652,6 +652,7 @@ class pekerjaan extends ceklogin {
             $data['atasan'] = $atasan;
             $data['ikut_serta'] = $ikut_serta;
             $data['sifat_terbuka'] = $sifat_terbuka;
+            $data['usulan']=$usulan;
         }
         //var_dump($data);
         if ($status == 1) {

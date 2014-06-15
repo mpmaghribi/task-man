@@ -38,7 +38,7 @@ foreach ($users as $u) {
                                     <?php } ?>
                                 </ul>
                                 <?php
-                                $pengusul = $deskripsi_pekerjaan[0]->flag_usulan == '1' && $ikut_serta;
+                                $pengusul = $usulan && $ikut_serta;
                                 //echo "pengusul = $pengusul";
                                 ?>
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
@@ -46,10 +46,10 @@ foreach ($users as $u) {
                                     <?php if ($bisa_edit) { ?><a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a><?php } ?>
                                     <?php if ($bisa_batalkan) { ?><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a><?php } ?>
                                     <?php
-                                    if ($terlambat > 0 && $ikut_serta) {
+                                    if ($terlambat > 0 && !$usulan) {
                                         if ($perpanjang) {
                                             ?><a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px">Perpanjangan Telah Dikirim</a><?php
-                                        } else {
+                                        } else if($ikut_serta){
                                             ?><a class="btn btn-primary btn-xs" data-toggle="modal" href="#modal_perpanjang" id="tombol_perpanjang" style="font-size: 10px">Minta Perpanjang</a><?php
                                         }
                                         ?><?php } ?>
