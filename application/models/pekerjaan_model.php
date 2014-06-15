@@ -362,7 +362,7 @@ class pekerjaan_model extends CI_Model {
     public function get_pekerjaan_staff($list_staff) {
         if (count($list_staff) == 0)
             return NULL;
-        $query = "select pekerjaan.*,detil_pekerjaan.* "
+        $query = "select pekerjaan.*,detil_pekerjaan.*, now() as sekarang "
                 . "from pekerjaan inner join detil_pekerjaan on "
                 . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan "
                 . "where (pekerjaan.flag_usulan='1' or pekerjaan.flag_usulan='2') "

@@ -26,7 +26,7 @@
                             //var_dump($my_staff);
                             $counter = 0;
                             $list_id_pekerjaan = array();
-                            $sekarang = date('Y-m-d');
+                            //$sekarang = date('Y-m-d');
                             foreach ($pekerjaan_staff as $kerja) {
                                 if (!in_array($kerja->id_pekerjaan, $list_id_pekerjaan)) {
 
@@ -50,7 +50,7 @@
                                     </tr>
                                 <?php } ?>
                             <script>
-                                ubah_status_pekerjaan('pekerjaan_staff_status_<?php echo $kerja->id_pekerjaan; ?>', <?php echo $kerja->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $kerja->tgl_mulai; ?>', '<?php echo $kerja->tgl_selesai; ?>', '<?php echo $kerja->tgl_read; ?>', '<?php echo $kerja->status; ?>', <?php echo $kerja->progress; ?>);
+                                ubah_status_pekerjaan('pekerjaan_staff_status_<?php echo $kerja->id_pekerjaan; ?>', <?php echo $kerja->flag_usulan; ?>, '<?php echo $kerja->sekarang; ?>', '<?php echo $kerja->tgl_mulai; ?>', '<?php echo $kerja->tgl_selesai; ?>', '<?php echo $kerja->tgl_read; ?>', '<?php echo $kerja->status; ?>', <?php echo $kerja->progress; ?>);
                             </script>
                             <?php
                         }
