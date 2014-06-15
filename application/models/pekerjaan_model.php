@@ -350,7 +350,7 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function get_pekerjaan($id_pekerjaan) {
-        $query = "select pekerjaan.* from pekerjaan "
+        $query = "select pekerjaan.*, now() as sekarang from pekerjaan "
                 . "where pekerjaan.id_pekerjaan = $id_pekerjaan";
         $query = $this->db->query($query);
         return $query->result();

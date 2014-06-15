@@ -490,6 +490,51 @@ class pekerjaan extends ceklogin {
 //        }
     }
 
+    public function req_perpanjangan() {
+        $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
+        $alasan = pg_escape_string($this->input->post('alasan'));
+        $this->load->mode(array('pekerjaan_model'));
+        $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
+        $status = 0;
+        $deskripsi_kesalahan = '';
+        $detil_pekerjaan = '';
+        $data['data_akun'] = $this->session->userdata('logged_in');
+        if (count($pekerjaan) > 0) {
+            $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan(array($id_pekerjaan));
+        } else {
+            $status = 1;
+            $deskripsi_kesalahan = 'pekerjaan tidak ditemukan';
+        }
+        $id_staff = array();
+        if ($status == 0) {
+            if (count($detil_pekerjaan) > 0) {
+                foreach ($detil_pekerjaan as $detil) {
+                    $id_staff[] = $detil->id_akun;
+                }
+            } else {
+                $status = 1;
+                $deskripsi_kesalahan = 'anda tidak berhak mengakses pekerjaan ini';
+            }
+        }
+        if ($status == 0) {
+            if (in_array($data['data_akun']['id_akun'], $id_staff)) {
+                $data['terlambat'] = strcmp(substr($pekerjaan[0]->sekarang, 0, 10), substr($pekerjaan[0]->tgl_selesai, 0, 10));
+            } else {
+                $status = 1;
+                $deskripsi_kesalahan = "anda tidak terlibat dalam pekerjaan ini";
+            }
+        }
+        if ($status == 0) {
+            if ($data['terlambat']) {
+                $update=array();
+                $update['flag_usulan']='9';
+            } else {
+                $status=1;
+                $deskripsi_kesalahan='pekerjaan tidak dalam keadaan terlambat';
+            }
+        }
+    }
+
     public function req_pending_task() {
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
@@ -549,6 +594,7 @@ class pekerjaan extends ceklogin {
             $desk = $data["deskripsi_pekerjaan"];
             $data['list_my_staff'] = $list_my_staff;
             $usulan = $desk[0]->flag_usulan == '1';
+            $data['perpanjang'] = $desk[0]->flag_usulan == '9';
             $admin = $temp['hakakses'] == 'Administrator';
             $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
             $detil_pekerjaan = $data['listassign_pekerjaan'];
@@ -608,7 +654,7 @@ class pekerjaan extends ceklogin {
             $data["id_pkj"] = $id_detail_pkj;
 
             $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
-            //print_r($data);
+            //var_dump($data);
             $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
         }
     }

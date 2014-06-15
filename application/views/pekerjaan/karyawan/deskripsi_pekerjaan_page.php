@@ -40,41 +40,48 @@ foreach ($users as $u) {
                                 <?php
                                 $pengusul = $deskripsi_pekerjaan[0]->flag_usulan == '1' && $ikut_serta;
                                 //echo "pengusul = $pengusul";
-                                
-                                    ?>
-                                    <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                        <?php if ($bisa_validasi) { ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi(<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>);">Validasi</a><?php } ?>
-                                        <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
-                                        <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
-                                    </div>
-                                    <script>
-                                        $('#tombol_batalkan_usulan').click(function(e) {
-                                            var c = confirm('Anda yakin ingin membatalkan pekerjaan "<?php echo $deskripsi_pekerjaan[0]->nama_pekerjaan; ?>"?');
-                                            if (c === false) {
-                                                e.preventDefault();
-                                            } else {
-                                                $.ajax({// create an AJAX call...
-                                                    data: "id_pekerjaan=::" + '<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>', // get the form data
-                                                    type: "get", // GET or POST
-                                                    url: "<?php echo site_url(); ?>/pekerjaan/batalkan_pekerjaan", // the file to call
-                                                    success: function(response) { // on success..
-                                                        var json = jQuery.parseJSON(response);
-                                                        if (json.status === "OK") {
-    <?php
-    $lempar_url = 'karyawan';
-    if ($this->session->userdata('prev') != null) {
-        $lempar_url = $this->session->userdata('prev');
-    }
-    ?>
-                                                            window.location = '<?php echo base_url() . 'pekerjaan/' . $lempar_url; ?>';
-                                                        } else {
-                                                            alert("Gagal membatalkan pekerjaan, " + json.reason);
-                                                        }
+                                ?>
+                                <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
+                                    <?php if ($bisa_validasi) { ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi(<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>);">Validasi</a><?php } ?>
+                                    <?php if ($bisa_edit) { ?><a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a><?php } ?>
+                                    <?php if ($bisa_batalkan) { ?><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a><?php } ?>
+                                    <?php
+                                    if ($terlambat > 0 && $ikut_serta) {
+                                        if ($perpanjang) {
+                                            ?><a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px">Perpanjangan Telah Dikirim</a><?php
+                                        } else {
+                                            ?><a class="btn btn-primary btn-xs" data-toggle="modal" href="#modal_perpanjang" id="tombol_perpanjang" style="font-size: 10px">Minta Perpanjang</a><?php
+                                        }
+                                        ?><?php } ?>
+                                </div>
+                                <script>
+                                    $('#tombol_batalkan_usulan').click(function(e) {
+                                        var c = confirm('Anda yakin ingin membatalkan pekerjaan "<?php echo $deskripsi_pekerjaan[0]->nama_pekerjaan; ?>"?');
+                                        if (c === false) {
+                                            e.preventDefault();
+                                        } else {
+                                            $.ajax({// create an AJAX call...
+                                                data: "id_pekerjaan=::" + '<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>', // get the form data
+                                                type: "get", // GET or POST
+                                                url: "<?php echo site_url(); ?>/pekerjaan/batalkan_pekerjaan", // the file to call
+                                                success: function(response) { // on success..
+                                                    var json = jQuery.parseJSON(response);
+                                                    if (json.status === "OK") {
+<?php
+$lempar_url = 'karyawan';
+if ($this->session->userdata('prev') != null) {
+    $lempar_url = $this->session->userdata('prev');
+}
+?>
+                                                        window.location = '<?php echo base_url() . 'pekerjaan/' . $lempar_url; ?>';
+                                                    } else {
+                                                        alert("Gagal membatalkan pekerjaan, " + json.reason);
                                                     }
-                                                });
-                                            }
-                                        });
-                                    </script>
+                                                }
+                                            });
+                                        }
+                                    });
+                                </script>
                             </header>
                             <div class="panel-body">
                                 <div class="tab-content">
@@ -333,9 +340,9 @@ foreach ($users as $u) {
                                                                     html += "</tr>";
 
                                                                     count++;
-//                                                                    $("#log_progress").val(json.data[i].progress);
-//                                                                    $("#tanggal").val(json.data[i].tanggal);
-//                                                                    $("#nama_pkj").val(json.data[i].nama_pekerjaan);
+                                                                    //                                                                    $("#log_progress").val(json.data[i].progress);
+                                                                    //                                                                    $("#tanggal").val(json.data[i].tanggal);
+                                                                    //                                                                    $("#nama_pkj").val(json.data[i].nama_pekerjaan);
                                                                 }
                                                                 html += "</tbody></table>";
                                                                 $("#history_progress").html(html);
@@ -347,6 +354,26 @@ foreach ($users as $u) {
                                                     });
                                                 }
                                             </script>
+                                            <div class="modal fade" id="modal_perpanjang" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            <h4 class="modal-title">Permintaan Perpanjangan</h4>
+                                                        </div>
+                                                        <div class="form modal-body">
+                                                            <!--                                                            <h5>Isi alasan perpanjangan</h5>-->
+                                                            <!--                                                            <textarea id="alasan_perpanjangan" placeholder="Isi Alasan Perpanjangan"></textarea>-->
+                                                            <div class="col-lg-12">
+                                                                <textarea class="form-control" id="alasan_perpanjangan" rows="10" placeholder="Isi Alasan Perpanjangan"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button data-dismiss="modal" class="btn btn-default" onclick="minta_perpanjang();" type="button">Kirim Permintaan</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="modal fade" id="LogProgress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
@@ -431,8 +458,10 @@ foreach ($users as $u) {
                                                                 <div class="form-group ">
                                                                     <label for="waktu_progress" class="control-label col-lg-3">Waktu Progress</label>
                                                                     <div class="col-lg-8">
-                                                                        <input readonly class="form-control" type="text" id="waktu_progress" name="waktu_progress" value="<?php date_default_timezone_set("Asia/Jakarta");
-                                                            echo date("Y-m-d h:i:s"); ?>" />
+                                                                        <input readonly class="form-control" type="text" id="waktu_progress" name="waktu_progress" value="<?php
+                                                                        date_default_timezone_set("Asia/Jakarta");
+                                                                        echo date("Y-m-d h:i:s");
+                                                                        ?>" />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -453,7 +482,7 @@ foreach ($users as $u) {
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                     ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -498,11 +527,11 @@ foreach ($users as $u) {
 
 
                                     </div>
-                                        <?php if (count($my_staff) > 0) { ?>
+                                    <?php if (count($my_staff) > 0) { ?>
                                         <div id="penilaianPekerjaan" class="tab-pane">
-                                        <?php $this->load->view('pekerjaan/penilaian'); ?>
+                                            <?php $this->load->view('pekerjaan/penilaian'); ?>
                                         </div>
-<?php } ?>
+                                    <?php } ?>
 
 
 
@@ -542,16 +571,16 @@ foreach ($users as $u) {
 
                 <!-- END JAVASCRIPTS -->
                 <script>
-                                                                jQuery(document).ready(function() {
-                                                                    EditableTableProgress.init();
-                                                                });
+                                                                    jQuery(document).ready(function() {
+                                                                        EditableTableProgress.init();
+                                                                    });
                 </script>
                 <!-- page end-->
             </section>
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-<?php $this->load->view('taskman_rightbar_page') ?>
+        <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
@@ -711,7 +740,26 @@ foreach ($users as $u) {
                 }
             });
         }
-
+        function minta_perpanjang() {
+            $.ajax({// create an AJAX call...
+                data: {
+                    id_pekerjaan : <?php echo $id_pkj; ?>, // get the form data
+                    alasan: $('#alasan_perpanjangan').html()
+                },
+                type: "POST", // GET or POST
+                url: "<?php echo site_url(); ?>/pekerjaan/req_perpanjangan", // the file to call
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+                    //alert(response);
+                    if (json.status === "OK") {
+                        //$('#div_acc_edit_cancel_usulan_pekerjaan').remove();
+                        $('#tombol_perpanjang').remove();
+                    } else {
+                        alert("Permintaan perpanjangan gagal, " + json.reason);
+                    }
+                }
+            });
+        }
         document.title = 'Deskripsi Pekerjaan: <?php echo $nama_pekerjaan; ?> - Task Management';
         //$('#komentar').trigger();
         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + document.getElementById('id_detail_pkj').value);
