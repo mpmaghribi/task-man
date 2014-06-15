@@ -15,7 +15,6 @@ class pekerjaan extends ceklogin {
         redirect(base_url() . 'pekerjaan/karyawan');
     }
 
-    
     function pengaduan() {
         //http://localhost:90/integrarsud/helpdesk/index.php/pengaduan/getDelegate/
         //print_r($url);
@@ -521,8 +520,10 @@ class pekerjaan extends ceklogin {
             //$is_isi_komentar = $this->input->get('is_isi_komentar');
             $data["deskripsi_pekerjaan"] = $this->pekerjaan_model->sp_deskripsi_pekerjaan($id_detail_pkj);
             $deskripsi_pekerjaan = $data['deskripsi_pekerjaan'];
+            //print_r($deskripsi_pekerjaan);
             if (count($deskripsi_pekerjaan) > 0) {
                 //pekerjaan berhasil di-query dari database, pekerjaan ada
+                $data['terlambat'] = strcmp(substr($deskripsi_pekerjaan[0]->sekarang, 0, 10), substr($deskripsi_pekerjaan[0]->tgl_selesai, 0, 10));
             } else {
                 $status = 1;
                 $nama_status = "Pekerjaan tidak ditemukan";
@@ -607,6 +608,7 @@ class pekerjaan extends ceklogin {
             $data["id_pkj"] = $id_detail_pkj;
 
             $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
+            //print_r($data);
             $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
         }
     }
@@ -781,37 +783,37 @@ class pekerjaan extends ceklogin {
         $data["data_akun"] = $session;
         $id_staff = $this->input->get("id_akun");
         $this->session->set_userdata('prev', 'pekerjaan_per_staff?id_akun=' . $id_staff);
-        
+
         //print_r($data['pekerjaan_staff']);
         $data["my_staff"] = $this->akun->my_staff($session["user_id"]);
         $data["id_staff"] = $id_staff;
         $data["nama_staff"] = "";
-		$status=1;
-		$judul_kesalahan = "Tidak Berhak";
-		$deskripsi_kesalahan = "Anda tidak berhak melihat daftar pekerjaan staff ini";
+        $status = 1;
+        $judul_kesalahan = "Tidak Berhak";
+        $deskripsi_kesalahan = "Anda tidak berhak melihat daftar pekerjaan staff ini";
         foreach ($data["my_staff"] as $st) {
             if ($st->id_akun == $id_staff) {
                 $data["nama_staff"] = $st->nama;
-				$status=0;
+                $status = 0;
                 break;
             }
         }
-		if($status==0){
-			$data["pekerjaan_staff"] = $this->pekerjaan_model->list_pekerjaan(array($id_staff));		
-			$list_id_pekerjaan = array();
-			foreach ($data["pekerjaan_staff"] as $pekerjaan) {
-				$list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
-			}
-			$data["detil_pekerjaan"] = json_encode($this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan));
-			//$data["my_staff"] = json_encode($data["my_staff"]);
-			$data['detil_progress']=$this->pekerjaan_model->get_progress_per_staff($id_staff);
-			$this->load->view('pekerjaan/pekerjaan_per_staff_page', $data);
-		}
-		if($status==1){
-			$data['judul_kesalahan']=$judul_kesalahan;
-			$data['deskripsi_kesalahan']=$deskripsi_kesalahan;
-			$this->load->view('pekerjaan/kesalahan',$data);
-		}
+        if ($status == 0) {
+            $data["pekerjaan_staff"] = $this->pekerjaan_model->list_pekerjaan(array($id_staff));
+            $list_id_pekerjaan = array();
+            foreach ($data["pekerjaan_staff"] as $pekerjaan) {
+                $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
+            }
+            $data["detil_pekerjaan"] = json_encode($this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan));
+            //$data["my_staff"] = json_encode($data["my_staff"]);
+            $data['detil_progress'] = $this->pekerjaan_model->get_progress_per_staff($id_staff);
+            $this->load->view('pekerjaan/pekerjaan_per_staff_page', $data);
+        }
+        if ($status == 1) {
+            $data['judul_kesalahan'] = $judul_kesalahan;
+            $data['deskripsi_kesalahan'] = $deskripsi_kesalahan;
+            $this->load->view('pekerjaan/kesalahan', $data);
+        }
     }
 
     /*
@@ -1324,7 +1326,7 @@ class pekerjaan extends ceklogin {
         $perubahan = $this->input->post("perubahan");
         $this->load->model("pekerjaan_model");
         $result = $this->pekerjaan_model->sp_updateprogress_pekerjaan($data, $id_detail_pkj);
-        $result2 = $this->pekerjaan_model->sp_tambah_progress($data, $id_detail_pkj,$perubahan);
+        $result2 = $this->pekerjaan_model->sp_tambah_progress($data, $id_detail_pkj, $perubahan);
 
 
         if ($result == 1 && $result2 == 1)
@@ -1340,16 +1342,16 @@ class pekerjaan extends ceklogin {
 //            redirect("login");
 //        }
     }
-    public function show_log_progress()
-    {
+
+    public function show_log_progress() {
         $temp = $this->session->userdata('logged_in');
         $id_detail_pkj = $this->input->post("id_detail_pkj");
         $id_akun = $this->input->post("user_id");
         $this->load->model("pekerjaan_model");
-        $result = $this->pekerjaan_model->sp_history_progress($id_akun,$id_detail_pkj);
+        $result = $this->pekerjaan_model->sp_history_progress($id_akun, $id_detail_pkj);
         //var_dump($result);
         $status = array(
-                'status' => 'OK', 'data' => $result);
+            'status' => 'OK', 'data' => $result);
 
         echo json_encode($status);
     }
@@ -1360,10 +1362,10 @@ class pekerjaan extends ceklogin {
         $id_detail_pkj = $this->input->post('id_detail_pkj');
         $id_akun = $this->input->post('user_id');
         $this->load->model("pekerjaan_model");
-        $result = $this->pekerjaan_model->sp_lihat_progress($id_akun,$id_detail_pkj);
+        $result = $this->pekerjaan_model->sp_lihat_progress($id_akun, $id_detail_pkj);
         //var_dump($result);
         $status = array(
-                'status' => 'OK', 'data' => $result);
+            'status' => 'OK', 'data' => $result);
 
         echo json_encode($status);
     }
