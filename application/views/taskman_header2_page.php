@@ -22,7 +22,7 @@
                     <i class="fa fa-tasks"></i>
                     <span class="badge bg-success" id="jumlah_pending_task"></span>
                 </a>
-                <ul class="dropdown-menu extended tasks-bar" id="bagian_pending_task">
+                <ul class="dropdown-menu extended tasks-bar" id="bagian_pending_task" style="overflow: scroll; max-height: 500px">
                     <li><p class="">Anda Tidak Memiliki Pending Task</p></li>
                     <li class="external">
                         <a href="<?php echo site_url(); ?>/pekerjaan/karyawan">Lihat Semua Task</a>

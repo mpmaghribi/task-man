@@ -552,9 +552,25 @@ class pekerjaan extends ceklogin {
     public function req_pending_task() {
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
-        $this->load->model("pekerjaan_model");
+        $this->load->model(array("pekerjaan_model","akun"));
         $list_pekerjaan = $this->pekerjaan_model->list_pending_task($temp['user_id']);
-        echo json_encode(array("status" => "OK", "data" => $list_pekerjaan));
+        $my_staff = $this->akun->my_staff($temp['id_akun']);
+        $mystaff=array();
+        foreach ($my_staff as $ms){
+            $mystaff[]=$ms->id_akun;
+        }
+        $pekerjaan_staff = $this->pekerjaan_model->get_pekerjaan_staff($mystaff);
+        $list_id_pekerjaan = array();
+        foreach ($pekerjaan_staff as $kerja){
+            $list_id_pekerjaan[]=$kerja->id_pekerjaan;
+        }
+        $detil_pekerjaan_staff = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
+        $progress_staff = $this->pekerjaan_model->get_progress_per_staff($mystaff);
+        echo json_encode(array("status" => "OK", "data" => $list_pekerjaan,
+            "staff"=>$my_staff,
+            "pekerjaan_staff"=>$pekerjaan_staff,
+            "detil_pekerjaan_staff"=>$detil_pekerjaan_staff,
+            "progress_staff"=>$progress_staff));
     }
 
     public function deskripsi_pekerjaan() {
@@ -871,7 +887,7 @@ class pekerjaan extends ceklogin {
             }
             $data["detil_pekerjaan"] = json_encode($this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan));
             //$data["my_staff"] = json_encode($data["my_staff"]);
-            $data['detil_progress'] = $this->pekerjaan_model->get_progress_per_staff($id_staff);
+            $data['detil_progress'] = $this->pekerjaan_model->get_progress_per_staff(array($id_staff));
             $this->load->view('pekerjaan/pekerjaan_per_staff_page', $data);
         }
         if ($status == 1) {

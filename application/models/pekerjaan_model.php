@@ -194,9 +194,10 @@ class pekerjaan_model extends CI_Model {
 
     //membaca detil progress seorang staff untuk seluruh pekerjaannya
     public function get_progress_per_staff($id_akun) {
+        if(count($id_akun)==0)return NULL;
         $query = "select detil_progress.*, detil_pekerjaan.id_pekerjaan from detil_pekerjaan inner join detil_progress on detil_progress.id_detil_pekerjaan="
                 . "detil_pekerjaan.id_detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan "
-                . "where detil_pekerjaan.id_akun=$id_akun and pekerjaan.flag_usulan='2' "
+                . "where detil_pekerjaan.id_akun in (". implode(",",$id_akun) .") and pekerjaan.flag_usulan='2' "
                 . "order by detil_progress.waktu,detil_pekerjaan.id_detil_pekerjaan,detil_progress.id_detil_progress";
         return $this->db->query($query)->result();
     }

@@ -62,18 +62,15 @@
 <script src="<?php echo base_url()?>assets/js/validation-init.js"></script>
 <!--icheck init -->
 <script src="<?php echo base_url()?>assets/js/icheck-init.js"></script>
-
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/js/advanced-datatable/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/data-tables/DT_bootstrap.js"></script>
-
 <script src="<?php echo base_url()?>assets/js/dynamic_table_init.js"></script>
-
-
 <script>
     function req_notifikasi() {
 
     }
     function req_pending_task() {
+        var bulan = ["Januari","February","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
         $.ajax({// create an AJAX call...
             data: "", // get the form data
             type: "GET", // GET or POST
@@ -88,12 +85,18 @@
                     //id="bagian_pending_task">
                     html = "<li><p class=\"\">Anda Memiliki " + jumlah_data + " Pemberitahuan</p></li>";
                     for (var i = 0; i < jumlah_data; i++) {
+                        var deadline = new Date(json.data[i]["tgl_selesai"].substring(0,19));
+                        console.log("deadline "+json.data[i]["tgl_selesai"]);
+                        var Deadline = deadline.getDate()+" "+bulan[deadline.getMonth()]+" "+deadline.getFullYear();
+                        var nama_pekerjaan =json.data[i]["nama_pekerjaan"];
+                        if(nama_pekerjaan.length>40)
+                            nama_pekerjaan=nama_pekerjaan.substring(0,40)+" ...";
                         html += "<li>" +
                                 "<a href =\"<?php echo site_url(); ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj="+json.data[i]["id_pekerjaan"]+ "&sumber=notifikasi\">" +
                                 "<div class = \"task-info clearfix\" >" +
                                 "<div class = \"desc pull-left\" >" +
-                                "<p><strong>"+json.data[i]["nama_pekerjaan"].substring(0,30)+"...</strong></p>" +
-                                "<p >"+ json.data[i]["progress"] +"% , "+ json.data[i]["tgl_selesai"] +" </p>" +
+                                "<p><strong>"+nama_pekerjaan+"</strong></p>" +
+                                "<p >"+ json.data[i]["progress"] +"% , "+ Deadline +" </p>" +
                                 "</div>" +
 //                                "<span class = \"notification-pie-chart pull-right\" data-percent = \""+ json.data[i]["progress"] +"\" >" +
 //                                "<span class = \"percent\" ></span>" +
