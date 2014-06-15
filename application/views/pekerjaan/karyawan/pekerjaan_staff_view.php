@@ -21,8 +21,8 @@
                         <?php
                         if (isset($pekerjaan_staff)) {
                             $prioritas = array(1 => 'Urgent', 2 => 'Tinggi', 3 => 'Sedang', 4 => 'Rendah');
-                            $list_status = array(1 => 'Not Approved', 2 => 'Approved');
-                            $label_status = array(1 => 'label-danger', 2 => 'label-success');
+                            $list_status = array(1 => 'Not Approved', 2 => 'Approved',9=>'Perpanjang');
+                            $label_status = array(1 => 'label-danger', 2 => 'label-success',9=>"label-inverse");
                             //var_dump($my_staff);
                             $counter = 0;
                             $list_id_pekerjaan = array();

@@ -38,6 +38,7 @@ class draft extends ceklogin {
         $insert['flag_usulan'] = '5';
         $insert['asal_pekerjaan'] = 'task management';
         $insert['kategori'] = pg_escape_string(strtolower($this->input->post('kategori')));
+        $insert['id_penanggung_jawab']=$temp['id_akun'];
 
 
 
@@ -62,7 +63,7 @@ class draft extends ceklogin {
                     $this->upload_file($files, $path, $id_pekerjaan);
                 }
                 $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja membuat draft pekerjaan.");
-                $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
+                //$this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
             } else {
                 echo 'id draft null';
             }
@@ -86,7 +87,7 @@ class draft extends ceklogin {
         if ($status == 0) {
             $data['draft_edit_submit'] = base_url() . 'draft/do_edit';
             $data['draft'] = $this->pekerjaan_model->get_draft(array($data['id_draft']));
-            if ($data['draft'][0]->id_akun == $session['id_akun']) {
+            if ($data['draft'][0]->id_penanggung_jawab == $session['id_akun']) {
                 
             } else {
                 $status = 1;
@@ -145,7 +146,7 @@ class draft extends ceklogin {
             $keterangan = 'draft tidak dapat ditemukan';
         }
         if($status==0){
-            if($detail_draft[0]->id_akun!=$session['id_akun']){
+            if($detail_draft[0]->id_penanggung_jawab!=$session['id_akun']){
                 $status=1;
                 $judul='Tidak Berhak';
                 $keterangan="Anda tidak berhak mengakses draft ini";
@@ -179,7 +180,7 @@ class draft extends ceklogin {
         }
         if (count($list_staff) > 0) {
             //print_r($list_staff);
-            if ($session['user_id'] == $detail_draft[0]->id_akun) {
+            if ($session['user_id'] == $detail_draft[0]->id_penanggung_jawab) {
 
                 $my_staff = $this->akun->my_staff($session['user_id']);
                 $mystaff = array();
@@ -279,7 +280,7 @@ class draft extends ceklogin {
         } else {
             $this->load->model(array('pekerjaan_model', 'berkas_model'));
             $detail_draft = $this->pekerjaan_model->get_draft(array($id_draft));
-            if ($detail_draft[0]->id_akun == $session['user_id']) {
+            if ($detail_draft[0]->id_penanggung_jawab == $session['user_id']) {
                 $list_berkas = $this->berkas_model->get_berkas_of_pekerjaan($id_draft);
                 foreach ($list_berkas as $berkas) {
                     $this->berkas_model->hapus_file($berkas->id_file);

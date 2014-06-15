@@ -60,12 +60,12 @@ class pekerjaan_model extends CI_Model {
         //$id_akun = pg_escape_string($id_akun);
         if (count($id_akun) == 0)
             return NULL;
-        $query = "select detil_pekerjaan.id_akun, pekerjaan.*, pekerjaan.tgl_selesai"
+        $query = "select detil_pekerjaan.id_akun, pekerjaan.* "
                 . "  from detil_pekerjaan inner join pekerjaan on "
                 . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan "
                 . "where detil_pekerjaan.id_akun in (" . implode(",", $id_akun) . ") "
                 . "and detil_pekerjaan.status!='Batal' "
-                . "and (pekerjaan.flag_usulan='1' or pekerjaan.flag_usulan='2') "
+                . "and pekerjaan.flag_usulan in('1','2','9') "
                 . "order by tglasli_mulai desc";
         //echo $query;
         $query = $this->db->query($query);
@@ -365,7 +365,7 @@ class pekerjaan_model extends CI_Model {
         $query = "select pekerjaan.*,detil_pekerjaan.*, now() as sekarang "
                 . "from pekerjaan inner join detil_pekerjaan on "
                 . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan "
-                . "where (pekerjaan.flag_usulan='1' or pekerjaan.flag_usulan='2') "
+                . "where pekerjaan.flag_usulan in ('1','2','9') "
                 . "and detil_pekerjaan.id_akun in (" . implode(",", $list_staff) . ")"
                 . "order by pekerjaan.id_pekerjaan";
         $query = $this->db->query($query);

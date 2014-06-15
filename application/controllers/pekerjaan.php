@@ -173,6 +173,7 @@ class pekerjaan extends ceklogin {
             $status = 1;
             $nama_status = "kesalahan";
             $keterangan = "pekerjaan tidak ditemukan";
+            
         }
         if ($pekerjaan[0]->flag_usulan == '3' || $pekerjaan[0]->flag_usulan == '6') {
             $status = 1;
@@ -191,6 +192,9 @@ class pekerjaan extends ceklogin {
             }
         }
         if ($status == 0) {
+            if($pekerjaan[0]->flag_usulan=='9'){
+                $update['flag_usulan']='2';
+            }
             echo "mencari siapa yang terlibat, siapa yang atasan";
             $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan(array($id_pekerjaan));
             foreach ($detil_pekerjaan as $detil) {
@@ -262,6 +266,7 @@ class pekerjaan extends ceklogin {
                     $this->upload_file($files, $path, $id_pekerjaan);
                 }
                 redirect(base_url() . "pekerjaan/deskripsi_pekerjaan?id_detail_pkj=" . $id_pekerjaan);
+                //var_dump($update);
             } else {
                 echo "gagal update";
             }
@@ -494,7 +499,7 @@ class pekerjaan extends ceklogin {
     public function req_perpanjangan() {
         $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
         $alasan = pg_escape_string($this->input->post('alasan'));
-        $this->load->mode(array('pekerjaan_model'));
+        $this->load->model(array('pekerjaan_model'));
         $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
         $status = 0;
         $deskripsi_kesalahan = '';
@@ -631,6 +636,10 @@ class pekerjaan extends ceklogin {
             } else if ($usulan && $ikut_serta) { //jika usulan dan dia adalah anggota pekerja
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;
+            }else if($data['perpanjang'] &&  $desk[0]->id_penanggung_jawab == $temp['user_id']){
+                $data['bisa_edit'] = true;
+                $data['bisa_batalkan'] = true;
+                $atasan = true;
             }
             $sifat_terbuka = strtolower($deskripsi_pekerjaan[0]->nama_sifat_pekerjaan) == 'umum';
             if ($data['bisa_validasi'] || $data['bisa_edit'] || $data['bisa_batalkan'] || $sifat_terbuka || $ikut_serta) {

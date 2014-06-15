@@ -121,7 +121,7 @@
                                                                     if (isset($list_berkas)) {
                                                                         foreach ($list_berkas as $berkas) {
                                                                             ?>
-                                                                            <tr id="berkas_<?php echo $berkas->id_file; ?>" title="diupload pada <?php echo date("d M Y H:i", strtotime($berkas->waktu)); ?>">
+                                                                            <tr id="berkas_<?php echo $berkas->id_file; ?>" title="diupload pada <?php echo date("d M Y H:i", strtotime(substr($berkas->waktu,0,19))); ?>">
                                                                                 <td id="nama_file_<?php echo $berkas->id_file; ?>"><?php echo basename($berkas->nama_file); ?></td>
                                                                                 <td id="aksi_<?php echo $berkas->id_file; ?>" style="width: 10px;text-align:right"><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a></td>
                                                                             </tr>
@@ -357,8 +357,8 @@ foreach ($users as $user) {
         }
         document.title = "Task Management - Edit Pekerjaan";
 <?php
-$mulai = date('Y-m-d', strtotime($pekerjaan[0]->tgl_mulai));
-$akhir = date('Y-m-d', strtotime($pekerjaan[0]->tgl_selesai));
+$mulai = date('Y-m-d', strtotime(substr($pekerjaan[0]->tgl_mulai,0,19)));
+$akhir = date('Y-m-d', strtotime(substr($pekerjaan[0]->tgl_selesai,0,19)));
 ?>
         var mulai = new Date('<?php echo $mulai; ?>');
         var akhir = new Date('<?php echo $akhir; ?>');

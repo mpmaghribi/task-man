@@ -135,9 +135,9 @@ if ($this->session->userdata('prev') != null) {
                                                 </h4>
                                                 <p style="font-size: larger">
                                                     <?php
-                                                    echo date("d M Y", strtotime($deskripsi_pekerjaan[0]->tgl_mulai));
+                                                    echo date("d M Y", strtotime(substr($deskripsi_pekerjaan[0]->tgl_mulai,0,19)));
                                                     echo " - ";
-                                                    echo date("d M Y", strtotime($deskripsi_pekerjaan[0]->tgl_selesai));
+                                                    echo date("d M Y", strtotime(substr($deskripsi_pekerjaan[0]->tgl_selesai,0,19)));
                                                     ?>
                                                 </p>
                                             </section>

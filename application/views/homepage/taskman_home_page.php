@@ -125,7 +125,7 @@
                                                                     </a>
                                                                 </td>
                                                                 <td style="vertical-align: middle" class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
-                                                                <td style="vertical-align: middle"> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
+                                                                <td style="vertical-align: middle"> <?php echo date("d M Y", strtotime(substr($value->tgl_mulai,0,19))) ?> - <?php echo date("d M Y", strtotime(substr($value->tgl_selesai,0,19))) ?></td>
                                                                 <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;           ?>"><?php foreach ($users as $value2) { ?>
                                                                         <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                                                                     <?php } ?></td>
