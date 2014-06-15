@@ -18,7 +18,6 @@
                         <li><a href="<?php echo base_url() ?>profil">Akun</a></li>
                     </ul>
                 </li>
-                <?php if($data_akun['hakakses'] == "Administrator" || $data_akun['hakakses'] == "Operator" || $data_akun['hakakses'] == "Manager" || $data_akun['hakakses'] == "Pegawai"){?>
                 <li class="sub-menu" id="submenu_pekerjaan_li">
                     <a href="javascript:;" id="submenu_pekerjaan">
                         <i class="fa fa-book" ></i>
@@ -63,7 +62,7 @@
                         
                     </ul>
                 </li>
-                 <?php }?>
+                 
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-laptop"></i>

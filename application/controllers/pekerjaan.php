@@ -355,6 +355,7 @@ class pekerjaan extends ceklogin {
         $insert['flag_usulan'] = '2';
         $insert['asal_pekerjaan'] = 'task management';
         $insert['kategori'] = $kategori;
+        $insert['id_penanggung_jawab']=$temp['id_akun'];
         if ($status == 1) {
             $data['judul_kesalahan'] = $judul_kesalahan;
             $data['deskripsi_kesalahan'] = $deskripsi_kesalahan;
@@ -380,7 +381,7 @@ class pekerjaan extends ceklogin {
                     $this->upload_file($files, $path, $id_pekerjaan);
                 }
                 $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja memberikan pekerjaan kepada staffnya.");
-                $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
+                //$this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
             }
             redirect($lempar);
         }
@@ -528,10 +529,18 @@ class pekerjaan extends ceklogin {
             if ($data['terlambat']) {
                 $update=array();
                 $update['flag_usulan']='9';
+                $result = $this->pekerjaan_model->update_pekerjaan($update,$id_pekerjaan);
+                if($result){
+                    $result=$this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_pekerjaan, $data['data_akun']['id_akun'], $alasan);
+                    echo json_encode(array("status"=>"OK"));
+                }
             } else {
                 $status=1;
                 $deskripsi_kesalahan='pekerjaan tidak dalam keadaan terlambat';
             }
+        }
+        if($status==1){
+            echo json_encode(array("status"=>"error","keterangan"=>$deskripsi_kesalahan));
         }
     }
 

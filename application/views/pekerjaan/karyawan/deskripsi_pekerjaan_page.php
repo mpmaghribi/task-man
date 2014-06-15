@@ -755,7 +755,7 @@ if ($this->session->userdata('prev') != null) {
                         //$('#div_acc_edit_cancel_usulan_pekerjaan').remove();
                         $('#tombol_perpanjang').remove();
                     } else {
-                        alert("Permintaan perpanjangan gagal, " + json.reason);
+                        alert("Permintaan perpanjangan gagal, " + json.keterangan);
                     }
                 }
             });
