@@ -55,9 +55,9 @@
                             </div>
                         </section>
                     </div>
-					<div class="col-md-12">
-                                            <div id="visualisasi_grafik"></div>
-                                        </div>
+					<div class="col-md-12" id="div_grafik">
+                        <div id="visualisasi_grafik"></div>
+                    </div>
                 </div>
                 <!-- page end-->
             </section>
@@ -148,37 +148,94 @@
 		var data_graph = [];
 		var jumlah_pekerjaan=pekerjaan_id.length;
 		console.log("mengolah detil progress");
+		var prev_progress=[];
 		for(var i=0;i<jumlah_detil_progress;i++){
-			var tanggal = detil_progress[i].waktu.substring(0,10);
+			var tanggal = detil_progress[i].waktu.substring(0,19);
 			console.log(tanggal);
 			if(!data_graph[tanggal]){
 				data_graph[tanggal]=[];
-				for(var j=0;j<jumlah_pekerjaan;j++){
-					if(!data_graph[tanggal][pekerjaan_id[j]]){
-						data_graph[tanggal][pekerjaan_id[j]]=0;
+				for(var j=0;j<jumlah_detil_progress;j++){
+					if(!data_graph[tanggal][detil_progress[j].id_pekerjaan]){
+						if(!prev_progress[detil_progress[j].id_pekerjaan]){
+							prev_progress[detil_progress[j].id_pekerjaan]=0;
+						}
+						data_graph[tanggal][detil_progress[j].id_pekerjaan]=prev_progress[detil_progress[j].id_pekerjaan];
 					}
+					/*if(!data_graph[tanggal][pekerjaan_nama[pekerjaan_id[j]]]){
+						data_graph[tanggal][pekerjaan_nama[pekerjaan_id[j]]]=0;
+					}*/
 				}
 			}
+			//data_graph[tanggal][pekerjaan_nama[detil_progress[i].id_pekerjaan]]=detil_progress[i].progress;
+			data_graph[tanggal][detil_progress[i].id_pekerjaan]=detil_progress[i].progress;
+			prev_progress[detil_progress[i].id_pekerjaan]=detil_progress[i].progress;
 		}
 		console.log("jumlah_pekerjaan " + jumlah_pekerjaan);
 		
 		console.log("data_graph");
 		console.log(data_graph);
+		var y_key = [];
+		var y_label=[];
+		var data_graph_text = "";
+		var sep1='';
+		for(var i in data_graph){
+			if(data_graph.hasOwnProperty(i)){
+				var tanggal = i;
+				data_graph_text+=sep1+'{"x":"'+tanggal+'",';
+				var isi = data_graph[i];
+				var sep2='';
+				for(var j in isi){
+					if(isi.hasOwnProperty(j)){
+						data_graph_text+=sep2+'"'+j+'":'+isi[j];
+						sep2=',';
+						if(y_key.indexOf(j)==-1){
+							y_key.push(j);
+							y_label.push(pekerjaan_nama[j]);
+						}
+					}
+				}
+				data_graph_text+='}';
+				sep1=',';
+			}
+		}
+		console.log(data_graph_text);
+		var myJsonString = JSON.stringify(data_graph);
+		console.log(myJsonString);
+		console.log(y_key);
+		console.log(y_label);
+		console.log('json');
+		var data_graph = jQuery.parseJSON('['+data_graph_text+']');
+		console.log(data_graph);
+		if(data_graph.length==0){
+			$('#div_grafik').remove();
+		}
+/*Morris.Area({
+    element: 'visualisasi_grafik',
+    behaveLikeLine: true,
+    data: 
+        data_graph
+    ,
+    xkey: 'x',
+    ykeys: y_key,
+    labels: y_label,
+    //lineColors:['#E67A77','#79D1CF']
+
+});*/
 Morris.Area({
     element: 'visualisasi_grafik',
     behaveLikeLine: true,
-    data: [
-        {x: '2011 Q1', y: 3, z: 3},
-        {x: '2011 Q2', y: 2, z: 1},
-        {x: '2011 Q3', y: 2, z: 9},
-        {x: '2011 Q4', y: 3, z: 3},
-        {x: '2011 Q5', y: 3, z: 4}
-    ],
+    gridEnabled: false,
+    gridLineColor: '#dddddd',
+    axes: true,
+    fillOpacity:.7,
+    data: data_graph,
+    //lineColors:['#E67A77','#D9DD81','#79D1CF'],
     xkey: 'x',
-    ykeys: ['y', 'z'],
-    labels: ['Y', 'Z'],
-    //lineColors:['#E67A77','#79D1CF']
+    ykeys: y_key,
+    labels: y_label,
+    pointSize: 0,
+    lineWidth: 0,
+    hideHover: 'auto'
 
 });
-
     </script>

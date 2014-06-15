@@ -55,7 +55,7 @@
                     });
                 })(jQuery);
             </script>
-            <?php if ($bawahan != NULL){?>
+            <?php if (isset($bawahan)&&$bawahan != NULL){?>
             <li class="widget-collapsible">
                 <a href="#" class="head widget-head purple-bg active">
                     <span class="pull-left"> recent activity staff</span>
