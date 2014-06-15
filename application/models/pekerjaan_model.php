@@ -171,7 +171,7 @@ class pekerjaan_model extends CI_Model {
 
     
     public function sp_deskripsi_pekerjaan($id_detail_pkj) {
-        $query = "select pekerjaan.*,sifat_pekerjaan.*"
+        $query = "select pekerjaan.*,sifat_pekerjaan.*, now() as sekarang "
                 . " from pekerjaan inner join sifat_pekerjaan "
                 . "on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan "
                 . "where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";

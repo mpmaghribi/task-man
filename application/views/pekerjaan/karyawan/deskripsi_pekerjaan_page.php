@@ -40,7 +40,7 @@ foreach ($users as $u) {
                                 <?php
                                 $pengusul = $deskripsi_pekerjaan[0]->flag_usulan == '1' && $ikut_serta;
                                 //echo "pengusul = $pengusul";
-                                if ($bisa_validasi || $bisa_edit || $bisa_batalkan) {
+                                
                                     ?>
                                     <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                         <?php if ($bisa_validasi) { ?><a class="btn btn-success btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi(<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>);">Validasi</a><?php } ?>
@@ -75,7 +75,6 @@ foreach ($users as $u) {
                                             }
                                         });
                                     </script>
-                                <?php } ?>
                             </header>
                             <div class="panel-body">
                                 <div class="tab-content">
