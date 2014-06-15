@@ -781,24 +781,37 @@ class pekerjaan extends ceklogin {
         $data["data_akun"] = $session;
         $id_staff = $this->input->get("id_akun");
         $this->session->set_userdata('prev', 'pekerjaan_per_staff?id_akun=' . $id_staff);
-        $data["pekerjaan_staff"] = $this->pekerjaan_model->list_pekerjaan(array($id_staff));
+        
         //print_r($data['pekerjaan_staff']);
         $data["my_staff"] = $this->akun->my_staff($session["user_id"]);
         $data["id_staff"] = $id_staff;
         $data["nama_staff"] = "";
+		$status=1;
+		$judul_kesalahan = "Tidak Berhak";
+		$deskripsi_kesalahan = "Anda tidak berhak melihat daftar pekerjaan staff ini";
         foreach ($data["my_staff"] as $st) {
             if ($st->id_akun == $id_staff) {
                 $data["nama_staff"] = $st->nama;
+				$status=0;
                 break;
             }
         }
-        $list_id_pekerjaan = array();
-        foreach ($data["pekerjaan_staff"] as $pekerjaan) {
-            $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
-        }
-        $data["detil_pekerjaan"] = json_encode($this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan));
-        $data["my_staff"] = json_encode($data["my_staff"]);
-        $this->load->view('pekerjaan/pekerjaan_per_staff_page', $data);
+		if($status==0){
+			$data["pekerjaan_staff"] = $this->pekerjaan_model->list_pekerjaan(array($id_staff));		
+			$list_id_pekerjaan = array();
+			foreach ($data["pekerjaan_staff"] as $pekerjaan) {
+				$list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
+			}
+			$data["detil_pekerjaan"] = json_encode($this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan));
+			//$data["my_staff"] = json_encode($data["my_staff"]);
+			$data['detil_progress']=$this->pekerjaan_model->get_progress_per_staff($id_staff);
+			$this->load->view('pekerjaan/pekerjaan_per_staff_page', $data);
+		}
+		if($status==1){
+			$data['judul_kesalahan']=$judul_kesalahan;
+			$data['deskripsi_kesalahan']=$deskripsi_kesalahan;
+			$this->load->view('pekerjaan/kesalahan',$data);
+		}
     }
 
     /*

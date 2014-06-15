@@ -190,6 +190,13 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
+	
+	//membaca detil progress seorang staff untuk seluruh pekerjaannya
+	public function get_progress_per_staff($id_akun){
+		$query = "select * from detil_pekerjaan inner join detil_progress on detil_progress.id_detil_pekerjaan="
+		."detil_pekerjaan.id_detil_pekerjaan where detil_pekerjaan.id_akun=$id_akun order by detil_pekerjaan.id_detil_pekerjaan,detil_progress.waktu";
+		return $this->db->query($query)->result();
+	}
 
     public function sp_updateprogress_pekerjaan($data, $id_detail_pkj) {
         $query = "update detil_pekerjaan set progress =" . $data . " where id_detil_pekerjaan =" . $id_detail_pkj;

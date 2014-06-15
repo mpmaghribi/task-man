@@ -75,21 +75,27 @@
         <?php $this->load->view('taskman_rightbar_page') ?>
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
+	<script src="<?php echo base_url() ?>/assets/js/morris-chart/morris.js"></script>
     <script>
         document.title = "Daftar Pekerjaan <?php echo $nama_staff; ?> - Task Management";
 
-        var my_staff = jQuery.parseJSON('<?php echo $my_staff; ?>');
+        var my_staff = jQuery.parseJSON('<?php echo json_encode($my_staff); ?>');
         var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
+		var detil_progress = jQuery.parseJSON('<?php echo json_encode($detil_progress);?>');
         var pekerjaan_flag = [];
         var pekerjaan_id = [];
         var pekerjaan_tanggal_selesai = [];
         var pekerjaan_tanggal_mulai = [];
+		var pekerjaan_nama=[];
 <?php foreach ($pekerjaan_staff as $pekerjaan) { ?>
             pekerjaan_id.push('<?php echo $pekerjaan->id_pekerjaan ?>');
+			pekerjaan_nama[<?php echo $pekerjaan->id_pekerjaan ?>]='<?php echo $pekerjaan->nama_pekerjaan; ?>';
             pekerjaan_flag.push('<?php echo $pekerjaan->flag_usulan; ?>');
             pekerjaan_tanggal_selesai.push('<?php echo date('Y-m-d',strtotime($pekerjaan->tgl_selesai));?>');
             pekerjaan_tanggal_mulai.push('<?php echo date('Y-m-d',strtotime($pekerjaan->tgl_mulai));?>');
 <?php } ?>
+		console.log("pekerjaan_nama");
+		console.log(pekerjaan_nama);
         function get_flag(id_pekerjaan) {
             var jumlah_pekerjaan = pekerjaan_id.length;
             for (var i = 0; i < jumlah_pekerjaan; i++) {
@@ -138,30 +144,26 @@
             }
         }
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-    </script>
-	<script src="<?php echo base_url() ?>/assets/js/morris-chart/morris.js"></script>
-    <script>
-        /*Morris.Area({
-            element: 'visualisasi_grafik',
-            behaveLikeLine: true,
-            gridEnabled: false,
-            gridLineColor: '#dddddd',
-            axes: true,
-            fillOpacity: .7,
-            data: [
-                {periode: '2012-06-01', iphone: 1687, ipad: 3460, itouch: 2208},
-                {periode: '2012-06-07', iphone: 1687, ipad: 3460},
-                {periode: '2012-06-15', iphone: 1000, ipad: 5713, itouch: 1791}
-            ],
-            lineColors: ['#E67A77', '#D9DD81', '#79D1CF'],
-            xkey: 'periode',
-            ykeys: ['iphone', 'ipad', 'itouch'],
-            labels: ['iPhone', 'iPad', 'iPod Touch'],
-            pointSize: 0,
-            lineWidth: 0,
-            hideHover: 'auto'
-
-        });*/
+		var jumlah_detil_progress=detil_progress.length;
+		var data_graph = [];
+		var jumlah_pekerjaan=pekerjaan_id.length;
+		console.log("mengolah detil progress");
+		for(var i=0;i<jumlah_detil_progress;i++){
+			var tanggal = detil_progress[i].waktu.substring(0,10);
+			console.log(tanggal);
+			if(!data_graph[tanggal]){
+				data_graph[tanggal]=[];
+				for(var j=0;j<jumlah_pekerjaan;j++){
+					if(!data_graph[tanggal][pekerjaan_id[j]]){
+						data_graph[tanggal][pekerjaan_id[j]]=0;
+					}
+				}
+			}
+		}
+		console.log("jumlah_pekerjaan " + jumlah_pekerjaan);
+		
+		console.log("data_graph");
+		console.log(data_graph);
 Morris.Area({
     element: 'visualisasi_grafik',
     behaveLikeLine: true,
@@ -175,9 +177,7 @@ Morris.Area({
     xkey: 'x',
     ykeys: ['y', 'z'],
     labels: ['Y', 'Z'],
-    lineColors:['#E67A77','#79D1CF']
-
-
+    //lineColors:['#E67A77','#79D1CF']
 
 });
 
