@@ -446,9 +446,7 @@ foreach ($users as $u) {
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
-                                            <div id="visualisasi_grafik"></div>
-                                        </div>
+                                        
 
 
 
@@ -719,30 +717,5 @@ foreach ($users as $u) {
         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + document.getElementById('id_detail_pkj').value);
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     </script>
-    <script src="<?php echo base_url() ?>/assets/js/morris-chart/morris.js"></script>
-    <script>
-        Morris.Area({
-            element: 'visualisasi_grafik',
-            behaveLikeLine: true,
-            gridEnabled: false,
-            gridLineColor: '#dddddd',
-            axes: true,
-            fillOpacity: .7,
-            data: [
-                {periode: '2012-06-01', iphone: 1687, ipad: 3460, itouch: 2208},
-                {periode: '2012-06-07', iphone: 1687, ipad: 3460},
-                {periode: '2012-06-15', iphone: 1000, ipad: 5713, itouch: 1791}
-            ],
-            lineColors: ['#E67A77', '#D9DD81', '#79D1CF'],
-            xkey: 'periode',
-            ykeys: ['iphone', 'ipad', 'itouch'],
-            labels: ['iPhone', 'iPad', 'iPod Touch'],
-            pointSize: 0,
-            lineWidth: 0,
-            hideHover: 'auto'
-
-        });
-
-
-    </script>
+    
 

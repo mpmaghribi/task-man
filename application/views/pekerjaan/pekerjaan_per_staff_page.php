@@ -55,6 +55,9 @@
                             </div>
                         </section>
                     </div>
+					<div class="col-md-12">
+                                            <div id="visualisasi_grafik"></div>
+                                        </div>
                 </div>
                 <!-- page end-->
             </section>
@@ -135,4 +138,47 @@
             }
         }
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+    </script>
+	<script src="<?php echo base_url() ?>/assets/js/morris-chart/morris.js"></script>
+    <script>
+        /*Morris.Area({
+            element: 'visualisasi_grafik',
+            behaveLikeLine: true,
+            gridEnabled: false,
+            gridLineColor: '#dddddd',
+            axes: true,
+            fillOpacity: .7,
+            data: [
+                {periode: '2012-06-01', iphone: 1687, ipad: 3460, itouch: 2208},
+                {periode: '2012-06-07', iphone: 1687, ipad: 3460},
+                {periode: '2012-06-15', iphone: 1000, ipad: 5713, itouch: 1791}
+            ],
+            lineColors: ['#E67A77', '#D9DD81', '#79D1CF'],
+            xkey: 'periode',
+            ykeys: ['iphone', 'ipad', 'itouch'],
+            labels: ['iPhone', 'iPad', 'iPod Touch'],
+            pointSize: 0,
+            lineWidth: 0,
+            hideHover: 'auto'
+
+        });*/
+Morris.Area({
+    element: 'visualisasi_grafik',
+    behaveLikeLine: true,
+    data: [
+        {x: '2011 Q1', y: 3, z: 3},
+        {x: '2011 Q2', y: 2, z: 1},
+        {x: '2011 Q3', y: 2, z: 9},
+        {x: '2011 Q4', y: 3, z: 3},
+        {x: '2011 Q5', y: 3, z: 4}
+    ],
+    xkey: 'x',
+    ykeys: ['y', 'z'],
+    labels: ['Y', 'Z'],
+    lineColors:['#E67A77','#79D1CF']
+
+
+
+});
+
     </script>
