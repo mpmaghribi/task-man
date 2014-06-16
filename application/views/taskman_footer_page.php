@@ -66,37 +66,86 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url() ?>assets/js/dynamic_table_init.js"></script>
 <script>
-        function req_notifikasi() {
+    function req_notifikasi() {
 
-        }
-        function req_pending_task() {
-            var bulan = ["Januari", "February", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            $.ajax({// create an AJAX call...
-                data: "", // get the form data
-                type: "GET", // GET or POST
-                url: "<?php echo site_url(); ?>/pekerjaan/req_pending_task", // the file to call
-                success: function(response) { // on success..
-                    var json = jQuery.parseJSON(response);
-                    //alert(response);
-                    if (json.status === "OK") {
-                        //alert("ok1");
-                        var html = "";
-                        var jumlah_data = json.data.length;
-                        //id="bagian_pending_task">
-                        html = "<li><p class=\"\">Anda Memiliki " + jumlah_data + " Pemberitahuan</p></li>";
-                        for (var i = 0; i < jumlah_data; i++) {
-                            var deadline = new Date(json.data[i]["tgl_selesai"].substring(0, 19));
+    }
+    function req_pending_task() {
+        var bulan = ["Januari", "February", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        $.ajax({// create an AJAX call...
+            data: "", // get the form data
+            type: "GET", // GET or POST
+            url: "<?php echo site_url(); ?>/pekerjaan/req_pending_task", // the file to call
+            success: function(response) { // on success..
+                var json = jQuery.parseJSON(response);
+                //alert(response);
+                if (json.status === "OK") {
+                    //alert("ok1");
+                    var html = "";
+                    var jumlah_data = json.data.length;
+                    //id="bagian_pending_task">
+                    html = "<li><p class=\"\">Anda Memiliki " + jumlah_data + " Pemberitahuan</p></li>";
+                    for (var i = 0; i < jumlah_data; i++) {
+                        var deadline = new Date(json.data[i]["tgl_selesai"].substring(0, 19));
+                        //console.log("deadline "+json.data[i]["tgl_selesai"]);
+                        var Deadline = deadline.getDate() + " " + bulan[deadline.getMonth()] + " " + deadline.getFullYear();
+                        var nama_pekerjaan = json.data[i]["nama_pekerjaan"];
+                        if (nama_pekerjaan.length > 40)
+                            nama_pekerjaan = nama_pekerjaan.substring(0, 40) + " ...";
+                        html += "<li>" +
+                                "<a href =\"<?php echo site_url(); ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj=" + json.data[i]["id_pekerjaan"] + "&sumber=notifikasi\">" +
+                                "<div class = \"task-info clearfix\" >" +
+                                "<div class = \"desc pull-left\" >" +
+                                "<p><strong>" + nama_pekerjaan + "</strong></p>" +
+                                "<p >" + json.data[i]["progress"] + "% , " + Deadline + " </p>" +
+                                "</div>" +
+//                                "<span class = \"notification-pie-chart pull-right\" data-percent = \""+ json.data[i]["progress"] +"\" >" +
+//                                "<span class = \"percent\" ></span>" +
+                                "</span>" +
+                                "</div>" +
+                                "</a>" +
+                                "</li>";
+                    }
+                    console.log(json);
+
+                    var list_pekerjaan_staff = [];
+                    var list_id_pekerjaan = [];
+                    var list_pekerjaan_staff_deadline = [];
+                    var list_progress_pekerjaan = [];
+                    var list_jumlah_pekerja = [];
+                    var p = json.pekerjaan_staff.length;
+                    var sekarang = '';
+                    for (var i = 0; i < p; i++) {
+                        list_pekerjaan_staff[json.pekerjaan_staff[i].id_pekerjaan] = json.pekerjaan_staff[i].nama_pekerjaan;
+                        list_pekerjaan_staff_deadline[json.pekerjaan_staff[i].id_pekerjaan] = new Date(json.pekerjaan_staff[i].tgl_selesai.substring(0, 19));
+                        list_progress_pekerjaan[json.pekerjaan_staff[i].id_pekerjaan] = 0;
+                        list_jumlah_pekerja[json.pekerjaan_staff[i].id_pekerjaan] = 0;
+                        list_id_pekerjaan.push(json.pekerjaan_staff[i].id_pekerjaan);
+                        sekarang = new Date(json.pekerjaan_staff[i].sekarang.substring(0, 19));
+                    }
+                    console.log(list_pekerjaan_staff);
+                    console.log(list_pekerjaan_staff_deadline);
+                    p = json.progress_staff.length;
+                    for (var i = 0; i < p; i++) {
+                        list_progress_pekerjaan[json.progress_staff[i].id_pekerjaan] += parseInt(json.progress_staff[i].progress);
+                        list_jumlah_pekerja[json.progress_staff[i].id_pekerjaan]++;
+                    }
+                    console.log(list_progress_pekerjaan);
+                    console.log(list_jumlah_pekerja);
+                    p = list_pekerjaan_staff.length;
+                    for (var i = 0; i < p; i++) {
+                        if (list_jumlah_pekerja[i] > 0) {
+                            var deadline = list_pekerjaan_staff_deadline[i];
                             //console.log("deadline "+json.data[i]["tgl_selesai"]);
                             var Deadline = deadline.getDate() + " " + bulan[deadline.getMonth()] + " " + deadline.getFullYear();
-                            var nama_pekerjaan = json.data[i]["nama_pekerjaan"];
+                            var nama_pekerjaan = list_pekerjaan_staff[i];
                             if (nama_pekerjaan.length > 40)
                                 nama_pekerjaan = nama_pekerjaan.substring(0, 40) + " ...";
                             html += "<li>" +
-                                    "<a href =\"<?php echo site_url(); ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj=" + json.data[i]["id_pekerjaan"] + "&sumber=notifikasi\">" +
-                                    "<div class = \"task-info clearfix\" >" +
+                                    '<a href ="<?php echo site_url(); ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj=' + list_id_pekerjaan[i] + '&sumber=notifikasi" style="background:#57c8f1">' +
+                                    '<div class = "task-info clearfix" >' +
                                     "<div class = \"desc pull-left\" >" +
                                     "<p><strong>" + nama_pekerjaan + "</strong></p>" +
-                                    "<p >" + json.data[i]["progress"] + "% , " + Deadline + " </p>" +
+                                    "<p >" + (list_progress_pekerjaan[i] / list_jumlah_pekerja[i]) + "% , " + Deadline + " </p>" +
                                     "</div>" +
 //                                "<span class = \"notification-pie-chart pull-right\" data-percent = \""+ json.data[i]["progress"] +"\" >" +
 //                                "<span class = \"percent\" ></span>" +
@@ -104,73 +153,30 @@
                                     "</div>" +
                                     "</a>" +
                                     "</li>";
+                            jumlah_data++;
                         }
-                        console.log(json);
-
-                        var list_pekerjaan_staff = [];
-                        var list_id_pekerjaan =[];
-                        var list_pekerjaan_staff_deadline = [];
-                        var list_progress_pekerjaan = [];
-                        var list_jumlah_pekerja = [];
-                        var p = json.pekerjaan_staff.length;
-                        var sekarang = '';
-                        for (var i = 0; i < p; i++) {
-                            list_pekerjaan_staff[json.pekerjaan_staff[i].id_pekerjaan] = json.pekerjaan_staff[i].nama_pekerjaan;
-                            list_pekerjaan_staff_deadline[json.pekerjaan_staff[i].id_pekerjaan] = new Date(json.pekerjaan_staff[i].tgl_selesai.substring(0, 19));
-                            list_progress_pekerjaan[json.pekerjaan_staff[i].id_pekerjaan] = 0;
-                            list_jumlah_pekerja[json.pekerjaan_staff[i].id_pekerjaan] = 0;
-                            list_id_pekerjaan.push(json.pekerjaan_staff[i].id_pekerjaan);
-                            sekarang = new Date(json.pekerjaan_staff[i].sekarang.substring(0, 19));
-                        }
-                        console.log(list_pekerjaan_staff);
-                        console.log(list_pekerjaan_staff_deadline);
-                        p = json.progress_staff.length;
-                        for (var i = 0; i < p; i++) {
-                            list_progress_pekerjaan[json.progress_staff[i].id_pekerjaan] += parseInt(json.progress_staff[i].progress);
-                            list_jumlah_pekerja[json.progress_staff[i].id_pekerjaan]++;
-                        }
-                        console.log(list_progress_pekerjaan);
-                        console.log(list_jumlah_pekerja);
-                        p = list_pekerjaan_staff.length;
-                        for (var i = 0; i < p; i++) {
-                            if (list_jumlah_pekerja[i] > 0) {
-                                var deadline = list_pekerjaan_staff_deadline[i];
-                                //console.log("deadline "+json.data[i]["tgl_selesai"]);
-                                var Deadline = deadline.getDate() + " " + bulan[deadline.getMonth()] + " " + deadline.getFullYear();
-                                var nama_pekerjaan = list_pekerjaan_staff[i];
-                                if (nama_pekerjaan.length > 40)
-                                    nama_pekerjaan = nama_pekerjaan.substring(0, 40) + " ...";
-                                html += "<li>" +
-                                        '<a href ="<?php echo site_url(); ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj=' + list_id_pekerjaan[i]+ '&sumber=notifikasi" style="background:#57c8f1">' +
-                                        '<div class = "task-info clearfix" >' +
-                                        "<div class = \"desc pull-left\" >" +
-                                        "<p><strong>" + nama_pekerjaan + "</strong></p>" +
-                                        "<p >" + (list_progress_pekerjaan[i]/list_jumlah_pekerja[i])+ "% , " + Deadline + " </p>" +
-                                        "</div>" +
-//                                "<span class = \"notification-pie-chart pull-right\" data-percent = \""+ json.data[i]["progress"] +"\" >" +
-//                                "<span class = \"percent\" ></span>" +
-                                        "</span>" +
-                                        "</div>" +
-                                        "</a>" +
-                                        "</li>";
-                                jumlah_data++;
-                            }
-                        }
-                        html += "<li class=\"external\"><a href=\"<?php echo site_url(); ?>/pekerjaan/karyawan\">Lihat Semua Task</a></li>";
-                        var tinggi_pending = $(window).height() * 0.8;
-                        $('#bagian_pending_task').css('overflow: scroll; max-height: ' + tinggi_pending + '%;overflow-x: hidden');
-                        $("#bagian_pending_task").html(html);
-                        if (jumlah_data == 0)
-                            jumlah_data = "";
-                        $("#jumlah_pending_task").html(jumlah_data);
-                        //alert("ok");
-                    } else {
-                        //alert("failed, " + json.reason);
                     }
+                    html += "<li class=\"external\"><a href=\"<?php echo site_url(); ?>/pekerjaan/karyawan\">Lihat Semua Task</a></li>";
+
+
+                    $("#bagian_pending_task").html(html);
+                    if (jumlah_data == 0)
+                        jumlah_data = "";
+                    $("#jumlah_pending_task").html(jumlah_data);
+                    //alert("ok");
+                } else {
+                    //alert("failed, " + json.reason);
                 }
-            });
-        }
-        req_pending_task();
+            }
+        });
+    }
+    req_pending_task();
+    var tinggi = $(window).height();
+    var lebar=$(window).width();
+    console.log('tinggi = ' + tinggi);
+    var tinggi_pending = Math.round(tinggi * 0.7);
+    var lebar_pending = Math.round(lebar *0.5);
+    $('#bagian_pending_task').attr('style', 'overflow: scroll; max-height: ' + tinggi_pending + 'px;min-width:'+lebar_pending+'px;overflow-x: hidden');
 </script>
 </body>
 </html>

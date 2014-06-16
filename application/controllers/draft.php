@@ -227,7 +227,7 @@ class draft extends ceklogin {
         $update["asal_pekerjaan"] = 'task management';
 
         $detail_draft = $this->pekerjaan_model->get_draft(array($id_draft));
-        if ($detail_draft[0]->id_akun == $session['user_id']) {
+        if ($detail_draft[0]->id_penanggung_jawab == $session['user_id']) {
             if ($this->pekerjaan_model->update_pekerjaan($update, $id_draft)) {
                 if (isset($_FILES["berkas"])) {
                     $path = './uploads/pekerjaan/' . $id_draft . '/';
@@ -239,7 +239,7 @@ class draft extends ceklogin {
                     $this->upload_file($files, $path, $id_draft);
                 }
                 $data['list_draft'] = $this->pekerjaan_model->get_list_draft($session['user_id']);
-                redirect(base_url() . 'draft');
+                redirect(base_url() . 'draft/view/?id_draft='.$id_draft);
             }
         } else {
             $data['judul_kesalahan'] = 'kesalahan';
