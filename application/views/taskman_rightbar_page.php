@@ -1,3 +1,7 @@
+<?php $temp = $this->session->userdata('logged_in'); $bawahan = json_decode(
+                file_get_contents(
+                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/".$temp['user_id']."/format/json"
+                        ));?>
 <div class="right-sidebar">
     <div class="right-stat-bar">
         <ul class="right-side-accordion">

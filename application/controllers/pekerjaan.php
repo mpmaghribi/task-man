@@ -784,6 +784,7 @@ class pekerjaan extends ceklogin {
 
     public function lihat_usulan() {
         $this->session->set_userdata('prev', 'lihat_usulan');
+        //$data["temp"] = $this->session->userdata('logged_in');
         $this->load->model(array("pekerjaan_model", "akun"));
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');

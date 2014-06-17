@@ -33,7 +33,7 @@ class home extends ceklogin {
         $data['finishtask'] = $result3[0]->count;
         $data['notworkingtask'] = $result4[0]->count;
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-        $data["temp"] = $this->session->userdata('logged_in');
+        //$data["temp"] = $this->session->userdata('logged_in');
         $data["users"] = json_decode(file_get_contents($url));
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Login", $temp['user_nama'] . " sedang berada di halaman dashboard.");
         $staff = $this->akun->my_staff($temp['user_id']);
@@ -63,10 +63,11 @@ class home extends ceklogin {
                 }
             $data['detil_pekerjaan_staff'] = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
         }
-        $data['bawahan'] = json_decode(
-                file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/".$temp['user_id']."/format/json"
-                        ));
+//        $data['bawahan'] = json_decode(
+//                file_get_contents(
+//                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/".$temp['user_id']."/format/json"
+//                        ));
+        
         $this->load->view('homepage/taskman_home_page', $data);
         //print_r($data);
         $this->session->set_userdata("prev","home");
