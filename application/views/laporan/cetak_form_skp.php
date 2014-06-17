@@ -171,10 +171,10 @@ and open the template in the editor.
                                 <table class="tabel_pdf_staff table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th rowspan="2" width="30">No</th>
-                                            <th rowspan="2">Kegiatan Tugas Jabatan</th>
-                                            <th rowspan="2" width="30">AK</th>
-                                            <th colspan="4">Target</th>
+                                            <th rowspan="2" width="30" style="text-align: center; vertical-align: middle">No</th>
+                                            <th rowspan="2" style="text-align: center; vertical-align: middle">Kegiatan Tugas Jabatan</th>
+                                            <th rowspan="2" width="30" style="text-align: center; vertical-align: middle">AK</th>
+                                            <th colspan="4" style="text-align: center; vertical-align: middle;">Target</th>
                                             
                                         </tr>
                                         <tr>
@@ -185,10 +185,10 @@ and open the template in the editor.
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php if (isset($pkj_karyawan)) { ?>
+                                        <?php if (isset($nilai_skp)) { ?>
                                             <?php
                                             $i = 1;
-                                            foreach ($pkj_karyawan as $value) {
+                                            foreach ($nilai_skp as $value) {
                                                 ?>
                                                 <?php if ($value->flag_usulan == 2) { ?>
                                                     <tr>
@@ -196,11 +196,11 @@ and open the template in the editor.
                                                                 <?php echo $i; ?>
                                                         </td>
                                                         <td  align="justify"><?php echo $value->nama_pekerjaan ?></td>
-                                                        <td  align="center"></td>
-                                                        <td  align="center"></td>
-                                                        <td  align="center"></td>
-                                                        <td  align="center"><?php if (isset($periode))echo $periode." Bulan"; else echo "12 Bulan";?></td>
-                                                        <td  align="center"></td>
+                                                        <td  align="center"  style="vertical-align: middle"><?php echo $value->ak ?></td>
+                                                        <td  align="center"  style="vertical-align: middle"><?php echo $value->kuatitas_output ?></td>
+                                                        <td  align="center"  style="vertical-align: middle"><?php echo $value->kualitas_mutu ?></td>
+                                                        <td  align="center"  style="vertical-align: middle"><?php if (isset($periode))echo $periode." Bulan"; else echo "12 Bulan";?></td>
+                                                        <td  align="center" style="vertical-align: middle"><?php echo $value->biaya ?></td>
                                                     </tr>
                                                 <?php } ?>
                                                 <?php

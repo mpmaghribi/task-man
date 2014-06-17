@@ -17,6 +17,7 @@ class laporan extends CI_Controller {
     public function cetak_form_skp()
     {
         $id = $this->input->get('id_akun');
+        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
         $data["nama"] = $this->input->get('nama');
@@ -55,6 +56,7 @@ class laporan extends CI_Controller {
     public function cetak_form_ckp()
     {
         $id = $this->input->get('id_akun');
+         $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
         $data["nama"] = $this->input->get('nama');
@@ -100,6 +102,7 @@ class laporan extends CI_Controller {
     }
     function exportFormCKP() {
         $id = $this->input->get('id_akun');
+        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
         $data["nama"] = $this->input->get('nama');
@@ -155,6 +158,7 @@ class laporan extends CI_Controller {
         $data['data_akun'] = $temp;
         $data['temp'] = $temp;
         $id = $temp["user_id"];
+        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
         $jabatan = json_decode(
                 file_get_contents(
                         str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id."/format/json"
@@ -203,6 +207,7 @@ class laporan extends CI_Controller {
         $data['data_akun'] = $temp;
         $data['temp'] = $temp;
         $id = $temp["user_id"];
+        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
         $jabatan = json_decode(
                 file_get_contents(
                         str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id."/format/json"
@@ -261,12 +266,13 @@ class laporan extends CI_Controller {
         $data["nama_penilai"] = $jabatan[0]->nama;
         $data["nip_penilai"] = $jabatan[0]->nip;
         $id = $this->input->get("id_akun2");
+        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
         $data["jabatan"] = $this->input->get("nama_jabatan2");
         $data["departemen"] = $this->input->get("nama_departemen2");
         $data["nama"] = $this->input->get("nama2");
         $data["nip"] = $this->input->get("nip2");
         $this->load->helper(array('pdf', 'date'));
-        $filename = 'Laporan SKP Per Periode.pdf';
+        $filename = 'Laporan CKP Per Periode.pdf';
         $data['state'] = 'Report';
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $temp;
@@ -298,6 +304,7 @@ class laporan extends CI_Controller {
         $data["nama_penilai"] = $jabatan[0]->nama;
         $data["nip_penilai"] = $jabatan[0]->nip;
         $id = $this->input->get("id_akun");
+        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
         $data["jabatan"] = $this->input->get("nama_jabatan");
         $data["departemen"] = $this->input->get("nama_departemen");
         $data["nama"] = $this->input->get("nama");
@@ -440,6 +447,7 @@ Data Pengaduan ' . $ket . '
 
     function exportToPDF() {
         $id = $this->input->get('id_akun');
+        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
         $data["nama"] = $this->input->get('nama');

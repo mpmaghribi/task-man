@@ -10,7 +10,9 @@
         <!--sidebar end-->
         <!--main content start-->
         <section id="main-content">
+            
             <section class="wrapper">
+                <?php //var_dump($temp); echo $temp['idmodul'][0]; ?>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="mini-stat clearfix">
