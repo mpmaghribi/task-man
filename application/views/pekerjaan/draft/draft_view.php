@@ -1,4 +1,4 @@
-<div id="div_view_draft" class="tab-pane ">
+<div id="div_view_draft" class="tab-pane col-md-12">
     <section class="panel">
         <header class="panel-heading">
             Daftar Draft Pekerjaan

@@ -1,4 +1,4 @@
-<div id="PekerjaanStaff" class="tab-pane ">
+<div id="PekerjaanStaff" class="tab-pane col-md-12">
     <section class="panel">
         <header class="panel-heading">
             Daftar  Pekerjaan staff

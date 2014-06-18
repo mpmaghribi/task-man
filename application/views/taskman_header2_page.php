@@ -43,7 +43,7 @@
             <li class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
 <!--                    <img alt="" src="<?php echo base_url() ?>/assets/images/avatar1_small.jpg">-->
-                    <span class="username"><?php echo $data_akun['user_nama'] ?></span>
+                    <span class="username"><?php echo $data_akun['user_nama'].' - '. $data_akun['nama_jabatan'].' - '. $data_akun['nama_departemen']; ?></span>
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu extended logout">

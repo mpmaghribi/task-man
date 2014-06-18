@@ -74,28 +74,15 @@
                 <!--mini statistics start-->
                 <!--mini statistics end-->
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12" id="PekerjaanSaya" >
                         <section class="panel">
-                            <header class="panel-heading tab-bg-dark-navy-blue ">
-                                <ul class="nav nav-tabs">
-                                    <li class="active">
-                                        <a data-toggle="tab" href="#PekerjaanSaya">Pekerjaan Saya</a>
-                                    </li>
-                                    <?php if (count($my_staff) > 0) { ?>
-                                        <li class="">
-                                            <a data-toggle="tab" href="#PekerjaanStaff">Pekerjaan Staff</a>
-                                        </li>
-                                        <li class="">
-                                            <a data-toggle="tab" href="#div_view_draft">Draft Pekerjaan</a>
-                                        </li>
-                                    <?php } ?>
-                                </ul>
+                            <header class="panel-heading  ">
+                                Pekerjaan Saya
                             </header>
                             <div class="panel-body">
 
-                                <div class="tab-content">
-                                    <div id="PekerjaanSaya" class="tab-pane active">
-
+                                <!--div class="tab-content"-->
+                                    <!--div class="tab-pane active"-->
 
                                         <div class="form">
                                             <table class="table table-striped table-hover table-condensed" id="tabel_home">
@@ -147,13 +134,14 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                    </div>
-                                    <?php $this->load->view('pekerjaan/karyawan/pekerjaan_staff_view'); ?>
-                                    <?php $this->load->view('pekerjaan/draft/draft_view'); ?>
-                                </div>
+                                    <!--/div-->
+                                    
+                                
                             </div>
                         </section>
                     </div>
+                    <?php $this->load->view('pekerjaan/karyawan/pekerjaan_staff_view'); ?>
+                                    <?php $this->load->view('pekerjaan/draft/draft_view'); ?>
                 </div>
             </section>
         </section>
