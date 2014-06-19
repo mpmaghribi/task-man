@@ -19,6 +19,7 @@
                         <?php
                         if (isset($list_draft)) {
                             $prioritas = array(1 => 'Urgent', 2 => 'Tinggi', 3 => 'Sedang', 4 => 'Rendah');
+                            $label_prioritas = array(1 => 'label-danger', 2 => 'label-success', 3 => 'label-info', 4 => 'label-inverse');
                             //var_dump($my_staff);
                             $counter = 0;
                             foreach ($list_draft as $draft) {
@@ -27,7 +28,7 @@
                                 echo '<td >' . $counter . '</td>';
                                 echo '<td>' . $draft->nama_pekerjaan . '</td>';
                                 echo '<td>' . date("d M Y", strtotime($draft->tgl_mulai)) . ' - ' . date("d M Y", strtotime($draft->tgl_selesai)) . '</td>';
-                                echo '<td>' . $prioritas[$draft->level_prioritas] . '</td>';
+                                echo '<td><span class="label '.$label_prioritas[$draft->level_prioritas].' label-mini">' . $prioritas[$draft->level_prioritas] . '</span></td>';
                                 ?>
                             <td style="text-align: right">
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: 0px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
