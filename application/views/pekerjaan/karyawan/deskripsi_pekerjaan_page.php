@@ -49,7 +49,7 @@ foreach ($users as $u) {
                                     if ($terlambat > 0 && !$usulan) {
                                         if ($perpanjang) {
                                             ?><a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px">Perpanjangan Telah Dikirim</a><?php
-                                        } else if($ikut_serta){
+                                        } else if ($ikut_serta) {
                                             ?><a class="btn btn-primary btn-xs" data-toggle="modal" href="#modal_perpanjang" id="tombol_perpanjang" style="font-size: 10px">Minta Perpanjang</a><?php
                                         }
                                         ?><?php } ?>
@@ -91,7 +91,11 @@ if ($this->session->userdata('prev') != null) {
                                         <div class="col-md-12">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
-                                                    Penanggung Jawab
+                                                    <?php if ($deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
+                                                        Pembuat Pekerjaan
+                                                        <?php } else if ($deskripsi_pekerjaan[0]->flag_usulan == '1') { ?>
+                                                        Ditujukan Kepada
+                                                    <?php } ?>
                                                 </h4>
                                                 <p style="font-size: larger" id="nama_penanggung_jawab">
                                                     <?php if ($deskripsi_pekerjaan[0]->id_penanggung_jawab != null) echo $user[$deskripsi_pekerjaan[0]->id_penanggung_jawab]; ?>
@@ -135,9 +139,9 @@ if ($this->session->userdata('prev') != null) {
                                                 </h4>
                                                 <p style="font-size: larger">
                                                     <?php
-                                                    echo date("d M Y", strtotime(substr($deskripsi_pekerjaan[0]->tgl_mulai,0,19)));
+                                                    echo date("d M Y", strtotime(substr($deskripsi_pekerjaan[0]->tgl_mulai, 0, 19)));
                                                     echo " - ";
-                                                    echo date("d M Y", strtotime(substr($deskripsi_pekerjaan[0]->tgl_selesai,0,19)));
+                                                    echo date("d M Y", strtotime(substr($deskripsi_pekerjaan[0]->tgl_selesai, 0, 19)));
                                                     ?>
                                                 </p>
                                             </section>
@@ -482,7 +486,7 @@ if ($this->session->userdata('prev') != null) {
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                     ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                       ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -743,7 +747,7 @@ if ($this->session->userdata('prev') != null) {
         function minta_perpanjang() {
             $.ajax({// create an AJAX call...
                 data: {
-                    id_pekerjaan : <?php echo $id_pkj; ?>, // get the form data
+                    id_pekerjaan: <?php echo $id_pkj; ?>, // get the form data
                     alasan: $('#alasan_perpanjangan').html()
                 },
                 type: "POST", // GET or POST
