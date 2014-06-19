@@ -93,7 +93,7 @@ if ($this->session->userdata('prev') != null) {
                                                 <h4 style="color: #1FB5AD;">
                                                     <?php if ($deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
                                                         Pembuat Pekerjaan
-                                                        <?php } else if ($deskripsi_pekerjaan[0]->flag_usulan == '1') { ?>
+                                                        <?php } else if ($deskripsi_pekerjaan[0]->flag_usulan == '1'||$deskripsi_pekerjaan[0]->flag_usulan == '9') { ?>
                                                         Ditujukan Kepada
                                                     <?php } ?>
                                                 </h4>
