@@ -6,7 +6,7 @@ var min_element_status = [];
 var total_progress = [];
 var jumlah_data_progress = [];
 var satu_hari = 1000 * 60 * 60 * 24;
-function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_read, status_, progress) {
+function subah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_read, status_, progress) {
     if (!min_element_status[id]) {
         min_element_status[id] = 5;
         total_progress[id] = 0;
