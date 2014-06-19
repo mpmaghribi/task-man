@@ -165,8 +165,8 @@ foreach ($pkj_karyawan as $pekerjaan_saya) {
             tgl_mulai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_mulai; ?>';<?php
 }
 ?>
-        console.log(tgl_selesai_pekerjaan_saya);
-        console.log(flag_usulan_pekerjaan_saya);
+        //console.log(tgl_selesai_pekerjaan_saya);
+        //console.log(flag_usulan_pekerjaan_saya);
         document.title = "DashBoard - Task Management";
 
         var jumlah_detil_saya = detil_pekerjaan_saya.length;

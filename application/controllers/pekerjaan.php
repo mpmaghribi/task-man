@@ -633,12 +633,13 @@ class pekerjaan extends ceklogin {
             foreach ($detil_pekerjaan as $detil) {
                 if ($detil->id_akun == $temp['user_id']) {
                     $ikut_serta = true;
-                    break;
+                    //break;
                 }
                 if (!in_array($detil->id_akun, $list_my_staff)) {
                     $diassign_ke_bawahan_saya = false;
                 }
             }
+            $data['diassign_ke_bawahan_saya']=$diassign_ke_bawahan_saya;
             $data['ikut_serta'] = $ikut_serta;
             if ($desk[0]->id_penanggung_jawab == $temp['user_id'] && $usulan) {//pemberi pekerjaan, atasan yg dituju pada pengusulan, atau atasan yg mengusulkan
                 $data['bisa_validasi'] = $usulan;

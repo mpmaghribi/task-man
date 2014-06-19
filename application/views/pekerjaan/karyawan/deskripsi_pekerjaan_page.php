@@ -748,7 +748,7 @@ if ($this->session->userdata('prev') != null) {
             $.ajax({// create an AJAX call...
                 data: {
                     id_pekerjaan: <?php echo $id_pkj; ?>, // get the form data
-                    alasan: $('#alasan_perpanjangan').html()
+                    alasan: $('#alasan_perpanjangan').val()
                 },
                 type: "POST", // GET or POST
                 url: "<?php echo site_url(); ?>/pekerjaan/req_perpanjangan", // the file to call
@@ -757,7 +757,8 @@ if ($this->session->userdata('prev') != null) {
                     //alert(response);
                     if (json.status === "OK") {
                         //$('#div_acc_edit_cancel_usulan_pekerjaan').remove();
-                        $('#tombol_perpanjang').remove();
+                        $('#tombol_perpanjang').attr('href','javascript:void(0);');
+                        $('#tombol_perpanjang').html('Perpanjangan Telah Dikirim');
                     } else {
                         alert("Permintaan perpanjangan gagal, " + json.keterangan);
                     }
