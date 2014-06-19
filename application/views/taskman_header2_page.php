@@ -4,8 +4,7 @@
     <div class="brand">
 
         <a href="<?php echo site_url() ?>" class="logo">
-    <!--        <img src="<?php echo base_url() ?>/assets/images/logo.png" alt="">-->
-            Task<br>Management
+            <img src="<?php echo base_url() ?>assets/logo-taskman.png" alt="">
         </a>
         <div class="sidebar-toggle-box">
             <div class="fa fa-bars"></div>
