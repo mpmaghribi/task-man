@@ -21,26 +21,25 @@
                         <?php
                         if (isset($pekerjaan_staff)) {
                             $prioritas = array(1 => 'Urgent', 2 => 'Tinggi', 3 => 'Sedang', 4 => 'Rendah');
-                            $list_status = array(1 => 'Not Approved', 2 => 'Approved',9=>'Perpanjang');
-                            $label_status = array(1 => 'label-danger', 2 => 'label-success',9=>"label-inverse");
+                            $list_status = array(1 => 'Not Approved', 2 => 'Approved', 9 => 'Perpanjang');
+                            $label_status = array(1 => 'label-danger', 2 => 'label-success', 9 => "label-inverse");
+                            $label_prioritas = array(1 => 'label-danger', 2 => 'label-success', 3 => 'label-info', 4 => 'label-inverse');
                             //var_dump($my_staff);
                             $counter = 0;
                             $list_id_pekerjaan = array();
                             //$sekarang = date('Y-m-d');
                             foreach ($pekerjaan_staff as $kerja) {
                                 if (!in_array($kerja->id_pekerjaan, $list_id_pekerjaan)) {
-
                                     $list_id_pekerjaan[] = $kerja->id_pekerjaan;
                                     $counter++;
                                     ?>
                                     <tr style="vertical-align: middle">
                                         <td style="vertical-align: middle"> <?php echo $counter; ?></td>
-                                        <td style="vertical-align: middle"> <?php echo $kerja->nama_pekerjaan; ?></td><?php
-                                        echo '<td style="vertical-align: middle">' . date("d M Y", strtotime(substr($kerja->tgl_mulai, 0, 19))) . ' - ' . date("d M Y", strtotime(substr($kerja->tgl_selesai, 0, 19))) . '</td>';
-                                        echo '<td style="vertical-align: middle" id="list_staff_' . $kerja->id_pekerjaan . '"></td>';
-                                        echo '<td style="vertical-align: middle">' . $prioritas[$kerja->level_prioritas] . '</td>';
-                                        echo '<td style="vertical-align: middle" id="pekerjaan_staff_status_' . $kerja->id_pekerjaan . '"><span class="label ' . $label_status[$kerja->flag_usulan] . ' label-mini">' . $list_status[$kerja->flag_usulan] . '</span></td>';
-                                        ?>
+                                        <td style="vertical-align: middle"> <?php echo $kerja->nama_pekerjaan; ?></td>
+                                        <td style="vertical-align: middle"><?= date("d M Y", strtotime(substr($kerja->tgl_mulai, 0, 10))) ?> - <?= date("d M Y", strtotime(substr($kerja->tgl_selesai, 0, 19))) ?></td>
+                                        <td style="vertical-align: middle" id="list_staff_<?=$kerja->id_pekerjaan; ?>"></td>
+                                        <td style="vertical-align: middle"><span class="label <?=$label_prioritas[$kerja->level_prioritas]; ?> label-mini"><?= $prioritas[$kerja->level_prioritas] ?></span></td>
+                                        <td style="vertical-align: middle" id="pekerjaan_staff_status_<?= $kerja->id_pekerjaan ?>"><span class="label <?= $label_status[$kerja->flag_usulan] ?> label-mini"><?= $list_status[$kerja->flag_usulan] ?></span></td>
                                         <td style="text-align: right;vertical-align: middle">
                                             <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: 0px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                                 <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $kerja->id_pekerjaan; ?>" id="" style="font-size: 10px">Edit</a>
@@ -48,9 +47,9 @@
                                             </div>
                                         </td>
                                     </tr>
-                                <?php } ?>
+        <?php } ?>
                             <script>
-                                ubah_status_pekerjaan('pekerjaan_staff_status_<?php echo $kerja->id_pekerjaan; ?>', <?php echo $kerja->flag_usulan; ?>, '<?php echo $kerja->sekarang; ?>', '<?php echo $kerja->tgl_mulai; ?>', '<?php echo $kerja->tgl_selesai; ?>', '<?php echo $kerja->tgl_read; ?>', '<?php echo $kerja->status; ?>', <?php echo $kerja->progress; ?>);
+                                //ubah_status_pekerjaan('pekerjaan_staff_status_<?php echo $kerja->id_pekerjaan; ?>', <?php echo $kerja->flag_usulan; ?>, '<?php echo $kerja->sekarang; ?>', '<?php echo $kerja->tgl_mulai; ?>', '<?php echo $kerja->tgl_selesai; ?>', '<?php echo $kerja->tgl_read; ?>', '<?php echo $kerja->status; ?>', <?php echo $kerja->progress; ?>);
                             </script>
                             <?php
                         }

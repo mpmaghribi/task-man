@@ -173,8 +173,9 @@ foreach ($pkj_karyawan as $pekerjaan_saya) {
         var jumlah_detil_saya = detil_pekerjaan_saya.length;
         for (var i = 0; i < jumlah_detil_saya; i++) {
             var detil = detil_pekerjaan_saya[i];
-            if (detil['id_akun'] == '<?php echo $data_akun['id_akun']; ?>')
-                ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'], tgl_mulai_pekerjaan_saya[detil['id_pekerjaan']], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);
+            if (detil['id_akun'] == '<?php echo $data_akun['id_akun']; ?>'){
+                //ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'], tgl_mulai_pekerjaan_saya[detil['id_pekerjaan']], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);
+            }
         }
     </script>
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>

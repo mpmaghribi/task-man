@@ -5,11 +5,7 @@
 <script src="<?php echo base_url() ?>/assets/js/jquery.simplePagination.js"></script>
 <!--Notification script-->
 <script src="<?php echo base_url() ?>/assets/js/miniNotification.js"></script>
-<script>
-    $(function() {
-        $('#mini-notification').miniNotification();
-    });
-</script>
+
 <!--End of notification script-->
 <script src="<?php echo base_url() ?>/assets/js/jquery-ui/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="<?php echo base_url() ?>/assets/bs3/js/bootstrap.min.js"></script>
@@ -171,9 +167,9 @@
         });
     }
     jQuery(document).ready(function() {
-        req_pending_task();
+        //req_pending_task();
     });
-
+    
     var tinggi = $(window).height();
     var lebar = $(window).width();
     console.log('tinggi = ' + tinggi);
