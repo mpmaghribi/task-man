@@ -18,10 +18,10 @@ class home extends ceklogin {
         $temp = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
         $list_id_pekerjaan_saya = array();
-        foreach ($result as $pekerjaan_saya){
-            $list_id_pekerjaan_saya[]=$pekerjaan_saya->id_pekerjaan;
+        foreach ($result as $pekerjaan_saya) {
+            $list_id_pekerjaan_saya[] = $pekerjaan_saya->id_pekerjaan;
         }
-        $data['detil_pekerjaan_saya']=$this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan_saya);
+        $data['detil_pekerjaan_saya'] = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan_saya);
         $data['data_akun'] = $this->session->userdata('logged_in');
         $data['pkj_karyawan'] = $result;
         $result1 = $this->pekerjaan_model->alltask($temp['user_id']);
@@ -36,42 +36,37 @@ class home extends ceklogin {
         //$data["temp"] = $this->session->userdata('logged_in');
         $data["users"] = json_decode(file_get_contents($url));
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Login", $temp['user_nama'] . " sedang berada di halaman dashboard.");
+
         $staff = $this->akun->my_staff($temp['user_id']);
-        $data['my_staff']=$staff;
+        $data['my_staff'] = $staff;
         if (count($data['my_staff']) > 0) {
             $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
             $my_staff = array();
             //print_r($staff);
             //var_dump($staff);
-            if (isset($staff->error)) 
-            {
-                $staff=array();
-                $data['my_staff']=$staff;
+            if (isset($staff->error)) {
+                $staff = array();
+                $data['my_staff'] = $staff;
             }
-                foreach ($staff as $s) {
-                    //print_r($s);
-                    //if(is_array($s))
-                    $my_staff[] = $s->id_akun;
-                
+            foreach ($staff as $s) {
+                //print_r($s);
+                //if(is_array($s))
+                $my_staff[] = $s->id_akun;
             }
             //print_r($my_staff);
-            $data['pekerjaan_staff'] = $this->pekerjaan_model->get_pekerjaan_staff( $my_staff);
+            $data['pekerjaan_staff'] = $this->pekerjaan_model->get_pekerjaan_staff($my_staff);
             $list_id_pekerjaan = array();
-            if ($data['pekerjaan_staff'] != NULL)
+            if ($data['pekerjaan_staff'] != NULL) {
                 foreach ($data['pekerjaan_staff'] as $job) {
                     $list_id_pekerjaan[] = $job->id_pekerjaan;
                 }
+            }
             $data['detil_pekerjaan_staff'] = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
         }
-//        $data['bawahan'] = json_decode(
-//                file_get_contents(
-//                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/".$temp['user_id']."/format/json"
-//                        ));
-        
         $this->load->view('homepage/taskman_home_page', $data);
         //print_r($data);
-        $this->session->set_userdata("prev","home");
-        $this->session->set_userdata("prev_text","Kembali ke Dashboard");
+        $this->session->set_userdata("prev", "home");
+        $this->session->set_userdata("prev_text", "Kembali ke Dashboard");
     }
 
     public function recent_activity_staff() {
@@ -80,21 +75,21 @@ class home extends ceklogin {
         $id = $temp["user_id"];
         $data['bawahan'] = json_decode(
                 file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/".$id."/format/json"
-                        ));
+                        str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/" . $id . "/format/json"
+        ));
         $data['activity'] = $this->taskman_repository->sp_recent_activity();
 
         $this->load->view('recent_activity_staff', $data);
     }
-    
+
     public function recent_activity() {
         $temp = $this->session->userdata("logged_in");
         $data['temp'] = $temp;
         $id = $temp["user_id"];
         $data['bawahan'] = json_decode(
                 file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/".$id."/format/json"
-                        ));
+                        str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/bawahan/id/" . $id . "/format/json"
+        ));
         $data['activity'] = $this->taskman_repository->sp_recent_activity();
 
         $this->load->view('recent_activity_page', $data);
