@@ -13,15 +13,15 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_r
         jumlah_data_progress[id] = 0;
         console.log("register new index status");
     }
-    console.log('mulai    = ' + tgl_mulai + ' sekarang = ' + sekarang + ' deadline = ' + tgl_selesai);
+    //console.log('mulai    = ' + tgl_mulai + ' sekarang = ' + sekarang + ' deadline = ' + tgl_selesai);
     //console.log('sekarang = ' + sekarang);
     //console.log('deadline = ' + tgl_selesai);
 
     if (sekarang.substring(0, 10) <= tgl_selesai.substring(0, 10)) {
-        console.log(id + " masih bisa dikerjakan");
+        //console.log(id + " masih bisa dikerjakan");
     }
     else {
-        console.log(id + " terlambat");
+        //console.log(id + " terlambat");
     }
     //console.log(tgl_selesai-sekarang);
     jumlah_data_progress[id]++;
@@ -64,7 +64,7 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_r
         status_id=6;
     }
     var new_label = '';
-    console.log("total progress = " + total_progress[id]);
+    //console.log("total progress = " + total_progress[id]);
     if (total_progress[id] > 0) {
         var nilai_progress = total_progress[id] / jumlah_data_progress[id];
         nilai_progress = (new Number(nilai_progress)).toPrecision(4);
@@ -102,6 +102,6 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_r
         new_label = '<span class="label label-' + status_label[status_id] + ' label-mini">' + status_nama[status_id] + '</span>';
         //console.log('status adalah label');
     }
-    console.log('set ' + id + ' to id status ' + status_id + ' => ' + status_nama[status_id] + '  |||||  ' + min_element_status[id]);
+    //console.log('set ' + id + ' to id status ' + status_id + ' => ' + status_nama[status_id] + '  |||||  ' + min_element_status[id]);
     $('#' + id).html(new_label);
 }

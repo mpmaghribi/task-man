@@ -56,8 +56,6 @@
                         </section>
                     </div>
                     <div class="col-md-12" id="div_grafik">
-                        <div id="grafik_highchart"></div>
-                        <div id="grafik_morris"></div>
                     </div>
                 </div>
                 <!-- page end-->
@@ -149,6 +147,7 @@
         }
 
         function morris_bar() {
+            //sudut pandang => pekerjaan terhadap tanggal
             var jumlah_detil_progress = detil_progress.length;
             var data_graph = [];
             var jumlah_pekerjaan = pekerjaan_id.length;
@@ -211,6 +210,10 @@
             var data_graph = jQuery.parseJSON('[' + data_graph_text + ']');
             console.log(data_graph);
 
+
+            if ($('#grafik_morris').length == 0) {
+                $('#div_grafik').append('<div id="grafik_morris"></div');
+            }
             Morris.Bar({
                 element: 'grafik_morris',
                 behaveLikeLine: true,
@@ -230,10 +233,13 @@
             });
         }
         function highchart_bar() {
-
+//sudut pandang => tanggal terhadap pekerjaan
             var list_tanggal = [];
             var list_date = [];
-            var list_nama_pekerjaan = [];
+            //var list_nama_pekerjaan = [];
+            var series_name = [];
+            var series_data = [];
+            var series_data2 = [];
 
             var jumlah_detil_progress = detil_progress.length;
             for (var i = 0; i < jumlah_detil_progress; i++) {
@@ -242,10 +248,53 @@
                     list_tanggal.push(tanggal);
                     list_date.push(new Date(tanggal));
                 }
+                if (series_name.indexOf(pekerjaan_nama[detil_progress[i].id_pekerjaan]) == -1) {
+                    series_name.push(pekerjaan_nama[detil_progress[i].id_pekerjaan]);
+                    //series_data[pekerjaan_nama[detil_progress[i].id_pekerjaan]]=[];
+                    series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]] = [];
+                }
+                //series_data[pekerjaan_nama[detil_progress[i].id_pekerjaan]].push(detil_progress[i].progress);
+                //series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]][tanggal]=detil_progress[i].progress;
+            }
+            var t = list_tanggal.length;
+            var p = series_name.length;
+            for (var i = 0; i < t; i++) {
+                var tanggal = list_tanggal[i];
+                for (var j = 0; j < p; j++) {
+                    var nama = series_name[j];
+                    //console.log(j+nama + ' => ' + i+tanggal);
+                    series_data2[nama][tanggal] = -1;
+                }
+            }
+            for (var i = 0; i < jumlah_detil_progress; i++) {
+                var tanggal = detil_progress[i].waktu.substring(0, 19);
+                series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]][tanggal] = detil_progress[i].progress;
+            }
+
+            for (var i in series_data2) {
+                var prev = 0;
+                //console.log(i);
+                if (series_data2.hasOwnProperty(i)) {
+                    for (var j in series_data2[i]) {
+                        if (series_data2[i].hasOwnProperty(j)) {
+                            //console.log(series_data2[i][j]);
+                            if (series_data2[i][j] == -1) {
+                                series_data2[i][j] = prev;
+                            } else {
+                                prev = series_data2[i][j];
+                            }
+                        }
+                    }
+                }
             }
             console.log('highchart log');
             console.log(list_tanggal);
             console.log(list_date);
+            console.log('series_name');
+            console.log(series_name);
+            console.log('series_data');
+            //console.log(series_data);
+            console.log(series_data2);
 
             var jumlah_tanggal = list_date.length;
             var selisih = list_date[jumlah_tanggal - 1] - list_date[0];
@@ -287,16 +336,46 @@
             for (var i = 0; i < n_r_index; i++) {
                 console.log(r_index[i] + '=' + r_[r_index[i]]);
             }
-            var kategori = [];
-            var series = [];
+            var kategori = list_tanggal;
+            var series1 = [];
+            for (var i in series_data2) {
+                if (series_data2.hasOwnProperty(i)) {
+                    var new_data = [];
+                    for (var j in series_data2[i]) {
+                        if (series_data2[i].hasOwnProperty(j)) {
+                            new_data.push(parseInt(series_data2[i][j]));
+                        }
+                    }
+                    var new_series = {name: i, data: new_data};
+                    series1.push(new_series);
+                }
+            }
 
 
-            $('#grafik_highchart').highcharts({
+            highchart_bar1(kategori, series1);
+
+
+
+        }
+        function highchart_bar1(kategori, series) {
+            //kategori = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            //series = [{name: 'Tokyo', data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]}, {name: 'New York', data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]}, {name: 'London', data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]}, {name: 'Berlin', data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]}];
+
+
+            console.log('kategori ');
+            console.log(kategori);
+            console.log('series');
+            console.log(series);
+            if ($('#grafik_highchart1').length == 0) {
+                $('#div_grafik').append('<div id="grafik_highchart1"></div');
+            }
+
+            var highchart = {
                 chart: {
                     type: 'column'
                 },
                 title: {
-                    text: 'Monthly Average Rainfall'
+                    text: 'pekerjaan'
                 },
                 subtitle: {
                     text: 'Perkembangan progress'
@@ -311,7 +390,7 @@
                 tooltip: {
                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                            '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                            '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
                     footerFormat: '</table>',
                     shared: true,
                     useHTML: true
@@ -321,15 +400,22 @@
                         pointPadding: 0.2,
                         borderWidth: 0
                     }
-                }
-            });
+                },
+                xAxis: {
+                    categories: kategori
+                },
+                series: series
+            };
+            console.log('highchart');
+            console.log(highchart);
+            $('#grafik_highchart1').highcharts(highchart);
         }
         jQuery(document).ready(function() {
             EditableTableProgress.init();
             $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-            morris_bar();
+
             fill_tabel_pekerjaan();
             highchart_bar();
-
+            morris_bar();
         });
     </script>
