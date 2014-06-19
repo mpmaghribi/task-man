@@ -10,9 +10,7 @@
         <!--sidebar end-->
         <!--main content start-->
         <section id="main-content">
-            
             <section class="wrapper">
-                <?php //var_dump($temp); echo $temp['idmodul'][0]; ?>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="mini-stat clearfix">
@@ -74,74 +72,79 @@
                 <!--mini statistics start-->
                 <!--mini statistics end-->
                 <div class="row">
+                    <?php if(in_array(1, $data_akun['idmodul'])){?>
                     <div class="col-md-12" id="PekerjaanSaya" >
                         <section class="panel">
                             <header class="panel-heading  ">
                                 Pekerjaan Saya
                             </header>
                             <div class="panel-body">
-
-                                <!--div class="tab-content"-->
-                                    <!--div class="tab-pane active"-->
-
-                                        <div class="form">
-                                            <table class="table table-striped table-hover table-condensed" id="tabel_home">
-                                                <thead>
+                                <div class="form">
+                                    <table class="table table-striped table-hover table-condensed" id="tabel_home">
+                                        <thead>
+                                            <tr>
+                                                <th> No</th>
+                                                <th class="hidden-phone">Pekerjaan</th>
+                                                <th>Deadline</th>
+                                                <th>Assign To</th>
+                                                <th style="min-width: 150px">Status</th>
+                                                <th></th>
+    <!--                                                            <th>Progress</th>-->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if (isset($pkj_karyawan)) { ?>
+                                                <?php
+                                                $i = 1;
+                                                $list_id_pekerjaan = array();
+                                                foreach ($pkj_karyawan as $value) {
+                                                    if (in_array($value->id_pekerjaan, $list_id_pekerjaan))
+                                                        continue;
+                                                    $list_id_pekerjaan[] = $value->id_pekerjaan;
+                                                    ?>
                                                     <tr>
-                                                        <th> No</th>
-                                                        <th class="hidden-phone">Pekerjaan</th>
-                                                        <th>Deadline</th>
-                                                        <th>Assign To</th>
-                                                        <th style="min-width: 150px">Status</th>
-                                                        <th></th>
-            <!--                                                            <th>Progress</th>-->
+                                                        <td style="vertical-align: middle">
+                                                            <a href="#">
+                                                                <?php echo $i; ?>
+                                                            </a>
+                                                        </td>
+                                                        <td style="vertical-align: middle" class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
+                                                        <td style="vertical-align: middle"> <?php echo date("d M Y", strtotime(substr($value->tgl_mulai, 0, 19))) ?> - <?php echo date("d M Y", strtotime(substr($value->tgl_selesai, 0, 19))) ?></td>
+                                                        <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;            ?>"><?php foreach ($users as $value2) { ?>
+                                                                <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
+                                                            <?php } ?></td>
+                                                        <td style="vertical-align: middle" id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
+                                                        <td style="vertical-align: middle">
+                                                            <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
+                                                                <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
+                                                                <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
+                                                            </form>
+                                                        </td>
                                                     </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php if (isset($pkj_karyawan)) { ?>
-                                                        <?php
-                                                        $i = 1;
-                                                        $list_id_pekerjaan = array();
-                                                        foreach ($pkj_karyawan as $value) {
-                                                            if (in_array($value->id_pekerjaan, $list_id_pekerjaan))
-                                                                continue;
-                                                            $list_id_pekerjaan[] = $value->id_pekerjaan;
-                                                            ?>
-                                                            <tr>
-                                                                <td style="vertical-align: middle">
-                                                                    <a href="#">
-                                                                        <?php echo $i; ?>
-                                                                    </a>
-                                                                </td>
-                                                                <td style="vertical-align: middle" class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
-                                                                <td style="vertical-align: middle"> <?php echo date("d M Y", strtotime(substr($value->tgl_mulai,0,19))) ?> - <?php echo date("d M Y", strtotime(substr($value->tgl_selesai,0,19))) ?></td>
-                                                                <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;           ?>"><?php foreach ($users as $value2) { ?>
-                                                                        <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
-                                                                    <?php } ?></td>
-                                                                <td style="vertical-align: middle" id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
-                                                                <td style="vertical-align: middle">
-                                                                    <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
-                                                                        <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
-                                                                        <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
-                                                                    </form>
-                                                                </td>
-                                                            </tr>
-                                                            <?php
-                                                            $i++;
-                                                        }
-                                                        ?>
-                                                    <?php } ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    <!--/div-->
-                                    
-                                
+                                                    <?php
+                                                    $i++;
+                                                }
+                                                ?>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--/div-->
+
+
                             </div>
                         </section>
                     </div>
-                    <?php $this->load->view('pekerjaan/karyawan/pekerjaan_staff_view'); ?>
-                                    <?php $this->load->view('pekerjaan/draft/draft_view'); ?>
+                    <?php }
+                    if(in_array(9, $data_akun['idmodul'])){
+                        $this->load->view('pekerjaan/karyawan/pekerjaan_staff_view'); 
+                    }
+                    if(in_array(3, $data_akun['idmodul'])){
+                        $this->load->view('pekerjaan/draft/draft_view'); 
+                    }
+                    ?>
+                    
+                    
                 </div>
             </section>
         </section>
@@ -171,7 +174,7 @@ foreach ($pkj_karyawan as $pekerjaan_saya) {
         for (var i = 0; i < jumlah_detil_saya; i++) {
             var detil = detil_pekerjaan_saya[i];
             if (detil['id_akun'] == '<?php echo $data_akun['id_akun']; ?>')
-                ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'],tgl_mulai_pekerjaan_saya[detil['id_pekerjaan']], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);
+                ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'], tgl_mulai_pekerjaan_saya[detil['id_pekerjaan']], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);
         }
     </script>
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
