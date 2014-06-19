@@ -24,7 +24,7 @@
                                     </li>
 
                                     <li class="">
-                                        <a data-toggle="tab" href="#TambahPekerjaan">Tambah Pekerjaan</a>
+                                        <a data-toggle="tab" href="#TambahPekerjaan">Usulkan Pekerjaan</a>
                                     </li>
                                 </ul>
                             </header>
@@ -92,7 +92,7 @@
                                         </section>
                                         <section class="panel">
                                             <header class="panel-heading">
-                                                Daftar Usulan Pekerjaan
+                                                Daftar Usulan Pekerjaan Saya
                                             </header>
                                             <div class="panel-body">
                                                 <div class="form">

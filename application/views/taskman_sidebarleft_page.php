@@ -48,7 +48,7 @@
                                 <li class="sub-menu">
                                     <a href="<?php echo base_url(); ?>pekerjaan/lihat_usulan">
                                         <i class="fa fa-book"></i>
-                                        <span>Usulan Pekerjaan</span>
+                                        <span>Usulan Pekerjaan Staff</span>
                                     </a>
                                 </li>
                             <?php } else if ($value == 5) { ?>
