@@ -84,7 +84,7 @@
                                                         <input class=" form-control" id="firstname" name="nama_pkj" type="text" value="<?php echo $pekerjaan[0]->nama_pekerjaan; ?>"/>
                                                     </div>
                                                 </div>
-                                                <div class="form-group ">
+                                                <div class="form-group " id="deskripsi">
                                                     <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
                                                     <div class="col-lg-6">
                                                         <textarea class="form-control" name="deskripsi_pkj" rows="12"><?php echo $pekerjaan[0]->deskripsi_pekerjaan; ?></textarea>
@@ -205,8 +205,10 @@
     </section>
     <script type="text/javascript">
         $(function() {
-            var nowTemp = new Date();
+            var nowTemp = new Date('<?php echo date('Y-m-d');?>');
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            //console.log(nowTemp);
+            //console.log(now);
             var checkin = $('.dpd1').datepicker({
                 format: 'dd-mm-yyyy',
                 onRender: function(date) {
@@ -224,7 +226,7 @@
             var checkout = $('.dpd2').datepicker({
                 format: 'dd-mm-yyyy',
                 onRender: function(date) {
-                    return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+                    return date.valueOf() <= checkin.date.valueOf() && date.valueOf() <= now.valueOf() ? 'disabled' : '';
                 }
             }).on('changeDate', function(ev) {
                 checkout.hide();

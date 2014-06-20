@@ -191,7 +191,7 @@ class pekerjaan extends ceklogin {
             }
         }
         if ($status == 0) {
-            if ($pekerjaan[0]->flag_usulan == '9') {
+            if ($pekerjaan[0]->flag_usulan == '9' && strcmp(date('Y-m-d'),$update["tgl_selesai"])<=0) {
                 $update['flag_usulan'] = '2';
             }
             echo "mencari siapa yang terlibat, siapa yang atasan";

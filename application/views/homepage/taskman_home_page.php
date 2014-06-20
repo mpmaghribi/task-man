@@ -96,8 +96,8 @@
                                                     <?php
                                                     $i = 1;
                                                     $list_id_pekerjaan = array();
-                                                    $list_status = array(1 => 'Not Approved', 2 => 'Approved', 9 => 'Perpanjang');
-                                                    $label_status = array(1 => 'label-danger', 2 => 'label-success', 9 => "label-inverse");
+                                                    $list_status = array(1 => 'Not Approved', 2 => 'Approved', 9 => 'Perpanjang', 't'=>'Terlambat');
+                                                    $label_status = array(1 => 'label-danger', 2 => 'label-success', 9 => "label-inverse",'t'=>'label-info');
                                                     foreach ($pkj_karyawan as $value) {
                                                         if (in_array($value->id_pekerjaan, $list_id_pekerjaan))
                                                             continue;

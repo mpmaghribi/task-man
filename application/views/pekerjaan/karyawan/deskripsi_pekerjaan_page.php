@@ -48,11 +48,16 @@ foreach ($users as $u) {
                                     <?php
                                     if ($terlambat > 0 && !$usulan) {
                                         if ($perpanjang) {
-                                            ?><a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px">Perpanjangan Telah Dikirim</a><?php
+                                            if ($ikut_serta) {
+                                                ?><a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px">Perpanjangan Telah Dikirim</a><?php
+                                            } else if ($bisa_edit) {
+                                                ?><a class="btn btn-primary btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>#deskripsi" id="" style="font-size: 10px">Minta Diperpanjang</a><?php
+                                            }
                                         } else if ($ikut_serta) {
                                             ?><a class="btn btn-primary btn-xs" data-toggle="modal" href="#modal_perpanjang" id="tombol_perpanjang" style="font-size: 10px">Minta Perpanjang</a><?php
                                         }
-                                        ?><?php } ?>
+                                    }
+                                    ?>
                                 </div>
                                 <script>
                                     $('#tombol_batalkan_usulan').click(function(e) {
@@ -93,7 +98,7 @@ if ($this->session->userdata('prev') != null) {
                                                 <h4 style="color: #1FB5AD;">
                                                     <?php if ($deskripsi_pekerjaan[0]->flag_usulan == '2') { ?>
                                                         Pembuat Pekerjaan
-                                                        <?php } else if ($deskripsi_pekerjaan[0]->flag_usulan == '1'||$deskripsi_pekerjaan[0]->flag_usulan == '9') { ?>
+                                                    <?php } else if ($deskripsi_pekerjaan[0]->flag_usulan == '1' || $deskripsi_pekerjaan[0]->flag_usulan == '9') { ?>
                                                         Ditujukan Kepada
                                                     <?php } ?>
                                                 </h4>
@@ -186,7 +191,7 @@ if ($this->session->userdata('prev') != null) {
                                                 </div>
                                             </section>
                                         </div>
-                                        <div class="col-md-12">
+                                        <div class="col-md-12" id="anggota_tim">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
                                                     Anggota Tim
@@ -200,8 +205,6 @@ if ($this->session->userdata('prev') != null) {
                                                                 <th>Nama</th>
                                                                 <th>Progress</th>
                                                                 <th></th>
-                                                                <th></th>
-<!--                                                                <th></th>-->
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -228,15 +231,16 @@ if ($this->session->userdata('prev') != null) {
                                                                                 </div>
                                                                             </div>
                                                                         </td>
-                                                                        <?php if ($value->id_akun == $temp['user_id'] && $value->flag_usulan == 2) { ?>
-                                                                            <td>
-                                                                                <a class=" btn btn-primary btn-xs" href="#UbahProgress" data-toggle="modal" onclick="show_progress('<?php echo $value->id_detil_pekerjaan ?>', '<?php echo $value->id_akun ?>')">Ubah Progress</a>
+                                                                        <td>
+                                                                            <?php
+                                                                            if ($value->id_akun == $data_akun['user_id'] && $value->flag_usulan == 2) {
+                                                                                if ($terlambat <= 0) {
+                                                                                    ?>
+                                                                                    <a class=" btn btn-primary btn-xs" href="#UbahProgress" data-toggle="modal" onclick="show_progress('<?php echo $value->id_detil_pekerjaan ?>', '<?php echo $value->id_akun ?>')">Ubah Progress</a>
+                                                                                <?php } ?>
                                                                                 <a class=" btn btn-primary btn-xs" href="#LogProgress" data-toggle="modal" onclick="history_progress('<?php echo $value->id_detil_pekerjaan ?>', '<?php echo $value->id_akun ?>')">History Progress</a>
-
-                                                                            </td>
-                                                                        <?php } ?>
-
-                                                                        <td></td>
+                                                                            <?php } ?>
+                                                                        </td>
                                                                     </tr>
                                                                     <?php
                                                                     $i++;
@@ -247,137 +251,32 @@ if ($this->session->userdata('prev') != null) {
                                                     </table>
                                                 </div>
                                             </section>
-                                            <script>
-                                                function ubah_progress()
-                                                {
-                                                    var data_progress = document.getElementById("progress").value;
-                                                    var idp = document.getElementById("idp").value;
-                                                    var log_perubahan = document.getElementById("perubahan").value;
-
-                                                    $.ajax({// create an AJAX call...
-                                                        data:
-                                                                {
-                                                                    id_detail_pkj: idp,
-                                                                    data_progress: data_progress,
-                                                                    perubahan: log_perubahan
-                                                                }, // get the form data
-                                                        type: "POST", // GET or POST
-                                                        url: "<?php echo site_url() ?>/pekerjaan/update_progress", // the file to call
-                                                        cache: false,
-                                                        success: function(response) { // on success..
-                                                            var json = jQuery.parseJSON(response);
-
-                                                            if (json.status === "OK") {
-                                                                alert("Progress berhasil diupdate!");
-                                                                window.location.href = "";
-                                                            } else {
-                                                                alert("Data gagal di update");
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                                function show_progress(id_detail_pkj, id_user)
-                                                {
-
-                                                    $.ajax({// create an AJAX call...
-                                                        data:
-                                                                {
-                                                                    user_id: id_user,
-                                                                    id_detail_pkj: id_detail_pkj
-                                                                }, // get the form data
-                                                        type: "POST", // GET or POST
-                                                        url: "<?php echo site_url() ?>/pekerjaan/show_progress", // the file to call
-                                                        cache: false,
-                                                        success: function(response) { // on success..
-                                                            var json = jQuery.parseJSON(response);
-
-                                                            if (json.status === "OK") {
-                                                                $("#progress").val(json.data[0].progress);
-                                                                $("#idp").val(id_detail_pkj);
-                                                            } else {
-                                                                alert("Data gagal di update");
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                                function history_progress(id_detail_pkj, id_user)
-                                                {
-                                                    $.ajax({// create an AJAX call...
-                                                        data:
-                                                                {
-                                                                    user_id: id_user,
-                                                                    id_detail_pkj: id_detail_pkj
-                                                                }, // get the form data
-                                                        type: "POST", // GET or POST
-                                                        url: "<?php echo site_url(); ?>/pekerjaan/show_log_progress", // the file to call
-                                                        cache: false,
-                                                        success: function(response) { // on success..
-                                                            var json = jQuery.parseJSON(response);
-                                                            if (json.status === "OK") {
-                                                                var count = 1;
-                                                                var html = "";
-                                                                html += "<table id='table_log_progress' class='table table-bordered'><thead><tr><th>No</th><th>Nama Pekerjaan</th><th>Log Perubahan</th><th> Progress</th><th> Tanggal</tr></thead>";
-                                                                html += "<tbody>";
-                                                                var jml = "";
-                                                                if (json.data.length > 5)
-                                                                {
-                                                                    jml = 5;
-                                                                } else {
-                                                                    jml = json.data.length;
-                                                                }
-                                                                for (var i = 0; i < jml; i++)
-                                                                {
-                                                                    var tgl = json.data[i].waktu;
-                                                                    //tgl = tgl.replace(/-/gi,"/");
-                                                                    tgl = tgl.substring(19, 0);
-                                                                    html += "<tr>";
-                                                                    html += "<td>" + count + "";
-                                                                    html += "</td>";
-                                                                    html += "<td>" + json.data[i].nama_pekerjaan + "";
-                                                                    html += "</td>";
-                                                                    html += "<td>" + json.data[i].deksripsi + "";
-                                                                    html += "</td>";
-                                                                    html += "<td>" + json.data[i].progress + "% Selesai";
-                                                                    html += "</td>";
-                                                                    html += "<td>" + tgl + "";
-                                                                    html += "</td>";
-                                                                    html += "</tr>";
-
-                                                                    count++;
-                                                                    //                                                                    $("#log_progress").val(json.data[i].progress);
-                                                                    //                                                                    $("#tanggal").val(json.data[i].tanggal);
-                                                                    //                                                                    $("#nama_pkj").val(json.data[i].nama_pekerjaan);
-                                                                }
-                                                                html += "</tbody></table>";
-                                                                $("#history_progress").html(html);
-                                                                //window.location.href = "";
-                                                            } else {
-                                                                alert("Data gagal di update");
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                            </script>
-                                            <div class="modal fade" id="modal_perpanjang" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                            <h4 class="modal-title">Permintaan Perpanjangan</h4>
-                                                        </div>
-                                                        <div class="form modal-body">
-                                                            <!--                                                            <h5>Isi alasan perpanjangan</h5>-->
-                                                            <!--                                                            <textarea id="alasan_perpanjangan" placeholder="Isi Alasan Perpanjangan"></textarea>-->
-                                                            <div class="col-lg-12">
-                                                                <textarea class="form-control" id="alasan_perpanjangan" rows="10" placeholder="Isi Alasan Perpanjangan"></textarea>
+                                            <?php
+                                            if ($terlambat > 0 && !$usulan) {
+                                                 if ($ikut_serta) {
+                                                    ?>
+                                                    <div class="modal fade" id="modal_perpanjang" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                    <h4 class="modal-title">Permintaan Perpanjangan</h4>
+                                                                </div>
+                                                                <div class="form modal-body">
+                                                                    <div class="col-lg-12">
+                                                                        <textarea class="form-control" id="alasan_perpanjangan" rows="10" placeholder="Isi Alasan Perpanjangan"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button data-dismiss="modal" class="btn btn-default" onclick="minta_perpanjang();" type="button">Kirim Permintaan</button>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="modal-footer">
-                                                            <button data-dismiss="modal" class="btn btn-default" onclick="minta_perpanjang();" type="button">Kirim Permintaan</button>
-                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
+                                                    <?php
+                                                }
+                                            }
+                                            ?>
                                             <div class="modal fade" id="LogProgress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
@@ -486,7 +385,7 @@ if ($this->session->userdata('prev') != null) {
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                       ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                           ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -531,7 +430,7 @@ if ($this->session->userdata('prev') != null) {
 
 
                                     </div>
-                                    <?php if (count($my_staff) > 0) { ?>
+                                    <?php if (in_array(6, $data_akun['idmodul'])) { ?>
                                         <div id="penilaianPekerjaan" class="tab-pane">
                                             <?php $this->load->view('pekerjaan/penilaian'); ?>
                                         </div>
@@ -588,34 +487,7 @@ if ($this->session->userdata('prev') != null) {
         <!--right sidebar end-->
 
     </section>
-    <script type="text/javascript">
-        $(function() {
-            var nowTemp = new Date();
-            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-            var checkin = $('.dpd1').datepicker({
-                format: 'dd-mm-yyyy',
-                onRender: function(date) {
-                    return date.valueOf() < now.valueOf() ? 'disabled' : '';
-                }
-            }).on('changeDate', function(ev) {
-                if (ev.date.valueOf() > checkout.date.valueOf()) {
-                    var newDate = new Date(ev.date)
-                    newDate.setDate(newDate.getDate() + 1);
-                    checkout.setValue(newDate);
-                }
-                checkin.hide();
-                $('.dpd2')[0].focus();
-            }).data('datepicker');
-            var checkout = $('.dpd2').datepicker({
-                format: 'dd-mm-yyyy',
-                onRender: function(date) {
-                    return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
-                }
-            }).on('changeDate', function(ev) {
-                checkout.hide();
-            }).data('datepicker');
-        });
-    </script>
+    
     <script>
         function hapus_file(id_file, deskripsi)
         {
@@ -688,8 +560,7 @@ if ($this->session->userdata('prev') != null) {
                     data:
                             {
                                 id_komentar: id
-                            }, // get the form data
-                    type: "GET", // GET or POST
+                            }, // get the form data                     type: "GET", // GET or POST
                     url: "<?php echo site_url(); ?>/pekerjaan/hapus_komentar_pekerjaan", // the file to call
                     success: function(response) { // on success..
                         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
@@ -757,16 +628,129 @@ if ($this->session->userdata('prev') != null) {
                     //alert(response);
                     if (json.status === "OK") {
                         //$('#div_acc_edit_cancel_usulan_pekerjaan').remove();
-                        $('#tombol_perpanjang').attr('href','javascript:void(0);');
+                        $('#tombol_perpanjang').attr('href', 'javascript:void(0);');
                         $('#tombol_perpanjang').html('Perpanjangan Telah Dikirim');
+                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + document.getElementById('id_detail_pkj').value);
+                        window.location.hash = '#anggota_tim';
                     } else {
                         alert("Permintaan perpanjangan gagal, " + json.keterangan);
                     }
                 }
             });
         }
+        
         document.title = 'Deskripsi Pekerjaan: <?php echo $nama_pekerjaan; ?> - Task Management';
         //$('#komentar').trigger();
         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + document.getElementById('id_detail_pkj').value);
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+
+        function ubah_progress()
+        {
+            var data_progress = document.getElementById("progress").value;
+            var idp = document.getElementById("idp").value;
+            var log_perubahan = document.getElementById("perubahan").value;
+
+            $.ajax({// create an AJAX call...
+                data:
+                        {
+                            id_detail_pkj: idp,
+                            data_progress: data_progress,
+                            perubahan: log_perubahan
+                        }, // get the form data
+                type: "POST", // GET or POST
+                url: "<?php echo site_url() ?>/pekerjaan/update_progress", // the file to call
+                cache: false,
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+
+                    if (json.status === "OK") {
+                        alert("Progress berhasil diupdate!");
+                        window.location.href = "";
+                    } else {
+                        alert("Data gagal di update");
+                    }
+                }
+            });
+        }
+        function show_progress(id_detail_pkj, id_user)
+        {
+
+            $.ajax({// create an AJAX call...
+                data:
+                        {
+                            user_id: id_user,
+                            id_detail_pkj: id_detail_pkj
+                        }, // get the form data
+                type: "POST", // GET or POST
+                url: "<?php echo site_url() ?>/pekerjaan/show_progress", // the file to call
+                cache: false,
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+
+                    if (json.status === "OK") {
+                        $("#progress").val(json.data[0].progress);
+                        $("#idp").val(id_detail_pkj);
+                    } else {
+                        alert("Data gagal di update");
+                    }
+                }
+            });
+        }
+        function history_progress(id_detail_pkj, id_user)
+        {
+            $.ajax({// create an AJAX call...
+                data:
+                        {
+                            user_id: id_user,
+                            id_detail_pkj: id_detail_pkj
+                        }, // get the form data
+                type: "POST", // GET or POST
+                url: "<?php echo site_url(); ?>/pekerjaan/show_log_progress", // the file to call
+                cache: false,
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+                    if (json.status === "OK") {
+                        var count = 1;
+                        var html = "";
+                        html += "<table id='table_log_progress' class='table table-bordered'><thead><tr><th>No</th><th>Nama Pekerjaan</th><th>Log Perubahan</th><th> Progress</th><th> Tanggal</tr></thead>";
+                        html += "<tbody>";
+                        var jml = "";
+                        if (json.data.length > 5)
+                        {
+                            jml = 5;
+                        } else {
+                            jml = json.data.length;
+                        }
+                        for (var i = 0; i < jml; i++)
+                        {
+                            var tgl = json.data[i].waktu;
+                            //tgl = tgl.replace(/-/gi,"/");
+                            tgl = tgl.substring(19, 0);
+                            html += "<tr>";
+                            html += "<td>" + count + "";
+                            html += "</td>";
+                            html += "<td>" + json.data[i].nama_pekerjaan + "";
+                            html += "</td>";
+                            html += "<td>" + json.data[i].deksripsi + "";
+                            html += "</td>";
+                            html += "<td>" + json.data[i].progress + "% Selesai";
+                            html += "</td>";
+                            html += "<td>" + tgl + "";
+                            html += "</td>";
+                            html += "</tr>";
+                            count++;
+                            //                                                                    $("#log_progress").val(json.data[i].progress);
+                            //                                                                    $("#tanggal").val(json.data[i].tanggal);
+                            //                                                                    $("#nama_pkj").val(json.data[i].nama_pekerjaan);
+                        }
+                        html += "</tbody></table>";
+                        $("#history_progress").html(html);
+                        //window.location.href = "";
+                    } else {
+                        alert("Data gagal di update");
+                    }
+                }
+            });
+        }
+
     </script>
