@@ -76,7 +76,7 @@ class taskman_repository extends CI_Model {
         $query = "SELECT * from pekerjaan "
                 . "inner join detil_pekerjaan on "
                 . "pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan "
-                . "where detil_pekerjaan.id_akun=".$id_user." and (pekerjaan.flag_usulan = '2' or pekerjaan.flag_usulan = '1') "
+                . "where detil_pekerjaan.id_akun=".$id_user." and pekerjaan.flag_usulan in ('1', '2','9') "
                 . "and detil_pekerjaan.status!='Batal'";
         //echo $query;
         $query = $this->db->query($query);
