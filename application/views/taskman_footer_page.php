@@ -4,16 +4,16 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="<?php echo base_url() ?>/assets/js/jquery.simplePagination.js"></script>
 <!--Notification script-->
-<script src="<?php echo base_url() ?>/assets/js/miniNotification.js"></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/miniNotification.js"></script>-->
 
 <!--End of notification script-->
 <script src="<?php echo base_url() ?>/assets/js/jquery-ui/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="<?php echo base_url() ?>/assets/bs3/js/bootstrap.min.js"></script>
-<script class="include" src="<?php echo base_url() ?>/assets/js/jquery.dcjqaccordion.2.7.js"></script>
+<script src="<?php echo base_url() ?>/assets/js/jquery.dcjqaccordion.2.7.js"></script>
 <script src="<?php echo base_url() ?>/assets/js/jquery.scrollTo.min.js"></script>
 <script src="<?php echo base_url() ?>/assets/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.js"></script>
 <script src="<?php echo base_url() ?>/assets/js/jquery.nicescroll.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>/assets/js/gritter/js/jquery.gritter.js"></script>
+<script src="<?php echo base_url() ?>/assets/js/gritter/js/jquery.gritter.js"></script>
 <script src="<?php echo base_url() ?>/assets/js/gritter.js" type="text/javascript"></script>
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot-chart/excanvas.min.js"></script><![endif]-->
 <script src="<?php echo base_url() ?>/assets/js/skycons/skycons.js"></script>

@@ -56,12 +56,13 @@
                                                                 $i = 0;
                                                                 foreach ($pkj_karyawan as $value) {
                                                                     ?>
-                                                                    <?php if ($value->flag_usulan == 2) { 
-                                                                        $i++;?>
+                                                                    <?php if ($value->flag_usulan == 2) {
+                                                                        $i++;
+                                                                        ?>
                                                                         <tr>
                                                                             <td>
                                                                                 <a href="#">
-                                                                                    <?php echo $i; ?>
+            <?php echo $i; ?>
                                                                                 </a>
                                                                             </td>
                                                                             <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
@@ -80,7 +81,6 @@
                                                                     </script>
                                                                     <?php
                                                                 }
-                                                                
                                                             }
                                                             ?>
                                                         <?php } ?>
@@ -118,7 +118,8 @@
                                                                         <tr>
                                                                             <td>
                                                                                 <a href="#">
-                                                                                    <?php echo $i;
+                                                                                    <?php
+                                                                                    echo $i;
                                                                                     $i++;
                                                                                     ?>
                                                                                 </a>
@@ -443,9 +444,11 @@
         function pekerjaan_saya_set_nama(id, isi) {
             var sep = '';
             var element = $('#' + id);
-            if (element.html().length > 0)
-                sep = ", ";
-            element.html(element.html() + sep + isi);
+            if (element.length > 0) {
+                if (element.html().length > 0)
+                    sep = ", ";
+                element.html(element.html() + sep + isi);
+            }
         }
 <?php
 if (isset($users)) {

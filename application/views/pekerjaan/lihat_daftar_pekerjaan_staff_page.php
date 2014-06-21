@@ -166,9 +166,13 @@
                                                         <tbody>
                                                             <?php
                                                             if (isset($my_staff)) {
+                                                                $has_listed=  array();
                                                                 //var_dump($my_staff);
                                                                 $counter = 0;
                                                                 foreach ($my_staff as $staff) {
+                                                                    if(in_array($staff->id_akun,$has_listed))
+                                                                        continue;
+                                                                    $has_listed[]=$staff->id_akun;
                                                                     $counter++;
                                                                     echo '<tr>';
                                                                     echo '<td >' . $counter . '</td>';
@@ -202,11 +206,6 @@
         <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
 
         <!-- END JAVASCRIPTS -->
-        <script>
-                                                            jQuery(document).ready(function() {
-                                                                EditableTableProgress.init();
-                                                            });
-        </script>
         <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
     </section>
@@ -237,6 +236,11 @@
             }).on('changeDate', function(ev) {
                 checkout.hide();
             }).data('datepicker');
+            $('#tabel_pekerjaan_staff').dataTable({
+                "aaSorting": [[0, "asc"]],
+                "iDisplayLength": 5,
+                "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+            });
         });
         function validasi(id_pekerjaan) {
             //alert("pekerjaan yg divalidasi " + id_pekerjaan);
@@ -329,7 +333,7 @@
                 //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
                 $('#enroll_' + list_id[i]).attr('checked', false);
             }
-            //EditableTableProgress.init();
+            
         }
         function pilih_staff_ok() {
             var jumlah_data = list_id.length;

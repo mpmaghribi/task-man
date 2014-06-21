@@ -411,11 +411,13 @@
             $('#grafik_highchart1').highcharts(highchart);
         }
         jQuery(document).ready(function() {
-            EditableTableProgress.init();
-            $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-
             fill_tabel_pekerjaan();
             highchart_bar();
             morris_bar();
+            $('#tabel_pekerjaan_staff').dataTable({
+                "aaSorting": [[0, "asc"]]
+            });
+            $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+            $('#submenu_pekerjaan_ul').attr('style', 'display:block');
         });
     </script>
