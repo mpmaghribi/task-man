@@ -56,7 +56,8 @@
                                                                 $i = 0;
                                                                 foreach ($pkj_karyawan as $value) {
                                                                     ?>
-                                                                    <?php if ($value->flag_usulan == 2) {
+                                                                    <?php
+                                                                    if ($value->flag_usulan == 2) {
                                                                         $i++;
                                                                         ?>
                                                                         <tr>
@@ -83,7 +84,7 @@
                                                                 }
                                                             }
                                                             ?>
-                                                        <?php } ?>
+<?php } ?>
 
                                                         </tbody>
                                                     </table>
@@ -114,7 +115,7 @@
                                                                 $i = 1;
                                                                 foreach ($pkj_karyawan as $value) {
                                                                     ?>
-                                                                    <?php if ($value->flag_usulan == 1) { ?>
+        <?php if ($value->flag_usulan == 1) { ?>
                                                                         <tr>
                                                                             <td>
                                                                                 <a href="#">
@@ -456,21 +457,26 @@ if (isset($users)) {
     foreach ($users as $user) {
         $id_nama_user[$user->id_akun] = $user->nama;
     }
-    foreach ($detil_pekerjaan as $detil) {
-        ?>pekerjaan_saya_set_nama("pekerjaan_nama_staff_<?php echo $detil->id_pekerjaan; ?>", '<?php if (isset($id_nama_user[$detil->id_akun])) echo $id_nama_user[$detil->id_akun]; ?>');
-        <?php
+    if (isset($detil_pekerjaan)) {
+        foreach ($detil_pekerjaan as $detil) {
+            ?>pekerjaan_saya_set_nama("pekerjaan_nama_staff_<?php echo $detil->id_pekerjaan; ?>", '<?php if (isset($id_nama_user[$detil->id_akun])) echo $id_nama_user[$detil->id_akun]; ?>');
+            <?php
+        }
     }
 }
 ?>
         $('#button_trigger_file').click(function() {
+            console.log('button trigger file click');
             $('#pilih_berkas_assign').click();
         });
         $('#pilih_berkas_assign').change(function() {
+            console.log('pilih berkas assign click');
             var pilih_berkas = document.getElementById('pilih_berkas_assign');
             var files = pilih_berkas.files;
             populate_file('berkas_baru', files);
         });
         function populate_file(id_tabel, files) {
+            console.log('populating files');
             $('#' + id_tabel).html('');
             var jumlah_file = files.length;
             for (var i = 0; i < jumlah_file; i++) {

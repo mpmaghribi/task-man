@@ -1,50 +1,50 @@
 <!--Core js-->
 
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-migrate-1.2.1.min.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/jquery.simplePagination.js"></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/jquery.simplePagination.js"></script>-->
 
-<script src="<?php echo base_url() ?>/assets/js/jquery-ui/jquery-ui-1.10.1.custom.min.js"></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/jquery-ui/jquery-ui-1.10.1.custom.min.js"></script>-->
 <script src="<?php echo base_url() ?>/assets/bs3/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url() ?>/assets/js/jquery.dcjqaccordion.2.7.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/jquery.scrollTo.min.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/jquery.nicescroll.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/gritter/js/jquery.gritter.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/gritter.js" type="text/javascript"></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/jquery.scrollTo.min.js"></script>-->
+<!--<script src="<?php echo base_url() ?>/assets/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.js"></script>-->
+<!--<script src="<?php echo base_url() ?>/assets/js/jquery.nicescroll.js"></script>-->
+<!--<script src="<?php echo base_url() ?>/assets/js/gritter/js/jquery.gritter.js"></script>-->
+<!--<script src="<?php echo base_url() ?>/assets/js/gritter.js" type="text/javascript"></script>-->
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot-chart/excanvas.min.js"></script><![endif]-->
-<script src="<?php echo base_url() ?>/assets/js/skycons/skycons.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/jquery.scrollTo/jquery.scrollTo.js"></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/skycons/skycons.js"></script>-->
+<!--<script src="<?php echo base_url() ?>/assets/js/jquery.scrollTo/jquery.scrollTo.js"></script>-->
 <!--<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>-->
-<script src="<?php echo base_url() ?>/assets/js/calendar/clndr.js"></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/calendar/clndr.js"></script>-->
 <!--<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>-->
-<script src="<?php echo base_url() ?>/assets/js/calendar/moment-2.2.1.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/evnt.calendar.init.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/jvector-map/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/jvector-map/jquery-jvectormap-us-lcc-en.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/gauge/gauge.js"></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/calendar/moment-2.2.1.js"></script>-->
+<!--<script src="<?php echo base_url() ?>/assets/js/evnt.calendar.init.js"></script>-->
+<!--<script src="<?php echo base_url() ?>/assets/js/jvector-map/jquery-jvectormap-1.2.2.min.js"></script>-->
+<!--<script src="<?php echo base_url() ?>/assets/js/jvector-map/jquery-jvectormap-us-lcc-en.js"></script>-->
+<!--<script src="<?php echo base_url() ?>/assets/js/gauge/gauge.js"></script>-->
 <script type="text/javascript" src="<?php echo base_url() ?>/assets/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 
 <!--clock init-->
-<script src="<?php echo base_url() ?>/assets/js/css3clock/js/css3clock.js"></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/css3clock/js/css3clock.js"></script>-->
 <!--Easy Pie Chart-->
-<script src="<?php echo base_url() ?>/assets/js/easypiechart/jquery.easypiechart.js"></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/easypiechart/jquery.easypiechart.js"></script>-->
 <!--Sparkline Chart-->
-<script src="<?php echo base_url() ?>/assets/js/sparkline/jquery.sparkline.js"></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/sparkline/jquery.sparkline.js"></script>-->
 <!--Morris Chart-->
-<script src="<?php echo base_url() ?>/assets/js/morris-chart/morris.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/morris-chart/raphael-min.js"></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/morris-chart/morris.js"></script>-->
+<!--<script src="<?php echo base_url() ?>/assets/js/morris-chart/raphael-min.js"></script>-->
 
-<script src="<?php echo base_url() ?>/assets/js/dashboard.js"></script>
-<script src="<?php echo base_url() ?>/assets/js/jquery.customSelect.min.js" ></script>
+<!--<script src="<?php echo base_url() ?>/assets/js/dashboard.js"></script>-->
+<!--<script src="<?php echo base_url() ?>/assets/js/jquery.customSelect.min.js" ></script>-->
 
-<script type="text/javascript" src="<?php echo base_url() ?>/assets/js/fuelux/js/spinner.min.js"></script>
+<!--<script type="text/javascript" src="<?php echo base_url() ?>/assets/js/fuelux/js/spinner.min.js"></script>-->
 <script type="text/javascript" src="<?php echo base_url() ?>/assets/js/jquery-multi-select/js/jquery.multi-select.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>/assets/js/jquery-multi-select/js/jquery.quicksearch.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>/assets/js/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+<!--<script type="text/javascript" src="<?php echo base_url() ?>/assets/js/jquery-multi-select/js/jquery.quicksearch.js"></script>-->
+<!--<script type="text/javascript" src="<?php echo base_url() ?>/assets/js/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>-->
 <script src="<?php echo base_url() ?>assets/js/jquery-tags-input/jquery.tagsinput.js"></script>
 
-<script src="<?php echo base_url() ?>assets/js/select2/select2.js"></script>
-<script src="<?php echo base_url() ?>assets/js/select-init.js"></script>
+<!--<script src="<?php echo base_url() ?>assets/js/select2/select2.js"></script>-->
+<!--<script src="<?php echo base_url() ?>assets/js/select-init.js"></script>-->
 <script src="<?php echo base_url() ?>assets/js/iCheck/jquery.icheck.js"></script>
 <script src="<?php echo base_url() ?>assets/js/ckeditor/ckeditor.js"></script>
 <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
@@ -109,7 +109,8 @@
                     var sekarang = '';
                     for (var i = 0; i < p; i++) {
                         list_pekerjaan_staff[json.pekerjaan_staff[i].id_pekerjaan] = json.pekerjaan_staff[i].nama_pekerjaan;
-                        list_pekerjaan_staff_deadline[json.pekerjaan_staff[i].id_pekerjaan] = new Date(json.pekerjaan_staff[i].tgl_selesai.substring(0, 19));
+                        //console.log('ivalid date? '+json.pekerjaan_staff[i].tgl_selesai.substring(0, 19));
+                        list_pekerjaan_staff_deadline[json.pekerjaan_staff[i].id_pekerjaan] = new Date(json.pekerjaan_staff[i].tgl_selesai.substring(0, 10));
                         list_progress_pekerjaan[json.pekerjaan_staff[i].id_pekerjaan] = 0;
                         list_jumlah_pekerja[json.pekerjaan_staff[i].id_pekerjaan] = 0;
                         if (list_id_pekerjaan.indexOf(json.pekerjaan_staff[i].id_pekerjaan) == -1)
@@ -147,7 +148,7 @@
                                     '<div class = "task-info clearfix" >' +
                                     "<div class = \"desc pull-left\" >" +
                                     "<p><strong>" + nama_pekerjaan + "</strong></p>" +
-                                    "<p >" + (list_progress_pekerjaan[i] / list_jumlah_pekerja[i]) + "% , " + Deadline + " </p>" +
+                                    "<p >" + (list_progress_pekerjaan[id_pekerjaan] / list_jumlah_pekerja[id_pekerjaan]) + "% , " + Deadline + " </p>" +
                                     "</div>" +
                                     "</span>" +
                                     "</div>" +

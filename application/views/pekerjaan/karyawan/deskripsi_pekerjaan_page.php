@@ -103,7 +103,8 @@ if ($this->session->userdata('prev') != null) {
                                                     <?php } ?>
                                                 </h4>
                                                 <p style="font-size: larger" id="nama_penanggung_jawab">
-                                                    <?php if ($deskripsi_pekerjaan[0]->id_penanggung_jawab != null) echo $user[$deskripsi_pekerjaan[0]->id_penanggung_jawab]; ?>
+                                                    <?php 
+                                                    if (isset($deskripsi_pekerjaan)&&count($deskripsi_pekerjaan)>0&&$deskripsi_pekerjaan[0]->id_penanggung_jawab != null) echo isset($user[$deskripsi_pekerjaan[0]->id_penanggung_jawab])?$user[$deskripsi_pekerjaan[0]->id_penanggung_jawab]:'kesalahan'; ?>
                                                 </p>
                                                 <h4 style="color: #1FB5AD;">
                                                     Nama Pekerjaan

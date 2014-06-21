@@ -191,7 +191,7 @@ class pekerjaan extends ceklogin {
             }
         }
         if ($status == 0) {
-            if ($pekerjaan[0]->flag_usulan == '9' && strcmp(date('Y-m-d'),$update["tgl_selesai"])<=0) {
+            if ($pekerjaan[0]->flag_usulan == '9' && strcmp(date('Y-m-d'), $update["tgl_selesai"]) <= 0) {
                 $update['flag_usulan'] = '2';
             }
             echo "mencari siapa yang terlibat, siapa yang atasan";
@@ -449,36 +449,77 @@ class pekerjaan extends ceklogin {
         $insert['asal_pekerjaan'] = 'task management';
         $insert["id_penanggung_jawab"] = $idatasan;
         $insert["id_pengusul"] = $temp['id_akun'];
-
-        //$result = $this->taskman_repository->sp_tambah_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
-        $result = $this->pekerjaan_model->usul_pekerjaan2($insert);
-        $id_pekerjaan_baru = -1;
-        if ($result != NULL)
-            $id_pekerjaan_baru = $result;
-        if ($id_pekerjaan_baru >= 0) {
-            //$atasan_url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $id_akun . "/format/json";
-
-            $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $temp['user_id']);
-
-            if (isset($_FILES["berkas"])) {
-                $path = './uploads/pekerjaan/' . $id_pekerjaan_baru . '/';
-                $this->load->library('upload');
-                if (!file_exists($path)) {
-                    mkdir($path, 0777, true);
-                }
-                $files = $_FILES["berkas"];
-                $this->upload_file($files, $path, $id_pekerjaan_baru);
-            }
-        } else {
-            
+        $status = 0;
+        $judul_kesalahan = '';
+        $deskripsi_kesalahan = '';
+        if (strlen(trim($insert['id_penanggung_jawab'])) == 0) {
+            $status = 1;
+            $judul_kesalahan = 'data tidak lengkap';
+            $deskripsi_kesalahan = 'atasan  diperlukan';
         }
-        $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja mengusulkan pekerjaan.");
+        if (strlen(trim($insert['level_prioritas'])) == 0) {
+            $status = 1;
+            $judul_kesalahan = 'data tidak lengkap';
+            $deskripsi_kesalahan = 'level_prioritas diperlukan';
+        }
+        if (strlen(trim($insert['tgl_mulai'])) == 0) {
+            $status = 1;
+            $judul_kesalahan = 'data tidak lengkap';
+            $deskripsi_kesalahan = 'tgl_mulai diperlukan';
+        }
+        if (strlen(trim($insert['tgl_selesai'])) == 0) {
+            $status = 1;
+            $judul_kesalahan = 'data tidak lengkap';
+            $deskripsi_kesalahan = 'tgl_selesai diperlukan';
+        }
+        if (strlen(trim($insert['deskripsi_pekerjaan'])) == 0) {
+            $status = 1;
+            $judul_kesalahan = 'data tidak lengkap';
+            $deskripsi_kesalahan = 'deskripsi pekerjaan diperlukan';
+        }
+        if (strlen(trim($insert['nama_pekerjaan'])) == 0) {
+            $status = 1;
+            $judul_kesalahan = 'data tidak lengkap';
+            $deskripsi_kesalahan = 'nama pekerjaan diperlukan';
+        }
+        if (strlen(trim($insert['id_sifat_pekerjaan'])) == 0) {
+            $status = 1;
+            $judul_kesalahan = 'data tidak lengkap';
+            $deskripsi_kesalahan = 'id sifat pekerjaan diperlukan';
+        }
+        if ($status == 1) {
+            $data['data_akun'] = $temp;
+            $data['judul_kesalahan'] = $judul_kesalahan;
+            $data['deskripsi_kesalahan'] = $deskripsi_kesalahan;
+            $this->load->view('pekerjaan/kesalahan', $data);
+        }
+        if ($status == 0) {//$result = $this->taskman_repository->sp_tambah_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj);
+            $result = $this->pekerjaan_model->usul_pekerjaan2($insert);
+            $id_pekerjaan_baru = -1;
+            if ($result != NULL)
+                $id_pekerjaan_baru = $result;
+            if ($id_pekerjaan_baru >= 0) {
+                //$atasan_url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $id_akun . "/format/json";
 
-        redirect('pekerjaan/karyawan');
-//        } else {
-//            $this->session->set_flashdata('status', 4);
-//            redirect("login");
-//        }
+                $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $temp['user_id']);
+
+                if (isset($_FILES["berkas"])) {
+                    $path = './uploads/pekerjaan/' . $id_pekerjaan_baru . '/';
+                    $this->load->library('upload');
+                    $files = $_FILES["berkas"];
+                    if (count($files) > 0) {
+                        if (!file_exists($path)) {
+                            mkdir($path, 0777, true);
+                        }
+                    }
+                    $this->upload_file($files, $path, $id_pekerjaan_baru);
+                }
+            } else {
+                
+            }
+            $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja mengusulkan pekerjaan.");
+            redirect('pekerjaan/karyawan');
+        }
     }
 
     public function list_pekerjaan() {
