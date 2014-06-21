@@ -37,8 +37,8 @@
                                         <td style="vertical-align: middle"> <?php echo $counter; ?></td>
                                         <td style="vertical-align: middle"> <?php echo $kerja->nama_pekerjaan; ?></td>
                                         <td style="vertical-align: middle"><?= date("d M Y", strtotime(substr($kerja->tgl_mulai, 0, 10))) ?> - <?= date("d M Y", strtotime(substr($kerja->tgl_selesai, 0, 19))) ?></td>
-                                        <td style="vertical-align: middle" id="list_staff_<?=$kerja->id_pekerjaan; ?>"></td>
-                                        <td style="vertical-align: middle"><span class="label <?=$label_prioritas[$kerja->level_prioritas]; ?> label-mini"><?= $prioritas[$kerja->level_prioritas] ?></span></td>
+                                        <td style="vertical-align: middle" id="list_staff_<?= $kerja->id_pekerjaan; ?>"></td>
+                                        <td style="vertical-align: middle"><span class="label <?= $label_prioritas[$kerja->level_prioritas]; ?> label-mini"><?= $prioritas[$kerja->level_prioritas] ?></span></td>
                                         <td style="vertical-align: middle" id="pekerjaan_staff_status_<?= $kerja->id_pekerjaan ?>"><span class="label <?= $label_status[$kerja->flag_usulan] ?> label-mini"><?= $list_status[$kerja->flag_usulan] ?></span></td>
                                         <td style="text-align: right;vertical-align: middle">
                                             <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: 0px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
@@ -47,7 +47,7 @@
                                             </div>
                                         </td>
                                     </tr>
-        <?php } ?>
+                                <?php } ?>
                             <script>
                                 //ubah_status_pekerjaan('pekerjaan_staff_status_<?php echo $kerja->id_pekerjaan; ?>', <?php echo $kerja->flag_usulan; ?>, '<?php echo $kerja->sekarang; ?>', '<?php echo $kerja->tgl_mulai; ?>', '<?php echo $kerja->tgl_selesai; ?>', '<?php echo $kerja->tgl_read; ?>', '<?php echo $kerja->status; ?>', <?php echo $kerja->progress; ?>);
                             </script>
@@ -65,6 +65,7 @@
                             sep = ', ';
                         $('#' + id).html($('#' + id).html() + sep + nama);
                     }
+                    jQuery(document).ready(function() {
 <?php foreach ($users as $user) {
     ?>list_user[<?php echo $user->id_akun; ?>] = '<?php echo $user->nama; ?>';
     <?php
@@ -76,6 +77,8 @@ if (isset($detil_pekerjaan_staff)) {
     }
 }
 ?>
+                $('#tabel_pekerjaan_staff').dataTable({});
+            });
                 </script>
             </div>
         </div>

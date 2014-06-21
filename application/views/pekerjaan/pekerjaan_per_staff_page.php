@@ -414,8 +414,7 @@
             fill_tabel_pekerjaan();
             highchart_bar();
             morris_bar();
-            $('#tabel_pekerjaan_staff').dataTable({
-                "aaSorting": [[0, "asc"]]
+            $('#tabel_pekerjaan_staff').dataTable({   
             });
             $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
             $('#submenu_pekerjaan_ul').attr('style', 'display:block');

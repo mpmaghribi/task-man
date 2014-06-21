@@ -236,8 +236,7 @@
             }).on('changeDate', function(ev) {
                 checkout.hide();
             }).data('datepicker');
-            $('#tabel_pekerjaan_staff').dataTable({
-                "aaSorting": [[0, "asc"]],
+            $('#tabel_pekerjaan_staff').dataTable({   
                 "iDisplayLength": 5,
                 "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
             });

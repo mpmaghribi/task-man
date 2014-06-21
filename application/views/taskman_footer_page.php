@@ -1,12 +1,8 @@
 <!--Core js-->
 
-<!--        <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-2.0.3.min.js"></script>-->
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="<?php echo base_url() ?>/assets/js/jquery.simplePagination.js"></script>
-<!--Notification script-->
-<!--<script src="<?php echo base_url() ?>/assets/js/miniNotification.js"></script>-->
 
-<!--End of notification script-->
 <script src="<?php echo base_url() ?>/assets/js/jquery-ui/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="<?php echo base_url() ?>/assets/bs3/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url() ?>/assets/js/jquery.dcjqaccordion.2.7.js"></script>
@@ -18,9 +14,9 @@
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot-chart/excanvas.min.js"></script><![endif]-->
 <script src="<?php echo base_url() ?>/assets/js/skycons/skycons.js"></script>
 <script src="<?php echo base_url() ?>/assets/js/jquery.scrollTo/jquery.scrollTo.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>-->
 <script src="<?php echo base_url() ?>/assets/js/calendar/clndr.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>-->
 <script src="<?php echo base_url() ?>/assets/js/calendar/moment-2.2.1.js"></script>
 <script src="<?php echo base_url() ?>/assets/js/evnt.calendar.init.js"></script>
 <script src="<?php echo base_url() ?>/assets/js/jvector-map/jquery-jvectormap-1.2.2.min.js"></script>
@@ -50,16 +46,16 @@
 <script src="<?php echo base_url() ?>assets/js/select2/select2.js"></script>
 <script src="<?php echo base_url() ?>assets/js/select-init.js"></script>
 <script src="<?php echo base_url() ?>assets/js/iCheck/jquery.icheck.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url() ?>assets/js/ckeditor/ckeditor.js"></script>
+<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <!--common script init for all pages-->
 <script src="<?php echo base_url() ?>assets/js/scripts.js"></script>
 <script src="<?php echo base_url() ?>assets/js/advanced-form.js"></script>
 <script src="<?php echo base_url() ?>assets/js/validation-init.js"></script>
 <!--icheck init -->
-<script src="<?php echo base_url() ?>assets/js/icheck-init.js"></script>
-<script type="text/javascript" language="javascript" src="<?php echo base_url() ?>assets/js/advanced-datatable/js/jquery.dataTables.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/data-tables/DT_bootstrap.js"></script>
+<!--<script src="<?php echo base_url() ?>assets/js/icheck-init.js"></script>-->
+<script src="<?php echo base_url() ?>assets/js/advanced-datatable/js/jquery.dataTables.js"></script>
+<script src="<?php echo base_url() ?>assets/js/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url() ?>assets/js/dynamic_table_init.js"></script>
 <script>
     function req_notifikasi() {
@@ -101,6 +97,7 @@
                                 "</a>" +
                                 "</li>";
                     }
+                    console.log('json pending task');
                     console.log(json);
 
                     var list_pekerjaan_staff = [];
@@ -115,25 +112,34 @@
                         list_pekerjaan_staff_deadline[json.pekerjaan_staff[i].id_pekerjaan] = new Date(json.pekerjaan_staff[i].tgl_selesai.substring(0, 19));
                         list_progress_pekerjaan[json.pekerjaan_staff[i].id_pekerjaan] = 0;
                         list_jumlah_pekerja[json.pekerjaan_staff[i].id_pekerjaan] = 0;
-                        list_id_pekerjaan.push(json.pekerjaan_staff[i].id_pekerjaan);
+                        if (list_id_pekerjaan.indexOf(json.pekerjaan_staff[i].id_pekerjaan) == -1)
+                            list_id_pekerjaan.push(json.pekerjaan_staff[i].id_pekerjaan);
                         sekarang = new Date(json.pekerjaan_staff[i].sekarang.substring(0, 19));
                     }
+                    console.log('list_pekerjaan_staff');
                     console.log(list_pekerjaan_staff);
+                    console.log('list_id_pekerjaan');
+                    console.log(list_id_pekerjaan);
+                    console.log('list_pekerjaan_staff_deadline');
                     console.log(list_pekerjaan_staff_deadline);
                     p = json.progress_staff.length;
                     for (var i = 0; i < p; i++) {
                         list_progress_pekerjaan[json.progress_staff[i].id_pekerjaan] += parseInt(json.progress_staff[i].progress);
                         list_jumlah_pekerja[json.progress_staff[i].id_pekerjaan]++;
                     }
+                    console.log('list_progress_pekerjaan');
                     console.log(list_progress_pekerjaan);
+                    console.log('list_jumlah_pekerja');
                     console.log(list_jumlah_pekerja);
-                    p = list_pekerjaan_staff.length;
+                    p = list_id_pekerjaan.length;
                     for (var i = 0; i < p; i++) {
-                        if (list_jumlah_pekerja[i] > 0) {
-                            var deadline = list_pekerjaan_staff_deadline[i];
+                        var id_pekerjaan = list_id_pekerjaan[i];
+                        if (list_jumlah_pekerja[id_pekerjaan] > 0) {
+                            console.log(i);
+                            var deadline = list_pekerjaan_staff_deadline[id_pekerjaan];
                             //console.log("deadline "+json.data[i]["tgl_selesai"]);
                             var Deadline = deadline.getDate() + " " + bulan[deadline.getMonth()] + " " + deadline.getFullYear();
-                            var nama_pekerjaan = list_pekerjaan_staff[i];
+                            var nama_pekerjaan = list_pekerjaan_staff[id_pekerjaan];
                             if (nama_pekerjaan.length > 40)
                                 nama_pekerjaan = nama_pekerjaan.substring(0, 40) + " ...";
                             html += "<li>" +
@@ -143,8 +149,6 @@
                                     "<p><strong>" + nama_pekerjaan + "</strong></p>" +
                                     "<p >" + (list_progress_pekerjaan[i] / list_jumlah_pekerja[i]) + "% , " + Deadline + " </p>" +
                                     "</div>" +
-//                                "<span class = \"notification-pie-chart pull-right\" data-percent = \""+ json.data[i]["progress"] +"\" >" +
-//                                "<span class = \"percent\" ></span>" +
                                     "</span>" +
                                     "</div>" +
                                     "</a>" +
@@ -167,9 +171,9 @@
         });
     }
     jQuery(document).ready(function() {
-        //req_pending_task();
+        req_pending_task();
     });
-    
+
     var tinggi = $(window).height();
     var lebar = $(window).width();
     console.log('tinggi = ' + tinggi);

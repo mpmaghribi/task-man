@@ -5,7 +5,7 @@
         </header>
         <div class="panel-body">
             <div class="form">
-                <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_staff">
+                <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_draft">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -28,7 +28,7 @@
                                 echo '<td >' . $counter . '</td>';
                                 echo '<td>' . $draft->nama_pekerjaan . '</td>';
                                 echo '<td>' . date("d M Y", strtotime($draft->tgl_mulai)) . ' - ' . date("d M Y", strtotime($draft->tgl_selesai)) . '</td>';
-                                echo '<td><span class="label '.$label_prioritas[$draft->level_prioritas].' label-mini">' . $prioritas[$draft->level_prioritas] . '</span></td>';
+                                echo '<td><span class="label ' . $label_prioritas[$draft->level_prioritas] . ' label-mini">' . $prioritas[$draft->level_prioritas] . '</span></td>';
                                 ?>
                             <td style="text-align: right">
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: 0px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
@@ -55,6 +55,9 @@
                             window.location = myurl;
                         }
                     }
+                    jQuery(document).ready(function() {
+                        $('#tabel_pekerjaan_draft').dataTable({});
+                    });
                 </script>
             </div>
         </div>

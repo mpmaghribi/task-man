@@ -184,6 +184,7 @@ foreach ($pkj_karyawan as $pekerjaan_saya) {
     <!-- END JAVASCRIPTS -->
     <script>
         jQuery(document).ready(function() {
-            EditableTableProgress.init();
+            $('#tabel_home').dataTable({   
+            });
         });
     </script>
