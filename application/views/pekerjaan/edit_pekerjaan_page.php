@@ -226,7 +226,7 @@
             var checkout = $('.dpd2').datepicker({
                 format: 'dd-mm-yyyy',
                 onRender: function(date) {
-                    return date.valueOf() <= checkin.date.valueOf() && date.valueOf() <= now.valueOf() ? 'disabled' : '';
+                    return date.valueOf() <= checkin.date.valueOf() || date.valueOf() <= now.valueOf() ? 'disabled' : '';
                 }
             }).on('changeDate', function(ev) {
                 checkout.hide();
