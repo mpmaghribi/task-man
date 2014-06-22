@@ -84,7 +84,7 @@ class taskman_repository extends CI_Model {
     }
 
     public function sp_recent_activity() {
-        $query = "SELECT * from activity order by activity.tanggal_activity DESC";
+        $query = "SELECT * from activity order by activity.tanggal_activity DESC limit 10";
         $query = $this->db->query($query);
         return $query->result();
     }

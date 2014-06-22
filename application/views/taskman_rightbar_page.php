@@ -17,20 +17,20 @@ $bawahan = json_decode(
                                 {
                                     cache: false,
                                     beforeSend: function() {
-                                        $('#recent_activity').show();
+                                        //$('#recent_activity').show();
                                     },
                                     complete: function() {
-                                        $('#recent_activity').show();
+                                        //$('#recent_activity').show();
                                     },
                                     success: function() {
                                         $('#recent_activity').show();
                                     }
                                 });
-                        var $container = $("#recent_activity");
-                        $container.load("<?php echo site_url(); ?>/home/recent_activity_staff");
+                        var container = $("#recent_activity");
+                        container.load('<?php echo site_url(); ?>/home/recent_activity_staff');
                         var refreshId = setInterval(function()
                         {
-                            $container.load('<?php echo site_url(); ?>/home/recent_activity_staff');
+                            container.load('<?php echo site_url(); ?>/home/recent_activity_staff');
                         }, 100000);
                     });
                 })(jQuery);
@@ -44,20 +44,20 @@ $bawahan = json_decode(
                                 {
                                     cache: false,
                                     beforeSend: function() {
-                                        $('#recent_activity2').show();
+                                        //$('#recent_activity2').show();
                                     },
                                     complete: function() {
-                                        $('#recent_activity2').show();
+                                        //$('#recent_activity2').show();
                                     },
                                     success: function() {
-                                        $('#recent_activity2').show();
+                                       $('#recent_activity2').show();
                                     }
                                 });
-                        var $container = $("#recent_activity2");
-                        $container.load("<?php echo site_url(); ?>/home/recent_activity");
+                        var container2 = $("#recent_activity2");
+                        container2.load('<?php echo site_url(); ?>/home/recent_activity');
                         var refreshId = setInterval(function()
                         {
-                            $container.load('<?php echo site_url(); ?>/home/recent_activity');
+                            container2.load('<?php echo site_url(); ?>/home/recent_activity');
                         }, 100000);
                     });
                 })(jQuery);

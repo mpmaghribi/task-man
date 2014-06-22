@@ -96,8 +96,8 @@
                                                     <?php
                                                     $i = 1;
                                                     $list_id_pekerjaan = array();
-                                                    $list_status = array(1 => 'Not Approved', 2 => 'Approved', 9 => 'Perpanjang', 't'=>'Terlambat');
-                                                    $label_status = array(1 => 'label-danger', 2 => 'label-success', 9 => "label-inverse",'t'=>'label-info');
+                                                    $list_status = array(1 => 'Not Approved', 2 => 'Approved', 9 => 'Perpanjang', 't' => 'Terlambat');
+                                                    $label_status = array(1 => 'label-danger', 2 => 'label-success', 9 => "label-inverse", 't' => 'label-info');
                                                     foreach ($pkj_karyawan as $value) {
                                                         if (in_array($value->id_pekerjaan, $list_id_pekerjaan))
                                                             continue;
@@ -111,7 +111,7 @@
                                                             </td>
                                                             <td style="vertical-align: middle" class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                             <td style="vertical-align: middle"> <?php echo date("d M Y", strtotime(substr($value->tgl_mulai, 0, 19))) ?> - <?php echo date("d M Y", strtotime(substr($value->tgl_selesai, 0, 19))) ?></td>
-                                                            <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;             ?>"><?php foreach ($users as $value2) { ?>
+                                                            <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;               ?>"><?php foreach ($users as $value2) { ?>
                                                                     <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                                                                 <?php } ?></td>
                                                             <td style="vertical-align: middle" id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><span class="label <?= $label_status[$value->flag_usulan] ?> label-mini"><?= $list_status[$value->flag_usulan] ?></span></td>
@@ -135,7 +135,7 @@
                                 </div>
                             </section>
                         </div>
-                    <?php
+                        <?php
                     }
                     if (in_array(9, $data_akun['idmodul'])) {
                         $this->load->view('pekerjaan/karyawan/pekerjaan_staff_view');
@@ -151,10 +151,10 @@
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-<?php $this->load->view('taskman_rightbar_page') ?>
+        <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
     </section>
-<?php $this->load->view("taskman_footer_page") ?>
+    <?php $this->load->view("taskman_footer_page") ?>
     <script>
         var detil_pekerjaan_saya = jQuery.parseJSON('<?php if (isset($detil_pekerjaan_saya)) echo json_encode($detil_pekerjaan_saya); ?>');
         var tgl_selesai_pekerjaan_saya = [];
@@ -170,12 +170,13 @@ foreach ($pkj_karyawan as $pekerjaan_saya) {
         //console.log(tgl_selesai_pekerjaan_saya);
         //console.log(flag_usulan_pekerjaan_saya);
         document.title = "DashBoard - Task Management";
-
-        var jumlah_detil_saya = detil_pekerjaan_saya.length;
+        var jumlah_detil_saya = 0
+        if (detil_pekerjaan_saya != null)
+            jumlah_detil_saya = detil_pekerjaan_saya.length;
         for (var i = 0; i < jumlah_detil_saya; i++) {
             var detil = detil_pekerjaan_saya[i];
             if (detil['id_akun'] == '<?php echo $data_akun['id_akun']; ?>') {
-                //ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'], tgl_mulai_pekerjaan_saya[detil['id_pekerjaan']], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);
+                ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'], tgl_mulai_pekerjaan_saya[detil['id_pekerjaan']], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);
             }
         }
     </script>
@@ -184,7 +185,7 @@ foreach ($pkj_karyawan as $pekerjaan_saya) {
     <!-- END JAVASCRIPTS -->
     <script>
         jQuery(document).ready(function() {
-            $('#tabel_home').dataTable({   
+            $('#tabel_home').dataTable({
             });
         });
     </script>

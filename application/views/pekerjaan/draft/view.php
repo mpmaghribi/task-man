@@ -19,21 +19,21 @@
                                     <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>draft/assign?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">Assign</a>
                                     <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>draft/edit?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-success btn-xs" href="<?php echo base_url(); ?>draft/view?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">View</a>
-                                    <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="" onclick="confirm_batal(<?php echo $draft[0]->id_pekerjaan?>,'<?php echo $draft[0]->nama_pekerjaan; ?>');" style="font-size: 10px">Batalkan</a>
-                                    
+                                    <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="" onclick="confirm_batal(<?php echo $draft[0]->id_pekerjaan ?>, '<?php echo $draft[0]->nama_pekerjaan; ?>');" style="font-size: 10px">Batalkan</a>
+
                                 </div>
                                 <script>
-                                        var url_hapus= '<?php echo base_url(); ?>draft/batalkan?id_draft=';
-                                        function confirm_batal(id_draft, judul){
-                                            var myurl = url_hapus+id_draft;
-                                            var c = confirm('apakah anda yakin menghapus draft "' + judul + '"?');
-                                            if(c===true){
-                                                window.location=myurl;
-                                            }
+                                    var url_hapus = '<?php echo base_url(); ?>draft/batalkan?id_draft=';
+                                    function confirm_batal(id_draft, judul) {
+                                        var myurl = url_hapus + id_draft;
+                                        var c = confirm('apakah anda yakin menghapus draft "' + judul + '"?');
+                                        if (c === true) {
+                                            window.location = myurl;
                                         }
-                                        </script>
+                                    }
+                                </script>
                             </header>
-                            
+
                             <div class="panel-body">
                                 <div class="tab-content">
                                     <?php $this->load->view('pekerjaan/draft/detail_view'); ?>
@@ -48,17 +48,15 @@
         <!--main content end-->
         <!--right sidebar start-->
         <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
-
         <!-- END JAVASCRIPTS -->
-        <script>
-            jQuery(document).ready(function() {
-                EditableTableProgress.init();
-            });</script>
         <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script type="text/javascript">
-        document.title = "Draft Pekerjaan - Task Management";
-        $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+                                    document.title = "Draft Pekerjaan - Task Management";
+                                    $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+                                    jQuery(document).ready(function() {
+                                        $('#tabel_pekerjaan_draft').dataTable();
+                                    });
     </script>
