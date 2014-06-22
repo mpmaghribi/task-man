@@ -30,7 +30,7 @@ foreach ($users as $u) {
                                     <?php
                                     //print_r($deskripsi_pekerjaan[0]);
                                     //print_r($data_akun);
-                                    if ($atasan && $deskripsi_pekerjaan[0]->flag_usulan == '2') {
+                                    if ($atasan && $deskripsi_pekerjaan[0]->flag_usulan == '2' && in_array(6, $data_akun['idmodul'])) {
                                         ?>
                                         <li class="">
                                             <a data-toggle="tab" href="#penilaianPekerjaan">Penilaian Kerja Staff</a>
@@ -162,7 +162,7 @@ if ($this->session->userdata('prev') != null) {
                                                             <tr>
                                                                 <th style="width: 70px">#</th>
                                                                 <th>Nama File</th>
-                                                                <th></th>
+                                                                <th style="width: 250px"></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>

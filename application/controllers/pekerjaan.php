@@ -613,9 +613,10 @@ class pekerjaan extends ceklogin {
         }
         $pekerjaan_staff = $this->pekerjaan_model->get_pekerjaan_staff($mystaff);
         $list_id_pekerjaan = array();
-        foreach ($pekerjaan_staff as $kerja) {
-            $list_id_pekerjaan[] = $kerja->id_pekerjaan;
-        }
+        if (count($pekerjaan_staff) > 0)
+            foreach ($pekerjaan_staff as $kerja) {
+                $list_id_pekerjaan[] = $kerja->id_pekerjaan;
+            }
         $detil_pekerjaan_staff = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
         $progress_staff = $this->pekerjaan_model->get_progress_per_staff($mystaff);
         echo json_encode(array("status" => "OK", "data" => $list_pekerjaan,
@@ -799,9 +800,10 @@ class pekerjaan extends ceklogin {
             if ($berhak) {
                 $berkas = $this->berkas_model->get_berkas($id_file);
                 $hapus = $this->berkas_model->hapus_file($id_file);
-                if ($hapus == true) {
+                if ($hapus == true && count($berkas)>0) {
                     $hasil['status'] = 'OK';
-                    unlink($berkas[0]->nama_file);
+                    if (file_exists($berkas[0]->nama_file))
+                        unlink($berkas[0]->nama_file);
                 } else
                     $hasil['reason'] = 'gagal menghapus';
             }

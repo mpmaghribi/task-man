@@ -36,6 +36,7 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_r
                 min_element_status[id] = 1;
             }
             else {
+                status_id=2;
                 total_progress[id] += progress;
                 /*if (progress == 0) {
                     if (min_element_status[id] > 2) {
@@ -81,11 +82,11 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_r
 
             console.log('persen hari = ' + persentase);
             var progress_warna = 0;
-            if (persentase > 0.8) {
+            if (persentase > 0.5) {
                 progress_warna = 3;
-            } else if (persentase > 0.6) {
-                progress_warna = 2;
             } else if (persentase > 0.4) {
+                progress_warna = 2;
+            } else if (persentase > 0.3) {
                 progress_warna = 1;
             } else {
                 progress_warna = 0;

@@ -79,7 +79,7 @@
                                                                             </td>
                                                                         </tr>
                                                                     <script>
-                                                                        //ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $value->tgl_mulai; ?>', '<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>', '<?php echo $value->status; ?>', <?php echo $value->progress; ?>);
+                                                                        ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $value->tgl_mulai; ?>', '<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>', '<?php echo $value->status; ?>', <?php echo $value->progress; ?>);
                                                                     </script>
                                                                     <?php
                                                                 }
@@ -139,7 +139,7 @@
                                                                             </td>
                                                                         </tr>
                                                                     <script>
-                                                                        //ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $value->tgl_mulai; ?>', '<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>', '<?php echo $value->status; ?>', <?php echo $value->progress; ?>);
+                                                                        ubah_status_pekerjaan('pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>', <?php echo $value->flag_usulan; ?>, '<?php echo $sekarang; ?>', '<?php echo $value->tgl_mulai; ?>', '<?php echo $value->tgl_selesai; ?>', '<?php echo $value->tgl_read; ?>', '<?php echo $value->status; ?>', <?php echo $value->progress; ?>);
                                                                     </script>
                                                                     <?php
                                                                 }
@@ -322,11 +322,12 @@
     <!-- END JAVASCRIPTS -->
     <script>
         jQuery(document).ready(function() {
-            EditableTableProgress.init();
+            $('#tabel_pkj_saya').dataTable();
+            $('#tabel_pkj_saya2').dataTable();
         });
-    </script>
+    
 <?php if (count($my_staff) > 0) { ?>
-        <script>
+    
             var list_nip = [];
             var list_nama = [];
             var list_departemen = [];
