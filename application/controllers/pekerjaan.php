@@ -102,14 +102,14 @@ class pekerjaan extends ceklogin {
 
             //echo "path = $path<br/>";
             if (isset($_FILES["berkas"])) {
-                $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
+                $path = './uploads/' . date('Y') . '/' . date('m') . '/' . date('d') . '/' . $id_pekerjaan . '/';
                 //$this->load->library('upload');
-                
+
                 $files = $_FILES["berkas"];
-                if(count($files)>0)
+                if (count($files) > 0)
                     if (!file_exists($path)) {
-                    mkdir($path, 0777, true);
-                }
+                        mkdir($path, 0777, true);
+                    }
                 $this->upload_file($files, $path, $id_pekerjaan);
             }
             $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja memberikan pekerjaan kepada staffnya.");
@@ -257,14 +257,14 @@ class pekerjaan extends ceklogin {
                 echo "check upload";
                 if (isset($_FILES["berkas"])) {
                     echo "uploading";
-                    $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
+                    $path = './uploads/' . date('Y') . '/' . date('m') . '/' . date('d') . '/' . $id_pekerjaan . '/';
                     //$this->load->library('upload');
-                    
+
                     $files = $_FILES["berkas"];
-                    if(count($files)>0)
+                    if (count($files) > 0)
                         if (!file_exists($path)) {
-                        mkdir($path, 0777, true);
-                    }
+                            mkdir($path, 0777, true);
+                        }
                     echo "uploading...";
                     $this->upload_file($files, $path, $id_pekerjaan);
                 }
@@ -380,14 +380,14 @@ class pekerjaan extends ceklogin {
 
                 //echo "path = $path<br/>";
                 if (isset($_FILES["berkas"])) {
-                    $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
+                    $path = './uploads/' . date('Y') . '/' . date('m') . '/' . date('d') . '/' . $id_pekerjaan . '/';
                     //$this->load->library('upload');
-                    
+
                     $files = $_FILES["berkas"];
-                    if(count($files)>0)
+                    if (count($files) > 0)
                         if (!file_exists($path)) {
-                        mkdir($path, 0777, true);
-                    }
+                            mkdir($path, 0777, true);
+                        }
                     $this->upload_file($files, $path, $id_pekerjaan);
                 }
                 $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja memberikan pekerjaan kepada staffnya.");
@@ -458,42 +458,42 @@ class pekerjaan extends ceklogin {
         $status = 0;
         $judul_kesalahan = '';
         $deskripsi_kesalahan = '';
-        if(!in_array(2,$temp['idmodul'])){
-            $status=1;
-            $judul_kesalahan='Kesalahan';
-            $deskripsi_kesalahan='Anda tidak berhak mengusulkan pekerjaan';
+        if (!in_array(2, $temp['idmodul'])) {
+            $status = 1;
+            $judul_kesalahan = 'Kesalahan';
+            $deskripsi_kesalahan = 'Anda tidak berhak mengusulkan pekerjaan';
         }
-        if ($status==0&&strlen(trim($insert['id_penanggung_jawab'])) == 0) {
+        if ($status == 0 && strlen(trim($insert['id_penanggung_jawab'])) == 0) {
             $status = 1;
             $judul_kesalahan = 'data tidak lengkap';
             $deskripsi_kesalahan = 'atasan  diperlukan';
         }
-        if ($status==0&&strlen(trim($insert['level_prioritas'])) == 0) {
+        if ($status == 0 && strlen(trim($insert['level_prioritas'])) == 0) {
             $status = 1;
             $judul_kesalahan = 'data tidak lengkap';
             $deskripsi_kesalahan = 'level_prioritas diperlukan';
         }
-        if ($status==0&&strlen(trim($insert['tgl_mulai'])) == 0) {
+        if ($status == 0 && strlen(trim($insert['tgl_mulai'])) == 0) {
             $status = 1;
             $judul_kesalahan = 'data tidak lengkap';
             $deskripsi_kesalahan = 'tgl_mulai diperlukan';
         }
-        if ($status==0&&strlen(trim($insert['tgl_selesai'])) == 0) {
+        if ($status == 0 && strlen(trim($insert['tgl_selesai'])) == 0) {
             $status = 1;
             $judul_kesalahan = 'data tidak lengkap';
             $deskripsi_kesalahan = 'tgl_selesai diperlukan';
         }
-        if ($status==0&&strlen(trim($insert['deskripsi_pekerjaan'])) == 0) {
+        if ($status == 0 && strlen(trim($insert['deskripsi_pekerjaan'])) == 0) {
             $status = 1;
             $judul_kesalahan = 'data tidak lengkap';
             $deskripsi_kesalahan = 'deskripsi pekerjaan diperlukan';
         }
-        if ($status==0&&strlen(trim($insert['nama_pekerjaan'])) == 0) {
+        if ($status == 0 && strlen(trim($insert['nama_pekerjaan'])) == 0) {
             $status = 1;
             $judul_kesalahan = 'data tidak lengkap';
             $deskripsi_kesalahan = 'nama pekerjaan diperlukan';
         }
-        if ($status==0&&strlen(trim($insert['id_sifat_pekerjaan'])) == 0) {
+        if ($status == 0 && strlen(trim($insert['id_sifat_pekerjaan'])) == 0) {
             $status = 1;
             $judul_kesalahan = 'data tidak lengkap';
             $deskripsi_kesalahan = 'id sifat pekerjaan diperlukan';
@@ -515,7 +515,8 @@ class pekerjaan extends ceklogin {
                 $result = $this->taskman_repository->sp_tambah_detil_pekerjaan($id_pekerjaan_baru, $temp['user_id']);
 
                 if (isset($_FILES["berkas"])) {
-                    $path = './uploads/pekerjaan/' . $id_pekerjaan_baru . '/';
+                    $path = './uploads/' . date('Y') . '/' . date('m') . '/' . date('d') . '/' . $id_pekerjaan_baru . '/';
+                    //$path = './uploads/pekerjaan/' . $id_pekerjaan_baru . '/';
                     $this->load->library('upload');
                     $files = $_FILES["berkas"];
                     if (count($files) > 0) {
@@ -983,7 +984,7 @@ class pekerjaan extends ceklogin {
     }
 
     public function batalkan_pekerjaan() {
-        $this->load->model(array("pekerjaan_model", "akun"));
+        $this->load->model(array("pekerjaan_model", "akun", 'berkas_model'));
         /*
          * mendapatkan list id pekerjaan yang akan dibatalkan
          */
@@ -1021,12 +1022,17 @@ class pekerjaan extends ceklogin {
                     }
                     $usulan = $pekerjaan[0]->flag_usulan == '1';
                     $berhak_usulan = ($session ['user_id'] == $pekerjaan[0]->id_penanggung_jawab && $usulan);
-                    $berhak_usulan = ($session ['user_id'] == $pekerjaan[0]->id_pengusul && $usulan);
-                    $admin = $session['hakakses'] == 'Administrator';
-                    if (($berhak_pekerjaan && !$usulan) || $berhak_usulan || ($admin)) {
+                    $berhak_usulan = $berhak_usulan || ($session ['user_id'] == $pekerjaan[0]->id_pengusul && $usulan);
+                    //$admin = $session['hakakses'] == 'Administrator';
+                    if (($berhak_pekerjaan && !$usulan) || $berhak_usulan) {
                         $this->pekerjaan_model->update_pekerjaan($update, $cur_id_pekerjaan);
                         //echo 'id pekerjaan yang akan dibatalkan untuk staffku=' . $cur_id_pekerjaan . "<br>\n";
                         $this->pekerjaan_model->batalkan_task($cur_id_pekerjaan);
+                        $list_berkas = $this->berkas_model->get_berkas_of_pekerjaan($cur_id_pekerjaan);
+                        foreach ($list_berkas as $berkas) {
+                            $this->berkas_model->hapus_file($berkas->id_file);
+                            unlink($berkas->nama_file);
+                        }
                     }
                 }
             }

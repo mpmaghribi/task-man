@@ -42,9 +42,9 @@
                 <table class="table table-striped table-hover table-condensed" id="table_deskripsi_file">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Nama File</th>
-                            <th></th>
+                            <th style="width: 70px">#</th>
+                            <th >Nama File</th>
+                            <th style="width: 150px"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,7 +58,7 @@
                                     <td><?php echo basename($berkas->nama_file); ?></td>
                                     <td style="text-align: right">
                                         <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() . $berkas->nama_file ?>');">Download</a>
-                                        <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
+                                        <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file_draft(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
                                     </td>
                                 </tr>
                                 <?php
@@ -72,3 +72,28 @@
         </section>
     </div>
 </div>
+<script>
+    function hapus_file_draft(id, nama) {
+        var c = confirm('Anda yakin ingin menghapus berkas "' + nama + '"?');
+        if (c === true) {
+            $.ajax({// create an AJAX call...
+                data: {
+                    id_file: id,
+                    id_draft: '<?php echo $draft[0]->id_pekerjaan; ?>'
+                }, // get the form data
+                type: "get", // GET or POST
+                url: "<?php echo site_url(); ?>/draft/hapus_file", // the file to call
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+                    //alert(response);
+                    if (json.status === "OK") {
+                        $('#berkas_' + id).remove();
+                        //$('#tombol_validasi_usulan').remove();
+                    } else {
+                        alert("Gagal menghapus file, " + json.reason);
+                    }
+                }
+            });
+        }
+    }
+</script>

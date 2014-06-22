@@ -11,6 +11,45 @@ class draft extends ceklogin {
         //$this->load->model("pengaduan_model");
     }
 
+    public function hapus_file() {
+        $id_file = pg_escape_string($this->input->get('id_file'));
+        $id_pekerjaan = pg_escape_string($this->input->get("id_draft"));
+        $this->load->model(array('pekerjaan_model', 'berkas_model'));
+        $session = $this->session->userdata('logged_in');
+        $parameter_valid = false;
+        if (strlen($id_pekerjaan) > 0 && strlen($id_file) > 0) {
+            $parameter_valid = true;
+        }
+        if ($parameter_valid) {
+            $cek = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
+            $hasil['status'] = 'error';
+            //print_r($cek);
+            if (count($cek) > 0) {
+                $berhak = false;
+                if ($cek[0]->id_penanggung_jawab == $session['user_id'] && $cek[0]->flag_usulan == '5') {
+                    $berhak = true;
+                } else {
+                    $hasil['reason'] = "Anda tidak berhak menghapus berkas";
+                }
+                $berhak &= in_array(3, $session['idmodul']);
+                if ($berhak) {
+                    $berkas = $this->berkas_model->get_berkas($id_file);
+                    $hapus = $this->berkas_model->hapus_file($id_file);
+                    if ($hapus == true) {
+                        $hasil['status'] = 'OK';
+                        unlink($berkas[0]->nama_file);
+                    } else
+                        $hasil['reason'] = 'gagal menghapus';
+                }
+            }else {
+                $hasil['reason'] = 'Pekerjaan tidak ditemukan';
+            }
+            echo json_encode($hasil);
+        } else {
+            echo json_encode(array('status' => 'error', 'reason' => 'parameter tidak lengkap'));
+        }
+    }
+
     public function index() {
         $session = $this->session->userdata('logged_in');
         $this->load->model(array('pekerjaan_model', 'akun'));
@@ -38,7 +77,7 @@ class draft extends ceklogin {
         $insert['flag_usulan'] = '5';
         $insert['asal_pekerjaan'] = 'task management';
         $insert['kategori'] = pg_escape_string(strtolower($this->input->post('kategori')));
-        $insert['id_penanggung_jawab']=$temp['id_akun'];
+        $insert['id_penanggung_jawab'] = $temp['id_akun'];
 
 
 
@@ -54,7 +93,7 @@ class draft extends ceklogin {
 
                 //echo "path = $path<br/>";
                 if (isset($_FILES["berkas"])) {
-                    $path = './uploads/pekerjaan/' . $id_pekerjaan . '/';
+                    $path = './uploads/' . date('Y') . '/' . date('m') . '/' . date('d') . '/' . $id_pekerjaan . '/';
                     //$this->load->library('upload');
                     if (!file_exists($path)) {
                         mkdir($path, 0777, true);
@@ -145,11 +184,11 @@ class draft extends ceklogin {
             $judul = 'Kesalahan Draft';
             $keterangan = 'draft tidak dapat ditemukan';
         }
-        if($status==0){
-            if($detail_draft[0]->id_penanggung_jawab!=$session['id_akun']){
-                $status=1;
-                $judul='Tidak Berhak';
-                $keterangan="Anda tidak berhak mengakses draft ini";
+        if ($status == 0) {
+            if ($detail_draft[0]->id_penanggung_jawab != $session['id_akun']) {
+                $status = 1;
+                $judul = 'Tidak Berhak';
+                $keterangan = "Anda tidak berhak mengakses draft ini";
             }
         }
         if ($status == 0) {
@@ -158,9 +197,9 @@ class draft extends ceklogin {
             //$data['my_staff']=$this->akun->my_staff($session['user_id']);
             $this->load->view('pekerjaan/draft/assign', $data);
         }
-        if($status==1){
-            $data['judul_kesalahan']=$judul;
-            $data['deskripsi_kesalahan']=$keterangan;
+        if ($status == 1) {
+            $data['judul_kesalahan'] = $judul;
+            $data['deskripsi_kesalahan'] = $keterangan;
             $this->load->view('pekerjaan/kesalahan', $data);
         }
     }
@@ -230,7 +269,8 @@ class draft extends ceklogin {
         if ($detail_draft[0]->id_penanggung_jawab == $session['user_id']) {
             if ($this->pekerjaan_model->update_pekerjaan($update, $id_draft)) {
                 if (isset($_FILES["berkas"])) {
-                    $path = './uploads/pekerjaan/' . $id_draft . '/';
+                    //$path = './uploads/pekerjaan/' . $id_draft . '/';
+                    $path = './uploads/' . date('Y') . '/' . date('m') . '/' . date('d') . '/' . $id_draft . '/';
                     //$this->load->library('upload');
                     if (!file_exists($path)) {
                         mkdir($path, 0777, true);
@@ -239,7 +279,7 @@ class draft extends ceklogin {
                     $this->upload_file($files, $path, $id_draft);
                 }
                 $data['list_draft'] = $this->pekerjaan_model->get_list_draft($session['user_id']);
-                redirect(base_url() . 'draft/view/?id_draft='.$id_draft);
+                redirect(base_url() . 'draft/view/?id_draft=' . $id_draft);
             }
         } else {
             $data['judul_kesalahan'] = 'kesalahan';
@@ -248,7 +288,7 @@ class draft extends ceklogin {
         }
     }
 
-    public function upload_file($files, $path, $id_pekerjaan) {
+    private function upload_file($files, $path, $id_pekerjaan) {
         $temp = $this->session->userdata('logged_in');
         $this->load->model("berkas_model");
         $jumlah_file = count($files["name"]);
@@ -280,7 +320,8 @@ class draft extends ceklogin {
         } else {
             $this->load->model(array('pekerjaan_model', 'berkas_model'));
             $detail_draft = $this->pekerjaan_model->get_draft(array($id_draft));
-            if ($detail_draft[0]->id_penanggung_jawab == $session['user_id']) {
+            $berhak = in_array(3, $session['idmodul']);
+            if ($detail_draft[0]->id_penanggung_jawab == $session['user_id'] && $berhak) {
                 $list_berkas = $this->berkas_model->get_berkas_of_pekerjaan($id_draft);
                 foreach ($list_berkas as $berkas) {
                     $this->berkas_model->hapus_file($berkas->id_file);

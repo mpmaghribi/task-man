@@ -26,7 +26,7 @@
                                         <thead>
                                             <tr>
                                                 <th> No</th>
-                                                <th class="hidden-phone">Pekerjaan</th>
+                                                <th style="min-width: 170px" class="hidden-phone">Pekerjaan</th>
                                                 <th>Deadline</th>
                                                 <th>Assign To</th>
                                                 <th>Status</th>

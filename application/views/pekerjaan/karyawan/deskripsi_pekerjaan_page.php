@@ -160,7 +160,7 @@ if ($this->session->userdata('prev') != null) {
                                                     <table class="table table-striped table-hover table-condensed" id="table_list_file">
                                                         <thead>
                                                             <tr>
-                                                                <th>#</th>
+                                                                <th style="width: 70px">#</th>
                                                                 <th>Nama File</th>
                                                                 <th></th>
                                                             </tr>
@@ -203,8 +203,8 @@ if ($this->session->userdata('prev') != null) {
                                                                 <th style="display: none">id</th>
                                                                 <th>#</th>
                                                                 <th>Nama</th>
-                                                                <th>Progress</th>
-                                                                <th></th>
+                                                                <th style="width: 300px">Progress</th>
+                                                                <th style="width: 250px"></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -743,6 +743,6 @@ if ($this->session->userdata('prev') != null) {
         }
         $(function() {
         $('#table_list_file').dataTable();
-        $('#staff_pekerjaan').dataTable();
+        $('#staff_pekerjaan').dataTable({"aaSorting": [[1,'asc']]});
         });
     </script>
