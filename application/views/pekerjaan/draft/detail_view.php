@@ -39,7 +39,7 @@
                 File Pendukung
             </h4>
             <div class="panel-body">
-                <table class="table table-striped table-hover table-condensed" id="table_deskripsi">
+                <table class="table table-striped table-hover table-condensed" id="table_deskripsi_file">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -58,7 +58,7 @@
                                     <td><?php echo basename($berkas->nama_file); ?></td>
                                     <td style="text-align: right">
                                         <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() . $berkas->nama_file ?>');">Download</a>
-<!--                                        <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>-->
+                                        <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
                                     </td>
                                 </tr>
                                 <?php

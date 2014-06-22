@@ -12,7 +12,7 @@
                             <th class="hidden-phone">Nama Pekerjaan</th>
                             <th class="hidden-phone">Waktu Pekerjaan</th>
                             <th class="hidden-phone">Prioritas</th>
-                            <th style="text-align: right"></th>
+                            <th style="text-align: right; min-width: 248px; width: 300px"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -30,8 +30,8 @@
                                 echo '<td>' . date("d M Y", strtotime($draft->tgl_mulai)) . ' - ' . date("d M Y", strtotime($draft->tgl_selesai)) . '</td>';
                                 echo '<td><span class="label ' . $label_prioritas[$draft->level_prioritas] . ' label-mini">' . $prioritas[$draft->level_prioritas] . '</span></td>';
                                 ?>
-                            <td style="text-align: right">
-                                <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: 0px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
+                            <td style="text-align: right;">
+                                <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: 0px;padding-top: 0px; font-size: 11px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                     <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>draft/assign?id_draft=<?php echo $draft->id_pekerjaan; ?>" id="" style="font-size: 10px">Assign</a>
                                     <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>draft/edit?id_draft=<?php echo $draft->id_pekerjaan; ?>" id="" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-success btn-xs" href="<?php echo base_url(); ?>draft/view?id_draft=<?php echo $draft->id_pekerjaan; ?>" id="" style="font-size: 10px">View</a>

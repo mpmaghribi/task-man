@@ -57,6 +57,8 @@
                                     document.title = "Draft Pekerjaan - Task Management";
                                     $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
                                     jQuery(document).ready(function() {
-                                        $('#tabel_pekerjaan_draft').dataTable();
+                                        $('#tabel_pekerjaan_file').dataTable();
+                                        console.log('datatable');
+                                        //$('#table_deskripsi_draft').dataTable();
                                     });
     </script>
