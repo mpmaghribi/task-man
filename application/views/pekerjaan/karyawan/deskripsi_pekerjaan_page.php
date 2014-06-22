@@ -103,8 +103,7 @@ if ($this->session->userdata('prev') != null) {
                                                     <?php } ?>
                                                 </h4>
                                                 <p style="font-size: larger" id="nama_penanggung_jawab">
-                                                    <?php 
-                                                    if (isset($deskripsi_pekerjaan)&&count($deskripsi_pekerjaan)>0&&$deskripsi_pekerjaan[0]->id_penanggung_jawab != null) echo isset($user[$deskripsi_pekerjaan[0]->id_penanggung_jawab])?$user[$deskripsi_pekerjaan[0]->id_penanggung_jawab]:'kesalahan'; ?>
+                                                    <?php if (isset($deskripsi_pekerjaan) && count($deskripsi_pekerjaan) > 0 && $deskripsi_pekerjaan[0]->id_penanggung_jawab != null) echo isset($user[$deskripsi_pekerjaan[0]->id_penanggung_jawab]) ? $user[$deskripsi_pekerjaan[0]->id_penanggung_jawab] : 'kesalahan'; ?>
                                                 </p>
                                                 <h4 style="color: #1FB5AD;">
                                                     Nama Pekerjaan
@@ -158,7 +157,7 @@ if ($this->session->userdata('prev') != null) {
                                                     File Pendukung
                                                 </h4>
                                                 <div class="panel-body">
-                                                    <table class="table table-striped table-hover table-condensed" id="table_deskripsi">
+                                                    <table class="table table-striped table-hover table-condensed" id="table_list_file">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
@@ -198,7 +197,7 @@ if ($this->session->userdata('prev') != null) {
                                                     Anggota Tim
                                                 </h4>
                                                 <div class="panel-body">
-                                                    <table class="table table-striped table-hover table-condensed">
+                                                    <table class="table table-striped table-hover table-condensed" id="staff_pekerjaan">
                                                         <thead>
                                                             <tr>
                                                                 <th style="display: none">id</th>
@@ -254,7 +253,7 @@ if ($this->session->userdata('prev') != null) {
                                             </section>
                                             <?php
                                             if ($terlambat > 0 && !$usulan) {
-                                                 if ($ikut_serta) {
+                                                if ($ikut_serta) {
                                                     ?>
                                                     <div class="modal fade" id="modal_perpanjang" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog">
@@ -363,9 +362,9 @@ if ($this->session->userdata('prev') != null) {
                                                                     <label for="waktu_progress" class="control-label col-lg-3">Waktu Progress</label>
                                                                     <div class="col-lg-8">
                                                                         <input readonly class="form-control" type="text" id="waktu_progress" name="waktu_progress" value="<?php
-                                                                        date_default_timezone_set("Asia/Jakarta");
-                                                                        echo date("Y-m-d h:i:s");
-                                                                        ?>" />
+                                            date_default_timezone_set("Asia/Jakarta");
+                                            echo date("Y-m-d h:i:s");
+                                            ?>" />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -386,7 +385,7 @@ if ($this->session->userdata('prev') != null) {
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                           ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                            ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -472,14 +471,6 @@ if ($this->session->userdata('prev') != null) {
                 </div>
                 <!--script for this page only-->
                 <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
-
-                <!-- END JAVASCRIPTS -->
-                <script>
-                                                                    jQuery(document).ready(function() {
-                                                                        EditableTableProgress.init();
-                                                                    });
-                </script>
-                <!-- page end-->
             </section>
         </section>
         <!--main content end-->
@@ -488,7 +479,7 @@ if ($this->session->userdata('prev') != null) {
         <!--right sidebar end-->
 
     </section>
-    
+
     <script>
         function hapus_file(id_file, deskripsi)
         {
@@ -550,8 +541,7 @@ if ($this->session->userdata('prev') != null) {
                 });
             });
         }
-    </script>
-    <script>
+
         function hapus(id) {
             $('#hapus_komen').click(function(e) {
                 //alert("pekerjaan yg divalidasi " + id_pekerjaan);
@@ -569,9 +559,7 @@ if ($this->session->userdata('prev') != null) {
                 });
             });
         }
-    </script>
 
-    <script>
 
         $('#save_komen').click(function(e) {
             //alert("pekerjaan yg divalidasi " + id_pekerjaan);
@@ -639,7 +627,7 @@ if ($this->session->userdata('prev') != null) {
                 }
             });
         }
-        
+
         document.title = 'Deskripsi Pekerjaan: <?php echo $nama_pekerjaan; ?> - Task Management';
         //$('#komentar').trigger();
         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + document.getElementById('id_detail_pkj').value);
@@ -753,5 +741,8 @@ if ($this->session->userdata('prev') != null) {
                 }
             });
         }
-
+        $(function() {
+        $('#table_list_file').dataTable();
+        $('#staff_pekerjaan').dataTable();
+        });
     </script>

@@ -22,10 +22,11 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#ListPekerjaan">List Pekerjaan</a>
                                     </li>
-
+<?php if(in_array(2,$data_akun['idmodul'])){?>
                                     <li class="">
                                         <a data-toggle="tab" href="#TambahPekerjaan">Usulkan Pekerjaan</a>
                                     </li>
+<?php } ?>
                                 </ul>
                             </header>
                             <div class="panel-body">
@@ -152,7 +153,7 @@
                                             </div>
                                         </section>
                                     </div>
-
+<?php if(in_array(2,$data_akun['idmodul'])){?>
                                     <div id="TambahPekerjaan" class="tab-pane">
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan" enctype="multipart/form-data">
@@ -235,35 +236,8 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="modal fade" id="modalTambahStaff" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" style="width: 1000px">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="tombol_tutup">&times;</button>
-                                                    <h4 class="modal-title">Tambahkan Staff</h4>
-                                                </div>
-                                                <div class="modal-body" id="tambahkan_staff_body">
-                                                    <table id="tabel_list_enroll_staff" class="table table-hover general-table">
-                                                        <thead id="tabel_list_enroll_staff_head">
-                                                            <tr id="tabel_list_enroll_staff_head">
-                                                                <th>No</th>
-                                                                <th>NIP</th>
-                                                                <th>Departemen</th>
-                                                                <th>Nama</th>
-                                                                <th>Enroll</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="tabel_list_enroll_staff_body">                                                            
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
-                                                    <button class="btn btn-success" type="button" onclick="pilih_staff_ok()">Save changes</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+<?php } ?>
+                                    
                                 </div>
                             </div>
 

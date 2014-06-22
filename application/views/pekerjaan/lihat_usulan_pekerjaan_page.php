@@ -180,6 +180,7 @@
                     $(function() {
                         get_data_usulan_pekerjaan();
                         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-                        
+                        $('#submenu_pekerjaan_ul').attr('style', 'display:block');
+                        document.title='Lihat Usulan Pekerjaan - Task Management';
                     });
     </script>

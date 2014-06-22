@@ -34,6 +34,8 @@
                                             <?php
                                             $counter = 0;
                                             $list_id_pekerjaan = array();
+                                            $list_status = array(1 => 'Not Approved', 2 => 'Approved', 9 => 'Perpanjang', 't' => 'Terlambat');
+                                            $label_status = array(1 => 'label-danger', 2 => 'label-success', 9 => "label-inverse", 't' => 'label-info');
                                             foreach ($pekerjaan_staff as $pekerjaan) {
                                                 if (in_array($pekerjaan->id_pekerjaan, $list_id_pekerjaan))
                                                     continue;
@@ -44,7 +46,7 @@
                                                     <td><?php echo $pekerjaan->nama_pekerjaan; ?></td>
                                                     <td><?php echo substr($pekerjaan->tgl_mulai, 0, 10) . ' - ' . substr($pekerjaan->tgl_selesai, 0, 10); ?></td>
                                                     <td id="assigh_to_<?php echo $pekerjaan->id_pekerjaan; ?>"></td>
-                                                    <td id="status_<?php echo $pekerjaan->id_pekerjaan; ?>" style="">status</td>
+                                                    <td id="status_<?php echo $pekerjaan->id_pekerjaan; ?>" style=""><span class="label <?= $label_status[$pekerjaan->flag_usulan] ?> label-mini"><?= $list_status[$pekerjaan->flag_usulan] ?></span></td>
                                                     <td><a  href="<?php echo base_url(); ?>pekerjaan/deskripsi_pekerjaan?id_detail_pkj=<?php echo $pekerjaan->id_pekerjaan; ?>" class="btn btn-success btn-xs"><i class="fa fa-eye">View</i></a></td>
                                                 </tr><?php
                                             }
@@ -70,6 +72,7 @@
         <?php $this->load->view('taskman_rightbar_page') ?>
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
+    <script src="<?php echo base_url() ?>assets/js/morris-chart/raphael-min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/morris-chart/morris.js"></script>
     <script src="<?php echo base_url() ?>assets/js/highchart/js/highcharts.js"></script>
     <script src="<?php echo base_url() ?>assets/js/highchart/js/modules/exporting.js"></script>
@@ -413,9 +416,8 @@
         jQuery(document).ready(function() {
             fill_tabel_pekerjaan();
             highchart_bar();
-            morris_bar();
-            $('#tabel_pekerjaan_staff').dataTable({   
-            });
+            //morris_bar();
+            $('#tabel_pekerjaan_staff').dataTable({});
             $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
             $('#submenu_pekerjaan_ul').attr('style', 'display:block');
         });
