@@ -179,8 +179,8 @@
     var lebar = $(window).width();
     console.log('tinggi = ' + tinggi);
     var tinggi_pending = Math.round(tinggi * 0.7);
-    var lebar_pending = Math.round(lebar * 0.5);
-    $('#bagian_pending_task').attr('style', 'overflow: scroll; max-height: ' + tinggi_pending + 'px;min-width:' + lebar_pending + 'px;overflow-x: hidden');
+    var lebar_pending = Math.round(lebar * 0.35);
+    $('#bagian_pending_task').attr('style', 'overflow: scroll; max-height: ' + tinggi_pending + 'px;min-width:' + lebar_pending + 'px !important;overflow-x: hidden;max-width:0px !important;width:'+lebar_pending+'px !important');
 </script>
 </body>
 </html>

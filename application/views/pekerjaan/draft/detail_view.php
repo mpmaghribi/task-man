@@ -57,7 +57,7 @@
                                     <td><?php echo $i; ?></td>
                                     <td><?php echo basename($berkas->nama_file); ?></td>
                                     <td style="text-align: right">
-                                        <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() . $berkas->nama_file ?>');">Download</a>
+                                        <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() //. $berkas->nama_file ?>download?id_file=<?php echo $berkas->id_file; ?>');">Download</a>
                                         <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file_draft(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
                                     </td>
                                 </tr>
