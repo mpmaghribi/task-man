@@ -237,7 +237,7 @@ if ($this->session->userdata('prev') != null) {
                                                                                 if ($terlambat <= 0) {
                                                                                     ?>
                                                                                     <a class=" btn btn-primary btn-xs" href="#UbahProgress" data-toggle="modal" onclick="show_progress('<?php echo $value->id_detil_pekerjaan ?>', '<?php echo $value->id_akun ?>')">Ubah Progress</a>
-                                                                                <?php } ?>
+                                                                                      <?php } ?>
                                                                                 <a class=" btn btn-primary btn-xs" href="#LogProgress" data-toggle="modal" onclick="history_progress('<?php echo $value->id_detil_pekerjaan ?>', '<?php echo $value->id_akun ?>')">History Progress</a>
                                                                             <?php } ?>
                                                                         </td>
@@ -302,7 +302,7 @@ if ($this->session->userdata('prev') != null) {
                                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                                             <h4 class="modal-title">Ubah Progress</h4>
                                                         </div>
-                                                        <form class="cmxform form-horizontal" id="signupForm" action="#" method="POST">
+                                                        <form class="cmxform form-horizontal" id="signupForm" action="#" method="POST" enctype="multipart/form-data">
                                                             <div class="form modal-body">
                                                                 <input type="hidden" id="idp" name="idp" value="" />
                                                                 <div class="form-group ">
@@ -345,6 +345,7 @@ if ($this->session->userdata('prev') != null) {
                                                                         </select>
                                                                     </div>
                                                                 </div>
+                                                                
                                                                 <div class="form-group ">
                                                                     <label for="perubahan" class="control-label col-lg-3">Log Perubahan</label>
                                                                     <div class="col-lg-8">
@@ -366,6 +367,26 @@ if ($this->session->userdata('prev') != null) {
                                             ?>" />
                                                                     </div>
                                                                 </div>
+                                                                <div class="form-group ">
+                                                                    <label for="file1" class="control-label col-lg-3">File Progress</label>
+                                                                    <div class="col-lg-8">
+                                                                        <input class="file_progress" type="file" id="file1" name="file1" value="" />
+                                                                        <button class="btn btn-warning btn-xs" onclick="uploadFile()" type="button"> Upload File</button>
+                                                            
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group ">
+                                                                    <label for="progressBar" class="control-label col-lg-3">Progress</label>
+                                                                    <div class="col-lg-8">
+                                                                        <progress id="progressBar" value="0" max="100" style="width:300px;"></progress> 
+                                                                     </div>
+                                                                </div>
+                                                                <div class="form-group ">
+                                                                    <label for="status" class="control-label col-lg-3">Status</label>
+                                                                    <div class="col-lg-8">
+                                                                        <h4 id="status"></h4> <p id="loaded_n_total"></p>
+                                                                     </div>
+                                                                </div>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
@@ -376,7 +397,29 @@ if ($this->session->userdata('prev') != null) {
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <script> 
+                                            function _(el){ return document.getElementById(el); } 
+                                            function uploadFile(){ 
+                                                var file = _("file1").files[0]; 
+                                                var idp = document.getElementById("idp").value;
+                                                if (file.type === "application/x-download" || file.type === "application/msword")
+                                                {
+                                                    var formdata = new FormData(); 
+                                                    formdata.append("file1", file); 
+                                                    formdata.append("id_pekerjaan",idp);
+                                                    var ajax = new XMLHttpRequest(); ajax.upload.addEventListener("progress", progressHandler, false); ajax.addEventListener("load", completeHandler, false); ajax.addEventListener("error", errorHandler, false); ajax.addEventListener("abort", abortHandler, false); ajax.open("POST", "<?php echo site_url()?>/file_upload_parser"); ajax.send(formdata); 
+                                                }
+                                                else
+                                                {
+                                                    //alert(file.name+" | "+file.size+" | "+file.type); 
+                                                   alert("Silahkan upload hanya pdf dan ms word 2003 - 2007 saja."); 
+                                                }
+                                                //alert(file.name+" | "+file.size+" | "+file.type); 
+                                                
+                                            } 
+                                            function progressHandler(event){ _("loaded_n_total").innerHTML = "Uploaded "+event.loaded+" bytes of "+event.total; var percent = (event.loaded / event.total) * 100; _("progressBar").value = Math.round(percent); _("status").innerHTML = Math.round(percent)+"% uploaded... please wait"; } function completeHandler(event){ _("status").innerHTML = event.target.responseText; _("progressBar").value = 0; } function errorHandler(event){ _("status").innerHTML = "Upload Failed"; } function abortHandler(event){ _("status").innerHTML = "Upload Aborted"; } 
+                                                                                        
+                                        </script>
 
 
 
@@ -434,25 +477,6 @@ if ($this->session->userdata('prev') != null) {
                                             <?php $this->load->view('pekerjaan/penilaian'); ?>
                                         </div>
                                     <?php } ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                 </div>
                             </div>
 
