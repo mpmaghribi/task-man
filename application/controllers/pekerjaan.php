@@ -31,6 +31,51 @@ class pekerjaan extends ceklogin {
         $this->load->view("pekerjaan/pengaduan_page", $data);
     }
 
+    public function perpanjang() {
+        $id_pekerjaan = pg_escape_string($this->input->post('id_pekerjaan'));
+        $tanggal_baru = pg_escape_string($this->input->post('tanggal_baru'));
+        $komentar = pg_escape_string($this->input->post('komentar_perpanjang'));
+        $session = $this->session->userdata('logged_in');
+        $status = true;
+        if (strlen($id_pekerjaan) == 0) {
+            $status = false;
+        }
+        $status = in_array(4, $session['idmodul']);
+        if ($status) {
+            $this->load->model(array('pekerjaan_model'));
+            $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
+            if (count($pekerjaan) == 0) {
+                $status = false;
+            }
+        }
+
+        if ($status) {
+            $status = $status && $pekerjaan[0]->id_penanggung_jawab == $session['id_akun'];
+        }
+        if($status){
+            $update['tgl_selesai']=$tanggal_baru;
+            //$this->pekerjaan_model->update($update);
+            //echo $pekerjaan[0]->tgl_selesai.' ';
+            $t = strtotime($tanggal_baru);
+            //echo $t.' ';
+            $baru= date('Y-m-d', $t);
+            $sistem = date('Y-m-d');
+            //echo $sistem . ' ' . $baru.' ';
+            $banding = strcmp(date('Y-m-d'), $baru);
+            //echo $banding;
+            if($banding <= 0){
+                $update['flag_usulan']='2';
+                $ubah = $this->pekerjaan_model->update_pekerjaan($update,$id_pekerjaan);
+                if($ubah){
+                    $result = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_pekerjaan, $session['id_akun'], $komentar);
+                }
+                echo json_encode(array('status'=>'OK'));
+            }else{
+                echo json_encode(array('status'=>'error','reason'=>'Tanggal yang anda masukkan tidak valid'));
+            }
+        }
+    }
+
     function get_pengaduan() {
         //http://localhost:90/integrarsud/helpdesk/index.php/pengaduan/getDelegate/
         //print_r($url);
@@ -191,7 +236,7 @@ class pekerjaan extends ceklogin {
             }
         }
         if ($status == 0) {
-            if ($pekerjaan[0]->flag_usulan == '9' && strcmp(date('Y-m-d'), $update["tgl_selesai"]) <= 0) {
+            if ($pekerjaan[0]->flag_usulan == '9' && strcmp(date('Y-m-d'), date('Y-m-d',strtotime($update["tgl_selesai"]))) <= 0) {
                 $update['flag_usulan'] = '2';
             }
             echo "mencari siapa yang terlibat, siapa yang atasan";
@@ -586,7 +631,8 @@ class pekerjaan extends ceklogin {
                 $update['flag_usulan'] = '9';
                 $result = $this->pekerjaan_model->update_pekerjaan($update, $id_pekerjaan);
                 if ($result) {
-                    $result = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_pekerjaan, $data['data_akun']['id_akun'], $alasan);
+                    if (strlen($alasan) > 0)
+                        $result = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_pekerjaan, $data['data_akun']['id_akun'], $alasan);
                     echo json_encode(array("status" => "OK"));
                 }
             } else {

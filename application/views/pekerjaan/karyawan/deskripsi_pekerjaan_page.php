@@ -51,7 +51,8 @@ foreach ($users as $u) {
                                             if ($ikut_serta) {
                                                 ?><a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px">Perpanjangan Telah Dikirim</a><?php
                                             } else if ($bisa_edit) {
-                                                ?><a class="btn btn-primary btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>#deskripsi" id="" style="font-size: 10px">Minta Diperpanjang</a><?php
+                                                $alamat = base_url() . "pekerjaan/edit?id_pekerjaan=" . $deskripsi_pekerjaan[0]->id_pekerjaan . "#deskripsi";
+                                                ?><a class="btn btn-primary btn-xs" href="javascript:void(0);" id="setuju_perpanjang"  style="font-size: 10px">Minta Diperpanjang</a><?php
                                             }
                                         } else if ($ikut_serta) {
                                             ?><a class="btn btn-primary btn-xs" data-toggle="modal" href="#modal_perpanjang" id="tombol_perpanjang" style="font-size: 10px">Minta Perpanjang</a><?php
@@ -93,6 +94,27 @@ if ($this->session->userdata('prev') != null) {
                                     <div id="deskripsiPekerjaan" class="tab-pane active">
                                         <section class="panel" >
                                         </section>
+                                        <div class="col-md-12 cmxform form-horizontal"  id="div_tanggap_perpanjang" style="display: none">
+                                            <h4>Ubah Deadline Pekerjaan</h4>
+                                            <div class="form-group ">
+                                                <label for="tanggal_baru" class="control-label col-lg-3">Tanggal Baru</label>
+                                                <div class="col-lg-6">
+                                                    <input class=" form-control" id="tanggal_baru" name="tanggal_baru" type="text" readonly="" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="komentar_perpanjang" class="control-label col-lg-3">Tambahkan Komentar</label>
+                                                <div class="col-lg-6">
+                                                    <textarea class="form-control" rows="10" name="komentar_perpanjang" id="komentar_perpanjang"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-lg-offset-3 col-lg-6">
+                                                    <input class="btn btn-success" type="button" id="tombol_simpan_perpanjang" value="Simpan"/>
+                                                    <input class="btn btn-primary" type="button" id="tombol_batal_perpanjang" value="Batal"/>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-md-12">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
@@ -175,7 +197,7 @@ if ($this->session->userdata('prev') != null) {
                                                                         <td><?php echo $i; ?></td>
                                                                         <td><?php echo basename($berkas->nama_file); ?></td>
                                                                         <td style="text-align: right">
-                                                                            <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() ?>download?id_file=<?= $berkas->id_file;?>');">Download</a>
+                                                                            <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() ?>download?id_file=<?= $berkas->id_file; ?>');">Download</a>
                                                                             <?php if ($atasan || $pengusul) { ?>
                                                                                 <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
                                                                             <?php } ?>
@@ -219,7 +241,7 @@ if ($this->session->userdata('prev') != null) {
                                                                         <td id="nama_staff_"><?php foreach ($users as $value2) { ?>
                                                                                 <?php
                                                                                 if ($value->id_akun == $value2->id_akun) {
-                                                                                    ?><a target="_blank" href="<?php echo base_url(); ?>pekerjaan/pekerjaan_per_staff?id_akun=<?php echo $value2->id_akun; ?>"><?php echo $value2->nama;?></a><?php
+                                                                                    ?><a target="_blank" href="<?php echo base_url(); ?>pekerjaan/pekerjaan_per_staff?id_akun=<?php echo $value2->id_akun; ?>"><?php echo $value2->nama; ?></a><?php
                                                                                 }
                                                                             }
                                                                             ?>
@@ -237,7 +259,7 @@ if ($this->session->userdata('prev') != null) {
                                                                                 if ($terlambat <= 0) {
                                                                                     ?>
                                                                                     <a class=" btn btn-primary btn-xs" href="#UbahProgress" data-toggle="modal" onclick="show_progress('<?php echo $value->id_detil_pekerjaan ?>', '<?php echo $value->id_akun ?>')">Ubah Progress</a>
-                                                                                      <?php } ?>
+                                                                                <?php } ?>
                                                                                 <a class=" btn btn-primary btn-xs" href="#LogProgress" data-toggle="modal" onclick="history_progress('<?php echo $value->id_detil_pekerjaan ?>', '<?php echo $value->id_akun ?>')">History Progress</a>
                                                                             <?php } ?>
                                                                         </td>
@@ -345,7 +367,7 @@ if ($this->session->userdata('prev') != null) {
                                                                         </select>
                                                                     </div>
                                                                 </div>
-                                                                
+
                                                                 <div class="form-group ">
                                                                     <label for="perubahan" class="control-label col-lg-3">Log Perubahan</label>
                                                                     <div class="col-lg-8">
@@ -362,9 +384,9 @@ if ($this->session->userdata('prev') != null) {
                                                                     <label for="waktu_progress" class="control-label col-lg-3">Waktu Progress</label>
                                                                     <div class="col-lg-8">
                                                                         <input readonly class="form-control" type="text" id="waktu_progress" name="waktu_progress" value="<?php
-                                            date_default_timezone_set("Asia/Jakarta");
-                                            echo date("Y-m-d h:i:s");
-                                            ?>" />
+                                                                        date_default_timezone_set("Asia/Jakarta");
+                                                                        echo date("Y-m-d h:i:s");
+                                                                        ?>" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group ">
@@ -372,20 +394,20 @@ if ($this->session->userdata('prev') != null) {
                                                                     <div class="col-lg-8">
                                                                         <input class="file_progress" type="file" id="file1" name="file1" value="" />
                                                                         <button class="btn btn-warning btn-xs" onclick="uploadFile()" type="button"> Upload File</button>
-                                                            
+
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group ">
                                                                     <label for="progressBar" class="control-label col-lg-3">Progress</label>
                                                                     <div class="col-lg-8">
                                                                         <progress id="progressBar" value="0" max="100" style="width:300px;"></progress> 
-                                                                     </div>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="form-group ">
                                                                     <label for="status" class="control-label col-lg-3">Status</label>
                                                                     <div class="col-lg-8">
                                                                         <h4 id="status"></h4> <p id="loaded_n_total"></p>
-                                                                     </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
@@ -397,28 +419,51 @@ if ($this->session->userdata('prev') != null) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <script> 
-                                            function _(el){ return document.getElementById(el); } 
-                                            function uploadFile(){ 
-                                                var file = _("file1").files[0]; 
+                                        <script>
+                                            function _(el) {
+                                                return document.getElementById(el);
+                                            }
+                                            function uploadFile() {
+                                                var file = _("file1").files[0];
                                                 var idp = document.getElementById("idp").value;
                                                 if (file.type === "application/x-download" || file.type === "application/msword")
                                                 {
-                                                    var formdata = new FormData(); 
-                                                    formdata.append("file1", file); 
-                                                    formdata.append("id_pekerjaan",idp);
-                                                    var ajax = new XMLHttpRequest(); ajax.upload.addEventListener("progress", progressHandler, false); ajax.addEventListener("load", completeHandler, false); ajax.addEventListener("error", errorHandler, false); ajax.addEventListener("abort", abortHandler, false); ajax.open("POST", "<?php echo site_url()?>/file_upload_parser"); ajax.send(formdata); 
+                                                    var formdata = new FormData();
+                                                    formdata.append("file1", file);
+                                                    formdata.append("id_pekerjaan", idp);
+                                                    var ajax = new XMLHttpRequest();
+                                                    ajax.upload.addEventListener("progress", progressHandler, false);
+                                                    ajax.addEventListener("load", completeHandler, false);
+                                                    ajax.addEventListener("error", errorHandler, false);
+                                                    ajax.addEventListener("abort", abortHandler, false);
+                                                    ajax.open("POST", "<?php echo site_url() ?>/file_upload_parser");
+                                                    ajax.send(formdata);
                                                 }
                                                 else
                                                 {
                                                     //alert(file.name+" | "+file.size+" | "+file.type); 
-                                                   alert("Silahkan upload hanya pdf dan ms word 2003 - 2007 saja."); 
+                                                    alert("Silahkan upload hanya pdf dan ms word 2003 - 2007 saja.");
                                                 }
                                                 //alert(file.name+" | "+file.size+" | "+file.type); 
-                                                
-                                            } 
-                                            function progressHandler(event){ _("loaded_n_total").innerHTML = "Uploaded "+event.loaded+" bytes of "+event.total; var percent = (event.loaded / event.total) * 100; _("progressBar").value = Math.round(percent); _("status").innerHTML = Math.round(percent)+"% uploaded... please wait"; } function completeHandler(event){ _("status").innerHTML = event.target.responseText; _("progressBar").value = 0; } function errorHandler(event){ _("status").innerHTML = "Upload Failed"; } function abortHandler(event){ _("status").innerHTML = "Upload Aborted"; } 
-                                                                                        
+
+                                            }
+                                            function progressHandler(event) {
+                                                _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes of " + event.total;
+                                                var percent = (event.loaded / event.total) * 100;
+                                                _("progressBar").value = Math.round(percent);
+                                                _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+                                            }
+                                            function completeHandler(event) {
+                                                _("status").innerHTML = event.target.responseText;
+                                                _("progressBar").value = 0;
+                                            }
+                                            function errorHandler(event) {
+                                                _("status").innerHTML = "Upload Failed";
+                                            }
+                                            function abortHandler(event) {
+                                                _("status").innerHTML = "Upload Aborted";
+                                            }
+
                                         </script>
 
 
@@ -427,7 +472,7 @@ if ($this->session->userdata('prev') != null) {
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                            ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                    ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -504,105 +549,105 @@ if ($this->session->userdata('prev') != null) {
     </section>
 
     <script>
-        function hapus_file(id_file, deskripsi)
-        {
-            var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
-            if (c == true) {
-                $.ajax({// create an AJAX call...
-                    data: {id_file: id_file,
-                        id_pekerjaan: <?php echo $id_pkj; ?>
-                    }, // get the form data
-                    type: "get", // GET or POST
-                    url: "<?php echo site_url(); ?>/pekerjaan/hapus_file", // the file to call
-                    success: function(response) { // on success..
-                        var json = jQuery.parseJSON(response);
-                        //alert(response);
-                        if (json.status === "OK") {
-                            $('#berkas_' + id_file).remove();
-                            //$('#tombol_validasi_usulan').remove();
-                        } else {
-                            alert("Gagal menghapus file, " + json.reason);
-                        }
-                    }
-                });
-            }
-            else {
-            }
-        }
-        function ubah_komentar(id_komen) {
-            //alert(id_komen);
-            $.ajax({// create an AJAX call...
-                data:
-                        {
-                            id_komentar_ubah: id_komen
-                        }, // get the form data
-                type: "GET", // GET or POST
-                url: "<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan_by_id", // the file to call
-                success: function(response) { // on success..
-                    var json = jQuery.parseJSON(response);
-                    //alert(json.data);
-                    $("#komentar_pkj_ubah").val(json.data);
-                }
-            });
-            $('#ubah_komen').click(function(e) {
-                //alert("pekerjaan yg divalidasi " + id_pekerjaan);
-                e.preventDefault();
-                //alert(document.getElementById('komentar_pkj_ubah').value);
-                var id_pkj = document.getElementById('id_detail_pkj').value;
-                $.ajax({// create an AJAX call...
-                    data:
-                            {
-                                id_komentar_ubah: id_komen,
-                                isi_komentar_ubah: document.getElementById('komentar_pkj_ubah').value
-                            }, // get the form data
-                    type: "GET", // GET or POST
-                    url: "<?php echo site_url(); ?>/pekerjaan/ubah_komentar_pekerjaan", // the file to call
-                    success: function(response) { // on success..
-                        //var json = jQuery.parseJSON(response);
-                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
-                    }
-                });
-            });
-        }
+                                            function hapus_file(id_file, deskripsi)
+                                            {
+                                                var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
+                                                if (c == true) {
+                                                    $.ajax({// create an AJAX call...
+                                                        data: {id_file: id_file,
+                                                            id_pekerjaan: <?php echo $id_pkj; ?>
+                                                        }, // get the form data
+                                                        type: "get", // GET or POST
+                                                        url: "<?php echo site_url(); ?>/pekerjaan/hapus_file", // the file to call
+                                                        success: function(response) { // on success..
+                                                            var json = jQuery.parseJSON(response);
+                                                            //alert(response);
+                                                            if (json.status === "OK") {
+                                                                $('#berkas_' + id_file).remove();
+                                                                //$('#tombol_validasi_usulan').remove();
+                                                            } else {
+                                                                alert("Gagal menghapus file, " + json.reason);
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                                else {
+                                                }
+                                            }
+                                            function ubah_komentar(id_komen) {
+                                                //alert(id_komen);
+                                                $.ajax({// create an AJAX call...
+                                                    data:
+                                                            {
+                                                                id_komentar_ubah: id_komen
+                                                            }, // get the form data
+                                                    type: "GET", // GET or POST
+                                                    url: "<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan_by_id", // the file to call
+                                                    success: function(response) { // on success..
+                                                        var json = jQuery.parseJSON(response);
+                                                        //alert(json.data);
+                                                        $("#komentar_pkj_ubah").val(json.data);
+                                                    }
+                                                });
+                                                $('#ubah_komen').click(function(e) {
+                                                    //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+                                                    e.preventDefault();
+                                                    //alert(document.getElementById('komentar_pkj_ubah').value);
+                                                    var id_pkj = document.getElementById('id_detail_pkj').value;
+                                                    $.ajax({// create an AJAX call...
+                                                        data:
+                                                                {
+                                                                    id_komentar_ubah: id_komen,
+                                                                    isi_komentar_ubah: document.getElementById('komentar_pkj_ubah').value
+                                                                }, // get the form data
+                                                        type: "GET", // GET or POST
+                                                        url: "<?php echo site_url(); ?>/pekerjaan/ubah_komentar_pekerjaan", // the file to call
+                                                        success: function(response) { // on success..
+                                                            //var json = jQuery.parseJSON(response);
+                                                            $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
+                                                        }
+                                                    });
+                                                });
+                                            }
 
-        function hapus(id) {
-            $('#hapus_komen').click(function(e) {
-                //alert("pekerjaan yg divalidasi " + id_pekerjaan);
-                e.preventDefault();
-                var id_pkj = document.getElementById('id_detail_pkj').value;
-                $.ajax({// create an AJAX call...
-                    data:
-                            {
-                                id_komentar: id
-                            }, // get the form data                     type: "GET", // GET or POST
-                    url: "<?php echo site_url(); ?>/pekerjaan/hapus_komentar_pekerjaan", // the file to call
-                    success: function(response) { // on success..
-                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
-                    }
-                });
-            });
-        }
+                                            function hapus(id) {
+                                                $('#hapus_komen').click(function(e) {
+                                                    //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+                                                    e.preventDefault();
+                                                    var id_pkj = document.getElementById('id_detail_pkj').value;
+                                                    $.ajax({// create an AJAX call...
+                                                        data:
+                                                                {
+                                                                    id_komentar: id
+                                                                }, // get the form data                     type: "GET", // GET or POST
+                                                        url: "<?php echo site_url(); ?>/pekerjaan/hapus_komentar_pekerjaan", // the file to call
+                                                        success: function(response) { // on success..
+                                                            $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
+                                                        }
+                                                    });
+                                                });
+                                            }
 
 
-        $('#save_komen').click(function(e) {
-            //alert("pekerjaan yg divalidasi " + id_pekerjaan);
-            e.preventDefault();
-            var id_pkj = document.getElementById('id_detail_pkj').value;
-            $.ajax({// create an AJAX call...
-                data:
-                        {
-                            id_detail_pkj: document.getElementById('id_detail_pkj').value, // get the form data
-                            komentar_pkj: document.getElementById('komentar_pkj').value,
-                            is_isi_komentar: document.getElementById('is_isi_komentar').value
-                        }, // get the form data
-                type: "GET", // GET or POST
-                url: "<?php echo site_url(); ?>/pekerjaan/komentar_pekerjaan", // the file to call
-                success: function(response) { // on success..
-                    $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
-                    document.getElementById('komentar_pkj').value = '';
-                }
-            });
-        });
+                                            $('#save_komen').click(function(e) {
+                                                //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+                                                e.preventDefault();
+                                                var id_pkj = document.getElementById('id_detail_pkj').value;
+                                                $.ajax({// create an AJAX call...
+                                                    data:
+                                                            {
+                                                                id_detail_pkj: document.getElementById('id_detail_pkj').value, // get the form data
+                                                                komentar_pkj: document.getElementById('komentar_pkj').value,
+                                                                is_isi_komentar: document.getElementById('is_isi_komentar').value
+                                                            }, // get the form data
+                                                    type: "GET", // GET or POST
+                                                    url: "<?php echo site_url(); ?>/pekerjaan/komentar_pekerjaan", // the file to call
+                                                    success: function(response) { // on success..
+                                                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
+                                                        document.getElementById('komentar_pkj').value = '';
+                                                    }
+                                                });
+                                            });
 
     </script>
     <?php
@@ -765,7 +810,49 @@ if ($this->session->userdata('prev') != null) {
             });
         }
         $(function() {
-        $('#table_list_file').dataTable();
-        $('#staff_pekerjaan').dataTable({"aaSorting": [[1,'asc']]});
+            $('#table_list_file').dataTable();
+            $('#staff_pekerjaan').dataTable({"aaSorting": [[1, 'asc']]});
+            var now = new Date();
+            now = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+            console.log(now);
+            var tanggal = $('#tanggal_baru').datepicker({
+                format: 'dd-mm-yyyy',
+                onRender: function(date) {
+                    return date.valueOf() < now.valueOf() ? 'disabled' : '';
+                }
+            }).on('changeDate', function(ev) {
+                tanggal.hide();
+            }).data('datepicker');
+        });
+
+        $('#setuju_perpanjang').click(function() {
+            $('#div_tanggap_perpanjang').show();
+            document.getElementById('tanggal_baru').value='';
+            document.getElementById('komentar_perpanjang').value='';
+        });
+        $('#tombol_batal_perpanjang').click(function() {
+            $('#div_tanggap_perpanjang').hide();
+        });
+        $('#tombol_simpan_perpanjang').click(function() {
+            $('#div_tanggap_perpanjang').hide();
+            $.ajax({// create an AJAX call...
+                data: {
+                    id_pekerjaan:document.getElementById('id_detail_pkj').value,
+                    tanggal_baru:document.getElementById('tanggal_baru').value,
+                    komentar_perpanjang:document.getElementById('komentar_perpanjang').value
+                }, 
+                type: "POST", // GET or POST
+                url: "<?php echo site_url() ?>/pekerjaan/perpanjang",
+                cache: false,
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+                    if (json.status === "OK") {
+                        $('#setuju_perpanjang').remove();
+                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + document.getElementById('id_detail_pkj').value);
+                    } else {
+                        alert("Perpanjangan Deadline Pekerjaan Gagal dilakukan");
+                    }
+                }
+            });
         });
     </script>
