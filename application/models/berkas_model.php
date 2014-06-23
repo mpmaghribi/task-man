@@ -19,10 +19,10 @@ class berkas_model extends CI_Model {
         //echo $query;
         $this->db->query($query);
     }
-    public function get_berkas_of_pekerjaan($id_pekerjaan) {
+    public function get_berkas_of_pekerjaan($id_pekerjaan,$start=0,$limit=100) {
         if($id_pekerjaan==NULL||  strlen($id_pekerjaan)==0)
             return NULL;
-        $query = "select * from file where id_pekerjaan=$id_pekerjaan order by waktu";
+        $query = "select * from file where id_pekerjaan=$id_pekerjaan order by waktu limit $limit offset $start";
         $query = $this->db->query($query);
         return $query->result();
     }

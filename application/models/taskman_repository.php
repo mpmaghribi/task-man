@@ -72,12 +72,12 @@ class taskman_repository extends CI_Model {
     }
 
 
-    public function sp_view_pekerjaan($id_user) {
+    public function sp_view_pekerjaan($id_user, $start=0, $limit=100) {
         $query = "SELECT * from pekerjaan "
                 . "inner join detil_pekerjaan on "
                 . "pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan "
                 . "where detil_pekerjaan.id_akun=".$id_user." and pekerjaan.flag_usulan in ('1', '2','9') "
-                . "and detil_pekerjaan.status!='Batal'";
+                . "and detil_pekerjaan.status!='Batal' limit $limit offset $start";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();

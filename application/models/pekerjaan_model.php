@@ -56,7 +56,7 @@ class pekerjaan_model extends CI_Model {
 //        return $this->db->query($queri);
 //    }
 
-    public function list_pekerjaan($id_akun) {
+    public function list_pekerjaan($id_akun,$offset=0,$limit=100) {
         //$id_akun = pg_escape_string($id_akun);
         if (count($id_akun) == 0)
             return NULL;
@@ -66,20 +66,21 @@ class pekerjaan_model extends CI_Model {
                 . "where detil_pekerjaan.id_akun in (" . implode(",", $id_akun) . ") "
                 . "and detil_pekerjaan.status!='Batal' "
                 . "and pekerjaan.flag_usulan in('1','2','9') "
-                . "order by tglasli_mulai desc";
+                . "order by tglasli_mulai desc limit $limit offset $offset";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }
 
-    public function list_pending_task($id_akun) {
+    public function list_pending_task($id_akun,$offset=0,$limit=100) {
         $id_akun = pg_escape_string($id_akun);
         $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan,"
                 . "detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_akun, detil_pekerjaan.progress, "
                 . "pekerjaan.tgl_selesai from detil_pekerjaan inner join pekerjaan on "
                 . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan  "
                 . "where id_akun=$id_akun "
-                . "and progress<100 and detil_pekerjaan.status!='Batal' and pekerjaan.flag_usulan in ('2')";
+                . "and progress<100 and detil_pekerjaan.status!='Batal' and pekerjaan.flag_usulan in ('2') "
+                . "limit $limit offset $offset";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
@@ -171,11 +172,11 @@ class pekerjaan_model extends CI_Model {
         return $query->result();
     }
 
-    public function sp_deskripsi_pekerjaan($id_detail_pkj) {
+    public function sp_deskripsi_pekerjaan($id_detail_pkj,$offset=0,$limit=100) {
         $query = "select pekerjaan.*,sifat_pekerjaan.*, now() as sekarang "
                 . " from pekerjaan inner join sifat_pekerjaan "
                 . "on sifat_pekerjaan.id_sifat_pekerjaan = pekerjaan.id_sifat_pekerjaan "
-                . "where pekerjaan.id_pekerjaan = " . $id_detail_pkj . ";";
+                . "where pekerjaan.id_pekerjaan = " . $id_detail_pkj . " limit $limit offset $offset;";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
@@ -234,13 +235,13 @@ class pekerjaan_model extends CI_Model {
         return $this->db->query($query)->result();
     }
 
-    public function sp_listassign_pekerjaan($id_detail_pkj) {
+    public function sp_listassign_pekerjaan($id_detail_pkj,$offset=0,$limit=100) {
         $query = "select detil_pekerjaan.*,pekerjaan.*,sifat_pekerjaan.*"
                 . "from detil_pekerjaan inner join pekerjaan on "
                 . "pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan "
                 . "inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan "
                 . "= pekerjaan.id_sifat_pekerjaan where pekerjaan.id_pekerjaan = "
-                . $id_detail_pkj . " and detil_pekerjaan.status!='Batal';";
+                . $id_detail_pkj . " and detil_pekerjaan.status!='Batal' limit $limit offset $offset;";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
@@ -261,8 +262,8 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
     }
 
-    public function sp_lihat_komentar_pekerjaan($id_detail_pkj) {
-        $query = "select * from komentar inner join pekerjaan on pekerjaan.id_pekerjaan = komentar.id_pekerjaan  where komentar.id_pekerjaan = " . $id_detail_pkj . " order by tgl_komentar DESC;";
+    public function sp_lihat_komentar_pekerjaan($id_detail_pkj,$offset=0,$limit=100) {
+        $query = "select * from komentar inner join pekerjaan on pekerjaan.id_pekerjaan = komentar.id_pekerjaan  where komentar.id_pekerjaan = " . $id_detail_pkj . " order by tgl_komentar DESC limit $limit offset $offset;";
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -273,10 +274,10 @@ class pekerjaan_model extends CI_Model {
         return $query->result();
     }
 
-    public function get_list_draft($user_id) {
+    public function get_list_draft($user_id,$offset=0,$limit=100) {
         $query = "select pekerjaan.* from pekerjaan "
                 . " where flag_usulan='5' and id_penanggung_jawab='$user_id' "
-                . "order by pekerjaan.level_prioritas";
+                . "order by pekerjaan.level_prioritas limit $limit offset $offset";
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -286,7 +287,7 @@ class pekerjaan_model extends CI_Model {
         return $qeury->result();
     }
 
-    public function get_list_usulan_pekerjaan($list_id_akun) {
+    public function get_list_usulan_pekerjaan($list_id_akun,$offset=0,$limit=100) {
         if (count($list_id_akun) == 0)
             return NULL;
         $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan, pekerjaan.tgl_mulai, "
@@ -294,7 +295,8 @@ class pekerjaan_model extends CI_Model {
                 "pekerjaan.tgl_selesai, pekerjaan.flag_usulan, pekerjaan.id_pekerjaan, detil_pekerjaan.id_akun " .
                 "from detil_pekerjaan " .
                 "inner join pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan " .
-                "where pekerjaan.flag_usulan='1' and detil_pekerjaan.status!='Batal' and id_akun in (" . implode(",", $list_id_akun) . ")";
+                "where pekerjaan.flag_usulan='1' and detil_pekerjaan.status!='Batal' and id_akun in (" . implode(",", $list_id_akun) . ") "
+                . "limit $limit offset $offset";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
@@ -311,24 +313,7 @@ class pekerjaan_model extends CI_Model {
         return 0;
     }
 
-    /*
-     * query pekerjaan yang pernah dan sedang dikerjakan oleh staff pada suatu departemen
-     */
-
-    public function staff_progress($id_pekerjaan) {
-        if ($id_pekerjaan == NULL || strlen($id_pekerjaan) == 0) {
-            return NULL;
-        }
-        $this->load->model("jabatan_model");
-        $id_jabatan_staff = $this->jabatan_model->get_id_jabatan("staff");
-        $query = "select detil_pekerjaan.progress, detil_pekerjaan.skor, akun.nama from detil_pekerjaan"
-                . " inner join akun on akun.id_akun=detil_pekerjaan.id_akun where "
-                . "akun.id_jabatan=$id_jabatan_staff and detil_pekerjaan.id_pekerjaan=$id_pekerjaan "
-                . "and akun.id_departemen=" . $this->session->userdata("user_departemen")
-                . " order by pekerjaan.id_pekerjaan";
-        //echo $query;
-        return $this->db->query($query)->result();
-    }
+    
 
     public function baca_pending_task($id_pekerjaan, $id_user) {
         if ($id_pekerjaan != NULL && $id_user != NULL && strlen($id_pekerjaan) > 0 &&
@@ -360,7 +345,7 @@ class pekerjaan_model extends CI_Model {
         return $query->result();
     }
 
-    public function get_pekerjaan_staff($list_staff) {
+    public function get_pekerjaan_staff($list_staff,$offset=0,$limit=100) {
         if (count($list_staff) == 0)
             return NULL;
         $query = "select pekerjaan.*,detil_pekerjaan.*, now() as sekarang "
@@ -368,23 +353,23 @@ class pekerjaan_model extends CI_Model {
                 . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan "
                 . "where pekerjaan.flag_usulan in ('1','2','9') "
                 . "and detil_pekerjaan.id_akun in (" . implode(",", $list_staff) . ")"
-                . "order by pekerjaan.id_pekerjaan";
+                . "order by pekerjaan.id_pekerjaan limit $limit offset $offset";
         $query = $this->db->query($query);
         return $query->result();
     }
 
-    public function get_draft($list_id_draft) {
+    public function get_draft($list_id_draft,$offset=0,$limit=100) {
         $query = 'select pekerjaan.*,sifat_pekerjaan.* from pekerjaan inner join '
                 . ' sifat_pekerjaan '
                 . 'on sifat_pekerjaan.id_sifat_pekerjaan=pekerjaan.id_sifat_pekerjaan '
                 . 'where pekerjaan.id_pekerjaan in (' . implode(',', $list_id_draft) . ') '
-                . 'order by pekerjaan.id_pekerjaan';
+                . 'order by pekerjaan.id_pekerjaan limit '.$limit.' offset '.$offset;
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }
 
-    public function get_detil_pekerjaan($list_id_pekerjaan) {
+    public function get_detil_pekerjaan($list_id_pekerjaan,$offset=0, $limit=100) {
         if (count($list_id_pekerjaan) == 0)
             return NULL;
         $query = "select detil_pekerjaan.*, now() as sekarang "
@@ -392,13 +377,14 @@ class pekerjaan_model extends CI_Model {
                 . "detil_pekerjaan.id_pekerjaan where detil_pekerjaan.status!='Batal' and "
                 . "detil_pekerjaan.id_pekerjaan in "
                 . "(" . implode(",", $list_id_pekerjaan) . ") "
-                . "order by detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_detil_pekerjaan";
+                . "order by detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_detil_pekerjaan "
+                . "limit $limit offset $offset";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }
 
-    public function get_detil_pekerjaan_of_staff($list_id_pekerjaan, $id_staff) {
+    public function get_detil_pekerjaan_of_staff($list_id_pekerjaan, $id_staff,$offset=0,$limit=100) {
         if (count($list_id_pekerjaan) == 0)
             return NULL;
         $query = "select detil_pekerjaan.*, pekerjaan.*"
@@ -407,7 +393,8 @@ class pekerjaan_model extends CI_Model {
                 . "detil_pekerjaan.id_pekerjaan in "
                 . "(" . implode(",", $list_id_pekerjaan) . ") and detil_pekerjaan.id_akun=$id_staff "
                 . "and detil_pekerjaan.status!='Batal' "
-                . "order by detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_detil_pekerjaan";
+                . "order by detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_detil_pekerjaan "
+                . "limit $limit offset $offset";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
