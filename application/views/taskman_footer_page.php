@@ -84,7 +84,7 @@
                         if (nama_pekerjaan.length > 40)
                             nama_pekerjaan = nama_pekerjaan.substring(0, 40) + " ...";
                         html += "<li>" +
-                                "<a href =\"<?php echo site_url(); ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj=" + json.data[i]["id_pekerjaan"] + "&sumber=notifikasi\">" +
+                                "<a href =\"<?php echo base_url(); ?>pekerjaan/deskripsi_pekerjaan?id_detail_pkj=" + json.data[i]["id_pekerjaan"] + "&sumber=notifikasi\">" +
                                 "<div class = \"task-info clearfix\" >" +
                                 "<div class = \"desc pull-left\" >" +
                                 "<p><strong>" + nama_pekerjaan + "</strong></p>" +
@@ -157,7 +157,7 @@
                             jumlah_data++;
                         }
                     }
-                    html += "<li class=\"external\"><a href=\"<?php echo site_url(); ?>/pekerjaan/karyawan\">Lihat Semua Task</a></li>";
+                    html += "<li class=\"external\"><a href=\"<?php echo base_url(); ?>pekerjaan/karyawan\">Lihat Semua Task</a></li>";
 
 
                     $("#bagian_pending_task").html(html);

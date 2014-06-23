@@ -207,6 +207,8 @@ class pekerjaan_model extends CI_Model {
         $query = "update detil_pekerjaan set progress =" . $data . " where id_detil_pekerjaan =" . $id_detail_pkj;
         //$query2 = "insert into detil_progress (id_detil_pekerjaan,deskripsi,progress,total_progress,waktu) values ('".$id_detail_pkj."','".$deskripsi."','".$data."','100','now()');";
         if ($this->db->query($query)) {
+            $query = "update detil_pekerjaan set tglasli_mulai=now() where id_detil_pekerjaan=$id_detail_pkj and tglasli_mulai is null";
+            $this->db->query($query);
             return 1;
         }
         return 0;
