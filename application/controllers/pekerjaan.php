@@ -144,15 +144,13 @@ class pekerjaan extends ceklogin {
         $data["my_staff"] = json_encode($staff);
         $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang berada di halaman pekerjaan.");
         //var_dump($data["pkj_karyawan"]);
-        $atasan = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $temp["user_id"] . "/format/json";
-        $data["atasan"] = json_decode(file_get_contents($atasan));
+        if (in_array(2, $temp['idmodul'])) {
+            $atasan = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $temp["user_id"] . "/format/json";
+            $data["atasan"] = json_decode(file_get_contents($atasan));
+        }
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["users"] = json_decode(file_get_contents($url));
         $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
-//        } else {
-//            $this->session->set_flashdata('status', 4);
-//            redirect("login");
-//        }
     }
 
     public function do_edit() {
@@ -608,17 +606,23 @@ class pekerjaan extends ceklogin {
         $list_pekerjaan = $this->pekerjaan_model->list_pending_task($temp['user_id']);
         $my_staff = $this->akun->my_staff($temp['id_akun']);
         $mystaff = array();
-        foreach ($my_staff as $ms) {
-            $mystaff[] = $ms->id_akun;
-        }
-        $pekerjaan_staff = $this->pekerjaan_model->get_pekerjaan_staff($mystaff);
-        $list_id_pekerjaan = array();
-        if (count($pekerjaan_staff) > 0)
-            foreach ($pekerjaan_staff as $kerja) {
-                $list_id_pekerjaan[] = $kerja->id_pekerjaan;
+        $pekerjaan_staff = array();
+        $detil_pekerjaan_staff = array();
+        $progress_staff = array();
+        if (in_array(5, $temp['idmodul'])) {
+            foreach ($my_staff as $ms) {
+                $mystaff[] = $ms->id_akun;
             }
-        $detil_pekerjaan_staff = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
-        $progress_staff = $this->pekerjaan_model->get_progress_per_staff($mystaff);
+
+            $pekerjaan_staff = $this->pekerjaan_model->get_pekerjaan_staff($mystaff);
+            $list_id_pekerjaan = array();
+            if (count($pekerjaan_staff) > 0)
+                foreach ($pekerjaan_staff as $kerja) {
+                    $list_id_pekerjaan[] = $kerja->id_pekerjaan;
+                }
+            $detil_pekerjaan_staff = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
+            $progress_staff = $this->pekerjaan_model->get_progress_per_staff($mystaff);
+        }
         echo json_encode(array("status" => "OK", "data" => $list_pekerjaan,
             "staff" => $my_staff,
             "pekerjaan_staff" => $pekerjaan_staff,
@@ -800,7 +804,7 @@ class pekerjaan extends ceklogin {
             if ($berhak) {
                 $berkas = $this->berkas_model->get_berkas($id_file);
                 $hapus = $this->berkas_model->hapus_file($id_file);
-                if ($hapus == true && count($berkas)>0) {
+                if ($hapus == true && count($berkas) > 0) {
                     $hasil['status'] = 'OK';
                     if (file_exists($berkas[0]->nama_file))
                         unlink($berkas[0]->nama_file);

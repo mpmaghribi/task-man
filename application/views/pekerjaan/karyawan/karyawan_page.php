@@ -63,19 +63,16 @@
                                                                         ?>
                                                                         <tr>
                                                                             <td>
-                                                                                <a href="#">
             <?php echo $i; ?>
-                                                                                </a>
                                                                             </td>
                                                                             <td class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                                             <td> <?php echo date("d M Y", strtotime($value->tgl_mulai)) ?> - <?php echo date("d M Y", strtotime($value->tgl_selesai)) ?></td>
                                                                             <td id="pekerjaan_nama_staff_<?php echo $value->id_pekerjaan; ?>"></td>
                                                                             <td id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><?php if ($value->flag_usulan == 1) { ?><span class="label label-danger label-mini"><?php echo 'Not Aprroved'; ?></span><?php } else if ($value->flag_usulan == 2) { ?><span class="label label-success label-mini"><?php echo 'Aprroved'; ?></span><?php } else { ?><span class="label label-info label-mini"><?php echo 'On Progress'; ?></span><?php } ?></td>
                                                                             <td>
-                                                                                <form method="get" action="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan">
-                                                                                    <input type="hidden" name="id_detail_pkj" value="<?php echo $value->id_pekerjaan ?>"/>
-                                                                                    <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </button>
-                                                                                </form>
+                                                                                <a href="<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan?id_detail_pkj=<?php echo $value->id_pekerjaan ?>">
+                                                                                    <span class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View </span>
+                                                                                </a>
                                                                             </td>
                                                                         </tr>
                                                                     <script>
@@ -92,6 +89,7 @@
                                                 </div>
                                             </div>
                                         </section>
+                                        <?php if(in_array(2,$data_akun['idmodul'])){?>
                                         <section class="panel">
                                             <header class="panel-heading">
                                                 Daftar Usulan Pekerjaan Saya
@@ -152,6 +150,7 @@
                                                 </div>
                                             </div>
                                         </section>
+                                        <?php } ?>
                                     </div>
 <?php if(in_array(2,$data_akun['idmodul'])){?>
                                     <div id="TambahPekerjaan" class="tab-pane">

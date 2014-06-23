@@ -219,7 +219,7 @@ if ($this->session->userdata('prev') != null) {
                                                                         <td id="nama_staff_"><?php foreach ($users as $value2) { ?>
                                                                                 <?php
                                                                                 if ($value->id_akun == $value2->id_akun) {
-                                                                                    echo $value2->nama;
+                                                                                    ?><a target="_blank" href="<?php echo base_url(); ?>pekerjaan/pekerjaan_per_staff?id_akun=<?php echo $value2->id_akun; ?>"><?php echo $value2->nama;?></a><?php
                                                                                 }
                                                                             }
                                                                             ?>
@@ -348,8 +348,7 @@ if ($this->session->userdata('prev') != null) {
                                                                 <div class="form-group ">
                                                                     <label for="perubahan" class="control-label col-lg-3">Log Perubahan</label>
                                                                     <div class="col-lg-8">
-                                                                        <textarea class="form-control" type="text" id="perubahan" name="perubahan" rows="12" value="">
-                                                                        </textarea>
+                                                                        <textarea class="form-control" type="text" id="perubahan" name="perubahan" rows="12" value=""></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group ">
