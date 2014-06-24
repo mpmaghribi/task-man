@@ -62,7 +62,7 @@
                     function set_assign_to(id, nama) {
                         var sep = '';
                         if ($('#' + id).html().length > 0)
-                            sep = ', ';
+                            sep = '<br/>';
                         $('#' + id).html($('#' + id).html() + sep + nama);
                     }
                     jQuery(document).ready(function() {
