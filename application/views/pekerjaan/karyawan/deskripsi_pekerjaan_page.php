@@ -247,11 +247,13 @@ if ($this->session->userdata('prev') != null) {
                                                                             ?>
                                                                         </td>
                                                                         <td>
+                                                                            <div id="progress_html">
                                                                             <div class="progress progress-striped progress-xs">
                                                                                 <div style="width: <?php echo $value->progress; ?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress; ?>" role="progressbar" class="progress-bar progress-bar-warning">
                                                                                     <span class="sr-only"><?php echo $value->progress; ?>% Complete (success)</span>
                                                                                 </div>
                                                                             </div>
+                                                                                </div>
                                                                         </td>
                                                                         <td>
                                                                             <?php
@@ -324,9 +326,10 @@ if ($this->session->userdata('prev') != null) {
                                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                                             <h4 class="modal-title">Ubah Progress</h4>
                                                         </div>
-                                                        <form class="cmxform form-horizontal" id="signupForm" action="#" method="POST" enctype="multipart/form-data">
+                                                        <form class="cmxform form-horizontal" id="progress_form" action="#" method="POST" enctype="multipart/form-data">
                                                             <div class="form modal-body">
                                                                 <input type="hidden" id="idp" name="idp" value="" />
+                                                                <input type="hidden" id="id_pkj" name="id_pkj" value="<?php echo $id_pkj?>" />
                                                                 <div class="form-group ">
                                                                     <label for="progress" class="control-label col-lg-3">Progress</label>
                                                                     <div class="col-lg-8">
@@ -393,6 +396,8 @@ if ($this->session->userdata('prev') != null) {
                                                                     <label for="file1" class="control-label col-lg-3">File Progress</label>
                                                                     <div class="col-lg-8">
                                                                         <input class="file_progress" type="file" id="file1" name="file1" value="" />
+                                                                        <input class="form-control" placeholder="Masukkan nama file anda" title="Format: nama file_nama anda" type="text" id="nama_file" name="nama_file" value="" />
+                                                                        <small>Format: nama file_nama anda</small><br>
                                                                         <button class="btn btn-warning btn-xs" onclick="uploadFile()" type="button"> Upload File</button>
 
                                                                     </div>
@@ -429,12 +434,21 @@ if ($this->session->userdata('prev') != null) {
                                             function uploadFile(){ 
                                                 $(".tampil_progress").css("display","block");
                                                 var file = _("file1").files[0]; 
-                                                var idp = document.getElementById("idp").value;
+                                                var idp = document.getElementById("id_pkj").value;
+                                                var nama_file = document.getElementById("nama_file").value;
                                                 if (file.type === "application/x-download" || file.type === "application/msword")
                                                 {
                                                     var formdata = new FormData();
                                                     formdata.append("file1", file);
                                                     formdata.append("id_pekerjaan", idp);
+                                                    if (file.type === "application/x-download"){
+                                                        formdata.append("nama_file", nama_file+"_"+new Date().toDateString()+".pdf");
+                                                    }
+                                                    else
+                                                    {
+                                                        formdata.append("nama_file", nama_file+"_"+new Date().toDateString()+".doc");
+                                                    }
+                                                    
                                                     var ajax = new XMLHttpRequest();
                                                     ajax.upload.addEventListener("progress", progressHandler, false);
                                                     ajax.addEventListener("load", completeHandler, false);
@@ -514,13 +528,6 @@ if ($this->session->userdata('prev') != null) {
                                                 </div>
                                             </div>
                                         </div>
-
-
-
-
-
-
-
                                     </div>
                                     <?php if (in_array(6, $data_akun['idmodul'])) { ?>
                                         <div id="penilaianPekerjaan" class="tab-pane">
@@ -708,10 +715,18 @@ if ($this->session->userdata('prev') != null) {
 
         function ubah_progress()
         {
+            
             var data_progress = document.getElementById("progress").value;
             var idp = document.getElementById("idp").value;
             var log_perubahan = document.getElementById("perubahan").value;
-
+            var nama_file = document.getElementById("nama_file").value;
+            var file = document.getElementById("file1").value;
+            if (log_perubahan === "" || nama_file === "" || data_progress === "" || file === "")
+            {
+                alert("Silahkan lengkapi terlebih dahulu.");
+                exit();
+            }
+           // else{
             $.ajax({// create an AJAX call...
                 data:
                         {
@@ -726,13 +741,21 @@ if ($this->session->userdata('prev') != null) {
                     var json = jQuery.parseJSON(response);
 
                     if (json.status === "OK") {
-                        alert("Progress berhasil diupdate!");
-                        window.location.href = "";
+                        alert("Progress berhasil diupdate!. Pastikan anda sudah melakukan upload file terlebih dahulu.");
+                        var html="";
+                        html += '<div class="progress progress-striped progress-xs">'+
+                            '<div style="width:'+data_progress+'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+data_progress+'" role="progressbar" class="progress-bar progress-bar-warning">'+
+                                '<span class="sr-only">'+data_progress+'% Complete (success)</span>'+
+                            '</div>'+
+                        '</div>';
+                $("#progress_html").html(html);
+                        //window.location.href = "";
                     } else {
                         alert("Data gagal di update");
                     }
                 }
             });
+           // }
         }
         function show_progress(id_detail_pkj, id_user)
         {

@@ -114,9 +114,12 @@ var Script = function () {
                 agree: "Please accept our policy"
             }
         });
-        $("#signupForm, #form_tambah_pekerjaan").validate({
+        $("#signupForm, #form_tambah_pekerjaan, #progress_form").validate({
             rules: {
                 topik_pengaduan: "required",
+                perubahan: "required",
+                nama_file: "required",
+                progress: "required",
                 isi_pengaduan: "required",
                 tgl_pengaduan: "required",
                 urgensitas: "required",
