@@ -436,12 +436,12 @@ if ($this->session->userdata('prev') != null) {
                                                 var file = _("file1").files[0]; 
                                                 var idp = document.getElementById("id_pkj").value;
                                                 var nama_file = document.getElementById("nama_file").value;
-                                                if (file.type === "application/x-download" || file.type === "application/msword")
+                                                if (file.type === "application/pdf" || file.type === "application/x-download" || file.type === "application/msword")
                                                 {
                                                     var formdata = new FormData();
                                                     formdata.append("file1", file);
                                                     formdata.append("id_pekerjaan", idp);
-                                                    if (file.type === "application/x-download"){
+                                                    if (file.type === "application/x-download" || file.type === "application/pdf"){
                                                         formdata.append("nama_file", nama_file+"_"+new Date().toDateString()+".pdf");
                                                     }
                                                     else
