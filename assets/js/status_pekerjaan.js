@@ -13,7 +13,7 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_r
         jumlah_data_progress[id] = 0;
         console.log("register new index status");
     }
-    //console.log('mulai    = ' + tgl_mulai + ' sekarang = ' + sekarang + ' deadline = ' + tgl_selesai);
+    
     //console.log('sekarang = ' + sekarang);
     //console.log('deadline = ' + tgl_selesai);
 
@@ -37,7 +37,7 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_r
             }
             else {
                 status_id=2;
-                total_progress[id] += progress;
+                total_progress[id] += parseInt(progress);
                 /*if (progress == 0) {
                     if (min_element_status[id] > 2) {
                         status_id = 2;
@@ -109,4 +109,5 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_r
     }
     //console.log('set ' + id + ' to id status ' + status_id + ' => ' + status_nama[status_id] + '  |||||  ' + min_element_status[id]);
     $('#' + id).html(new_label);
+    console.log('id = '+id+' mulai = ' + tgl_mulai + ' sekarang = ' + sekarang + ' deadline = ' + tgl_selesai+' progress = '+progress+' totalprogress = '+total_progress[id]);
 }
