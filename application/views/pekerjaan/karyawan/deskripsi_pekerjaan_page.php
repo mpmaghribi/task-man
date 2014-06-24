@@ -300,7 +300,7 @@ if ($this->session->userdata('prev') != null) {
                                             }
                                             ?>
                                             <div class="modal fade" id="LogProgress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
+                                                <div class="modal-dialog" style="width: 1100px">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -397,8 +397,9 @@ if ($this->session->userdata('prev') != null) {
 
                                                                     </div>
                                                                 </div>
+                                                                <div class="tampil_progress" style="display: none;">
                                                                 <div class="form-group ">
-                                                                    <label for="progressBar" class="control-label col-lg-3">Progress</label>
+                                                                    <label for="progressBar" class="control-label col-lg-3">Total</label>
                                                                     <div class="col-lg-8">
                                                                         <progress id="progressBar" value="0" max="100" style="width:300px;"></progress> 
                                                                     </div>
@@ -409,9 +410,10 @@ if ($this->session->userdata('prev') != null) {
                                                                         <h4 id="status"></h4> <p id="loaded_n_total"></p>
                                                                     </div>
                                                                 </div>
+                                                                    </div>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
+                                                                <button data-dismiss="modal" class="btn btn-default" id="batal_progress" type="button">Batal</button>
                                                                 <button class="btn btn-warning" data-dismiss="modal" onclick="ubah_progress()" type="button"> Ubah Progress</button>
                                                             </div>
                                                         </form>
@@ -419,12 +421,14 @@ if ($this->session->userdata('prev') != null) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <script>
-                                            function _(el) {
-                                                return document.getElementById(el);
-                                            }
-                                            function uploadFile() {
-                                                var file = _("file1").files[0];
+                                        <script> 
+                                            $("#batal_progress").click(function(e){
+                                                $(".tampil_progress").css("display","none");
+                                            });
+                                            function _(el){ return document.getElementById(el); } 
+                                            function uploadFile(){ 
+                                                $(".tampil_progress").css("display","block");
+                                                var file = _("file1").files[0]; 
                                                 var idp = document.getElementById("idp").value;
                                                 if (file.type === "application/x-download" || file.type === "application/msword")
                                                 {
@@ -442,7 +446,8 @@ if ($this->session->userdata('prev') != null) {
                                                 else
                                                 {
                                                     //alert(file.name+" | "+file.size+" | "+file.type); 
-                                                    alert("Silahkan upload hanya pdf dan ms word 2003 - 2007 saja.");
+
+                                                   alert("Silahkan upload hanya pdf dan ms word < 2007 saja."); 
                                                 }
                                                 //alert(file.name+" | "+file.size+" | "+file.type); 
 
@@ -753,6 +758,7 @@ if ($this->session->userdata('prev') != null) {
                 }
             });
         }
+
         function history_progress(id_detail_pkj, id_user)
         {
             $.ajax({// create an AJAX call...
@@ -769,7 +775,7 @@ if ($this->session->userdata('prev') != null) {
                     if (json.status === "OK") {
                         var count = 1;
                         var html = "";
-                        html += "<table id='table_log_progress' class='table table-bordered'><thead><tr><th>No</th><th>Nama Pekerjaan</th><th>Log Perubahan</th><th> Progress</th><th> Tanggal</tr></thead>";
+                        html += "<table id='table_log_progress' class='table table-bordered'><thead><tr><th>No</th><th>Nama Pekerjaan</th><th style='width: 50%;'>Log Perubahan</th><th> Progress</th><th> Tanggal</tr></thead>";
                         html += "<tbody>";
                         var jml = "";
                         if (json.data.length > 5)
@@ -781,8 +787,11 @@ if ($this->session->userdata('prev') != null) {
                         for (var i = 0; i < jml; i++)
                         {
                             var tgl = json.data[i].waktu;
-                            //tgl = tgl.replace(/-/gi,"/");
+                            tgl = tgl.replace(/-/gi,"/");
                             tgl = tgl.substring(19, 0);
+                            tgl = Date.parse(tgl);
+                            tgl = new Date(tgl);
+                            //var tgl2 = new Date(tgl.getFullYear(), tgl.getMonth(), tgl.getDay(), tgl.getHours(), tgl.getMinutes(), 0, 0);
                             html += "<tr>";
                             html += "<td>" + count + "";
                             html += "</td>";
@@ -792,7 +801,7 @@ if ($this->session->userdata('prev') != null) {
                             html += "</td>";
                             html += "<td>" + json.data[i].progress + "% Selesai";
                             html += "</td>";
-                            html += "<td>" + tgl + "";
+                            html += "<td>" + tgl.toLocaleString() + "";
                             html += "</td>";
                             html += "</tr>";
                             count++;
