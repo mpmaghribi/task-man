@@ -137,6 +137,7 @@
                     var jumlah_notif=0;
                     for(var i=0;i<jumlah_data;i++){
                         var id = list_id_pekerjaan[i];
+                        var progress = (list_pekerjaan_progress[id]/list_jumlah_pekerja[id]);
                         if(list_id_pekerjaan_staff.indexOf(id)>=0){//pekerjaan staff
                             
                         }else{//pekerjaan ku
@@ -154,7 +155,7 @@
                                 '<div class="task-info clearfix">'+
                                 '<div class="desc pull-left">'+
                                 '<p><strong>'+nama_pekerjaan+'</strong></p>'+
-                                '<p>'+(list_pekerjaan_progress[id]/list_jumlah_pekerja[id])+'% '+deadline+'</p>'+
+                                '<p>'+progress+'% '+deadline+'</p>'+
                                 '</div>'+
                                 '</div>'+
                                 '</a>'+
@@ -166,16 +167,16 @@
                     
                     console.log('json pending task');
                     console.log(json);
-                    console.log('list_id_pekerjaan');
-                    console.log(list_id_pekerjaan);
-                    console.log('list_pekerjaan_nama');
-                    console.log(list_pekerjaan_nama);
-                    console.log('list_pekerjaan_deadline');
-                    console.log(list_pekerjaan_deadline);
-                    console.log('list_pekerjaan_progress');
-                    console.log(list_pekerjaan_progress);
-                    console.log('list_jumlah_pekerja');
-                    console.log(list_jumlah_pekerja);
+//                    console.log('list_id_pekerjaan');
+//                    console.log(list_id_pekerjaan);
+//                    console.log('list_pekerjaan_nama');
+//                    console.log(list_pekerjaan_nama);
+//                    console.log('list_pekerjaan_deadline');
+//                    console.log(list_pekerjaan_deadline);
+//                    console.log('list_pekerjaan_progress');
+//                    console.log(list_pekerjaan_progress);
+//                    console.log('list_jumlah_pekerja');
+//                    console.log(list_jumlah_pekerja);
                     
                     $("#bagian_pending_task").html(html);
                     if (jumlah_data == 0)

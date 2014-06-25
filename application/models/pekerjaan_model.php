@@ -75,8 +75,8 @@ class pekerjaan_model extends CI_Model {
     public function list_pending_task($id_akun,$offset=0,$limit=100) {
         $id_akun = pg_escape_string($id_akun);
         $query = "select detil_pekerjaan.id_detil_pekerjaan, pekerjaan.nama_pekerjaan,"
-                . "detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_akun, detil_pekerjaan.progress, "
-                . "pekerjaan.tgl_selesai from detil_pekerjaan inner join pekerjaan on "
+                . "detil_pekerjaan.id_pekerjaan, detil_pekerjaan.id_akun, detil_pekerjaan.progress, pekerjaan.tgl_mulai, "
+                . "pekerjaan.tgl_selesai,detil_pekerjaan.tgl_read from detil_pekerjaan inner join pekerjaan on "
                 . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan  "
                 . "where id_akun=$id_akun "
                 . "and progress<100 and detil_pekerjaan.status!='Batal' and pekerjaan.flag_usulan in ('2') "
