@@ -676,10 +676,11 @@ if ($this->session->userdata('prev') != null) {
                     var json = jQuery.parseJSON(response);
                     //alert(response);
                     if (json.status === "OK") {
-                        //$('#div_acc_edit_cancel_usulan_pekerjaan').remove();
+                        console.log('validasi pekerjaan berhasil');
                         $('#tombol_validasi_usulan').remove();
                     } else {
                         alert("validasi gagal, " + json.reason);
+                        console.log('validasi pekerjaan gagal');
                     }
                 }
             });

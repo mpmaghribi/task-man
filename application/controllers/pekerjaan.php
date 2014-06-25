@@ -52,26 +52,26 @@ class pekerjaan extends ceklogin {
         if ($status) {
             $status = $status && $pekerjaan[0]->id_penanggung_jawab == $session['id_akun'];
         }
-        if($status){
-            $update['tgl_selesai']=$tanggal_baru;
+        if ($status) {
+            $update['tgl_selesai'] = $tanggal_baru;
             //$this->pekerjaan_model->update($update);
             //echo $pekerjaan[0]->tgl_selesai.' ';
             $t = strtotime($tanggal_baru);
             //echo $t.' ';
-            $baru= date('Y-m-d', $t);
+            $baru = date('Y-m-d', $t);
             $sistem = date('Y-m-d');
             //echo $sistem . ' ' . $baru.' ';
             $banding = strcmp(date('Y-m-d'), $baru);
             //echo $banding;
-            if($banding <= 0){
-                $update['flag_usulan']='2';
-                $ubah = $this->pekerjaan_model->update_pekerjaan($update,$id_pekerjaan);
-                if($ubah){
+            if ($banding <= 0) {
+                $update['flag_usulan'] = '2';
+                $ubah = $this->pekerjaan_model->update_pekerjaan($update, $id_pekerjaan);
+                if ($ubah) {
                     $result = $this->pekerjaan_model->sp_tambah_komentar_pekerjaan($id_pekerjaan, $session['id_akun'], $komentar);
                 }
-                echo json_encode(array('status'=>'OK'));
-            }else{
-                echo json_encode(array('status'=>'error','reason'=>'Tanggal yang anda masukkan tidak valid'));
+                echo json_encode(array('status' => 'OK'));
+            } else {
+                echo json_encode(array('status' => 'error', 'reason' => 'Tanggal yang anda masukkan tidak valid'));
             }
         }
     }
@@ -224,7 +224,7 @@ class pekerjaan extends ceklogin {
             $nama_status = "kesalahan";
             $keterangan = "Pekerjaan ini telah dibatalkan";
         }
-        $atasan = in_array(5,$session['idmodul']);
+        $atasan = in_array(5, $session['idmodul']);
         $terlibat = false;
         $usulan = false;
         $detil_pekerjaan = "";
@@ -236,7 +236,7 @@ class pekerjaan extends ceklogin {
             }
         }
         if ($status == 0) {
-            if ($pekerjaan[0]->flag_usulan == '9' && strcmp(date('Y-m-d'), date('Y-m-d',strtotime($update["tgl_selesai"]))) <= 0) {
+            if ($pekerjaan[0]->flag_usulan == '9' && strcmp(date('Y-m-d'), date('Y-m-d', strtotime($update["tgl_selesai"]))) <= 0) {
                 $update['flag_usulan'] = '2';
             }
             echo "mencari siapa yang terlibat, siapa yang atasan";
@@ -675,7 +675,7 @@ class pekerjaan extends ceklogin {
             "pekerjaan_staff" => $pekerjaan_staff,
             "detil_pekerjaan_staff" => $detil_pekerjaan_staff,
             //"progress_staff" => $progress_staff,
-            'sekarang'=>date('Y-m-d')));
+            'sekarang' => date('Y-m-d')));
     }
 
     public function deskripsi_pekerjaan() {
@@ -937,7 +937,7 @@ class pekerjaan extends ceklogin {
             $status = 1;
         }
         if ($status == 0) {
-            if ($pekerjaan[0]->id_penanggung_jawab == $temp['id_akun']) {
+            if ($pekerjaan[0]->id_penanggung_jawab == $temp['id_akun'] && in_array(14, $temp['idmodul'])) {
                 
             } else {
                 $status = 1;
@@ -1151,7 +1151,8 @@ class pekerjaan extends ceklogin {
             }
         }
 
-
+        $id_target = null;
+        $id_realisasi = null;
         if ($status == 'OK') {
             $tipe_nilai = $this->pekerjaan_model->get_list_tipe_nilai();
             foreach ($tipe_nilai as $tipeNilai) {
@@ -1181,9 +1182,9 @@ class pekerjaan extends ceklogin {
             $staff_ku = in_array($id_staff, $list_id_staff);
             //$admin = $session['hakakses'] == 'Administrator';
             //$manager = $session['hakakses'] == 'Manager';
-
+            $berhak_menilai = in_array(6, $session['idmodul']);
             //if (in_array($id_staff, $list_id_staff) || ($session ['user_id'] == $id_staff && $session['hakakses'] == 'Administrator')) {
-            if (($staff_ku && $manager) ) {
+            if (($staff_ku && $berhak_menilai)) {
                 
             } else {
                 $status = '1';
@@ -1311,9 +1312,9 @@ class pekerjaan extends ceklogin {
             $staff_ku = in_array($id_staff, $list_id_staff);
             //$admin = $session['hakakses'] == 'Administrator';
             //$manager = $session['hakakses'] == 'Manager';
-
+            $berhak_menilai = in_array(6, $session['idmodul']);
             //if (in_array($id_staff, $list_id_staff) || ($session ['user_id'] == $id_staff && $session['hakakses'] == 'Administrator')) {
-            if (($staff_ku && $manager) ) {
+            if (($staff_ku && $berhak_menilai)) {
                 
             } else {
                 $status = '1';
@@ -1579,6 +1580,11 @@ class pekerjaan extends ceklogin {
             $nama_status = "id pekerjaan diperlukan";
             $keterangan = "id pekerjaan diperlukan";
         }
+//        if(!in_array(13,$temp['idmodul'])){
+//            $status=1;
+//            $nama_status='Akses Terbatas';
+//            $keterangan='Anda tidak berhak mengubah usulan pekerjaan';
+//        }
         $data = array();
         if ($status == 0) {
             $data["pekerjaan"] = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
@@ -1588,10 +1594,12 @@ class pekerjaan extends ceklogin {
                 $keterangan = "pekerjaan tidak ditermukan";
             }
         }
-        if ($data["pekerjaan"][0]->flag_usulan == '3' || $data["pekerjaan"][0]->flag_usulan == '6') {
-            $status = 1;
-            $nama_status = "kesalahan";
-            $keterangan = "Pekerjaan ini telah dibatalkan";
+        if ($status == 0) {
+            if ($data["pekerjaan"][0]->flag_usulan == '3' || $data["pekerjaan"][0]->flag_usulan == '6') {
+                $status = 1;
+                $nama_status = "kesalahan";
+                $keterangan = "Pekerjaan ini telah dibatalkan";
+            }
         }
         $data["data_akun"] = $temp;
 
@@ -1622,9 +1630,10 @@ class pekerjaan extends ceklogin {
             if ($p[0]->flag_usulan == '1') {
                 $data['usulan'] = true;
                 //var_dump($data['atasan']);
-                $data['atasan'] = $data['atasan'] && $p[0]->id_penanggung_jawab == $temp['id_akun'];
+                
                 //var_dump($data['atasan']);
             }
+            $data['atasan'] = $data['atasan'] && $p[0]->id_penanggung_jawab == $temp['id_akun'] && in_array(14,$temp['idmodul']);
             //$data['atasan'] = $data['atasan'] || $temp['hakakses'] == 'Administrator';
             //var_dump($data['atasan']);
 
@@ -1636,6 +1645,7 @@ class pekerjaan extends ceklogin {
                     break;
                 }
             }
+            $data['terlibat']=$data['terlibat']&&in_array(13,$temp['idmodul']);
             if (!($data['atasan'] || ($data['usulan'] && $data['terlibat']))) {
                 $status = 1;
                 $nama_status = "Tidak berhak";
