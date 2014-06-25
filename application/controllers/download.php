@@ -49,12 +49,13 @@ class download extends ceklogin {
         if($berhak){
             if(file_exists($path)){
                 header('Content-Description: file');
-                header('Content-Type: file');
+                header('Content-Type: application/octet-stream');
                 header('Content-Disposition:  filename="'.basename($path).'"');
                 header('Expires: 0');
                 header('Cache-Control: must-revalidate');
                 //header('Pragma: Public');
                 header('Content-Length: ' . filesize($path));
+                //header('lokasi: "' . $path.'"');
                 ob_clean();
                 flush();
                 readfile($path);

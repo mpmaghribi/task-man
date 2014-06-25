@@ -162,6 +162,12 @@ if ($this->session->userdata('prev') != null) {
                                                     <?php echo $deskripsi_pekerjaan[0]->nama_sifat_pekerjaan; ?>
                                                 </p>
                                                 <h4 style="color: #1FB5AD;">
+                                                    Kategori Pekerjaan
+                                                </h4>
+                                                <p style="font-size: larger">
+                                                    <?php echo $deskripsi_pekerjaan[0]->kategori; ?>
+                                                </p>
+                                                <h4 style="color: #1FB5AD;">
                                                     Deadline
                                                 </h4>
                                                 <p style="font-size: larger">

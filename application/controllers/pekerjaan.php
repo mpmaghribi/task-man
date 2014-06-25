@@ -225,9 +225,11 @@ class pekerjaan extends ceklogin {
             $keterangan = "Pekerjaan ini telah dibatalkan";
         }
         $atasan = in_array(5, $session['idmodul']);
+        $bisa_nambah_file=in_array(6,$session['idmodul']);
+        $bisa_nambah_staff=in_array(7,$session['idmodul']);
         $terlibat = false;
         $usulan = false;
-        $detil_pekerjaan = "";
+        $detil_pekerjaan = null;
         $my_staff = $this->akun->my_staff($session['user_id']);
         $list_id_staff = array();
         if (!isset($my_staff->error)) {
@@ -249,15 +251,16 @@ class pekerjaan extends ceklogin {
                 }
                 if (!in_array($detil->id_akun, $list_id_staff)) {
                     $atasan = false;
-                    echo "bukan atasan";
+                    echo "salah satu staff yang mengerjakan, bukanlah staffnya";
                 }
             }
             //$atasan = $atasan || ($session['hakakses'] == 'Administrator');
             if ($pekerjaan[0]->flag_usulan == '1')
                 $usulan = true;
         }
+        $bisa_edit_usulan_saya = in_array(13,$session['idmodul']);
         if ($status == 0) {
-            if (!($atasan || ($usulan && $terlibat))) {
+            if (!($atasan || ($usulan && $terlibat&&$bisa_edit_usulan_saya))) {
                 $staff = 1;
                 $nama_status = "kesalahan";
                 $keterangan = "anda tidak berhak mengubah pekerjaan";
@@ -1633,7 +1636,7 @@ class pekerjaan extends ceklogin {
                 
                 //var_dump($data['atasan']);
             }
-            $data['atasan'] = $data['atasan'] && $p[0]->id_penanggung_jawab == $temp['id_akun'] && in_array(14,$temp['idmodul']);
+            $data['atasan'] = $data['atasan'] && $p[0]->id_penanggung_jawab == $temp['id_akun'] && in_array(5,$temp['idmodul']);
             //$data['atasan'] = $data['atasan'] || $temp['hakakses'] == 'Administrator';
             //var_dump($data['atasan']);
 
@@ -1649,7 +1652,7 @@ class pekerjaan extends ceklogin {
             if (!($data['atasan'] || ($data['usulan'] && $data['terlibat']))) {
                 $status = 1;
                 $nama_status = "Tidak berhak";
-                $keterangan = "anda tidak berhak mengubah pekerjaan";
+                $keterangan = "anda tidak berhak mengubah pekerjaan " . ($data['atasan']?'true':'false'). ' ' . ($data['usulan']?'true':'false'). ' '. ($data['terlibat']?'true':'false');
             }
         }
 
