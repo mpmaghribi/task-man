@@ -71,12 +71,12 @@ class pekerjaan extends ceklogin {
             } else {
                 echo json_encode(array('status' => 'error', 'reason' => 'Tanggal yang anda masukkan tidak valid'));
             }
+        } else {
+            echo json_encode(array('status' => 'error', 'reason' => 'Tidak dapat mengubah tanggal deadline'));
         }
     }
 
     function get_pengaduan() {
-        //http://localhost:90/integrarsud/helpdesk/index.php/pengaduan/getDelegate/
-        //print_r($url);
         $id = $this->input->post("id_pengaduan");
 
         $url = str_replace('taskmanagement', 'integrarsud/helpdesk', site_url()) . "/pengaduan/getIdDelegate/" . pg_escape_string($id);
@@ -166,34 +166,32 @@ class pekerjaan extends ceklogin {
         $this->load->model("pekerjaan_model");
         $this->load->model("akun");
         $temp = $this->session->userdata('logged_in');
-        $data['temp'] = $this->session->userdata('logged_in');
-        $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
-        $data['data_akun'] = $this->session->userdata('logged_in');
-//            $result = $this->taskman_repository->sp_view_pekerjaan($this->session->userdata('user_id'));
-        $data['pkj_karyawan'] = $result;
-        //var_dump($result);
-        $list_id_pekerjaan = array();
-        foreach ($result as $pekerjaan) {
-            $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
+        if (in_array(1, $temp['idmodul'])) {
+            $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
+            $data['data_akun'] = $this->session->userdata('logged_in');
+            $data['pkj_karyawan'] = $result;
+            $list_id_pekerjaan = array();
+            foreach ($result as $pekerjaan) {
+                $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
+            }
+            $staff = $this->akun->my_staff($temp["user_id"]);
+            $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
+            $data["detil_pekerjaan"] = $detil_pekerjaan;
+            $data["my_staff"] = json_encode($staff);
+            $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang berada di halaman pekerjaan.");
+            //var_dump($data["pkj_karyawan"]);
+            if (in_array(2, $temp['idmodul'])) {
+                $atasan = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $temp["user_id"] . "/format/json";
+                $data["atasan"] = json_decode(file_get_contents($atasan));
+            }
+            $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+            $data["users"] = json_decode(file_get_contents($url));
+            $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
+        }else{
+            $data['judul_kesalahan']='Tidak berhak';
+            $data['deskripsi_kesalahan']='Anda tidak berhak mengakses pekerjaan';
+            $this->load->view('pekerjaan/kesalahan',$data);
         }
-        //var_dump($list_id_pekerjaan);
-        $staff = $this->akun->my_staff($temp["user_id"]);
-        $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
-        //var_dump($detil_pekerjaan);
-        //var_dump($staff);
-        //echo "temp";
-        //var_dump($temp);
-        $data["detil_pekerjaan"] = $detil_pekerjaan;
-        $data["my_staff"] = json_encode($staff);
-        $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang berada di halaman pekerjaan.");
-        //var_dump($data["pkj_karyawan"]);
-        if (in_array(2, $temp['idmodul'])) {
-            $atasan = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $temp["user_id"] . "/format/json";
-            $data["atasan"] = json_decode(file_get_contents($atasan));
-        }
-        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-        $data["users"] = json_decode(file_get_contents($url));
-        $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
     }
 
     public function do_edit() {
@@ -223,8 +221,8 @@ class pekerjaan extends ceklogin {
             $keterangan = "Pekerjaan ini telah dibatalkan";
         }
         $atasan = in_array(5, $session['idmodul']);
-        $bisa_nambah_file=in_array(6,$session['idmodul']);
-        $bisa_nambah_staff=in_array(7,$session['idmodul']);
+        $bisa_nambah_file = in_array(6, $session['idmodul']);
+        $bisa_nambah_staff = in_array(7, $session['idmodul']);
         $terlibat = false;
         $usulan = false;
         $detil_pekerjaan = null;
@@ -256,9 +254,9 @@ class pekerjaan extends ceklogin {
             if ($pekerjaan[0]->flag_usulan == '1')
                 $usulan = true;
         }
-        $bisa_edit_usulan_saya = in_array(2,$session['idmodul']);
+        $bisa_edit_usulan_saya = in_array(2, $session['idmodul']);
         if ($status == 0) {
-            if (!($atasan || ($usulan && $terlibat&&$bisa_edit_usulan_saya))) {
+            if (!($atasan || ($usulan && $terlibat && $bisa_edit_usulan_saya))) {
                 $staff = 1;
                 $nama_status = "kesalahan";
                 $keterangan = "anda tidak berhak mengubah pekerjaan";
@@ -1631,10 +1629,9 @@ class pekerjaan extends ceklogin {
             if ($p[0]->flag_usulan == '1') {
                 $data['usulan'] = true;
                 //var_dump($data['atasan']);
-                
                 //var_dump($data['atasan']);
             }
-            $data['atasan'] = $data['atasan'] && $p[0]->id_penanggung_jawab == $temp['id_akun'] && in_array(5,$temp['idmodul']);
+            $data['atasan'] = $data['atasan'] && $p[0]->id_penanggung_jawab == $temp['id_akun'] && in_array(5, $temp['idmodul']);
             //$data['atasan'] = $data['atasan'] || $temp['hakakses'] == 'Administrator';
             //var_dump($data['atasan']);
 
@@ -1646,11 +1643,11 @@ class pekerjaan extends ceklogin {
                     break;
                 }
             }
-            $data['terlibat']=$data['terlibat']&&in_array(2,$temp['idmodul']);
+            $data['terlibat'] = $data['terlibat'] && in_array(2, $temp['idmodul']);
             if (!($data['atasan'] || ($data['usulan'] && $data['terlibat']))) {
                 $status = 1;
                 $nama_status = "Tidak berhak";
-                $keterangan = "anda tidak berhak mengubah pekerjaan " . ($data['atasan']?'true':'false'). ' ' . ($data['usulan']?'true':'false'). ' '. ($data['terlibat']?'true':'false');
+                $keterangan = "anda tidak berhak mengubah pekerjaan " . ($data['atasan'] ? 'true' : 'false') . ' ' . ($data['usulan'] ? 'true' : 'false') . ' ' . ($data['terlibat'] ? 'true' : 'false');
             }
         }
 
