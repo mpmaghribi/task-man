@@ -46,6 +46,7 @@ class download extends ceklogin {
         $berhak = $atasan || $terbuka;
         $pekerjaan_valid = $usulan || $draft || $approved || $terlambat;
         $berhak = $berhak || ($ikut_serta && $pekerjaan_valid);
+        $berhak = $berhak&&in_array(1,$session['idmodul']);
         if($berhak){
             if(file_exists($path)){
                 header('Content-Description: file');

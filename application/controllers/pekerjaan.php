@@ -16,8 +16,6 @@ class pekerjaan extends ceklogin {
     }
 
     function pengaduan() {
-        //http://localhost:90/integrarsud/helpdesk/index.php/pengaduan/getDelegate/
-        //print_r($url);
         $url = str_replace('taskmanagement', 'integrarsud/helpdesk', str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
         $data["pengaduan"] = json_decode(file_get_contents($url));
         $url2 = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
@@ -258,7 +256,7 @@ class pekerjaan extends ceklogin {
             if ($pekerjaan[0]->flag_usulan == '1')
                 $usulan = true;
         }
-        $bisa_edit_usulan_saya = in_array(13,$session['idmodul']);
+        $bisa_edit_usulan_saya = in_array(2,$session['idmodul']);
         if ($status == 0) {
             if (!($atasan || ($usulan && $terlibat&&$bisa_edit_usulan_saya))) {
                 $staff = 1;
@@ -1648,7 +1646,7 @@ class pekerjaan extends ceklogin {
                     break;
                 }
             }
-            $data['terlibat']=$data['terlibat']&&in_array(13,$temp['idmodul']);
+            $data['terlibat']=$data['terlibat']&&in_array(2,$temp['idmodul']);
             if (!($data['atasan'] || ($data['usulan'] && $data['terlibat']))) {
                 $status = 1;
                 $nama_status = "Tidak berhak";
