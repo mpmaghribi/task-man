@@ -661,19 +661,21 @@ class pekerjaan extends ceklogin {
             }
 
             $pekerjaan_staff = $this->pekerjaan_model->get_pekerjaan_staff($mystaff);
-            $list_id_pekerjaan = array();
-            if (count($pekerjaan_staff) > 0)
-                foreach ($pekerjaan_staff as $kerja) {
-                    $list_id_pekerjaan[] = $kerja->id_pekerjaan;
-                }
-            $detil_pekerjaan_staff = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
-            $progress_staff = $this->pekerjaan_model->get_progress_per_staff($mystaff);
+//            $list_id_pekerjaan = array();
+//            if (count($pekerjaan_staff) > 0){
+//                foreach ($pekerjaan_staff as $kerja) {
+//                    $list_id_pekerjaan[] = $kerja->id_pekerjaan;
+//                }
+//            }
+            //$detil_pekerjaan_staff = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
+            //$progress_staff = $this->pekerjaan_model->get_progress_per_staff($mystaff);
         }
-        echo json_encode(array("status" => "OK", "data" => $list_pekerjaan,
+        echo json_encode(array("status" => "OK", "pekerjaan_saya" => $list_pekerjaan,
             "staff" => $my_staff,
             "pekerjaan_staff" => $pekerjaan_staff,
             "detil_pekerjaan_staff" => $detil_pekerjaan_staff,
-            "progress_staff" => $progress_staff));
+            //"progress_staff" => $progress_staff,
+            'sekarang'=>date('Y-m-d')));
     }
 
     public function deskripsi_pekerjaan() {
