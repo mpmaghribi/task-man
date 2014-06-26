@@ -255,7 +255,7 @@ class pekerjaan extends ceklogin {
                 $usulan = true;
         }
         $bisa_edit_usulan_saya = $usulan && $terlibat && in_array(2, $session['idmodul']);
-        $data['bisa_edit_usulan_saya']=$bisa_edit_usulan_saya;
+        $data['bisa_edit_usulan_saya'] = $bisa_edit_usulan_saya;
         if ($status == 0) {
             if (!($atasan || ( $bisa_edit_usulan_saya))) {
                 $staff = 1;
@@ -498,7 +498,7 @@ class pekerjaan extends ceklogin {
         $insert['asal_pekerjaan'] = 'task management';
         $insert["id_penanggung_jawab"] = $idatasan;
         $insert["id_pengusul"] = $temp['id_akun'];
-        $insert['kategori']=pg_escape_string($this->input->post('kategori'));
+        $insert['kategori'] = pg_escape_string($this->input->post('kategori'));
         $status = 0;
         $judul_kesalahan = '';
         $deskripsi_kesalahan = '';
@@ -681,7 +681,7 @@ class pekerjaan extends ceklogin {
 
     public function deskripsi_pekerjaan() {
         $data['data_akun'] = $this->session->userdata('logged_in');
-        $debug=false;
+        $debug = false;
         //$data['temp'] = $this->session->userdata('logged_in');
         $temp = $this->session->userdata('logged_in');
 
@@ -748,17 +748,17 @@ class pekerjaan extends ceklogin {
             }
             $data['diassign_ke_bawahan_saya'] = $diassign_ke_bawahan_saya;
             $data['ikut_serta'] = $ikut_serta;
-            $debug=true;
-            if ($desk[0]->id_penanggung_jawab == $temp['user_id'] && $usulan && in_array(4,$temp['idmodul'])) {//pemberi pekerjaan, atasan yg dituju pada pengusulan, atau atasan yg mengusulkan
+            $debug = true;
+            if ($desk[0]->id_penanggung_jawab == $temp['user_id'] && $usulan && in_array(4, $temp['idmodul'])) {//pemberi pekerjaan, atasan yg dituju pada pengusulan, atau atasan yg mengusulkan
                 $data['bisa_validasi'] = $usulan;
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;
                 $atasan = true;
-            } else if ($desk[0]->flag_usulan == '2' && ($diassign_ke_bawahan_saya || $desk[0]->id_penanggung_jawab == $temp['user_id']) && (in_array(5,$temp['idmodul']))) {//berkuasa atas pekerjaan
+            } else if ($desk[0]->flag_usulan == '2' && ($diassign_ke_bawahan_saya || $desk[0]->id_penanggung_jawab == $temp['user_id']) && (in_array(5, $temp['idmodul']))) {//berkuasa atas pekerjaan
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;
                 $atasan = true;
-            } else if ($usulan && $ikut_serta&&(in_array(2,$temp['idmodul']))) { //jika usulan dan dia adalah anggota pekerja
+            } else if ($usulan && $ikut_serta && (in_array(2, $temp['idmodul']))) { //jika usulan dan dia adalah anggota pekerja
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;
             } else if ($data['perpanjang'] && $desk[0]->id_penanggung_jawab == $temp['user_id']) {
@@ -770,7 +770,7 @@ class pekerjaan extends ceklogin {
             //$data['bisa_edit'] = $data['bisa_edit']&&in_array(4, $temp['idmodul']);
             //$data['bisa_validasi'] =$data['bisa_validasi'] && in_array(4, $temp['idmodul']);
             //$data['bisa_batalkan'] =$data['bisa_batalkan'] && in_array(4, $temp['idmodul']);
-            $debug=false;
+            $debug = false;
             if ($data['bisa_validasi'] || $data['bisa_edit'] || $data['bisa_batalkan'] || $sifat_terbuka || $ikut_serta) {
                 
             } else {
@@ -802,8 +802,10 @@ class pekerjaan extends ceklogin {
             $data["id_pkj"] = $id_detail_pkj;
 
             $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
-            if($debug)var_dump($data);else
-            $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
+            if ($debug)
+                var_dump($data);
+            else
+                $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
         }
     }
 
@@ -1140,8 +1142,6 @@ class pekerjaan extends ceklogin {
 
         $status = 'OK';
         $keterangan = '';
-        $id_target = null;
-        $id_realisasi = null;
 
         if ($status == 'OK') {
             if (strlen($id_pekerjaan) > 0) {
@@ -1176,14 +1176,16 @@ class pekerjaan extends ceklogin {
 
         $list_id_staff = array();
         $nama_staff = array();
-        if ($status == 'OK' && ($id_target == null || $id_realisasi == null)) {
-            $status = '1';
-            $keterangan = 'Data tipe nilai tidak dapat ditemukan';
-        } else {
-            $query_staff = $this->akun->my_staff($session['user_id']);
-            foreach ($query_staff as $s) {
-                $list_id_staff[] = $s->id_akun;
-                $nama_staff[$s->id_akun] = $s->nama;
+        if ($status == 'OK') {
+            if ($id_target == null || $id_realisasi == null) {
+                $status = '1';
+                $keterangan = 'Data tipe nilai tidak dapat ditemukan';
+            } else {
+                $query_staff = $this->akun->my_staff($session['user_id']);
+                foreach ($query_staff as $s) {
+                    $list_id_staff[] = $s->id_akun;
+                    $nama_staff[$s->id_akun] = $s->nama;
+                }
             }
         }
 
@@ -1223,31 +1225,39 @@ class pekerjaan extends ceklogin {
         if ($status == 'OK') {
             $nilai_target = $this->pekerjaan_model->nilai_get($id_detil_pekerjaan, $id_target);
             $nilai_realisasi = $this->pekerjaan_model->nilai_get($id_detil_pekerjaan, $id_realisasi);
+            $data['status'] = $status;
+            $data['target'] = $nilai_target;
+            $data['realisasi'] = $nilai_realisasi;
             if ($nama_tipe_nilai == 'realisasi') {
-                if (count($nilai_target) > 0) {
-                    if (count($nilai_realisasi) > 0) {
-                        $data['status'] = $status;
-                        $data['data'] = $nilai_realisasi;
-                    } else {
-                        $status = 'kosong';
-                        $keterangan = 'Belum ada nilai';
-                    }
-                } else {
-                    $status = '1';
-                    $keterangan = 'Anda belum mengisi nilai target';
-                }
+                $data['data'] = $nilai_realisasi;
             } else if ($nama_tipe_nilai == 'target') {
-                if (count($nilai_target) > 0) {
-                    $data['status'] = $status;
-                    $data['data'] = $nilai_target;
-                } else {
-                    $status = 'kosong';
-                    $keterangan = 'Belum ada nilai';
-                }
-            } else {
-                $status = '1';
-                $keterangan = 'Tipe nilai yang diminta tidak dikenal';
+                $data['data'] = $nilai_target;
             }
+//            if ($nama_tipe_nilai == 'realisasi') {
+//                if (count($nilai_target) > 0) {
+//                    if (count($nilai_realisasi) > 0) {
+//                        $data['status'] = $status;
+//                        $data['data'] = $nilai_realisasi;
+//                    } else {
+//                        $status = 'kosong';
+//                        $keterangan = 'Belum ada nilai';
+//                    }
+//                } else {
+//                    $status = '1';
+//                    $keterangan = 'Anda belum mengisi nilai target';
+//                }
+//            } else if ($nama_tipe_nilai == 'target') {
+//                if (count($nilai_target) > 0) {
+//                    $data['status'] = $status;
+//                    $data['data'] = $nilai_target;
+//                } else {
+//                    $status = 'kosong';
+//                    $keterangan = 'Belum ada nilai';
+//                }
+//            } else {
+//                $status = '1';
+//                $keterangan = 'Tipe nilai yang diminta tidak dikenal';
+//            }
         }
 
 
@@ -1289,6 +1299,36 @@ class pekerjaan extends ceklogin {
             } else {
                 $status = '1';
                 $keterangan = 'staff yang dinilai tidak ditentukan';
+            }
+        }
+        if ($status == 'OK') {
+            if (!is_numeric($ak)) {
+                $status = '1';
+                $keterangan = 'isi nilai AK dengan angka';
+            }
+        }
+        if ($status == 'OK') {
+            if (!is_numeric($kuantitas_output)) {
+                $status = '1';
+                $keterangan = 'isi nilai Kuantitas Output dengan angka';
+            }
+        }
+        if ($status == 'OK') {
+            if (!is_numeric($kualitas_mutu)) {
+                $status = '1';
+                $keterangan = 'isi nilai Kualitas Mutu dengan angka';
+            }
+        }
+        if ($status == 'OK') {
+            if (!is_numeric($biaya)) {
+                $status = '1';
+                $keterangan = 'isi nilai Biaya dengan angka';
+            }
+        }
+        if ($status == 'OK') {
+            if (!is_numeric($waktu)) {
+                $status = '1';
+                $keterangan = 'isi nilai Waktu dengan angka';
             }
         }
 
@@ -1361,11 +1401,32 @@ class pekerjaan extends ceklogin {
         }
 
         $update_data = false;
+        $update2 = false;
+        $update2_data = array();
+        $update2_id = null;
         $update_id = null;
-
         if ($status == 'OK') {
             $nilai_target = $this->pekerjaan_model->nilai_get($id_detil_pekerjaan, $id_target);
             $nilai_realisasi = $this->pekerjaan_model->nilai_get($id_detil_pekerjaan, $id_realisasi);
+            if ($nama_tipe_nilai == 'realisasi') {
+                if (count($nilai_target) > 0) {
+                    if ($nilai_target[0]->kuatitas_output < 1) {
+                        $status = '1';
+                        $keterangan = "Isi target Kuantitas Output dengan nilai positif";
+                    } else if ($nilai_target[0]->kualitas_mutu < 1) {
+                        $status = '1';
+                        $keterangan = "Isi target Kualitas Mutu dengan nilai positif";
+                    } else if ($nilai_target[0]->waktu < 1) {
+                        $status = '1';
+                        $keterangan = "Isi target Waktu dengan nilai positif";
+                    } else if ($nilai_target[0]->biaya < 1) {
+                        $status = '1';
+                        $keterangan = "Isi target Biaya dengan nilai positif";
+                    }
+                }
+            }
+        }
+        if ($status == 'OK') {
             if ($nama_tipe_nilai == 'realisasi') {
                 $insert['id_tipe_nilai'] = $id_realisasi;
                 if (count($nilai_target) > 0) {
@@ -1403,6 +1464,31 @@ class pekerjaan extends ceklogin {
                 if (count($nilai_target) > 0) {
                     $update_data = true;
                     $update_id = $nilai_target[0]->id_nilai;
+                    if (count($nilai_realisasi) > 0) {
+                        $update2 = true;
+                        $update2_id = $nilai_realisasi[0]->id_nilai;
+                        $kuantitas = 100 * $nilai_realisasi[0]->kuatitas_output / $kuantitas_output;
+                        $kualitas = 100 * $nilai_realisasi[0]->kualitas_mutu / $kualitas_mutu;
+                        $persen_waktu = 100 - (100 * $nilai_realisasi[0]->waktu / $waktu);
+                        $nilai_waktu = 0;
+                        if ($persen_waktu > 24) {
+                            $nilai_waktu = 76 - ( ( ((1.76 * $waktu - $nilai_realisasi[0]->waktu ) / $waktu) * 100) - 100);
+                        } else {
+                            $nilai_waktu = ( (1.76 * $waktu - $nilai_realisasi[0]->waktu) / $waktu) * 100;
+                        }
+                        $nilai_biaya = 0;
+                        $persen_biaya = 100 - ( $nilai_realisasi[0]->biaya / $biaya * 100);
+                        if ($persen_biaya > 24) {
+                            $nilai_biaya = 76 - ( ( ((1.76 * $biaya - $nilai_realisasi[0]->biaya) / $biaya) * 100) - 100);
+                        } else {
+                            $nilai_biaya = ( (1.76 * $biaya - $nilai_realisasi[0]->biaya) / $biaya) * 100;
+                        }
+                        $update2_data ['penghitungan'] = $kualitas + $kuantitas + $nilai_biaya + $nilai_waktu;
+                        $update2_data['nilai_skp'] = $update2_data['penghitungan'] / 4;
+                        if ($nilai_realisasi[0]->biaya == 0 && $biaya == 0) {
+                            $update2_data['nilai_skp'] = $update2_data['penghitungan'] / 3;
+                        }
+                    }
                 }
             } else {
                 $status = '1';
@@ -1415,6 +1501,9 @@ class pekerjaan extends ceklogin {
         if ($status == 'OK') {
             if ($update_data) {//update nilai
                 $status_nilai = $this->pekerjaan_model->nilai_update($insert, $update_id);
+                if($update2){
+                    $status_nilai=$this->pekerjaan_model->nilai_update($update2_data,$update2_id);
+                }
             } else {//nilai baru
                 $status_nilai = $this->pekerjaan_model->nilai_set($insert);
             }

@@ -263,8 +263,9 @@ if ($this->session->userdata('prev') != null) {
                                                                         </td>
                                                                         <td>
                                                                             <?php
-                                                                            if ($value->id_akun == $data_akun['user_id'] && $value->flag_usulan == 2) {
-                                                                                if ($terlambat <= 0) {
+                                                                            //if ($value->id_akun == $data_akun['user_id'] && $value->flag_usulan == 2) {
+                                                                            if(($ikut_serta&&!$usulan)||$atasan){
+                                                                                if ($terlambat <= 0 &&!$atasan) {
                                                                                     ?>
                                                                                     <a class=" btn btn-primary btn-xs" href="#UbahProgress" data-toggle="modal" onclick="show_progress('<?php echo $value->id_detil_pekerjaan ?>', '<?php echo $value->id_akun ?>')">Ubah Progress</a>
                                                                                 <?php } ?>
