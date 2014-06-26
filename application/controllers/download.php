@@ -44,7 +44,7 @@ class download extends ceklogin {
             $terlambat = $pekerjaan[0]->flag_usulan == '9';
         }
         $berhak = $atasan || $terbuka;
-        $pekerjaan_valid = $usulan || $draft || $approved || $terlambat;
+        $pekerjaan_valid = $usulan ||  $approved || $terlambat;
         $berhak = $berhak || ($ikut_serta && $pekerjaan_valid);
         $berhak = $berhak&&in_array(1,$session['idmodul']);
         if($berhak){
