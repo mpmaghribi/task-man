@@ -685,7 +685,7 @@ if ($this->session->userdata('prev') != null) {
                         console.log('validasi pekerjaan berhasil');
                         $('#tombol_validasi_usulan').remove();
                     } else {
-                        alert("validasi gagal, " + json.reason);
+                        alert( json.reason);
                         console.log('validasi pekerjaan gagal');
                     }
                 }

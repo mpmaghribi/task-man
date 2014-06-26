@@ -62,6 +62,7 @@
 
     }
     function req_pending_task() {
+        console.log('req_pending_task');
         var bulan = ["Januari", "February", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         $.ajax({// create an AJAX call...
             type: "GET", // GET or POST
@@ -111,12 +112,14 @@
                     var pekerjaan = json.pekerjaan_staff;
                     for (var i = 0; i < jumlah_data; i++) {
                         var id_pekerjaan = parseInt(pekerjaan[i].id_pekerjaan);
-                        if (list_id_pekerjaan.indexOf(id_pekerjaan) == -1) {
+                        var id_pekerjaan_sudah_ada = list_id_pekerjaan.indexOf(id_pekerjaan);
+                        console.log('id pekerjaan ' + id_pekerjaan + ' staff sudah ada = ' + id_pekerjaan_sudah_ada);
+                        if (id_pekerjaan_sudah_ada == -1) {
                             list_id_pekerjaan.push(id_pekerjaan);
                             list_id_pekerjaan_staff.push(id_pekerjaan);
                             list_jumlah_pekerja[id_pekerjaan] = 0;
                             list_pekerjaan_progress[id_pekerjaan] = 0;
-                            //console.log('insert ' + id_pekerjaan);
+                            console.log('insert ' + id_pekerjaan);
                         }
                         list_pekerjaan_nama[id_pekerjaan] = pekerjaan[i].nama_pekerjaan;
                         var tanggal = new Date(pekerjaan[i].tgl_selesai.substring(0, 10));
@@ -139,9 +142,10 @@
                         var id1 = list_id_pekerjaan[i];
                         for (var j = i + 1; j < jumlah_data; j++) {
                             var id2 = list_id_pekerjaan[j];
-                            if (list_pekerjaan_deadline[id1] < list_pekerjaan_deadline[id2]) {
+                            if (list_pekerjaan_deadline[id1] > list_pekerjaan_deadline[id2]) {
                                 list_id_pekerjaan[i] = id2;
                                 list_id_pekerjaan[j] = id1;
+                                id1 = id2;
                             }
                         }
                     }
@@ -164,23 +168,39 @@
                     jumlah_data = list_id_pekerjaan.length;
                     var jumlah_notif = 0;
                     for (var i = 0; i < jumlah_data; i++) {
+                        var style = '';
+                        var text_style='';
                         var id = list_id_pekerjaan[i];
                         var progress = (list_pekerjaan_progress[id] / list_jumlah_pekerja[id]);
                         if (list_id_pekerjaan_staff.indexOf(id) >= 0) {//pekerjaan staff
+                            style = 'style="background:#F1F2D7"';
+                            console.log('pekerjaan staff ' + id);
                             var jumlah_hari_kerja = list_pekerjaan_deadline[id] - list_pekerjaan_mulai[id];
-                            var jumlah_hari_lewat = sekarang-list_pekerjaan_mulai[id];
-                            jumlah_hari_kerja=jumlah_hari_kerja/1000/60/60/24;
-                            jumlah_hari_lewat=jumlah_hari_lewat/1000/60/60/24;
+                            var jumlah_hari_lewat = sekarang - list_pekerjaan_mulai[id];
+                            jumlah_hari_kerja = jumlah_hari_kerja / 1000 / 60 / 60 / 24;
+                            jumlah_hari_lewat = jumlah_hari_lewat / 1000 / 60 / 60 / 24;
                             console.log('perbedaaan hari ' + id)
-                            console.log(jumlah_hari_kerja);
-                            console.log(jumlah_hari_lewat);
-                            if(jumlah_hari_lewat>0){
-                                
-                            }else{
+                            console.log('jumlah hari kerja = ' + jumlah_hari_kerja);
+                            console.log('jumlah hari lewat = ' + jumlah_hari_lewat);
+                            if (jumlah_hari_lewat > 0) {//jika masuk pada waktu pengerjaan pekerjaan staff
+                                if (jumlah_hari_lewat >= jumlah_hari_kerja) {//jika telat
+                                    console.log('telat');
+                                    style = 'style="background:#A1A1A1;"';
+                                    text_style='color:white !important;';
+                                } else{
+                                    var rasio= jumlah_hari_lewat/jumlah_hari_kerja;
+                                    console.log('rasio = '+rasio);
+                                    if(rasio<0.2){
+                                        style = 'style="background:#FF6C60;"';
+                                        text_style='color:white !important;';
+                                    }
+                                    
+                                }
+                            } else {//jika hari ini belum hari pekerjaan dimulai
                                 continue;
                             }
                         } else {//pekerjaan ku
-
+                            console.log('pekerjaan ku ' + id);
                         }
                         var dead = list_pekerjaan_deadline[id];
                         var deadline = dead.getDate() + ' ' + bulan[dead.getMonth()] + ' ' + dead.getFullYear();
@@ -190,11 +210,11 @@
                             nama_pekerjaan = nama_pekerjaan.substring(0, 35) + '...';
                         }
                         html += '<li>' +
-                                '<a href="<?= base_url() ?>pekerjaan/deskripsi_pekerjaan?id_detail_pkj=' + id + '&sumber=notifikasi">' +
+                                '<a href="<?= base_url() ?>pekerjaan/deskripsi_pekerjaan?id_detail_pkj=' + id + '&sumber=notifikasi" ' + style + '>' +
                                 '<div class="task-info clearfix">' +
-                                '<div class="desc pull-left">' +
-                                '<h5 style="text-transform:none">' + nama_pekerjaan + '</h5>' +
-                                '<p>' + progress + '%, ' + deadline + '</p>' +
+                                '<div class="desc pull-left" >' +
+                                '<h5 style="text-transform:none;'+text_style+'">' + nama_pekerjaan + '</h5>' +
+                                '<p style="'+text_style+'">' + progress + '%, ' + deadline + '</p>' +
                                 '</div>' +
                                 '</div>' +
                                 '</a>' +
@@ -204,7 +224,7 @@
                     html = '<li><p class="">Anda memiliki ' + jumlah_notif + ' Pemberitahuan</p></li>' + html;
                     html += '<li class="external"><a href="<?php echo base_url(); ?>pekerjaan/karyawan">Lihat Semua Task</a></li>';
 
-                    
+
 
                     $("#bagian_pending_task").html(html);
                     if (jumlah_notif == 0)

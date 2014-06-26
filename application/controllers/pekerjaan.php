@@ -187,10 +187,10 @@ class pekerjaan extends ceklogin {
             $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
             $data["users"] = json_decode(file_get_contents($url));
             $this->load->view('pekerjaan/karyawan/karyawan_page', $data);
-        }else{
-            $data['judul_kesalahan']='Tidak berhak';
-            $data['deskripsi_kesalahan']='Anda tidak berhak mengakses pekerjaan';
-            $this->load->view('pekerjaan/kesalahan',$data);
+        } else {
+            $data['judul_kesalahan'] = 'Tidak berhak';
+            $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengakses pekerjaan';
+            $this->load->view('pekerjaan/kesalahan', $data);
         }
     }
 
@@ -925,22 +925,28 @@ class pekerjaan extends ceklogin {
     public function validasi_usulan() {
 //        if ($this->check_session_and_cookie() == 1 && $this->session->userdata("user_jabatan") == "manager") {
         $temp = $this->session->userdata('logged_in');
-        $id_pekerjaan = $this->input->post("id_pekerjaan");
-        $this->load->model("pekerjaan_model");
-        $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
         $status = 0;
-        if (count($pekerjaan) > 0) {
-            
-        } else {
-            echo json_encode(array("status" => "error", "reason" => "pekerjaan tidak ditemukan"));
+        if (!in_array(4, $temp['idmodul'])) {
             $status = 1;
+            echo json_encode(array("status" => "error", "reason" => "Anda tidak berhak untuk melakukan validasi usulan"));
         }
         if ($status == 0) {
-            if ($pekerjaan[0]->id_penanggung_jawab == $temp['id_akun'] && in_array(14, $temp['idmodul'])) {
+            $id_pekerjaan = $this->input->post("id_pekerjaan");
+            $this->load->model("pekerjaan_model");
+            $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
+            if (count($pekerjaan) > 0) {
+                
+            } else {
+                echo json_encode(array("status" => "error", "reason" => "pekerjaan tidak ditemukan"));
+                $status = 1;
+            }
+        }
+        if ($status == 0) {
+            if ($pekerjaan[0]->id_penanggung_jawab == $temp['id_akun']) {
                 
             } else {
                 $status = 1;
-                echo json_encode(array("status" => "error", "reason" => "anda tidak berhak memvalidasi usulan ini"));
+                echo json_encode(array("status" => "error", "reason" => "Pekerjaan ini tidak dapat divalidasi oleh anda"));
             }
         }
         if ($status == 0) {
