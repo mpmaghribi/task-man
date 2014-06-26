@@ -137,7 +137,7 @@
                         </div>
                         <?php
                     }
-                    if (in_array(9, $data_akun['idmodul'])) {
+                    if (in_array(5, $data_akun['idmodul'])) {
                         $this->load->view('pekerjaan/karyawan/pekerjaan_staff_view');
                     }
                     if (in_array(3, $data_akun['idmodul'])) {
