@@ -177,21 +177,21 @@
                             console.log('pekerjaan staff ' + id);
                             var jumlah_hari_kerja = list_pekerjaan_deadline[id] - list_pekerjaan_mulai[id];
                             var jumlah_hari_lewat = sekarang - list_pekerjaan_mulai[id];
-                            jumlah_hari_kerja = jumlah_hari_kerja / 1000 / 60 / 60 / 24;
-                            jumlah_hari_lewat = jumlah_hari_lewat / 1000 / 60 / 60 / 24;
+                            jumlah_hari_kerja = jumlah_hari_kerja / satu_hari;
+                            jumlah_hari_lewat = jumlah_hari_lewat / satu_hari;
                             console.log('perbedaaan hari ' + id)
                             console.log('jumlah hari kerja = ' + jumlah_hari_kerja);
                             console.log('jumlah hari lewat = ' + jumlah_hari_lewat);
                             if (jumlah_hari_lewat > 0) {//jika masuk pada waktu pengerjaan pekerjaan staff
                                 if (jumlah_hari_lewat >= jumlah_hari_kerja) {//jika telat
                                     console.log('telat');
-                                    style = 'style="background:#A1A1A1;"';
+                                    style = 'style="background:#FF6C60;"';
                                     text_style='color:white !important;';
                                 } else{
                                     var rasio= jumlah_hari_lewat/jumlah_hari_kerja;
                                     console.log('rasio = '+rasio);
                                     if(rasio<0.2){
-                                        style = 'style="background:#FF6C60;"';
+                                        style = 'style="background:#A1A1A1;"';
                                         text_style='color:white !important;';
                                     }
                                     

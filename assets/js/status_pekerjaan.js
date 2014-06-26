@@ -1,4 +1,4 @@
-var status_nama = ["Not Approved", "Belum Dibaca", "Sudah Dibaca", "Dikerjakan", "Selesai", "Terlambat", "Request Perpanjang"];
+var status_nama = ["Usulan", "Belum Dibaca", "Sudah Dibaca", "Dikerjakan", "Selesai", "Terlambat", "Request Perpanjang"];
 var status_label = ["danger", "primary", "info", "success", "inverse", "default", "default"];
 //console.log(status_nama);
 //console.log(status_label);

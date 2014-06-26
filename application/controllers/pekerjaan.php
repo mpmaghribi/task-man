@@ -254,9 +254,10 @@ class pekerjaan extends ceklogin {
             if ($pekerjaan[0]->flag_usulan == '1')
                 $usulan = true;
         }
-        $bisa_edit_usulan_saya = in_array(2, $session['idmodul']);
+        $bisa_edit_usulan_saya = $usulan && $terlibat && in_array(2, $session['idmodul']);
+        $data['bisa_edit_usulan_saya']=$bisa_edit_usulan_saya;
         if ($status == 0) {
-            if (!($atasan || ($usulan && $terlibat && $bisa_edit_usulan_saya))) {
+            if (!($atasan || ( $bisa_edit_usulan_saya))) {
                 $staff = 1;
                 $nama_status = "kesalahan";
                 $keterangan = "anda tidak berhak mengubah pekerjaan";
@@ -497,6 +498,7 @@ class pekerjaan extends ceklogin {
         $insert['asal_pekerjaan'] = 'task management';
         $insert["id_penanggung_jawab"] = $idatasan;
         $insert["id_pengusul"] = $temp['id_akun'];
+        $insert['kategori']=pg_escape_string($this->input->post('kategori'));
         $status = 0;
         $judul_kesalahan = '';
         $deskripsi_kesalahan = '';
@@ -679,6 +681,7 @@ class pekerjaan extends ceklogin {
 
     public function deskripsi_pekerjaan() {
         $data['data_akun'] = $this->session->userdata('logged_in');
+        $debug=false;
         //$data['temp'] = $this->session->userdata('logged_in');
         $temp = $this->session->userdata('logged_in');
 
@@ -745,16 +748,17 @@ class pekerjaan extends ceklogin {
             }
             $data['diassign_ke_bawahan_saya'] = $diassign_ke_bawahan_saya;
             $data['ikut_serta'] = $ikut_serta;
-            if ($desk[0]->id_penanggung_jawab == $temp['user_id'] && $usulan) {//pemberi pekerjaan, atasan yg dituju pada pengusulan, atau atasan yg mengusulkan
+            $debug=true;
+            if ($desk[0]->id_penanggung_jawab == $temp['user_id'] && $usulan && in_array(4,$temp['idmodul'])) {//pemberi pekerjaan, atasan yg dituju pada pengusulan, atau atasan yg mengusulkan
                 $data['bisa_validasi'] = $usulan;
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;
                 $atasan = true;
-            } else if ($desk[0]->flag_usulan == '2' && ($diassign_ke_bawahan_saya || $desk[0]->id_penanggung_jawab == $temp['user_id'])) {//berkuasa atas pekerjaan
+            } else if ($desk[0]->flag_usulan == '2' && ($diassign_ke_bawahan_saya || $desk[0]->id_penanggung_jawab == $temp['user_id']) && (in_array(5,$temp['idmodul']))) {//berkuasa atas pekerjaan
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;
                 $atasan = true;
-            } else if ($usulan && $ikut_serta) { //jika usulan dan dia adalah anggota pekerja
+            } else if ($usulan && $ikut_serta&&(in_array(2,$temp['idmodul']))) { //jika usulan dan dia adalah anggota pekerja
                 $data['bisa_edit'] = true;
                 $data['bisa_batalkan'] = true;
             } else if ($data['perpanjang'] && $desk[0]->id_penanggung_jawab == $temp['user_id']) {
@@ -763,9 +767,10 @@ class pekerjaan extends ceklogin {
                 $atasan = true;
             }
             $sifat_terbuka = strtolower($deskripsi_pekerjaan[0]->nama_sifat_pekerjaan) == 'umum';
-            $data['bisa_edit'] &= in_array(4, $temp['idmodul']);
-            $data['bisa_validasi'] &= in_array(4, $temp['idmodul']);
-            $data['bisa_batalkan'] &= in_array(4, $temp['idmodul']);
+            //$data['bisa_edit'] = $data['bisa_edit']&&in_array(4, $temp['idmodul']);
+            //$data['bisa_validasi'] =$data['bisa_validasi'] && in_array(4, $temp['idmodul']);
+            //$data['bisa_batalkan'] =$data['bisa_batalkan'] && in_array(4, $temp['idmodul']);
+            $debug=false;
             if ($data['bisa_validasi'] || $data['bisa_edit'] || $data['bisa_batalkan'] || $sifat_terbuka || $ikut_serta) {
                 
             } else {
@@ -797,7 +802,7 @@ class pekerjaan extends ceklogin {
             $data["id_pkj"] = $id_detail_pkj;
 
             $data["list_berkas"] = $this->berkas_model->get_berkas_of_pekerjaan($id_detail_pkj);
-            //var_dump($data);
+            if($debug)var_dump($data);else
             $this->load->view('pekerjaan/karyawan/deskripsi_pekerjaan_page', $data);
         }
     }

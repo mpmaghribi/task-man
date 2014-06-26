@@ -182,6 +182,15 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
+                                                    <label for="kategori" class="control-label col-lg-3">Kategori Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="kategori" class="form-control m-bot15">
+                                                            <option value="project">Project</option>
+                                                            <option value="rutin">Rutin</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
                                                     <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
                                                     <div class="col-lg-6">
                                                         <input class=" form-control" id="nama_pkj2" name="nama_pkj2" type="text" />
