@@ -10,11 +10,11 @@
                         <tr>
                             <th style="width: 60px">No</th>
                             <th style="width: 200px"  class="hidden-phone">Pekerjaan</th>
-                            <th style="width: 150px">Deadline</th>
+                            <th style="width: 120px">Deadline</th>
                             <th>Assign To</th>
                             <th>Prioritas</th>
-                            <th style="min-width: 150px">Status</th>
-                            <th style="text-align: right;min-width: 140px"></th>
+                            <th style="min-width: 100px">Status</th>
+                            <th style="text-align: right;min-width: 200px"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,6 +42,9 @@
                                         <td style="" id="pekerjaan_staff_status_<?= $kerja->id_pekerjaan ?>"><span class="label <?= $label_status[$kerja->flag_usulan] ?> label-mini"><?= $list_status[$kerja->flag_usulan] ?></span></td>
                                         <td style="text-align: right;">
                                             <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: 0px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
+                                                <?php if ($kerja->flag_usulan == '1') { ?>
+                                                    <a class="btn btn-info btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan_<?php echo $kerja->id_pekerjaan; ?>" style="font-size: 10px" onclick="validasi_usulan(<?php echo $kerja->id_pekerjaan; ?>);">Validasi</a>
+                                                <?php } ?>
                                                 <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $kerja->id_pekerjaan; ?>" id="" style="font-size: 10px">Edit</a>
                                                 <a class="btn btn-success btn-xs" href="<?php echo base_url(); ?>pekerjaan/deskripsi_pekerjaan?id_detail_pkj=<?php echo $kerja->id_pekerjaan; ?>" id="" style="font-size: 10px">View</a>
                                             </div>
@@ -79,6 +82,25 @@ if (isset($detil_pekerjaan_staff)) {
 ?>
                 $('#tabel_pekerjaan_staff').dataTable({});
             });
+            function validasi_usulan(id_pekerjaan) {
+                //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+                $.ajax({// create an AJAX call...
+                    data: "id_pekerjaan=" + id_pekerjaan, // get the form data
+                    type: "POST", // GET or POST
+                    url: "<?php echo site_url(); ?>/pekerjaan/validasi_usulan", // the file to call
+                    success: function(response) { // on success..
+                        var json = jQuery.parseJSON(response);
+                        //alert(response);
+                        if (json.status === "OK") {
+                            console.log('validasi pekerjaan berhasil');
+                            $('#tombol_validasi_usulan_'+id_pekerjaan).remove();
+                        } else {
+                            alert(json.reason);
+                            console.log('validasi pekerjaan gagal');
+                        }
+                    }
+                });
+            }
                 </script>
             </div>
         </div>

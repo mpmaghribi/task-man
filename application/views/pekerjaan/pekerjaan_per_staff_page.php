@@ -412,7 +412,7 @@
                 },
                 series: series,
                 credits: {
-                    text: 'artcak',
+                    text: '',
                     href: ''
                 }
             };

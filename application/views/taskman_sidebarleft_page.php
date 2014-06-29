@@ -43,7 +43,7 @@
                                         <span>Pekerjaan Saya</span>
                                     </a>
                                 </li>
-                            <?php } else if ($value == 2) { ?>
+                            <?php } else if ($value == 2 && false) { ?>
 
                                 <li class="sub-menu">
                                     <a href="<?php echo base_url(); ?>pekerjaan/lihat_usulan">
