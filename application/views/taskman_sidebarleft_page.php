@@ -94,7 +94,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo base_url() ?>login/logout">
+                    <a href="<?php echo str_replace("taskmanagement", "integrarsud", site_url()) ?>/dasboard/logout">
                         <i class="fa fa-angle-double-right"></i>
                         <span>Log Out</span>
                     </a>
