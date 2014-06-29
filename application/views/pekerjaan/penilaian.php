@@ -14,15 +14,15 @@
         }
         foreach ($listassign_pekerjaan as $detail) {
             ?>
-                                                                                            <tr>
-                                                                                                <td style="vertical-align: middle"><?php echo $list_user[$detail->id_akun]; ?></td>
-                                                                                                <td>
-                                                                                                    <div class="btn-group btn-group-lg btn-xs" style="float: right; padding: -25px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                                                                                        <a class="btn btn-info " href="#modal_" data-toggle="modal" id="target_<?php echo $detail->id_akun; ?>" onclick="load_nilai(<?php echo $detail->id_akun; ?>, 'target');" style="font-size: 12px;padding: 4px 10px;">Target</a>
-                                                                                                        <a class="btn btn-success" href="#modal_" data-toggle="modal" id="realisasi_<?php echo $detail->id_akun; ?>" style="font-size: 12px;padding: 4px 10px;" onclick="load_nilai(<?php echo $detail->id_akun; ?>, 'realisasi');">Realisasi</a>
-                                                                                                    </div>
-                                                                                                </td>
-                                                                                            </tr>
+                                                                                                <tr>
+                                                                                                    <td style="vertical-align: middle"><?php echo $list_user[$detail->id_akun]; ?></td>
+                                                                                                    <td>
+                                                                                                        <div class="btn-group btn-group-lg btn-xs" style="float: right; padding: -25px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
+                                                                                                            <a class="btn btn-info " href="#modal_" data-toggle="modal" id="target_<?php echo $detail->id_akun; ?>" onclick="load_nilai(<?php echo $detail->id_akun; ?>, 'target');" style="font-size: 12px;padding: 4px 10px;">Target</a>
+                                                                                                            <a class="btn btn-success" href="#modal_" data-toggle="modal" id="realisasi_<?php echo $detail->id_akun; ?>" style="font-size: 12px;padding: 4px 10px;" onclick="load_nilai(<?php echo $detail->id_akun; ?>, 'realisasi');">Realisasi</a>
+                                                                                                        </div>
+                                                                                                    </td>
+                                                                                                </tr>
             <?php
         }
         //print_r($staff_array);
@@ -181,16 +181,14 @@
     </div>
 </div>
 <script>
-    var list_id_detil_pekerjaan=[];
-    <?php 
-    
-            foreach ($listassign_pekerjaan as $detil){
-                ?>
-                    list_id_detil_pekerjaan[<?= $detail->id_akun; ?>]='<?= $detil->id_detil_pekerjaan; ?>';
-                    <?php
-            }
-    
+    var list_id_detil_pekerjaan = [];
+<?php
+foreach ($listassign_pekerjaan as $detil) {
     ?>
+        list_id_detil_pekerjaan[<?= $detil->id_akun; ?>] = '<?= $detil->id_detil_pekerjaan; ?>';
+    <?php
+}
+?>
     var div_penilaian = $('#div_penilaian1');
 
     var label_target_ak = $('#label_target_ak');
@@ -458,6 +456,7 @@
             success: function(response) { // on success..
                 var json = jQuery.parseJSON(response);
                 if (json.status === "OK") {
+                    console.log('retrieve progress ok');
                     var count = 1;
                     var jml = json.data.length;
                     for (var i = 0; i < jml; i++)
@@ -465,14 +464,14 @@
                         var waktu = json.data[i].waktu;
                         var tanggal = new Date(waktu.substring(0, 10));
                         if (waktu.length > 19) {
-                            waktu = waktu.substring(0,19);
+                            waktu = waktu.substring(0, 19);
                         }
-                        var html='';
-                        
+                        var html = '';
+
                         html += "<tr>";
                         html += "<td>" + count + "";
                         html += "</td>";
-                        
+
                         html += "<td>" + json.data[i].deksripsi + "";
                         html += "</td>";
                         html += "<td>" + json.data[i].progress + "%";
@@ -483,7 +482,7 @@
                         count++;
                         tabel_body.append(html);
                     }
-$('#tabel_penilaian_progress').dataTable();
+                    //$('#tabel_penilaian_progress').dataTable();
                 } else {
                 }
             }

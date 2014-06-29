@@ -300,64 +300,67 @@
             console.log(series_data2);
 
             var jumlah_tanggal = list_date.length;
-            var selisih = list_date[jumlah_tanggal - 1] - list_date[0];
-            var r_ = [];
+            console.log('jumlah_tanggal = ' + jumlah_tanggal);
+            if (jumlah_tanggal > 0) {
+                var selisih = list_date[jumlah_tanggal - 1] - list_date[0];
+                var r_ = [];
+                console.log('selisih = ' + selisih);
 
-            r_['milisecond'] = selisih / jumlah_tanggal;
-            console.log('selisih tanggal = ' + selisih + ' milisecond');
+                r_['milisecond'] = selisih / jumlah_tanggal;
+                console.log('selisih tanggal = ' + selisih + ' milisecond');
 
-            var second = selisih / 1000;
-            r_['second'] = second / jumlah_tanggal;
-            console.log('selisih tanggal = ' + second + ' second');
+                var second = selisih / 1000;
+                r_['second'] = second / jumlah_tanggal;
+                console.log('selisih tanggal = ' + second + ' second');
 
-            var menit = second / 60;
-            r_['menit'] = menit / jumlah_tanggal;
-            console.log('selisih tanggal = ' + menit + ' menit');
+                var menit = second / 60;
+                r_['menit'] = menit / jumlah_tanggal;
+                console.log('selisih tanggal = ' + menit + ' menit');
 
-            var jam = menit / 60;
-            r_['jam'] = jam / jumlah_tanggal;
-            console.log('selisih tanggal = ' + jam + ' jam');
+                var jam = menit / 60;
+                r_['jam'] = jam / jumlah_tanggal;
+                console.log('selisih tanggal = ' + jam + ' jam');
 
-            var hari = jam / 24;
-            r_['hari'] = hari / jumlah_tanggal;
-            console.log('selisih tanggal = ' + hari + ' hari');
+                var hari = jam / 24;
+                r_['hari'] = hari / jumlah_tanggal;
+                console.log('selisih tanggal = ' + hari + ' hari');
 
-            var minggu = hari / 7;
-            r_['minggu'] = minggu / jumlah_tanggal;
-            console.log('selisih tanggal = ' + minggu + ' minggu');
+                var minggu = hari / 7;
+                r_['minggu'] = minggu / jumlah_tanggal;
+                console.log('selisih tanggal = ' + minggu + ' minggu');
 
-            var bulan = hari / 30;
-            r_['bulan'] = bulan / jumlah_tanggal;
-            console.log('selisih tanggal = ' + bulan + ' bulan');
+                var bulan = hari / 30;
+                r_['bulan'] = bulan / jumlah_tanggal;
+                console.log('selisih tanggal = ' + bulan + ' bulan');
 
-            var r_index = ["milisecond", 'second', 'menit', 'jam', 'hari', 'minggu', 'bulan'];
+                var r_index = ["milisecond", 'second', 'menit', 'jam', 'hari', 'minggu', 'bulan'];
 
-            console.log('jumlah data tanggal = ' + jumlah_tanggal);
+                console.log('jumlah data tanggal = ' + jumlah_tanggal);
 
-            console.log(r_index);
-            var n_r_index = r_index.length;
-            for (var i = 0; i < n_r_index; i++) {
-                console.log(r_index[i] + '=' + r_[r_index[i]]);
-            }
-            var kategori = list_tanggal;
-            var series1 = [];
-            for (var i in series_data2) {
-                if (series_data2.hasOwnProperty(i)) {
-                    var new_data = [];
-                    for (var j in series_data2[i]) {
-                        if (series_data2[i].hasOwnProperty(j)) {
-                            new_data.push(parseInt(series_data2[i][j]));
-                        }
-                    }
-                    var new_series = {name: i, data: new_data};
-                    series1.push(new_series);
+                console.log(r_index);
+                var n_r_index = r_index.length;
+                for (var i = 0; i < n_r_index; i++) {
+                    console.log(r_index[i] + '=' + r_[r_index[i]]);
                 }
+                var kategori = list_tanggal;
+                var series1 = [];
+                for (var i in series_data2) {
+                    if (series_data2.hasOwnProperty(i)) {
+                        var new_data = [];
+                        for (var j in series_data2[i]) {
+                            if (series_data2[i].hasOwnProperty(j)) {
+                                new_data.push(parseInt(series_data2[i][j]));
+                            }
+                        }
+                        var new_series = {name: i, data: new_data};
+                        series1.push(new_series);
+                    }
+                }
+
+
+                highchart_bar1(kategori, series1);
+
             }
-
-
-            highchart_bar1(kategori, series1);
-
-
 
         }
         function highchart_bar1(kategori, series) {
@@ -378,16 +381,16 @@
                     type: 'column'
                 },
                 title: {
-                    text: 'pekerjaan'
+                    text: '<?php echo $nama_staff ?>'
                 },
                 subtitle: {
-                    text: 'Perkembangan progress'
+                    text: 'Perkembangan Progress Pekerjaan'
                 },
                 yAxis: {
                     min: 0,
                     max: 100,
                     title: {
-                        text: 'progress (%)'
+                        text: 'Progress (%)'
                     }
                 },
                 tooltip: {
@@ -407,7 +410,11 @@
                 xAxis: {
                     categories: kategori
                 },
-                series: series
+                series: series,
+                credits: {
+                    text: 'artcak',
+                    href: ''
+                }
             };
             console.log('highchart');
             console.log(highchart);
