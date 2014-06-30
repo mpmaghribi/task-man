@@ -43,7 +43,7 @@ foreach ($users as $u) {
                                 ?>
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                     <?php if ($bisa_validasi) { ?><a class="btn btn-info btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi_usulan(<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>);">Validasi</a><?php } ?>
-                                    <?php if ($bisa_edit ) { ?><a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a><?php } ?>
+                                    <?php if ($bisa_edit) { ?><a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a><?php } ?>
                                     <?php if ($bisa_batalkan) { ?><a class="btn btn-warning btn-xs" href="javascript:void(0);" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a><?php } ?>
                                     <?php
                                     if ($terlambat > 0 && !$usulan) {
@@ -79,7 +79,7 @@ if ($this->session->userdata('prev') != null) {
     $lempar_url = $this->session->userdata('prev');
 }
 ?>
-                                                        window.location = '<?php echo base_url()  . $lempar_url; ?>';
+                                                        window.location = '<?php echo base_url() . $lempar_url; ?>';
                                                     } else {
                                                         alert("Gagal membatalkan pekerjaan, " + json.reason);
                                                     }
@@ -254,18 +254,18 @@ if ($this->session->userdata('prev') != null) {
                                                                         </td>
                                                                         <td>
                                                                             <div id="progress_html">
-                                                                            <div class="progress progress-striped progress-xs">
-                                                                                <div style="width: <?php echo $value->progress; ?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress; ?>" role="progressbar" class="progress-bar progress-bar-warning">
-                                                                                    <span class="sr-only"><?php echo $value->progress; ?>% Complete (success)</span>
+                                                                                <div class="progress progress-striped progress-xs">
+                                                                                    <div style="width: <?php echo $value->progress; ?>%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="<?php echo $value->progress; ?>" role="progressbar" class="progress-bar progress-bar-warning">
+                                                                                        <span class="sr-only"><?php echo $value->progress; ?>% Complete (success)</span>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                                </div>
                                                                         </td>
                                                                         <td>
                                                                             <?php
-                                                                            if ($value->id_akun == $data_akun['user_id'] && $value->flag_usulan == 2||$atasan) {
-                                                                            //if(($ikut_serta&&!$usulan)||$atasan){
-                                                                                if ($terlambat <= 0 &&!$atasan) {
+                                                                            if ($value->id_akun == $data_akun['user_id'] && $value->flag_usulan == 2 || $atasan) {
+                                                                                //if(($ikut_serta&&!$usulan)||$atasan){
+                                                                                if ($terlambat <= 0 && !$atasan) {
                                                                                     ?>
                                                                                     <a class=" btn btn-primary btn-xs" href="#UbahProgress" data-toggle="modal" onclick="show_progress('<?php echo $value->id_detil_pekerjaan ?>', '<?php echo $value->id_akun ?>')">Ubah Progress</a>
                                                                                 <?php } ?>
@@ -336,7 +336,7 @@ if ($this->session->userdata('prev') != null) {
                                                         <form class="cmxform form-horizontal" id="progress_form" action="#" method="POST" enctype="multipart/form-data">
                                                             <div class="form modal-body">
                                                                 <input type="hidden" id="idp" name="idp" value="" />
-                                                                <input type="hidden" id="id_pkj" name="id_pkj" value="<?php echo $id_pkj?>" />
+                                                                <input type="hidden" id="id_pkj" name="id_pkj" value="<?php echo $id_pkj ?>" />
                                                                 <div class="form-group ">
                                                                     <label for="progress" class="control-label col-lg-3">Progress</label>
                                                                     <div class="col-lg-8">
@@ -410,19 +410,19 @@ if ($this->session->userdata('prev') != null) {
                                                                     </div>
                                                                 </div>
                                                                 <div class="tampil_progress" style="display: none;">
-                                                                <div class="form-group ">
-                                                                    <label for="progressBar" class="control-label col-lg-3">Total</label>
-                                                                    <div class="col-lg-8">
-                                                                        <progress id="progressBar" value="0" max="100" style="width:300px;"></progress> 
+                                                                    <div class="form-group ">
+                                                                        <label for="progressBar" class="control-label col-lg-3">Total</label>
+                                                                        <div class="col-lg-8">
+                                                                            <progress id="progressBar" value="0" max="100" style="width:300px;"></progress> 
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group ">
+                                                                        <label for="status" class="control-label col-lg-3">Status</label>
+                                                                        <div class="col-lg-8">
+                                                                            <h4 id="status"></h4> <p id="loaded_n_total"></p>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group ">
-                                                                    <label for="status" class="control-label col-lg-3">Status</label>
-                                                                    <div class="col-lg-8">
-                                                                        <h4 id="status"></h4> <p id="loaded_n_total"></p>
-                                                                    </div>
-                                                                </div>
-                                                                    </div>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button data-dismiss="modal" class="btn btn-default" id="batal_progress" type="button">Batal</button>
@@ -433,14 +433,16 @@ if ($this->session->userdata('prev') != null) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <script> 
-                                            $("#batal_progress").click(function(e){
-                                                $(".tampil_progress").css("display","none");
+                                        <script>
+                                            $("#batal_progress").click(function(e) {
+                                                $(".tampil_progress").css("display", "none");
                                             });
-                                            function _(el){ return document.getElementById(el); } 
-                                            function uploadFile(){ 
-                                                $(".tampil_progress").css("display","block");
-                                                var file = _("file1").files[0]; 
+                                            function _(el) {
+                                                return document.getElementById(el);
+                                            }
+                                            function uploadFile() {
+                                                $(".tampil_progress").css("display", "block");
+                                                var file = _("file1").files[0];
                                                 var idp = document.getElementById("id_pkj").value;
                                                 var nama_file = document.getElementById("nama_file").value;
                                                 if (file.type === "application/pdf" || file.type === "application/x-download" || file.type === "application/msword")
@@ -448,14 +450,13 @@ if ($this->session->userdata('prev') != null) {
                                                     var formdata = new FormData();
                                                     formdata.append("file1", file);
                                                     formdata.append("id_pekerjaan", idp);
-                                                    if (file.type === "application/x-download" || file.type === "application/pdf"){
-                                                        formdata.append("nama_file", nama_file+"_"+new Date().toDateString()+".pdf");
+                                                    if (file.type === "application/x-download" || file.type === "application/pdf") {
+                                                        formdata.append("nama_file", nama_file + "_" + new Date().toDateString() + ".pdf");
                                                     }
                                                     else
                                                     {
-                                                        formdata.append("nama_file", nama_file+"_"+new Date().toDateString()+".doc");
+                                                        formdata.append("nama_file", nama_file + "_" + new Date().toDateString() + ".doc");
                                                     }
-                                                    
                                                     var ajax = new XMLHttpRequest();
                                                     ajax.upload.addEventListener("progress", progressHandler, false);
                                                     ajax.addEventListener("load", completeHandler, false);
@@ -468,7 +469,7 @@ if ($this->session->userdata('prev') != null) {
                                                 {
                                                     //alert(file.name+" | "+file.size+" | "+file.type); 
 
-                                                   alert("Silahkan upload hanya pdf dan ms word < 2007 saja."); 
+                                                    alert("Silahkan upload hanya pdf dan ms word < 2007 saja.");
                                                 }
                                                 //alert(file.name+" | "+file.size+" | "+file.type); 
 
@@ -498,7 +499,7 @@ if ($this->session->userdata('prev') != null) {
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                    ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                     ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -536,11 +537,11 @@ if ($this->session->userdata('prev') != null) {
                                             </div>
                                         </div>
                                     </div>
-                                    <?php if (in_array(6, $data_akun['idmodul'])) { ?>
+                                        <?php if (in_array(6, $data_akun['idmodul'])) { ?>
                                         <div id="penilaianPekerjaan" class="tab-pane">
-                                            <?php $this->load->view('pekerjaan/penilaian'); ?>
+                                        <?php $this->load->view('pekerjaan/penilaian'); ?>
                                         </div>
-                                    <?php } ?>
+<?php } ?>
                                 </div>
                             </div>
 
@@ -562,7 +563,7 @@ if ($this->session->userdata('prev') != null) {
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-        <?php $this->load->view('taskman_rightbar_page') ?>
+<?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
@@ -686,7 +687,7 @@ if ($this->session->userdata('prev') != null) {
                         console.log('validasi pekerjaan berhasil');
                         $('#tombol_validasi_usulan').remove();
                     } else {
-                        alert( json.reason);
+                        alert(json.reason);
                         console.log('validasi pekerjaan gagal');
                     }
                 }
@@ -723,18 +724,18 @@ if ($this->session->userdata('prev') != null) {
 
         function ubah_progress()
         {
-            
+
             var data_progress = document.getElementById("progress").value;
             var idp = document.getElementById("idp").value;
             var log_perubahan = document.getElementById("perubahan").value;
             var nama_file = document.getElementById("nama_file").value;
             var file = document.getElementById("file1").value;
-            if (log_perubahan === "" || nama_file === "" || data_progress === "" || file === "")
-            {
-                alert("Silahkan lengkapi terlebih dahulu.");
-                exit();
-            }
-           // else{
+//            if (log_perubahan === "" || nama_file === "" || data_progress === "" || file === "")
+//            {
+//                alert("Silahkan lengkapi terlebih dahulu.");
+//                exit();
+//            }
+            // else{
             $.ajax({// create an AJAX call...
                 data:
                         {
@@ -750,20 +751,20 @@ if ($this->session->userdata('prev') != null) {
 
                     if (json.status === "OK") {
                         alert("Progress berhasil diupdate!. Pastikan anda sudah melakukan upload file terlebih dahulu.");
-                        var html="";
-                        html += '<div class="progress progress-striped progress-xs">'+
-                            '<div style="width:'+data_progress+'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'+data_progress+'" role="progressbar" class="progress-bar progress-bar-warning">'+
-                                '<span class="sr-only">'+data_progress+'% Complete (success)</span>'+
-                            '</div>'+
-                        '</div>';
-                $("#progress_html").html(html);
+                        var html = "";
+                        html += '<div class="progress progress-striped progress-xs">' +
+                                '<div style="width:' + data_progress + '%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="' + data_progress + '" role="progressbar" class="progress-bar progress-bar-warning">' +
+                                '<span class="sr-only">' + data_progress + '% Complete (success)</span>' +
+                                '</div>' +
+                                '</div>';
+                        $("#progress_html").html(html);
                         //window.location.href = "";
                     } else {
                         alert("Data gagal di update");
                     }
                 }
             });
-           // }
+            // }
         }
         function show_progress(id_detail_pkj, id_user)
         {
@@ -818,7 +819,7 @@ if ($this->session->userdata('prev') != null) {
                         for (var i = 0; i < jml; i++)
                         {
                             var tgl = json.data[i].waktu;
-                            tgl = tgl.replace(/-/gi,"/");
+                            tgl = tgl.replace(/-/gi, "/");
                             tgl = tgl.substring(19, 0);
                             tgl = Date.parse(tgl);
                             tgl = new Date(tgl);
@@ -867,8 +868,8 @@ if ($this->session->userdata('prev') != null) {
 
         $('#setuju_perpanjang').click(function() {
             $('#div_tanggap_perpanjang').show();
-            document.getElementById('tanggal_baru').value='';
-            document.getElementById('komentar_perpanjang').value='';
+            document.getElementById('tanggal_baru').value = '';
+            document.getElementById('komentar_perpanjang').value = '';
         });
         $('#tombol_batal_perpanjang').click(function() {
             $('#div_tanggap_perpanjang').hide();
@@ -877,10 +878,10 @@ if ($this->session->userdata('prev') != null) {
             $('#div_tanggap_perpanjang').hide();
             $.ajax({// create an AJAX call...
                 data: {
-                    id_pekerjaan:document.getElementById('id_detail_pkj').value,
-                    tanggal_baru:document.getElementById('tanggal_baru').value,
-                    komentar_perpanjang:document.getElementById('komentar_perpanjang').value
-                }, 
+                    id_pekerjaan: document.getElementById('id_detail_pkj').value,
+                    tanggal_baru: document.getElementById('tanggal_baru').value,
+                    komentar_perpanjang: document.getElementById('komentar_perpanjang').value
+                },
                 type: "POST", // GET or POST
                 url: "<?php echo site_url() ?>/pekerjaan/perpanjang",
                 cache: false,
