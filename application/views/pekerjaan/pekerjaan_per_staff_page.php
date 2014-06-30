@@ -82,23 +82,23 @@
 
         var my_staff = jQuery.parseJSON('<?php echo json_encode($my_staff); ?>');
         var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
-        var detil_progress=[];
-        <?php 
-        //var_dump($detil_progress);
-        foreach ($detil_progress as $progress){
-            ?>
-                var progress = {
-                    id_detil_progress:<?=$progress->id_detil_progress;?>,
-                    id_detil_pekerjaan:<?=$progress->id_detil_pekerjaan;?>,
-                    deskripsi:'<?php echo str_replace("\n","<br>",$progress->deksripsi);?>',
-                    progress:<?=$progress->progress;?>,
-                    waktu:'<?=$progress->waktu;?>',
-                    id_pekerjaan:<?=$progress->id_pekerjaan;?>
-                };
-                detil_progress.push(progress);
-                <?php
-        }
-        ?>
+        var detil_progress = [];
+<?php
+//var_dump($detil_progress);
+foreach ($detil_progress as $progress) {
+    ?>
+            var progress = {
+                id_detil_progress:<?= $progress->id_detil_progress; ?>,
+                id_detil_pekerjaan:<?= $progress->id_detil_pekerjaan; ?>,
+                deskripsi: '<?php echo str_replace("\n", "<br>", $progress->deksripsi); ?>',
+                progress:<?= $progress->progress; ?>,
+                waktu: '<?= $progress->waktu; ?>',
+                id_pekerjaan:<?= $progress->id_pekerjaan; ?>
+            };
+            detil_progress.push(progress);
+    <?php
+}
+?>
         var pekerjaan_flag = [];
         var pekerjaan_id = [];
         var pekerjaan_tanggal_selesai = [];
@@ -143,7 +143,7 @@
             var jumlah_staff = my_staff.length;
             for (var i = 0; i < jumlah_detil; i++) {
                 var cell_to_process = 'assigh_to_' + detil_pekerjaan[i]['id_pekerjaan'];
-                console.log('cell to process = ' + cell_to_process);
+                //console.log('cell to process = ' + cell_to_process);
                 var cell = $('#' + cell_to_process);
                 if (cell.length > 0) {
                     var nama_staff = '';
@@ -251,6 +251,12 @@
 
             });
         }
+        function duadigit(v) {
+            if (v >= 0 && v <= 9) {
+                return '0' + v;
+            }
+            return v;
+        }
         function highchart_bar() {
 //sudut pandang => tanggal terhadap pekerjaan
             var list_tanggal = [];
@@ -265,7 +271,16 @@
                 var tanggal = detil_progress[i].waktu.substring(0, 19);
                 if (list_tanggal.indexOf(tanggal) == -1) {
                     list_tanggal.push(tanggal);
-                    list_date.push(new Date(tanggal));
+                    //console.log('tanggal '+tanggal)
+                    var dddd = new Date(tanggal.substring(0, 10));
+                    //console.log('jam '+tanggal.substring(11,13));
+                    dddd.setHours(tanggal.substring(11, 13));
+                    //console.log('menit '+tanggal.substring(14,16));
+                    dddd.setMinutes(tanggal.substring(14, 16));
+                    //console.log('detik '+tanggal.substring(17,19));
+                    dddd.setSeconds(tanggal.substring(17, 19));
+                    dddd.setMilliseconds(0);
+                    list_date.push(dddd);
                 }
                 if (series_name.indexOf(pekerjaan_nama[detil_progress[i].id_pekerjaan]) == -1) {
                     series_name.push(pekerjaan_nama[detil_progress[i].id_pekerjaan]);
@@ -274,6 +289,86 @@
                 }
                 //series_data[pekerjaan_nama[detil_progress[i].id_pekerjaan]].push(detil_progress[i].progress);
                 //series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]][tanggal]=detil_progress[i].progress;
+            }
+            var jumlah_tanggal = list_date.length;
+            if (jumlah_tanggal > 0) {
+                var area = 1;
+                console.log('jumlah tanggal = ' + jumlah_tanggal);
+                var selisih = list_date[jumlah_tanggal - 1] - list_date[0];
+                var r_ = [];
+                console.log('selisih = ' + selisih);
+
+                r_['milisecond'] = selisih / jumlah_tanggal;
+                console.log('selisih mili = ' + selisih + ' milisecond');
+
+                var second = selisih / 1000;
+                r_['second'] = second / jumlah_tanggal;
+                console.log('selisih detik = ' + second + ' second');
+
+                var menit = second / 60;
+                r_['menit'] = menit / jumlah_tanggal;
+                console.log('selisih menit = ' + menit + ' menit');
+                if (menit >= 1)
+                    area = Math.ceil(menit);
+
+                var jam = menit / 60;
+                r_['jam'] = jam / jumlah_tanggal;
+                console.log('selisih jam = ' + jam + ' jam');
+                if (jam >= 1)
+                    area = Math.ceil(jam);
+
+                var hari = jam / 24;
+                r_['hari'] = hari / jumlah_tanggal;
+                console.log('selisih hari = ' + hari + ' hari');
+                if (hari >= 1)
+                    area = Math.ceil(hari);
+
+                var minggu = hari / 7;
+                r_['minggu'] = minggu / jumlah_tanggal;
+                console.log('selisih minggu = ' + minggu + ' minggu');
+                if (minggu >= 1)
+                    area = Math.ceil(minggu);
+
+                var bulan = hari / 30;
+                r_['bulan'] = bulan / jumlah_tanggal;
+                console.log('selisih bulan = ' + bulan + ' bulan');
+                if (bulan >= 1)
+                    area = Math.ceil(bulan);
+
+                var r_index = ["milisecond", 'second', 'menit', 'jam', 'hari', 'minggu', 'bulan'];
+
+                console.log('jumlah data tanggal = ' + jumlah_tanggal);
+
+                console.log(r_index);
+                var n_r_index = r_index.length;
+                for (var i = 0; i < n_r_index; i++) {
+                    console.log(r_index[i] + '=' + r_[r_index[i]]);
+                }
+                console.log('area = ' + area);
+                var area2 = [];
+                var pecahan = selisih / area;
+                //var pecahan0 = 0;
+                var pecahan1 = pecahan;
+                var awal = list_date[0].getTime();
+                for (var i = 0; i < area; i++) {
+                    var akhir = awal + pecahan1;
+                    var m_d = new Date(awal);
+                    var a_d = new Date(akhir)
+                    area2.push(
+                            {
+                                mulai: awal,
+                                akhir: akhir,
+                                m_d: m_d.getFullYear() + '-' + duadigit(m_d.getMonth() + 1) + '-' + duadigit(m_d.getDate()) + ' ' + duadigit(m_d.getHours()) + ':' + duadigit(m_d.getMinutes()) + ':' + duadigit(m_d.getSeconds()),
+                                a_d: a_d.getFullYear() + '-' + duadigit(a_d.getMonth() + 1) + '-' + duadigit(a_d.getDate()) + ' ' + duadigit(a_d.getHours()) + ':' + duadigit(a_d.getMinutes()) + ':' + duadigit(a_d.getSeconds()),
+                                series: ''
+                            }
+                    );
+                    //pecahan0 = pecahan1;
+                    awal += pecahan;
+                    //pecahan1 += pecahan;
+                }
+                console.log('area2');
+                console.log(area2);
             }
             var t = list_tanggal.length;
             var p = series_name.length;
@@ -289,7 +384,7 @@
                 var tanggal = detil_progress[i].waktu.substring(0, 19);
                 series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]][tanggal] = detil_progress[i].progress;
             }
-
+            var area2_p = area2.length;
             for (var i in series_data2) {
                 var prev = 0;
                 //console.log(i);
@@ -297,8 +392,23 @@
                     for (var j in series_data2[i]) {
                         if (series_data2[i].hasOwnProperty(j)) {
                             //console.log(series_data2[i][j]);
+
+                            for (var t = 0; t < area2_p; t++) {
+                                //console.log(j + ' lebih  dari area2 ' + t + area2[t].m_d + ' ?');
+                                if (j >= area2[t].m_d) {
+                                    //console.log(j + ' kurang dari area2 ' + t + area2[t].a_d + ' ?');
+                                    if (j <= area2[t].a_d) {
+                                        //console.log(j + ' lebih dari series area2 ' + t + area2[t].series + ' ?');
+                                        if (j >= area2[t].series) {
+                                            area2[t].series = j;
+                                            //console.log('set area2 series to ' + j);
+                                        }
+                                    }
+                                }
+                            }
                             if (series_data2[i][j] == -1) {
                                 series_data2[i][j] = prev;
+
                             } else {
                                 prev = series_data2[i][j];
                             }
@@ -306,66 +416,80 @@
                     }
                 }
             }
+            var series_data = [];
+            for (var j = 0; j < series_name.length; j++) {
+                var nama = series_name[j];
+                //console.log(nama);
+                //console.log(area2[i].series );
+                if (!series_data[nama])
+                    series_data[nama] = [];
+            }
+            for (var i = 0; i < area2_p; i++) {
+                if (area2[i].series.length < 2)
+                    area2[i].series = area2[i].a_d;
+                for (var j = 0; j < series_name.length; j++) {
+                    var nama = series_name[j];
+                    //console.log(nama);
+                    //console.log(area2[i].series );
+                    series_data[nama][area2[i].series] = -1;
+                }
+            }
+            for (var i in series_data2) {
+                if (series_data2.hasOwnProperty(i)) {
+                    for (var j in series_data2[i]) {
+                        if (series_data2[i].hasOwnProperty(j)) {
+                            for (var t = 0; t < area2_p; t++) {
+                                if (area2[t].series.length > 0 && area2[t].series==j) {
+                                    console.log('area2 ' + t + ' set series for  ' + i + ' ' + area2[t].series + ' with  ' + j)
+                                    series_data[i][area2[t].series] = series_data2[i][j];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            for (var i in series_data) {
+                var prev=0;
+                if (series_data.hasOwnProperty(i)) {
+                    for (var j in series_data[i]) {
+                        if (series_data[i].hasOwnProperty(j)) {
+                           if(series_data[i][j]==-1) {
+                               series_data[i][j]=prev;
+                           }else{
+                               prev=series_data[i][j];
+                           }
+                        }
+                    }
+                }
+            }
+
+            console.log('area_last');
+            console.log(area2);
             console.log('highchart log');
-            console.log(list_tanggal);
-            console.log(list_date);
+            //console.log(list_tanggal);
+            //console.log(list_date);
             console.log('series_name');
             console.log(series_name);
             console.log('series_data');
-            //console.log(series_data);
+            console.log(series_data);
             console.log(series_data2);
 
             var jumlah_tanggal = list_date.length;
             console.log('jumlah_tanggal = ' + jumlah_tanggal);
             if (jumlah_tanggal > 0) {
-                var selisih = list_date[jumlah_tanggal - 1] - list_date[0];
-                var r_ = [];
-                console.log('selisih = ' + selisih);
 
-                r_['milisecond'] = selisih / jumlah_tanggal;
-                console.log('selisih tanggal = ' + selisih + ' milisecond');
-
-                var second = selisih / 1000;
-                r_['second'] = second / jumlah_tanggal;
-                console.log('selisih tanggal = ' + second + ' second');
-
-                var menit = second / 60;
-                r_['menit'] = menit / jumlah_tanggal;
-                console.log('selisih tanggal = ' + menit + ' menit');
-
-                var jam = menit / 60;
-                r_['jam'] = jam / jumlah_tanggal;
-                console.log('selisih tanggal = ' + jam + ' jam');
-
-                var hari = jam / 24;
-                r_['hari'] = hari / jumlah_tanggal;
-                console.log('selisih tanggal = ' + hari + ' hari');
-
-                var minggu = hari / 7;
-                r_['minggu'] = minggu / jumlah_tanggal;
-                console.log('selisih tanggal = ' + minggu + ' minggu');
-
-                var bulan = hari / 30;
-                r_['bulan'] = bulan / jumlah_tanggal;
-                console.log('selisih tanggal = ' + bulan + ' bulan');
-
-                var r_index = ["milisecond", 'second', 'menit', 'jam', 'hari', 'minggu', 'bulan'];
-
-                console.log('jumlah data tanggal = ' + jumlah_tanggal);
-
-                console.log(r_index);
-                var n_r_index = r_index.length;
-                for (var i = 0; i < n_r_index; i++) {
-                    console.log(r_index[i] + '=' + r_[r_index[i]]);
+                var kategori = [];
+                for(var i=0;i<area2.length;i++){
+                    kategori.push(area2[i].series);
                 }
-                var kategori = list_tanggal;
+                
                 var series1 = [];
-                for (var i in series_data2) {
-                    if (series_data2.hasOwnProperty(i)) {
+                for (var i in series_data) {
+                    if (series_data.hasOwnProperty(i)) {
                         var new_data = [];
-                        for (var j in series_data2[i]) {
-                            if (series_data2[i].hasOwnProperty(j)) {
-                                new_data.push(parseInt(series_data2[i][j]));
+                        for (var j in series_data[i]) {
+                            if (series_data[i].hasOwnProperty(j)) {
+                                new_data.push(parseInt(series_data[i][j]));
                             }
                         }
                         var new_series = {name: i, data: new_data};
@@ -384,8 +508,8 @@
             //series = [{name: 'Tokyo', data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]}, {name: 'New York', data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]}, {name: 'London', data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]}, {name: 'Berlin', data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]}];
 
 
-            console.log('kategori ');
-            console.log(kategori);
+            //console.log('kategori ');
+            //console.log(kategori);
             console.log('series');
             console.log(series);
             if ($('#grafik_highchart1').length == 0) {
@@ -432,8 +556,8 @@
                     href: ''
                 }
             };
-            console.log('highchart');
-            console.log(highchart);
+            //console.log('highchart');
+            //console.log(highchart);
             $('#grafik_highchart1').highcharts(highchart);
         }
         jQuery(document).ready(function() {
