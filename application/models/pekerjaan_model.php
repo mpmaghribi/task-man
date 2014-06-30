@@ -192,7 +192,12 @@ class pekerjaan_model extends CI_Model {
         $query = $this->db->query($query);
         return $query->result();
     }
-
+public function get_progress_by_id($list_id_progress){
+    if(count($list_id_progress)==0)return NULL;
+    $query ="select * from detil_progress where id_detil_progress in (".implode(',',$list_id_progress).")";
+    $query=$this->db->query($query);
+    return $query->result();
+}
     //membaca detil progress seorang staff untuk seluruh pekerjaannya
     public function get_progress_per_staff($id_akun) {
         if(count($id_akun)==0)return NULL;
@@ -218,9 +223,11 @@ class pekerjaan_model extends CI_Model {
         //$query = "update detil_pekerjaan set progress =" . $data . " where id_detil_pekerjaan =" . $id_detail_pkj;
         $query = "insert into detil_progress (id_detil_pekerjaan,deksripsi,progress,total_progress,waktu) values ('" . $id_detail_pkj . "','" . $deskripsi . "','" . $data . "','100','now()');";
         if ($this->db->query($query)) {
-            return 1;
+            $id_progress=$this->db->query("select currval('detil_progress_id_detil_progress_seq') as id_baru")->result();
+            //var_dump($id_progress                    );
+            return $id_progress[0]->id_baru;
         }
-        return 0;
+        return null;
     }
 
     public function sp_lihat_progress($id_akun, $id_detail_pkj) {
@@ -361,6 +368,8 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function get_draft($list_id_draft,$offset=0,$limit=100) {
+        if(count($list_id_draft)==0)
+            return NULL;
         $query = 'select pekerjaan.*,sifat_pekerjaan.* from pekerjaan inner join '
                 . ' sifat_pekerjaan '
                 . 'on sifat_pekerjaan.id_sifat_pekerjaan=pekerjaan.id_sifat_pekerjaan '
@@ -383,6 +392,13 @@ class pekerjaan_model extends CI_Model {
                 . "limit $limit offset $offset";
         //echo $query;
         $query = $this->db->query($query);
+        return $query->result();
+    }
+    
+    public function get_detil_pekerjaan_by_id($list_id_detil_pekerjaan){
+        if(count($list_id_detil_pekerjaan)==0)return NULL;
+        $query  ="select * from detil_pekerjaan where id_detil_pekerjaan in (".implode(',',$list_id_detil_pekerjaan).')';
+        $query=$this->db->query($query);
         return $query->result();
     }
 

@@ -330,7 +330,7 @@ if ($this->session->userdata('prev') != null) {
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="tombol_tutup_progress">&times;</button>
                                                             <h4 class="modal-title">Ubah Progress</h4>
                                                         </div>
                                                         <form class="cmxform form-horizontal" id="progress_form" action="#" method="POST" enctype="multipart/form-data">
@@ -402,10 +402,10 @@ if ($this->session->userdata('prev') != null) {
                                                                 <div class="form-group ">
                                                                     <label for="file1" class="control-label col-lg-3">File Progress</label>
                                                                     <div class="col-lg-8">
-                                                                        <input class="file_progress" type="file" id="file1" name="file1" value="" />
-                                                                        <input class="form-control" placeholder="Masukkan nama file anda" title="Format: nama file_nama anda" type="text" id="nama_file" name="nama_file" value="" />
-                                                                        <small>Format: nama file_nama anda</small><br>
-                                                                        <button class="btn btn-warning btn-xs" onclick="uploadFile()" type="button"> Upload File</button>
+                                                                        <input class="file_progress" type="file" id="file1" name="file1" value="" multiple=""/>
+<!--                                                                        <input class="form-control" placeholder="Masukkan nama file anda" title="Format: nama file_nama anda" type="text" id="nama_file" name="nama_file" value="" />-->
+<!--                                                                        <small>Format: nama file_nama anda</small><br>-->
+<!--                                                                        <button class="btn btn-warning btn-xs" onclick="uploadFile()" type="button"> Upload File</button>-->
 
                                                                     </div>
                                                                 </div>
@@ -426,7 +426,7 @@ if ($this->session->userdata('prev') != null) {
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button data-dismiss="modal" class="btn btn-default" id="batal_progress" type="button">Batal</button>
-                                                                <button class="btn btn-warning" data-dismiss="modal" onclick="ubah_progress()" type="button"> Ubah Progress</button>
+                                                                <button class="btn btn-warning"  onclick="ubah_progress()" type="button"> Ubah Progress</button>
                                                             </div>
                                                         </form>
                                                     </div>
@@ -434,62 +434,7 @@ if ($this->session->userdata('prev') != null) {
                                             </div>
                                         </div>
                                         <script>
-                                            $("#batal_progress").click(function(e) {
-                                                $(".tampil_progress").css("display", "none");
-                                            });
-                                            function _(el) {
-                                                return document.getElementById(el);
-                                            }
-                                            function uploadFile() {
-                                                $(".tampil_progress").css("display", "block");
-                                                var file = _("file1").files[0];
-                                                var idp = document.getElementById("id_pkj").value;
-                                                var nama_file = document.getElementById("nama_file").value;
-                                                if (file.type === "application/pdf" || file.type === "application/x-download" || file.type === "application/msword")
-                                                {
-                                                    var formdata = new FormData();
-                                                    formdata.append("file1", file);
-                                                    formdata.append("id_pekerjaan", idp);
-                                                    if (file.type === "application/x-download" || file.type === "application/pdf") {
-                                                        formdata.append("nama_file", nama_file + "_" + new Date().toDateString() + ".pdf");
-                                                    }
-                                                    else
-                                                    {
-                                                        formdata.append("nama_file", nama_file + "_" + new Date().toDateString() + ".doc");
-                                                    }
-                                                    var ajax = new XMLHttpRequest();
-                                                    ajax.upload.addEventListener("progress", progressHandler, false);
-                                                    ajax.addEventListener("load", completeHandler, false);
-                                                    ajax.addEventListener("error", errorHandler, false);
-                                                    ajax.addEventListener("abort", abortHandler, false);
-                                                    ajax.open("POST", "<?php echo site_url() ?>/file_upload_parser");
-                                                    ajax.send(formdata);
-                                                }
-                                                else
-                                                {
-                                                    //alert(file.name+" | "+file.size+" | "+file.type); 
 
-                                                    alert("Silahkan upload hanya pdf dan ms word < 2007 saja.");
-                                                }
-                                                //alert(file.name+" | "+file.size+" | "+file.type); 
-
-                                            }
-                                            function progressHandler(event) {
-                                                _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes of " + event.total;
-                                                var percent = (event.loaded / event.total) * 100;
-                                                _("progressBar").value = Math.round(percent);
-                                                _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
-                                            }
-                                            function completeHandler(event) {
-                                                _("status").innerHTML = event.target.responseText;
-                                                _("progressBar").value = 0;
-                                            }
-                                            function errorHandler(event) {
-                                                _("status").innerHTML = "Upload Failed";
-                                            }
-                                            function abortHandler(event) {
-                                                _("status").innerHTML = "Upload Aborted";
-                                            }
 
                                         </script>
 
@@ -499,7 +444,7 @@ if ($this->session->userdata('prev') != null) {
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                     ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                        ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -537,11 +482,11 @@ if ($this->session->userdata('prev') != null) {
                                             </div>
                                         </div>
                                     </div>
-                                        <?php if (in_array(6, $data_akun['idmodul'])) { ?>
+                                    <?php if (in_array(6, $data_akun['idmodul'])) { ?>
                                         <div id="penilaianPekerjaan" class="tab-pane">
-                                        <?php $this->load->view('pekerjaan/penilaian'); ?>
+                                            <?php $this->load->view('pekerjaan/penilaian'); ?>
                                         </div>
-<?php } ?>
+                                    <?php } ?>
                                 </div>
                             </div>
 
@@ -563,7 +508,7 @@ if ($this->session->userdata('prev') != null) {
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-<?php $this->load->view('taskman_rightbar_page') ?>
+        <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
@@ -722,50 +667,7 @@ if ($this->session->userdata('prev') != null) {
         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + document.getElementById('id_detail_pkj').value);
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
 
-        function ubah_progress()
-        {
 
-            var data_progress = document.getElementById("progress").value;
-            var idp = document.getElementById("idp").value;
-            var log_perubahan = document.getElementById("perubahan").value;
-            var nama_file = document.getElementById("nama_file").value;
-            var file = document.getElementById("file1").value;
-//            if (log_perubahan === "" || nama_file === "" || data_progress === "" || file === "")
-//            {
-//                alert("Silahkan lengkapi terlebih dahulu.");
-//                exit();
-//            }
-            // else{
-            $.ajax({// create an AJAX call...
-                data:
-                        {
-                            id_detail_pkj: idp,
-                            data_progress: data_progress,
-                            perubahan: log_perubahan
-                        }, // get the form data
-                type: "POST", // GET or POST
-                url: "<?php echo site_url() ?>/pekerjaan/update_progress", // the file to call
-                cache: false,
-                success: function(response) { // on success..
-                    var json = jQuery.parseJSON(response);
-
-                    if (json.status === "OK") {
-                        alert("Progress berhasil diupdate!. Pastikan anda sudah melakukan upload file terlebih dahulu.");
-                        var html = "";
-                        html += '<div class="progress progress-striped progress-xs">' +
-                                '<div style="width:' + data_progress + '%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="' + data_progress + '" role="progressbar" class="progress-bar progress-bar-warning">' +
-                                '<span class="sr-only">' + data_progress + '% Complete (success)</span>' +
-                                '</div>' +
-                                '</div>';
-                        $("#progress_html").html(html);
-                        //window.location.href = "";
-                    } else {
-                        alert("Data gagal di update");
-                    }
-                }
-            });
-            // }
-        }
         function show_progress(id_detail_pkj, id_user)
         {
 
@@ -896,4 +798,125 @@ if ($this->session->userdata('prev') != null) {
                 }
             });
         });
+        $("#batal_progress").click(function(e) {
+            $(".tampil_progress").css("display", "none");
+        });
+        function _(el) {
+            return document.getElementById(el);
+        }
+
+        function progressHandler(event) {
+            _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes of " + event.total;
+            var percent = (event.loaded / event.total) * 100;
+            _("progressBar").value = Math.round(percent);
+            _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+        }
+        function completeHandler(event) {
+            _("status").innerHTML = '';
+            _("progressBar").value = 0;
+        }
+        function errorHandler(event) {
+            _("status").innerHTML = "Upload Failed";
+        }
+        function abortHandler(event) {
+            _("status").innerHTML = "Upload Aborted";
+        }
+        function ubah_progress()
+        {
+
+            var data_progress = document.getElementById("progress").value;
+            var idp = document.getElementById("idp").value;
+            var log_perubahan = document.getElementById("perubahan").value;
+//            /var nama_file = document.getElementById("nama_file").value;
+            var file = document.getElementById("file1").value;
+//            if (log_perubahan === "" || nama_file === "" || data_progress === "" || file === "")
+//            {
+//                alert("Silahkan lengkapi terlebih dahulu.");
+//                exit();
+//            }
+            // else{
+            $.ajax({// create an AJAX call...
+                data:
+                        {
+                            id_detail_pkj: idp,
+                            data_progress: data_progress,
+                            perubahan: log_perubahan
+                        }, // get the form data
+                type: "POST", // GET or POST
+                url: "<?php echo site_url() ?>/pekerjaan/update_progress", // the file to call
+                cache: false,
+                success: function(response) { // on success..
+                    var json = jQuery.parseJSON(response);
+
+                    if (json.status === "OK") {
+                        var id_progress = json.id_progress;
+                        $(".tampil_progress").css("display", "block");
+                        var ajax = new XMLHttpRequest();
+                        ajax.upload.addEventListener("progress", progressHandler, false);
+                        ajax.addEventListener("load", completeHandler, false);
+                        ajax.addEventListener("error", errorHandler, false);
+                        ajax.addEventListener("abort", abortHandler, false);
+                        ajax.open("POST", "<?php echo site_url() ?>/pekerjaan/upload_file_progress");
+                        var formdata = new FormData();
+                        var berkas = _("file1").files;
+                        var p = berkas.length;
+                        for(var i=0;i<p;i++){
+                        formdata.append("berkas[]", berkas[i]);
+                    }
+                        formdata.append("id_progress", id_progress);
+                        ajax.send(formdata);
+
+
+
+                        //alert("Progress berhasil diupdate!. Pastikan anda sudah melakukan upload file terlebih dahulu.");
+                        var html = "";
+                        html += '<div class="progress progress-striped progress-xs">' +
+                                '<div style="width:' + data_progress + '%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="' + data_progress + '" role="progressbar" class="progress-bar progress-bar-warning">' +
+                                '<span class="sr-only">' + data_progress + '% Complete (success)</span>' +
+                                '</div>' +
+                                '</div>';
+                        $("#progress_html").html(html);
+                        //window.location.href = "";
+                        $('#tombol_tutup_progress').trigger('click');
+                    } else {
+                        alert("Data gagal di update");
+                    }
+                }
+            });
+            // }
+        }
+        function uploadFile() {
+            $(".tampil_progress").css("display", "block");
+            var file = _("file1").files[0];
+            var idp = document.getElementById("id_pkj").value;
+            var nama_file = document.getElementById("nama_file").value;
+            if (file.type === "application/pdf" || file.type === "application/x-download" || file.type === "application/msword")
+            {
+                var formdata = new FormData();
+                formdata.append("file1", file);
+                formdata.append("id_pekerjaan", idp);
+                if (file.type === "application/x-download" || file.type === "application/pdf") {
+                    formdata.append("nama_file", nama_file + "_" + new Date().toDateString() + ".pdf");
+                }
+                else
+                {
+                    formdata.append("nama_file", nama_file + "_" + new Date().toDateString() + ".doc");
+                }
+                var ajax = new XMLHttpRequest();
+                ajax.upload.addEventListener("progress", progressHandler, false);
+                ajax.addEventListener("load", completeHandler, false);
+                ajax.addEventListener("error", errorHandler, false);
+                ajax.addEventListener("abort", abortHandler, false);
+                ajax.open("POST", "<?php echo site_url() ?>/file_upload_parser");
+                ajax.send(formdata);
+            }
+            else
+            {
+                //alert(file.name+" | "+file.size+" | "+file.type); 
+
+                alert("Silahkan upload hanya pdf dan ms word < 2007 saja.");
+            }
+            //alert(file.name+" | "+file.size+" | "+file.type); 
+
+        }
     </script>

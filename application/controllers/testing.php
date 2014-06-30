@@ -5,21 +5,6 @@ if (!defined('BASEPATH'))
 
 class testing extends CI_Controller {
 
-    /**
-     * Index Page for this controller.
-     *
-     * Maps to the following URL
-     * 		http://example.com/index.php/welcome
-     * 	- or -  
-     * 		http://example.com/index.php/welcome/index
-     * 	- or -
-     * Since this controller is set as the default controller in 
-     * config/routes.php, it's displayed at http://example.com/
-     *
-     * So any other public methods not prefixed with an underscore will
-     * map to /index.php/welcome/<method_name>
-     * @see http://codeigniter.com/user_guide/general/urls.html
-     */
     public function index() {
         echo base_url();
         echo "<br>";
@@ -44,9 +29,16 @@ class testing extends CI_Controller {
     }
 
     public function upload_view() {
+        echo strcmp('3','2');
         $this->load->view('testing/upload');
     }
-
+    
+    public function do_upload(){
+        $teks=$this->input->post('teks');
+        var_dump($teks);
+        
+    }
+    
     public function atasan() {
         $session = $this->session->userdata('logged_in');
         $atasan_url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $session['user_id'] . "/format/json";

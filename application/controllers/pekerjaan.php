@@ -61,7 +61,7 @@ class pekerjaan extends ceklogin {
             //echo $sistem . ' ' . $baru.' ';
             $banding = strcmp(date('Y-m-d'), $baru);
             //echo $banding;
-            if ($banding <= 0) {
+            if ($banding <= 0) { // jika string kiri lebih kecil atau sama
                 $update['flag_usulan'] = '2';
                 $ubah = $this->pekerjaan_model->update_pekerjaan($update, $id_pekerjaan);
                 if ($ubah) {
@@ -444,30 +444,50 @@ class pekerjaan extends ceklogin {
 //        }
     }
 
-    public function upload_file($files, $path, $id_pekerjaan) {
+    public function upload_file($files, $path, $id_pekerjaan, $id_progress = null) {
         $temp = $this->session->userdata('logged_in');
         $this->load->model("berkas_model");
-        $jumlah_file = count($files["name"]);
-        for ($i = 0; $i < $jumlah_file; $i++) {
-            if ($files["tmp_name"][$i] != "") {
-                $filename = $files["name"][$i];
-                $new_file_path = $path . $filename;
-                $e = explode('.', $filename);
-                $ext = '.' . end($e);
-                $filename = str_replace($ext, '', $filename);
-                $c = 1;
-                while (file_exists($new_file_path)) {
-                    $new_file_path = $path . $filename . $c . $ext;
-                    $c++;
-                }
-                if (move_uploaded_file($files["tmp_name"][$i], $new_file_path)) {
-                    $this->berkas_model->upload_file($temp['user_id'], $new_file_path, $id_pekerjaan);
-                    echo "berhasil memindah file";
+        //echo 'jumlah file ' . $jumlah_file;
+        if (is_array($files['name'])) {
+            $jumlah_file = count($files["name"]);
+            for ($i = 0; $i < $jumlah_file; $i++) {
+                if ($files["tmp_name"][$i] != "") {
+                    $filename = $files["name"][$i];
+                    $new_file_path = $path . $filename;
+                    $e = explode('.', $filename);
+                    $ext = '.' . end($e);
+                    $filename = str_replace($ext, '', $filename);
+                    $c = 1;
+                    while (file_exists($new_file_path)) {
+                        $new_file_path = $path . $filename . $c . $ext;
+                        $c++;
+                    }
+                    if (move_uploaded_file($files["tmp_name"][$i], $new_file_path)) {
+                        $this->berkas_model->upload_file($temp['user_id'], $new_file_path, $id_pekerjaan, $id_progress);
+                        echo "berhasil memindah file";
+                    } else {
+                        echo "gagal memindah file";
+                    }
                 } else {
-                    echo "gagal memindah file";
+                    echo "nama file kosong";
                 }
+            }
+        } else {
+            $filename = $files["name"];
+            $new_file_path = $path . $filename;
+            $e = explode('.', $filename);
+            $ext = '.' . end($e);
+            $filename = str_replace($ext, '', $filename);
+            $c = 1;
+            while (file_exists($new_file_path)) {
+                $new_file_path = $path . $filename . $c . $ext;
+                $c++;
+            }
+            if (move_uploaded_file($files["tmp_name"], $new_file_path)) {
+                $this->berkas_model->upload_file($temp['user_id'], $new_file_path, $id_pekerjaan, $id_progress);
+                echo "berhasil memindah file";
             } else {
-                echo "nama file kosong";
+                echo "gagal memindah file";
             }
         }
     }
@@ -1501,8 +1521,8 @@ class pekerjaan extends ceklogin {
         if ($status == 'OK') {
             if ($update_data) {//update nilai
                 $status_nilai = $this->pekerjaan_model->nilai_update($insert, $update_id);
-                if($update2){
-                    $status_nilai=$this->pekerjaan_model->nilai_update($update2_data,$update2_id);
+                if ($update2) {
+                    $status_nilai = $this->pekerjaan_model->nilai_update($update2_data, $update2_id);
                 }
             } else {//nilai baru
                 $status_nilai = $this->pekerjaan_model->nilai_set($insert);
@@ -1626,9 +1646,9 @@ class pekerjaan extends ceklogin {
         $result2 = $this->pekerjaan_model->sp_tambah_progress($data, $id_detail_pkj, $perubahan);
 
 
-        if ($result == 1 && $result2 == 1)
+        if ($result2 != null && $result == 1)
             $status = array(
-                'status' => 'OK');
+                'status' => 'OK', 'id_progress' => $result2);
         else
             $status = array('status' => 'NotOK');
 
@@ -1640,15 +1660,77 @@ class pekerjaan extends ceklogin {
 //        }
     }
 
+    public function upload_file_progress() {
+        $id_progress = pg_escape_string($this->input->post('id_progress'));
+        $this->load->model(array('pekerjaan_model'));
+        $session = $this->session->userdata('logged_in');
+        $list_progress = $this->pekerjaan_model->get_progress_by_id(array($id_progress));
+        echo 'membaca data progress yang baru saja dilakukan<br>';
+        foreach ($list_progress as $progress) {
+            $id_detil_pekerjaan_progress = $progress->id_detil_pekerjaan;
+            $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan_by_id(array($id_detil_pekerjaan_progress));
+            $terlibat = false;
+            echo 'mengecek apakah terlibat dalam pekerjaan tersebut<br>';
+            foreach ($detil_pekerjaan as $detil) {
+                if ($detil->id_akun == $session['id_akun']) {
+                    $terlibat = true;
+                    $id_pekerjaan = $detil->id_pekerjaan;
+                    echo 'terlibat<br>';
+                    break;
+                }
+            }
+            $berhak = false;
+            if ($terlibat) {
+                echo 'mengecek apakah berhak untuk melakukan upload progress<br>';
+
+                $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
+                if (count($pekerjaan) > 0) {
+                    echo 'pekerjaan ditemukan<br>';
+                    $pekerjaan = $pekerjaan[0];
+                    $deadline_pekerjaan = substr($pekerjaan->tgl_selesai, 0, 10);
+                    $sekarang = date('Y-m-d');
+                    if ($pekerjaan->flag_usulan == '2' && strcmp($deadline_pekerjaan, $sekarang) >= 0) {
+                        echo 'pekerjaan dalam keadaaan boleh dikerjakan<br>';
+                        $berhak = true;
+                    }
+                }
+            }
+            if ($berhak) {
+                echo 'apakah ada berkas yang dterima<br>';
+                if (isset($_FILES["berkas"])) {
+                    echo 'ada berkas diterima<br>';
+                    $path = './uploads/' . date('Y') . '/' . date('m') . '/' . date('d') . '/' . $id_pekerjaan . '/' . $id_progress . '/';
+                    //$path = './uploads/pekerjaan/' . $id_pekerjaan_baru . '/';
+                    $this->load->library('upload');
+                    $files = $_FILES["berkas"];
+                    if (count($files) > 0) {
+                        if (!file_exists($path)) {
+                            mkdir($path, 0777, true);
+                            echo 'membuat directory baru untuk menyimpan file yang diupload<br>';
+                        }
+                    }
+                    echo 'moving file to upload directory';
+                    //var_dump($files);
+                    $this->upload_file($files, $path, $id_pekerjaan, $id_progress);
+                }
+            }
+        }
+    }
+
     public function show_log_progress() {
         $temp = $this->session->userdata('logged_in');
         $id_detail_pkj = $this->input->post("id_detail_pkj");
         $id_akun = $this->input->post("user_id");
-        $this->load->model("pekerjaan_model");
+        $this->load->model(array("pekerjaan_model",'berkas_model'));
         $result = $this->pekerjaan_model->sp_history_progress($id_akun, $id_detail_pkj);
+        $list_id_progress=array();
+        foreach ($result as $pr){
+            $list_id_progress[]=$pr->id_detil_progress;
+        }
+        $berkas = $this->berkas_model->get_berkas_progress($list_id_progress);
         //var_dump($result);
         $status = array(
-            'status' => 'OK', 'data' => $result);
+            'status' => 'OK', 'data' => $result,'berkas'=>$berkas);
 
         echo json_encode($status);
     }

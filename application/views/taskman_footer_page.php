@@ -58,6 +58,7 @@
 <script src="<?php echo base_url() ?>assets/js/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url() ?>assets/js/dynamic_table_init.js"></script>
 <script>
+    var satuhari = 1000*60*60*24;
     function req_notifikasi() {
 
     }
@@ -177,8 +178,8 @@
                             console.log('pekerjaan staff ' + id);
                             var jumlah_hari_kerja = list_pekerjaan_deadline[id] - list_pekerjaan_mulai[id];
                             var jumlah_hari_lewat = sekarang - list_pekerjaan_mulai[id];
-                            jumlah_hari_kerja = jumlah_hari_kerja / satu_hari;
-                            jumlah_hari_lewat = jumlah_hari_lewat / satu_hari;
+                            jumlah_hari_kerja = jumlah_hari_kerja / satuhari;
+                            jumlah_hari_lewat = jumlah_hari_lewat / satuhari;
                             console.log('perbedaaan hari ' + id)
                             console.log('jumlah hari kerja = ' + jumlah_hari_kerja);
                             console.log('jumlah hari lewat = ' + jumlah_hari_lewat);

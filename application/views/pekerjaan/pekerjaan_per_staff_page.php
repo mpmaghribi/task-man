@@ -82,7 +82,23 @@
 
         var my_staff = jQuery.parseJSON('<?php echo json_encode($my_staff); ?>');
         var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
-        var detil_progress = jQuery.parseJSON('<?php echo json_encode($detil_progress); ?>');
+        var detil_progress=[];
+        <?php 
+        //var_dump($detil_progress);
+        foreach ($detil_progress as $progress){
+            ?>
+                var progress = {
+                    id_detil_progress:<?=$progress->id_detil_progress;?>,
+                    id_detil_pekerjaan:<?=$progress->id_detil_pekerjaan;?>,
+                    deskripsi:'<?php echo str_replace("\n","<br>",$progress->deksripsi);?>',
+                    progress:<?=$progress->progress;?>,
+                    waktu:'<?=$progress->waktu;?>',
+                    id_pekerjaan:<?=$progress->id_pekerjaan;?>
+                };
+                detil_progress.push(progress);
+                <?php
+        }
+        ?>
         var pekerjaan_flag = [];
         var pekerjaan_id = [];
         var pekerjaan_tanggal_selesai = [];

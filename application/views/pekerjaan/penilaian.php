@@ -14,15 +14,15 @@
         }
         foreach ($listassign_pekerjaan as $detail) {
             ?>
-                                                                                                <tr>
-                                                                                                    <td style="vertical-align: middle"><?php echo $list_user[$detail->id_akun]; ?></td>
-                                                                                                    <td>
-                                                                                                        <div class="btn-group btn-group-lg btn-xs" style="float: right; padding: -25px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                                                                                            <a class="btn btn-info " href="#modal_" data-toggle="modal" id="target_<?php echo $detail->id_akun; ?>" onclick="load_nilai(<?php echo $detail->id_akun; ?>, 'target');" style="font-size: 12px;padding: 4px 10px;">Target</a>
-                                                                                                            <a class="btn btn-success" href="#modal_" data-toggle="modal" id="realisasi_<?php echo $detail->id_akun; ?>" style="font-size: 12px;padding: 4px 10px;" onclick="load_nilai(<?php echo $detail->id_akun; ?>, 'realisasi');">Realisasi</a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
+                                                                                                        <tr>
+                                                                                                            <td style="vertical-align: middle"><?php echo $list_user[$detail->id_akun]; ?></td>
+                                                                                                            <td>
+                                                                                                                <div class="btn-group btn-group-lg btn-xs" style="float: right; padding: -25px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
+                                                                                                                    <a class="btn btn-info " href="#modal_" data-toggle="modal" id="target_<?php echo $detail->id_akun; ?>" onclick="load_nilai(<?php echo $detail->id_akun; ?>, 'target');" style="font-size: 12px;padding: 4px 10px;">Target</a>
+                                                                                                                    <a class="btn btn-success" href="#modal_" data-toggle="modal" id="realisasi_<?php echo $detail->id_akun; ?>" style="font-size: 12px;padding: 4px 10px;" onclick="load_nilai(<?php echo $detail->id_akun; ?>, 'realisasi');">Realisasi</a>
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                        </tr>
             <?php
         }
         //print_r($staff_array);
@@ -60,9 +60,9 @@
                 <tbody>
                     <tr id="row_target">
                         <td><input type="text" id="input_target_ak"        value="ak" style="display: none" class="form-control"/><label id="label_target_ak">ak</label></td>
-                        <td><input type="text" id="input_target_kuantitas" value="ak" style="display: none" class="form-control"/><label id="label_target_kuantitas">kuantitas output</label></td>
+                        <td><input type="text" id="input_target_kuantitas" value="ak" style="display: none" class="form-control" /><label id="label_target_kuantitas">kuantitas output</label></td>
                         <td><input type="text" id="input_target_kualitas"  value="ak" style="display: none" class="form-control"/><label id="label_target_kualitas">kualitas mutu</label></td>
-                        <td><input type="text" id="input_target_waktu"     value="ak" style="display: none" class="form-control"/><label id="label_target_waktu">waktu</label></td>
+                        <td><input type="text" id="input_target_waktu"     value="ak" style="display: none" class="form-control" placeholder="bulan"/><label id="label_target_waktu">waktu</label></td>
                         <td><input type="text" id="input_target_biaya"     value="ak" style="display: none" class="form-control"/><label id="label_target_biaya">biaya</label></td>
                     </tr>
                 </tbody>
@@ -92,7 +92,7 @@
                         <td><input type="text" id="input_realisasi_ak"        value="ak" style="display: none" class="form-control"/><label id="label_realisasi_ak"       >ak</label></td>
                         <td><input type="text" id="input_realisasi_kuantitas" value="ak" style="display: none" class="form-control"/><label id="label_realisasi_kuantitas">kuantitas output</label></td>
                         <td><input type="text" id="input_realisasi_kualitas"  value="ak" style="display: none" class="form-control"/><label id="label_realisasi_kualitas" >kualitas mutu</label></td>
-                        <td><input type="text" id="input_realisasi_waktu"     value="ak" style="display: none" class="form-control"/><label id="label_realisasi_waktu"    >waktu</label></td>
+                        <td><input type="text" id="input_realisasi_waktu"     value="ak" style="display: none" class="form-control" placeholder="bulan"/><label id="label_realisasi_waktu"    >waktu</label></td>
                         <td><input type="text" id="input_realisasi_biaya"     value="ak" style="display: none" class="form-control"/><label id="label_realisasi_biaya"    >biaya</label></td>
                         <td><label id="label_penghitungan">0</label></td>
                         <td><label id="label_skp">0</label></td>
@@ -161,7 +161,7 @@
                         <div class="form-group ">
                             <label for="waktu" class="control-label col-lg-3">Waktu</label>
                             <div class="col-lg-6">
-                                <input class=" form-control" id="waktu" name="waktu" type="text" />
+                                <input class=" form-control" id="waktu" name="waktu" type="text" placeholder="bulan"/>
                             </div>
                         </div>
                         <div class="form-group ">
@@ -231,7 +231,7 @@ foreach ($listassign_pekerjaan as $detil) {
         label_target_ak.html('0');
         label_target_kuantitas.html('0');
         label_target_kualitas.html('0');
-        label_target_waktu.html('0');
+        label_target_waktu.html('0 bulan');
         label_target_biaya.html('0');
 
         input_target_ak.val('0');
@@ -243,7 +243,7 @@ foreach ($listassign_pekerjaan as $detil) {
         label_realisasi_ak.html('0');
         label_realisasi_kuantitas.html('0');
         label_realisasi_kualitas.html('0');
-        label_realisasi_waktu.html('0');
+        label_realisasi_waktu.html('0 bulan');
         label_realisasi_biaya.html('0');
 
         input_realisasi_ak.val('0');
@@ -282,7 +282,7 @@ foreach ($listassign_pekerjaan as $detil) {
                         label_target_ak.html(target['ak']);
                         label_target_kuantitas.html(target['kuatitas_output']);
                         label_target_kualitas.html(target['kualitas_mutu']);
-                        label_target_waktu.html(target['waktu']);
+                        label_target_waktu.html(target['waktu'] + ' bulan');
                         label_target_biaya.html(target['biaya']);
 
                         input_target_ak.val(target['ak']);
@@ -298,7 +298,7 @@ foreach ($listassign_pekerjaan as $detil) {
                         label_realisasi_ak.html(realisasi['ak']);
                         label_realisasi_kuantitas.html(realisasi['kuatitas_output']);
                         label_realisasi_kualitas.html(realisasi['kualitas_mutu']);
-                        label_realisasi_waktu.html(realisasi['waktu']);
+                        label_realisasi_waktu.html(realisasi['waktu'] + ' bulan');
                         label_realisasi_biaya.html(realisasi['biaya']);
                         label_realisasi_hitung.html(realisasi['penghitungan']);
                         label_realisasi_skp.html(realisasi['nilai_skp']);
@@ -462,6 +462,7 @@ foreach ($listassign_pekerjaan as $detil) {
                     for (var i = 0; i < jml; i++)
                     {
                         var waktu = json.data[i].waktu;
+                        //console.log(json.data[i]);
                         var tanggal = new Date(waktu.substring(0, 10));
                         if (waktu.length > 19) {
                             waktu = waktu.substring(0, 19);
@@ -469,11 +470,11 @@ foreach ($listassign_pekerjaan as $detil) {
                         var html = '';
 
                         html += "<tr>";
-                        html += "<td>" + count + "";
+                        html += "<td>" + count;
                         html += "</td>";
 
-                        html += "<td>" + json.data[i].deksripsi + "";
-                        html += "</td>";
+                        html += '<td >' + json.data[i].deksripsi;
+                        html += '<div id="deskripsi_' + json.data[i].id_detil_progress + '" style="font-size:8pt; color:blue;text-align:left"></div></td>';
                         html += "<td>" + json.data[i].progress + "%";
                         html += "</td>";
                         html += "<td>" + waktu + "";
@@ -481,6 +482,11 @@ foreach ($listassign_pekerjaan as $detil) {
                         html += "</tr>";
                         count++;
                         tabel_body.append(html);
+                    }
+                    var l = json.berkas.length;
+                    for (var i = 0; i < l; i++) {
+                        var berkas = json.berkas[i];
+                        $('#deskripsi_' + berkas.id_progress).append('<br><a target="_blank" href="<?php echo base_url() ?>download?id_file=' + berkas.id_file + '" style="font-size:7pt; color:blue;">' + basename(berkas.nama_file) + '</a>');
                     }
                     //$('#tabel_penilaian_progress').dataTable();
                 } else {
@@ -617,5 +623,15 @@ foreach ($listassign_pekerjaan as $detil) {
             }
         });
     }
-
+    function basename(nama) {
+        var p = nama.length;
+        var h = '';
+        for (var i = p - 1; i > 0; i--) {
+            if (nama[i] == '/') {
+                break;
+            }
+            h = nama[i]+h;
+        }
+        return h;
+    }
 </script>
