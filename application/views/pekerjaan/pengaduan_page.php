@@ -57,8 +57,8 @@
                                                                 <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button">Pilihan <span class="caret"></span></button>
                                                                 <ul role="menu" class="dropdown-menu">
                                                                     <li><a href="#" id="selesai_pengaduan" onclick="selesai_pengaduan(<?php echo $value->id_pengaduan?>)" >Selesai</a></li>
-                                                                                                        <li><a href="#pengaduan_pkj" onclick="terima_pengaduan('<?php echo $value->id_pengaduan; ?>')" data-toggle="modal" >Terima</a></li> 
-                                                                                                        <li><a href="#tolak_pengaduan" data-toggle="modal" onclick="tolak_pengaduan(<?php echo $value->id_pengaduan?>)" >Tolak</a></li>
+                                                                    <li><a href="#pengaduan_pkj" onclick="terima_pengaduan('<?php echo $value->id_pengaduan; ?>')" data-toggle="modal" >Terima</a></li> 
+                                                                    <li><a href="#tolak_pengaduan" data-toggle="modal" onclick="tolak_pengaduan(<?php echo $value->id_pengaduan?>)" >Tolak</a></li>
 
                                                                 </ul>
                                                             </div>

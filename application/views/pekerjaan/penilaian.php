@@ -104,7 +104,7 @@
                 <a class="btn btn-success pull-right" href="javascript:void(0);" style="font-size: 12px;padding: 7px 10px;" id="tombol_simpan_realisasi" onclick="simpan_realisasi()">Simpan</a>
             </div>
         </div>
-        <div class="col-md-4" style="display:none" id="div_show_progress">
+        <div class="cmxform form-horizontal col-md-8" style="display:none" id="div_show_progress">
             <h4>Progress Staff</h4>
             <table class="table table-hover general-table" style="vertical-align: middle; text-align: center" id="tabel_penilaian_progress">
                 <thead>

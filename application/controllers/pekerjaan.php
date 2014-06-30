@@ -96,9 +96,9 @@ class pekerjaan extends ceklogin {
         $tgl2 = $this->input->post("tgl_pengaduan2");
         $urgensitas = $this->input->post("urgensitas");
         $staff = $this->input->post("staff_rsud");
-        foreach ($staff as $value) {
-            echo ($value);
-        }
+//        foreach ($staff as $value) {
+//            echo ($value);
+//        }
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
         $sifat_pkj = 2;
@@ -125,7 +125,7 @@ class pekerjaan extends ceklogin {
             $id_pengaduan = $value->id_pengaduan;
         }
         $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan($sifat_pkj, $parent_pkj, $nama_pkj, $deskripsi_pkj, $tgl_mulai_pkj, $tgl_selesai_pkj, $prioritas, $status_pkj, $asal_pkj, $id_pengaduan, "insidentil");
-        $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
+//        $this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
         if ($id_pekerjaan != NULL) {
             foreach ($staff as $val) {//val itu nip
 //                if (strlen($val) == 0) {
