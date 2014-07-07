@@ -109,5 +109,5 @@ function ubah_status_pekerjaan(id, flag, sekarang, tgl_mulai, tgl_selesai, tgl_r
     }
     //console.log('set ' + id + ' to id status ' + status_id + ' => ' + status_nama[status_id] + '  |||||  ' + min_element_status[id]);
     $('#' + id).html(new_label);
-    console.log('id = '+id+' mulai = ' + tgl_mulai + ' sekarang = ' + sekarang + ' deadline = ' + tgl_selesai+' progress = '+progress+' totalprogress = '+total_progress[id]);
+    //console.log('id = '+id+' mulai = ' + tgl_mulai + ' sekarang = ' + sekarang + ' deadline = ' + tgl_selesai+' progress = '+progress+' totalprogress = '+total_progress[id]);
 }

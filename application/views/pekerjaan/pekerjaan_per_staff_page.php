@@ -57,6 +57,33 @@
                             </div>
                         </section>
                     </div>
+					<div class="modal fade" id="modalFilterPekerjaan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" >
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="tombol_tutup">&times;</button>
+                                                    <h4 class="modal-title">Pilih Pekerjaan</h4>
+                                                </div>
+                                                <div class="modal-body" id="tambahkan_staff_body">
+                                                    <table id="tabel_list_pekerjaan_enroll" class="table table-hover general-table">
+                                                        <thead id="tabel_list_enroll_staff_head">
+                                                            <tr id="tabel_list_enroll_staff_head">
+                                                                <th>No</th>
+                                                                <th>Nama Pekerjaan</th>
+                                                                <th>Enroll</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tabel_list_pekerjaan_enroll_body">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
+                                                    <button data-dismiss="modal" class="btn btn-success" type="button" onclick="pilih_pekerjaan_ok();">Simpan</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                     <div class="col-md-12" id="div_grafik">
                     </div>
                 </div>
@@ -76,13 +103,14 @@
     <script src="<?php echo base_url() ?>assets/js/morris-chart/morris.js"></script>
     <script src="<?php echo base_url() ?>assets/js/highchart/js/highcharts.js"></script>
     <script src="<?php echo base_url() ?>assets/js/highchart/js/modules/exporting.js"></script>
-    <script>
+    <script id="list_variabel">
 
         document.title = "Daftar Pekerjaan <?php echo $nama_staff; ?> - Task Management";
 
         var my_staff = jQuery.parseJSON('<?php echo json_encode($my_staff); ?>');
         var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
         var detil_progress = [];
+		
 <?php
 //var_dump($detil_progress);
 foreach ($detil_progress as $progress) {
@@ -115,6 +143,10 @@ foreach ($detil_progress as $progress) {
 <?php } ?>
         console.log("pekerjaan_nama");
         console.log(pekerjaan_nama);
+		var batas_tanggal_bawah='';
+		var batas_tanggal_atas='';
+		</script>
+		<script>
         function get_flag(id_pekerjaan) {
             var jumlah_pekerjaan = pekerjaan_id.length;
             for (var i = 0; i < jumlah_pekerjaan; i++) {
@@ -123,6 +155,8 @@ foreach ($detil_progress as $progress) {
             }
             return 1;
         }
+		</script>
+		<script>
         function get_tanggal_selesai(id_pekerjaan) {
             var jumlah_pekerjaan = pekerjaan_id.length;
             for (var i = 0; i < jumlah_pekerjaan; i++) {
@@ -130,6 +164,8 @@ foreach ($detil_progress as $progress) {
                     return pekerjaan_tanggal_selesai[i];
             }
         }
+		</script>
+		<script>
         function get_tanggal_mulai(id_pekerjaan) {
             var jumlah_pekerjaan = pekerjaan_id.length;
             for (var i = 0; i < jumlah_pekerjaan; i++) {
@@ -137,6 +173,8 @@ foreach ($detil_progress as $progress) {
                     return pekerjaan_tanggal_mulai[i];
             }
         }
+		</script>
+		<script>
         function fill_tabel_pekerjaan() {
             var jumlah_detil = detil_pekerjaan.length;
             console.log('jumlah detil = ' + jumlah_detil);
@@ -164,7 +202,8 @@ foreach ($detil_progress as $progress) {
                 }
             }
         }
-
+		</script>
+		<script>
         function morris_bar() {
             //sudut pandang => pekerjaan terhadap tanggal
             var jumlah_detil_progress = detil_progress.length;
@@ -231,7 +270,7 @@ foreach ($detil_progress as $progress) {
 
 
             if ($('#grafik_morris').length == 0) {
-                $('#div_grafik').append('<div id="grafik_morris"></div');
+                $('#div_grafik').append('<div id="grafik_morris"></div>');
             }
             Morris.Bar({
                 element: 'grafik_morris',
@@ -251,20 +290,104 @@ foreach ($detil_progress as $progress) {
 
             });
         }
+		</script>
+		<script>
         function duadigit(v) {
             if (v >= 0 && v <= 9) {
                 return '0' + v;
             }
             return v;
         }
-        function highchart_bar() {
-//sudut pandang => tanggal terhadap pekerjaan
-            var list_tanggal = [];
+		</script>
+		<script id="buat_filter_grafik">
+		function buat_filter_graph(list_date){
+			if(list_date.length==0)
+			return 0;
+			
+			if ($('#grafik_morris').length == 0) {
+                $('#div_grafik').append('<div class="cmxform form-horizontal"><div id="grafik_filter" class="form-group"></div></div>');
+            }
+			var filter_div = $('#grafik_filter');
+			filter_div.append('<label class="control-label col-lg-3">Filter Tanggal</label>'+
+                              '<div class="col-lg-4">'+
+                              '<div class="input-group input-large" data-date-format="dd-mm-yyyy">'+
+                              '<input id="graf_tanggal_mulai" readonly type="text" class="form-control " value="" name="">'+
+                              '<span class="input-group-addon">Sampai</span>'+
+                              '<input id="graf_tanggal_akhir" readonly type="text" class="form-control " value="" name="">'+
+                              '</div>'+
+							  '<input type="button" class="btn btn-success" value="Tampilkan" style="display:none">'+
+                              '</div>'+
+							  '<a class="btn btn-success" data-toggle="modal" href="#modalFilterPekerjaan" onclick="filter_pekerjaan();">Filter Pekerjaan</a>'
+							  
+							  );
+			//var graf_tanggal_mulai=$('#graf_tanggal_mulai');
+			//var graf_tanggal_akhir=$('#graf_tanggal_akhir');
+			var tanggal_mulai = list_date[0];
+			var tanggal_akhir = list_date[list_date.length-1];
+			var tanggal_akhir2=tanggal_akhir;
+			var tanggal_mulai2=tanggal_mulai;
+			var check_awal = $('#graf_tanggal_mulai').datepicker({
+				format: 'dd-mm-yyyy',
+				onRender:function(date){
+					return date.valueOf() < tanggal_mulai.valueOf() || date.valueOf() > tanggal_akhir.valueOf()  ? 'disabled':'';
+				}
+			}).on('changeDate', function(ev) {
+				console.log(check_awal.date);
+				tanggal_mulai2=check_awal.date;
+				batas_tanggal_bawah=tanggal_mulai2.getFullYear()+'-'+duadigit(tanggal_mulai2.getMonth()+1)+'-'+duadigit(tanggal_mulai2.getDate());
+				highchart_bar_process();
+				check_awal.hide();
+                //$('#graf_tanggal_akhir').focus();
+            }).data('datepicker');
+			var check_akhir = $('#graf_tanggal_akhir').datepicker({
+				format: 'dd-mm-yyyy',
+				onRender: function(date){
+					return date.valueOf() < tanggal_mulai.valueOf() || date.valueOf() > tanggal_akhir.valueOf() ? 'disabled':'';
+				}
+			}).on('changeDate', function(ev) {
+				console.log(check_akhir.date);
+				tanggal_akhir2=check_akhir.date;
+				batas_tanggal_atas=tanggal_akhir2.getFullYear()+'-'+duadigit(tanggal_akhir2.getMonth()+1)+'-'+duadigit(tanggal_akhir2.getDate());
+				highchart_bar_process();
+                check_akhir.hide();
+            }).data('datepicker');
+			//check_awal.date=tanggal_mulai;
+			//check_akhir.date=tanggal_akhir;
+			//graf_tanggal_mulai.val(duadigit(tanggal_mulai.getDate()) + '-' +duadigit(tanggal_mulai.getMonth()+1)+'-'+duadigit(tanggal_mulai.getFullYear()));
+			tanggal_akhir.setDate(tanggal_akhir.getDate()+1);
+			if(tanggal_akhir.getHours()>0||tanggal_akhir.getMinutes()>0||tanggal_akhir.getSeconds()>0){
+				tanggal_akhir.setHours(0);
+				tanggal_akhir.setMinutes(0);
+				tanggal_akhir.setSeconds(0);
+			}
+			tanggal_mulai.setHours(0);
+			tanggal_mulai.setMinutes(0);
+			tanggal_mulai.setSeconds(0);
+			check_awal.setValue(tanggal_mulai);
+			check_akhir.setValue(tanggal_akhir);
+			//console.log(check_awal);
+			//console.log(check_akhir);
+			batas_tanggal_atas=tanggal_akhir.getFullYear()+'-'+duadigit(tanggal_akhir.getMonth()+1)+'-'+duadigit(tanggal_akhir.getDate());
+			batas_tanggal_bawah=tanggal_mulai.getFullYear()+'-'+duadigit(tanggal_mulai.getMonth()+1)+'-'+duadigit(tanggal_mulai.getDate());
+			console.log('script filter grafik');
+			return 1;
+		}
+		</script>
+		<script id="list_variabel2">
+			var list_tanggal = [];
             var list_date = [];
             //var list_nama_pekerjaan = [];
             var series_name = [];
             var series_data = [];
             var series_data2 = [];
+		</script>		
+		<script>
+        function highchart_bar_init() {
+//sudut pandang => tanggal terhadap pekerjaan
+            list_tanggal = [];
+            list_date = [];
+            //list_nama_pekerjaan = [];
+            
 
             var jumlah_detil_progress = detil_progress.length;
             for (var i = 0; i < jumlah_detil_progress; i++) {
@@ -282,19 +405,69 @@ foreach ($detil_progress as $progress) {
                     dddd.setMilliseconds(0);
                     list_date.push(dddd);
                 }
-                if (series_name.indexOf(pekerjaan_nama[detil_progress[i].id_pekerjaan]) == -1) {
-                    series_name.push(pekerjaan_nama[detil_progress[i].id_pekerjaan]);
-                    //series_data[pekerjaan_nama[detil_progress[i].id_pekerjaan]]=[];
-                    series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]] = [];
-                }
-                //series_data[pekerjaan_nama[detil_progress[i].id_pekerjaan]].push(detil_progress[i].progress);
-                //series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]][tanggal]=detil_progress[i].progress;
             }
+			buat_filter_graph(list_date);
+			
+			highchart_bar_process();
+
+        }
+		function highchart_bar_process(){
+			console.log('PROCESSING DATA FOR HIGHCHART');
+			var jumlah_detil_progress = detil_progress.length;
+			series_name = [];
+            series_data = [];
+            series_data2 = [];
+            for (var i = 0; i < jumlah_detil_progress; i++) {
+				var tanggal = detil_progress[i].waktu.substring(0,10);
+				if(tanggal<=batas_tanggal_atas && tanggal>=batas_tanggal_bawah){
+					if (series_name.indexOf(pekerjaan_nama[detil_progress[i].id_pekerjaan]) == -1) {
+						//apakah suatu pekerjaan ikut ditampilkan dalam graf
+						var id_pekerjaan = detil_progress[i].id_pekerjaan;
+						if(list_pekerjaan_graf_ditampilkan_init==false && list_id_pekerjaan_ditampilkan_status[id_pekerjaan]==true){
+							console.log('pekerjaan filter telah diinisialisasi');
+							series_name.push(pekerjaan_nama[detil_progress[i].id_pekerjaan]);
+							//series_data[pekerjaan_nama[detil_progress[i].id_pekerjaan]]=[];
+							series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]] = [];
+						}else if(list_pekerjaan_graf_ditampilkan_init){
+							console.log('pekerjaan filter belum diinisialisasi');
+							series_name.push(pekerjaan_nama[detil_progress[i].id_pekerjaan]);
+							//series_data[pekerjaan_nama[detil_progress[i].id_pekerjaan]]=[];
+							series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]] = [];
+						}
+					}
+				}
+			}
+			
+			//mencari selisih tampilan graph
+			var jumlah_detil_progress = detil_progress.length;
             var jumlah_tanggal = list_date.length;
+			
             if (jumlah_tanggal > 0) {
+				var batas_atas = new Date(batas_tanggal_atas);
+				var batas_bawah = new Date(batas_tanggal_bawah);
+				var index_atas = jumlah_tanggal-1;
+				var index_bawah = 0;
+				var index_atas_init=false;
+				var index_bawah_init=false;
+				for(var i=0;i<jumlah_tanggal;i++){
+					if(!index_atas_init){
+						if(list_date[jumlah_tanggal-i-1]<=batas_atas){
+							index_atas=jumlah_tanggal-i-1;
+							index_atas_init=true;
+						}
+					}
+					if(!index_bawah_init){
+						if(list_date[i]>=batas_bawah){
+							index_bawah=i;
+							index_bawah_init=true;
+						}
+					}
+				}
+				
                 var area = 1;
+				var pakai_jam = true;
                 console.log('jumlah tanggal = ' + jumlah_tanggal);
-                var selisih = list_date[jumlah_tanggal - 1] - list_date[0];
+                var selisih = list_date[index_atas] - list_date[index_bawah];
                 var r_ = [];
                 console.log('selisih = ' + selisih);
 
@@ -308,32 +481,44 @@ foreach ($detil_progress as $progress) {
                 var menit = second / 60;
                 r_['menit'] = menit / jumlah_tanggal;
                 console.log('selisih menit = ' + menit + ' menit');
-                if (menit >= 1)
+                if (menit >= 1){
                     area = Math.ceil(menit);
+					if(area>10) area=10;
+				}
 
                 var jam = menit / 60;
                 r_['jam'] = jam / jumlah_tanggal;
                 console.log('selisih jam = ' + jam + ' jam');
-                if (jam >= 1)
+                if (jam >= 1){
                     area = Math.ceil(jam);
+					if(area>10) area=10;
+				}
 
                 var hari = jam / 24;
                 r_['hari'] = hari / jumlah_tanggal;
                 console.log('selisih hari = ' + hari + ' hari');
-                if (hari >= 1)
+                if (hari >= 1){
                     area = Math.ceil(hari);
+					if(area<5)area=5;
+					else pakai_jam=false;
+				}
 
                 var minggu = hari / 7;
                 r_['minggu'] = minggu / jumlah_tanggal;
                 console.log('selisih minggu = ' + minggu + ' minggu');
-                if (minggu >= 1)
+                if (minggu >= 1){
+					pakai_jam=false;
                     area = Math.ceil(minggu);
+					if(area<7)area=7;
+				}
 
                 var bulan = hari / 30;
                 r_['bulan'] = bulan / jumlah_tanggal;
                 console.log('selisih bulan = ' + bulan + ' bulan');
-                if (bulan >= 1)
+                if (bulan >= 1){
                     area = Math.ceil(bulan);
+					if(area<4)area=4;
+				}
 
                 var r_index = ["milisecond", 'second', 'menit', 'jam', 'hari', 'minggu', 'bulan'];
 
@@ -344,12 +529,15 @@ foreach ($detil_progress as $progress) {
                 for (var i = 0; i < n_r_index; i++) {
                     console.log(r_index[i] + '=' + r_[r_index[i]]);
                 }
+				
                 console.log('area = ' + area);
+				
+				//membagi ke dalam beberapa daerah, ambil batas maksimal tiap daerah
                 var area2 = [];
                 var pecahan = selisih / area;
                 //var pecahan0 = 0;
                 var pecahan1 = pecahan;
-                var awal = list_date[0].getTime();
+                var awal = list_date[index_bawah].getTime();
                 for (var i = 0; i < area; i++) {
                     var akhir = awal + pecahan1;
                     var m_d = new Date(awal);
@@ -374,15 +562,20 @@ foreach ($detil_progress as $progress) {
             var p = series_name.length;
             for (var i = 0; i < t; i++) {
                 var tanggal = list_tanggal[i];
-                for (var j = 0; j < p; j++) {
-                    var nama = series_name[j];
-                    //console.log(j+nama + ' => ' + i+tanggal);
-                    series_data2[nama][tanggal] = -1;
-                }
+				if(tanggal<=batas_tanggal_atas && tanggal>=batas_tanggal_bawah){
+					for (var j = 0; j < p; j++) {
+						var nama = series_name[j];
+						//console.log(j+nama + ' => ' + i+tanggal);
+						series_data2[nama][tanggal] = -1;
+					}
+				}
             }
             for (var i = 0; i < jumlah_detil_progress; i++) {
                 var tanggal = detil_progress[i].waktu.substring(0, 19);
-                series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]][tanggal] = detil_progress[i].progress;
+				if(tanggal<=batas_tanggal_atas && tanggal>=batas_tanggal_bawah){
+					if(series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]])
+						series_data2[pekerjaan_nama[detil_progress[i].id_pekerjaan]][tanggal] = detil_progress[i].progress;
+				}
             }
             var area2_p = area2.length;
             for (var i in series_data2) {
@@ -392,7 +585,6 @@ foreach ($detil_progress as $progress) {
                     for (var j in series_data2[i]) {
                         if (series_data2[i].hasOwnProperty(j)) {
                             //console.log(series_data2[i][j]);
-
                             for (var t = 0; t < area2_p; t++) {
                                 //console.log(j + ' lebih  dari area2 ' + t + area2[t].m_d + ' ?');
                                 if (j >= area2[t].m_d) {
@@ -408,7 +600,6 @@ foreach ($detil_progress as $progress) {
                             }
                             if (series_data2[i][j] == -1) {
                                 series_data2[i][j] = prev;
-
                             } else {
                                 prev = series_data2[i][j];
                             }
@@ -474,13 +665,16 @@ foreach ($detil_progress as $progress) {
             console.log(series_data);
             console.log(series_data2);
 
+			//mengubah ke format series dan category untuk highchart
             var jumlah_tanggal = list_date.length;
             console.log('jumlah_tanggal = ' + jumlah_tanggal);
+			
             if (jumlah_tanggal > 0) {
 
                 var kategori = [];
                 for(var i=0;i<area2.length;i++){
-                    kategori.push(area2[i].series);
+					if(pakai_jam) kategori.push(area2[i].series);
+					else kategori.push(area2[i].series.substring(0,10));
                 }
                 
                 var series1 = [];
@@ -496,13 +690,11 @@ foreach ($detil_progress as $progress) {
                         series1.push(new_series);
                     }
                 }
-
-
                 highchart_bar1(kategori, series1);
-
             }
-
-        }
+		}
+		</script>
+		<script>
         function highchart_bar1(kategori, series) {
             //kategori = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             //series = [{name: 'Tokyo', data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]}, {name: 'New York', data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]}, {name: 'London', data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]}, {name: 'Berlin', data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]}];
@@ -513,7 +705,7 @@ foreach ($detil_progress as $progress) {
             console.log('series');
             console.log(series);
             if ($('#grafik_highchart1').length == 0) {
-                $('#div_grafik').append('<div id="grafik_highchart1"></div');
+                $('#div_grafik').append('<div id="grafik_highchart1"></div>');
             }
 
             var highchart = {
@@ -562,10 +754,64 @@ foreach ($detil_progress as $progress) {
         }
         jQuery(document).ready(function() {
             fill_tabel_pekerjaan();
-            highchart_bar();
+            highchart_bar_init();
+			highchart_bar_process();
             //morris_bar();
             $('#tabel_pekerjaan_staff').dataTable({});
             $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
             $('#submenu_pekerjaan_ul').attr('style', 'display:block');
         });
     </script>
+	<script>
+	var list_pekerjaan_graf_ditampilkan_init=true;
+	var list_id_pekerjaan_ditampilkan=[];
+	var list_id_pekerjaan_ditampilkan_status=[];
+	function pilih_pekerjaan_ok(){
+		var jumlah_data_ditampilkan=list_id_pekerjaan_ditampilkan.length;
+		for(var i=0;i<jumlah_data_ditampilkan;i++){
+			if(list_id_pekerjaan_ditampilkan[i]){
+				var id_pekerjaan  = list_id_pekerjaan_ditampilkan[i];
+				var id_element='pekerjaan_ditampilkan_'+id_pekerjaan;
+				console.log('processing element '+id_element);
+				var element = $('#'+id_element);
+				if(element.length>0){
+					console.log(element);
+					console.log(id_element+' set to '+element[0].checked);
+					if(element[0].checked)
+					list_id_pekerjaan_ditampilkan_status[id_pekerjaan]=true;
+					else list_id_pekerjaan_ditampilkan_status[id_pekerjaan]=false;
+				}else{
+					console.log(id_element+' does not exists');
+				}
+			}
+		}
+		highchart_bar_process();
+	}
+	function filter_pekerjaan(){
+		if(list_pekerjaan_graf_ditampilkan_init){
+			list_pekerjaan_graf_ditampilkan_init=false;
+			var jumlah_data_ditampilkan = detil_progress.length;
+			for(var i=0;i<jumlah_data_ditampilkan;i++){
+				var detil_prog = detil_progress[i];
+				if(list_id_pekerjaan_ditampilkan.indexOf(detil_prog.id_pekerjaan)==-1){
+					list_id_pekerjaan_ditampilkan.push(detil_prog.id_pekerjaan);
+					list_id_pekerjaan_ditampilkan_status[detil_prog.id_pekerjaan]=true;
+				}
+			}
+		}
+		var tabel_body = $('#tabel_list_pekerjaan_enroll_body');
+		tabel_body.html('');
+		var jumlah_data_ditampilkan = list_id_pekerjaan_ditampilkan.length;
+		for(var i=0;i<jumlah_data_ditampilkan;i++){
+			var id_pekerjaan = list_id_pekerjaan_ditampilkan[i];
+			var nama_pekerjaan = pekerjaan_nama[id_pekerjaan];
+			tabel_body.append(
+				'<tr>'+
+				'<td>'+(i+1)+'</td>'+
+				'<td>'+nama_pekerjaan+'</td>'+
+				'<td><input type="checkbox" id="pekerjaan_ditampilkan_'+id_pekerjaan+'" '+(list_id_pekerjaan_ditampilkan_status[id_pekerjaan]?'checked':'')+' />'+
+				'</tr>'
+			);
+		}
+	}
+	</script>

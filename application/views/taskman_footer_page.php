@@ -63,7 +63,7 @@
 
     }
     function req_pending_task() {
-        console.log('req_pending_task');
+        //console.log('req_pending_task');
         var bulan = ["Januari", "February", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         $.ajax({// create an AJAX call...
             type: "GET", // GET or POST
@@ -114,13 +114,13 @@
                     for (var i = 0; i < jumlah_data; i++) {
                         var id_pekerjaan = parseInt(pekerjaan[i].id_pekerjaan);
                         var id_pekerjaan_sudah_ada = list_id_pekerjaan.indexOf(id_pekerjaan);
-                        console.log('id pekerjaan ' + id_pekerjaan + ' staff sudah ada = ' + id_pekerjaan_sudah_ada);
+                        //console.log('id pekerjaan ' + id_pekerjaan + ' staff sudah ada = ' + id_pekerjaan_sudah_ada);
                         if (id_pekerjaan_sudah_ada == -1) {
                             list_id_pekerjaan.push(id_pekerjaan);
                             list_id_pekerjaan_staff.push(id_pekerjaan);
                             list_jumlah_pekerja[id_pekerjaan] = 0;
                             list_pekerjaan_progress[id_pekerjaan] = 0;
-                            console.log('insert ' + id_pekerjaan);
+                            //console.log('insert ' + id_pekerjaan);
                         }
                         list_pekerjaan_nama[id_pekerjaan] = pekerjaan[i].nama_pekerjaan;
                         var tanggal = new Date(pekerjaan[i].tgl_selesai.substring(0, 10));
@@ -150,22 +150,22 @@
                             }
                         }
                     }
-                    console.log('json pending task');
-                    console.log(json);
-                    console.log('list_id_pekerjaan');
-                    console.log(list_id_pekerjaan);
-                    console.log('list_pekerjaan_nama');
-                    console.log(list_pekerjaan_nama);
-                    console.log('list_pekerjaan_mulai');
-                    console.log(list_pekerjaan_mulai);
-                    console.log('list_pekerjaan_deadline');
-                    console.log(list_pekerjaan_deadline);
-                    console.log('list_pekerjaan_progress');
-                    console.log(list_pekerjaan_progress);
-                    console.log('list_jumlah_pekerja');
-                    console.log(list_jumlah_pekerja);
-                    console.log('sekarang');
-                    console.log(sekarang);
+                    //console.log('json pending task');
+                    //console.log(json);
+                    //console.log('list_id_pekerjaan');
+                    //console.log(list_id_pekerjaan);
+                    //console.log('list_pekerjaan_nama');
+                    //console.log(list_pekerjaan_nama);
+                    //console.log('list_pekerjaan_mulai');
+                    //console.log(list_pekerjaan_mulai);
+                    //console.log('list_pekerjaan_deadline');
+                    //console.log(list_pekerjaan_deadline);
+                    //console.log('list_pekerjaan_progress');
+                    //console.log(list_pekerjaan_progress);
+                    //console.log('list_jumlah_pekerja');
+                    //console.log(list_jumlah_pekerja);
+                    //console.log('sekarang');
+                    //console.log(sekarang);
                     jumlah_data = list_id_pekerjaan.length;
                     var jumlah_notif = 0;
                     for (var i = 0; i < jumlah_data; i++) {
@@ -175,22 +175,22 @@
                         var progress = (list_pekerjaan_progress[id] / list_jumlah_pekerja[id]);
                         if (list_id_pekerjaan_staff.indexOf(id) >= 0) {//pekerjaan staff
                             style = 'style="background:#F1F2D7"';
-                            console.log('pekerjaan staff ' + id);
+                            //console.log('pekerjaan staff ' + id);
                             var jumlah_hari_kerja = list_pekerjaan_deadline[id] - list_pekerjaan_mulai[id];
                             var jumlah_hari_lewat = sekarang - list_pekerjaan_mulai[id];
                             jumlah_hari_kerja = jumlah_hari_kerja / satuhari;
                             jumlah_hari_lewat = jumlah_hari_lewat / satuhari;
-                            console.log('perbedaaan hari ' + id)
-                            console.log('jumlah hari kerja = ' + jumlah_hari_kerja);
-                            console.log('jumlah hari lewat = ' + jumlah_hari_lewat);
+                            //console.log('perbedaaan hari ' + id)
+                            //console.log('jumlah hari kerja = ' + jumlah_hari_kerja);
+                            //console.log('jumlah hari lewat = ' + jumlah_hari_lewat);
                             if (jumlah_hari_lewat > 0) {//jika masuk pada waktu pengerjaan pekerjaan staff
                                 if (jumlah_hari_lewat >= jumlah_hari_kerja) {//jika telat
-                                    console.log('telat');
+                                    //console.log('telat');
                                     style = 'style="background:#FF6C60;"';
                                     text_style='color:white !important;';
                                 } else{
                                     var rasio= jumlah_hari_lewat/jumlah_hari_kerja;
-                                    console.log('rasio = '+rasio);
+                                    //console.log('rasio = '+rasio);
                                     if(rasio<0.2){
                                         style = 'style="background:#A1A1A1;"';
                                         text_style='color:white !important;';
@@ -201,7 +201,7 @@
                                 continue;
                             }
                         } else {//pekerjaan ku
-                            console.log('pekerjaan ku ' + id);
+                            //console.log('pekerjaan ku ' + id);
                         }
                         var dead = list_pekerjaan_deadline[id];
                         var deadline = dead.getDate() + ' ' + bulan[dead.getMonth()] + ' ' + dead.getFullYear();
@@ -244,7 +244,7 @@
 
     var tinggi = $(window).height();
     var lebar = $(window).width();
-    console.log('tinggi = ' + tinggi);
+    //console.log('tinggi = ' + tinggi);
     var tinggi_pending = Math.round(tinggi * 0.7);
     var lebar_pending = Math.round(lebar * 0.35);
     lebar_pending = 320;
