@@ -77,8 +77,8 @@
                     <tr >
                         <th rowspan="2" style="vertical-align: middle; text-align: center">AK</th>
                         <th colspan="4" style="vertical-align: middle; text-align: center">REALISASI</th>
-                        <th rowspan="2" style="vertical-align: middle; text-align: center">Penghitungan</th>
-                        <th rowspan="2" style="vertical-align: middle; text-align: center">Nilai Capaian<br/>SKP</th>
+                        <!--th rowspan="2" style="vertical-align: middle; text-align: center">Penghitungan</th>
+                        <th rowspan="2" style="vertical-align: middle; text-align: center">Nilai Capaian<br/>SKP</th-->
                     </tr>
                     <tr >
                         <th style="vertical-align: middle; text-align: center">Kuantitas Output</th>
@@ -94,11 +94,23 @@
                         <td><input type="text" id="input_realisasi_kualitas"  value="ak" style="display: none" class="form-control"/><label id="label_realisasi_kualitas" >kualitas mutu</label></td>
                         <td><input type="text" id="input_realisasi_waktu"     value="ak" style="display: none" class="form-control" placeholder="bulan"/><label id="label_realisasi_waktu"    >waktu</label></td>
                         <td><input type="text" id="input_realisasi_biaya"     value="ak" style="display: none" class="form-control"/><label id="label_realisasi_biaya"    >biaya</label></td>
-                        <td><label id="label_penghitungan">0</label></td>
-                        <td><label id="label_skp">0</label></td>
+                        <!--td><label id="label_penghitungan">0</label></td>
+                        <td><label id="label_skp">0</label></td-->
                     </tr>
                 </tbody>
             </table>
+			<div class="form-group ">
+                <label for="pilih_staff_nilai" class="control-label col-lg-3">Nilai Perhitungan</label>
+                <div class="col-lg-9">
+                    <label class="form-control" id="label_penghitungan"></label>
+                </div>
+            </div>
+			<div class="form-group ">
+                <label for="pilih_staff_nilai" class="control-label col-lg-3">Nilai SKP</label>
+                <div class="col-lg-9">
+                    <label class="form-control" id="label_skp"></label>
+                </div>
+            </div>
             <div class="col-lg-9 pull-right">
                 <a class="btn btn-info pull-right" href="javascript:void(0);" style="font-size: 12px;padding: 7px 10px;" id="tombol_edit_realisasi" onclick="edit_realisasi()">Edit</a>
                 <a class="btn btn-success pull-right" href="javascript:void(0);" style="font-size: 12px;padding: 7px 10px;" id="tombol_simpan_realisasi" onclick="simpan_realisasi()">Simpan</a>
