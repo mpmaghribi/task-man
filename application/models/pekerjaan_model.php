@@ -5,7 +5,14 @@ class pekerjaan_model extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
-
+    
+    
+    public function sp_list_file_progress($id_pekerjaan) {
+        $query = "Select file.id_file, file.id_pekerjaan, file.nama_file, file.waktu from file inner join detil_progress on detil_progress.id_detil_progress = file.id_progress where file.id_pekerjaan = ".  pg_escape_string($id_pekerjaan)." ";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    
     public function alltask($id_akun) {
         $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "";
         $query = $this->db->query($query);
@@ -240,6 +247,12 @@ public function get_progress_by_id($list_id_progress){
     public function sp_history_progress($id_akun, $id_detail_pkj) {
         $query = "select *, detil_progress.progress from detil_progress inner join detil_pekerjaan on detil_pekerjaan.id_detil_pekerjaan = detil_progress.id_detil_pekerjaan" .
                 " inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun = $id_akun and detil_progress.id_detil_pekerjaan = $id_detail_pkj order by detil_progress.waktu DESC";
+
+        return $this->db->query($query)->result();
+    }
+    
+    public function sp_file_progress($id_detail_pkj) {
+        $query = "select * from file where id_pekerjaan = $id_detail_pkj order by waktu DESC";
 
         return $this->db->query($query)->result();
     }

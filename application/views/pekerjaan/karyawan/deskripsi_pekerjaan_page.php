@@ -219,6 +219,46 @@ if ($this->session->userdata('prev') != null) {
                                                 </div>
                                             </section>
                                         </div>
+                                        <div class="col-md-12">
+                                            <section class="panel">
+                                                <h4 style="color: #1FB5AD;">
+                                                    List File Progress
+                                                </h4>
+                                                <div class="panel-body">
+                                                    <table class="table table-striped table-hover table-condensed" id="table_file_progress">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 70px">#</th>
+                                                                <th>Nama File</th>
+                                                                <th style="width: 250px"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php
+                                                            if (isset($file_progress)) {
+                                                                $i = 1;
+                                                                foreach ($file_progress as $berkas) {
+                                                                    ?>
+                                                                    <tr id="berkas_<?php echo $berkas->id_file; ?>" title="diupload pada <?php echo date("d M Y H:i", strtotime($berkas->waktu)); ?>">
+                                                                        <td><?php echo $i; ?></td>
+                                                                        <td><?php echo basename($berkas->nama_file); ?></td>
+                                                                        <td style="text-align: right">
+                                                                            <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() ?>download?id_file=<?= $berkas->id_file; ?>');">Download</a>
+                                                                            <?php if ($atasan || $pengusul) { ?>
+                                                                                <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
+                                                                            <?php } ?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <?php
+                                                                    $i++;
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </section>
+                                        </div>
                                         <div class="col-md-12" id="anggota_tim">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">

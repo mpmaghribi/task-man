@@ -104,7 +104,7 @@ var EditableTableProgress = function() {
                     }
                 ]
             });
-            $('#tabel_home,#table_log_progress').dataTable({
+            $('#tabel_home,#table_log_progress, #table_file_progress').dataTable({
                 // set the initial value
                 "iDisplayLength": 20,
                 "sDom": "<'row'f<'col-lg-6'>r>t<'row'<'col-lg-6'i><'col-lg-6'p>>",

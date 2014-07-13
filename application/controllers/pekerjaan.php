@@ -698,8 +698,11 @@ class pekerjaan extends ceklogin {
             //"progress_staff" => $progress_staff,
             'sekarang' => date('Y-m-d')));
     }
-
+    
     public function deskripsi_pekerjaan() {
+        //List File Progress
+        
+        
         $data['data_akun'] = $this->session->userdata('logged_in');
         $debug = false;
         //$data['temp'] = $this->session->userdata('logged_in');
@@ -708,6 +711,7 @@ class pekerjaan extends ceklogin {
         $this->load->model(array("pekerjaan_model", "berkas_model", 'akun'));
 
         $id_detail_pkj = $this->input->get('id_detail_pkj');
+        $data['file_progress'] = $this->pekerjaan_model->sp_list_file_progress($id_detail_pkj);
         $status = 0;
         $nama_status = "OK";
         $keterangan = "OK";
