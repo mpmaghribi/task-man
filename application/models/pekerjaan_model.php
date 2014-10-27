@@ -376,6 +376,7 @@ public function get_progress_by_id($list_id_progress){
                 . "where pekerjaan.flag_usulan in ('1','2','9') "
                 . "and detil_pekerjaan.id_akun in (" . implode(",", $list_staff) . ")"
                 . "order by pekerjaan.id_pekerjaan limit $limit offset $offset";
+        //echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }

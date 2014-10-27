@@ -680,7 +680,7 @@ class pekerjaan extends ceklogin {
             foreach ($my_staff as $ms) {
                 $mystaff[] = $ms->id_akun;
             }
-
+            if(count($mystaff)>0)
             $pekerjaan_staff = $this->pekerjaan_model->get_pekerjaan_staff($mystaff);
 //            $list_id_pekerjaan = array();
 //            if (count($pekerjaan_staff) > 0){
