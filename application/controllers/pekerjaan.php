@@ -698,11 +698,11 @@ class pekerjaan extends ceklogin {
             //"progress_staff" => $progress_staff,
             'sekarang' => date('Y-m-d')));
     }
-    
+
     public function deskripsi_pekerjaan() {
         //List File Progress
-        
-        
+
+
         $data['data_akun'] = $this->session->userdata('logged_in');
         $debug = false;
         //$data['temp'] = $this->session->userdata('logged_in');
@@ -1010,7 +1010,7 @@ class pekerjaan extends ceklogin {
         $session = $this->session->userdata('logged_in');
         $data["data_akun"] = $session;
         $id_staff = $this->input->get("id_akun");
-        $this->session->set_userdata('prev', 'pekerjaan_per_staff?id_akun=' . $id_staff);
+        $this->session->set_userdata('prev', 'pekerjaan/pekerjaan_per_staff?id_akun=' . $id_staff);
 
         //print_r($data['pekerjaan_staff']);
         $data["my_staff"] = $this->akun->my_staff($session["user_id"]);
@@ -1121,7 +1121,8 @@ class pekerjaan extends ceklogin {
                         $list_berkas = $this->berkas_model->get_berkas_of_pekerjaan($cur_id_pekerjaan);
                         foreach ($list_berkas as $berkas) {
                             $this->berkas_model->hapus_file($berkas->id_file);
-                            unlink($berkas->nama_file);
+                            if (file_exists($berkas->nama_file))
+                                unlink($berkas->nama_file);
                         }
                     }
                 }
@@ -1725,16 +1726,16 @@ class pekerjaan extends ceklogin {
         $temp = $this->session->userdata('logged_in');
         $id_detail_pkj = $this->input->post("id_detail_pkj");
         $id_akun = $this->input->post("user_id");
-        $this->load->model(array("pekerjaan_model",'berkas_model'));
+        $this->load->model(array("pekerjaan_model", 'berkas_model'));
         $result = $this->pekerjaan_model->sp_history_progress($id_akun, $id_detail_pkj);
-        $list_id_progress=array();
-        foreach ($result as $pr){
-            $list_id_progress[]=$pr->id_detil_progress;
+        $list_id_progress = array();
+        foreach ($result as $pr) {
+            $list_id_progress[] = $pr->id_detil_progress;
         }
         $berkas = $this->berkas_model->get_berkas_progress($list_id_progress);
         //var_dump($result);
         $status = array(
-            'status' => 'OK', 'data' => $result,'berkas'=>$berkas);
+            'status' => 'OK', 'data' => $result, 'berkas' => $berkas);
 
         echo json_encode($status);
     }
@@ -1833,7 +1834,7 @@ class pekerjaan extends ceklogin {
             if (!($data['atasan'] || ($data['usulan'] && $data['terlibat']))) {
                 $status = 1;
                 $nama_status = "Tidak berhak";
-                $keterangan = "anda tidak berhak mengubah pekerjaan " . ($data['atasan'] ? 'true' : 'false') . ' ' . ($data['usulan'] ? 'true' : 'false') . ' ' . ($data['terlibat'] ? 'true' : 'false');
+                $keterangan = "anda tidak berhak mengubah pekerjaan "; //. ($data['atasan'] ? 'true' : 'false') . ' ' . ($data['usulan'] ? 'true' : 'false') . ' ' . ($data['terlibat'] ? 'true' : 'false');
             }
         }
 
