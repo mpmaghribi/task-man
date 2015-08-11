@@ -12,56 +12,56 @@
         <title>Dashboard</title>
 
 
-        <link href="<?php echo base_url() ?>/assets/bs3/css/bootstrap.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/css/bootstrap-reset.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/jquery-ui/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/css/bootstrap-reset.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/font-awesome/css/font-awesome.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/jvector-map/jquery-jvectormap-1.2.2.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/css/clndr.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/js/bootstrap-datepicker/css/datepicker.css" />
-        <link href="<?php echo base_url() ?>/assets/css/simplePagination.css" rel="stylesheet"/>
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/js/gritter/css/jquery.gritter.css" />
+        <link href="<?php echo base_url() ?>assets/bs3/css/bootstrap.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/css/bootstrap-reset.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/jquery-ui/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/css/bootstrap-reset.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/jvector-map/jquery-jvectormap-1.2.2.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/css/clndr.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/js/bootstrap-datepicker/css/datepicker.css" />
+        <link href="<?php echo base_url() ?>assets/css/simplePagination.css" rel="stylesheet"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/js/gritter/css/jquery.gritter.css" />
         <!--icheck-->
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/red.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/green.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/blue.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/yellow.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/minimal/purple.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/minimal/red.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/minimal/green.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/minimal/blue.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/minimal/yellow.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/minimal/purple.css" rel="stylesheet">
 
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/square.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/red.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/green.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/blue.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/yellow.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/square/purple.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/square/square.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/square/red.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/square/green.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/square/blue.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/square/yellow.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/square/purple.css" rel="stylesheet">
 
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/grey.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/red.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/green.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/blue.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/yellow.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/js/iCheck/skins/flat/purple.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/flat/grey.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/flat/red.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/flat/green.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/flat/blue.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/flat/yellow.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/iCheck/skins/flat/purple.css" rel="stylesheet">
 
         <!--clock css-->
-        <link href="<?php echo base_url() ?>/assets/js/css3clock/css/style.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/js/css3clock/css/style.css" rel="stylesheet">
         <!--Morris Chart CSS -->
-        <link rel="stylesheet" href="<?php echo base_url() ?>/assets/js/morris-chart/morris.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>assets/js/morris-chart/morris.css">
         <!-- Custom styles for this template -->
-        <link href="<?php echo base_url() ?>/assets/css/style.css" rel="stylesheet">
-        <link href="<?php echo base_url() ?>/assets/css/style-responsive.css" rel="stylesheet"/>
+        <link href="<?php echo base_url() ?>assets/css/style.css" rel="stylesheet">
+        <link href="<?php echo base_url() ?>assets/css/style-responsive.css" rel="stylesheet"/>
 
         <!--Notification style-->
-        <link rel="stylesheet" href="<?php echo base_url() ?>/assets/css/notification.css">
+        <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/notification.css">
         <!--End of notification style-->
-        <link rel="stylesheet" href="<?php echo base_url() ?>/assets/css/bootstrap-switch.css" />
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/js/jquery-multi-select/css/multi-select.css" />
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/js/jquery-tags-input/jquery.tagsinput.css" />
+        <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap-switch.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/js/jquery-multi-select/css/multi-select.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/js/jquery-tags-input/jquery.tagsinput.css" />
 
-        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>/assets/js/select2/select2.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/js/select2/select2.css" />
 
-        <link href="<?php echo base_url() ?>/assets/js/advanced-datatable/css/demo_page.css" rel="stylesheet" />
-        <link href="<?php echo base_url() ?>/assets/js/advanced-datatable/css/demo_table.css" rel="stylesheet" />
-        <link rel="stylesheet" href="<?php echo base_url() ?>/assets/js/data-tables/DT_bootstrap.css" />
+        <link href="<?php echo base_url() ?>assets/js/advanced-datatable/css/demo_page.css" rel="stylesheet" />
+        <link href="<?php echo base_url() ?>assets/js/advanced-datatable/css/demo_table.css" rel="stylesheet" />
+        <link rel="stylesheet" href="<?php echo base_url() ?>assets/js/data-tables/DT_bootstrap.css" />
     </head>

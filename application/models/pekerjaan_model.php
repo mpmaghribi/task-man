@@ -20,7 +20,13 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function ongoingtask($id_akun) {
-        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "where status = 'on-going'";
+        $id_akun = pg_escape_string($id_akun);
+        $query = "Select COUNT(*) 
+                 from detil_pekerjaan 
+                 inner join pekerjaan 
+                 on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan 
+                 and detil_pekerjaan.id_akun = '$id_akun' 
+                 where pekerjaan.tgl_mulai::date <= now()::date and pekerjaan.tgl_selesai::date >= now()::date";
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -47,13 +53,25 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function finishtask($id_akun) {
-        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "where status = 'finished'";
+        $id_akun = pg_escape_string($id_akun);
+        $query = "Select COUNT(*) 
+                 from detil_pekerjaan 
+                 inner join pekerjaan 
+                 on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan 
+                 and detil_pekerjaan.id_akun = '$id_akun' 
+                 where pekerjaan.tgl_selesai::date < now()::date";
         $query = $this->db->query($query);
         return $query->result();
     }
 
     public function notworkingtask($id_akun) {
-        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "where status = 'un-read'";
+        $id_akun = pg_escape_string($id_akun);
+        $query = "Select COUNT(*) 
+                 from detil_pekerjaan 
+                 inner join pekerjaan 
+                 on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan 
+                 and detil_pekerjaan.id_akun = '$id_akun' 
+                 where pekerjaan.tgl_mulai::date > now()::date ";
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -126,6 +144,7 @@ class pekerjaan_model extends CI_Model {
     }
 
     public function usul_pekerjaan2($data) {
+        $this->db->query("set datestyle to 'European'");
         $pekerjaan = $this->db->insert('pekerjaan', $data);
         if ($pekerjaan === true) {
             $query1 = "select currval('tbl_pekerjaan_id') as id_baru";
@@ -433,6 +452,7 @@ public function get_progress_by_id($list_id_progress){
     }
 
     public function update_pekerjaan($update, $id) {
+        $this->db->query("set datestyle to 'European'");
         $this->db->where('id_pekerjaan', $id);
         return $this->db->update('pekerjaan', $update);
     }

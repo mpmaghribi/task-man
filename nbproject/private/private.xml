@@ -3,36 +3,37 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/taskmanagement/assets/css/notification.css</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/taskman_header_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/login.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/karyawan/karyawan_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/config/config.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/taskman_header2_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/home.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/homepage/taskman_home_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/edit_pekerjaan_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/kesalahan.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/login/taskman_login_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/assets/css/style.css</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/assets/css/clndr.css</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/recent_activity_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/models/pekerjaan_model.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/download.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/config/database.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/config/routes.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/models/berkas_model.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/views/taskman_footer_page.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/config/database.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/homepage/taskman_home_page.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/home.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/download.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/assets/bs3/css/bootstrap-theme.min.css</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/taskman_header_page.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/assets/css/clndr.css</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/login/taskman_login_page.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/config/config.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/models/akun.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/karyawan/pekerjaan_staff_view.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/libraries/ceklogin.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/pekerjaan.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/karyawan/deskripsi_pekerjaan_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/application/config/autoload.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/assets/bs3/css/bootstrap.css</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/assets/css/blue-theme.css</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/assets/css/notification.css</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/login.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/models/berkas_model.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/views/taskman_sidebarleft_page.php</file>
-            <file>file:/C:/xampp/htdocs/taskmanagement/assets/bs3/css/bootstrap-theme.min.css</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/kesalahan.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/assets/bs3/css/bootstrap.css</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/edit_pekerjaan_page.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/karyawan/karyawan_page.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/assets/css/blue-theme.css</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/draft.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/controllers/pekerjaan.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/config/autoload.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/taskman_header2_page.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/views/recent_activity_page.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/assets/css/style.css</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/models/pekerjaan_model.php</file>
         </group>
     </open-files>
 </project-private>

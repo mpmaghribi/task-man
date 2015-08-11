@@ -1,6 +1,7 @@
 <?php $this->load->view("taskman_header_page") ?> 
-<script src="<?php echo base_url() ?>/assets/js/status_pekerjaan.js"></script>
+
 <body>
+    <script src="<?php echo base_url() ?>assets/js/status_pekerjaan.js"></script>
     <section id="container">
         <!--header start-->
         <?php $this->load->view("taskman_header2_page") ?>
@@ -72,7 +73,10 @@
                 <!--mini statistics start-->
                 <!--mini statistics end-->
                 <div class="row">
-                    <?php if (in_array(1, $data_akun['idmodul'])) { ?>
+                    <?php
+                    //jika user berhak mengakses halaman yang berisi pekerjaannya
+                    if (in_array(1, $data_akun['idmodul'])) {
+                        ?>
                         <div class="col-md-12" id="PekerjaanSaya" >
                             <section class="panel">
                                 <header class="panel-heading  ">
@@ -111,7 +115,7 @@
                                                             </td>
                                                             <td style="vertical-align: middle" class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                             <td style="vertical-align: middle"> <?php echo date("d M Y", strtotime(substr($value->tgl_mulai, 0, 19))) ?> - <?php echo date("d M Y", strtotime(substr($value->tgl_selesai, 0, 19))) ?></td>
-                                                            <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;               ?>"><?php foreach ($users as $value2) { ?>
+                                                            <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;                       ?>"><?php foreach ($users as $value2) { ?>
                                                                     <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                                                                 <?php } ?></td>
                                                             <td style="vertical-align: middle" id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><span class="label <?= $label_status[$value->flag_usulan] ?> label-mini"><?= $list_status[$value->flag_usulan] ?></span></td>
@@ -127,6 +131,33 @@
                                                     ?>
                                                 <?php } ?>
                                             </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form">
+                                        <table id="tabel_pekerjaan_saya" class="table table-striped table-hover table-condensed" >
+                                            <thead>
+                                                <tr>
+                                                    <th rowspan="2">No.</th>
+                                                    <th rowspan="2">Pekerjaan</th>
+                                                    <th rowspan="2">AK</th>
+                                                    <th colspan="4">Target</th>
+                                                    <th rowspan="2">AK</th>
+                                                    <th colspan="4">Realisasi</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Kuantitas</th>
+                                                    <th>Kualitas</th>
+                                                    <th>Waktu</th>
+                                                    <th>Biaya</th>
+                                                    <th>Kuantitas</th>
+                                                    <th>Kualitas</th>
+                                                    <th>Waktu</th>
+                                                    <th>Biaya</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
                                     <!--/div-->
@@ -160,15 +191,11 @@
         var tgl_selesai_pekerjaan_saya = [];
         var tgl_mulai_pekerjaan_saya = [];
         var flag_usulan_pekerjaan_saya = [];
-<?php
-foreach ($pkj_karyawan as $pekerjaan_saya) {
-    ?>tgl_selesai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_selesai; ?>';
+<?php foreach ($pkj_karyawan as $pekerjaan_saya) { ?>
+            tgl_selesai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_selesai; ?>';
             flag_usulan_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->flag_usulan; ?>';
-            tgl_mulai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_mulai; ?>';<?php
-}
+            tgl_mulai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_mulai; ?>';<?php }
 ?>
-        //console.log(tgl_selesai_pekerjaan_saya);
-        //console.log(flag_usulan_pekerjaan_saya);
         document.title = "DashBoard - Task Management";
         var jumlah_detil_saya = 0
         if (detil_pekerjaan_saya != null)
@@ -182,10 +209,42 @@ foreach ($pkj_karyawan as $pekerjaan_saya) {
     </script>
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
 
-    <!-- END JAVASCRIPTS -->
     <script>
-        jQuery(document).ready(function() {
-            $('#tabel_home').dataTable({
+        var tabel_pekerjaan_saya = null;
+        var site_url = "<?php echo site_url() ?>";
+        jQuery(document).ready(function () {
+            $('#tabel_home').dataTable({});
+            if (tabel_pekerjaan_saya != null) {
+                tabel_pekerjaan_saya.fnDestroy();
+                console.log('tabel pekerjaan saya is destroyed');
+            }
+            tabel_pekerjaan_saya = $('#tabel_pekerjaan_saya').dataTable({
+                
+//                processing: true,
+//                serverSide: true,
+//                //bServerSide:true,
+//                //bProcessing:true,
+//                ajax: {
+//                    method: 'post',
+//                    url: site_url + "/pekerjaan2/get_pekerjaan_saya_datatable",
+//                    data: {
+//                    },
+//                    dataSrc: function (json) {
+//                        jsonData = json.data;
+//                        return json.data;
+//                    }
+//                },
+//                createdRow: function (row, data, index) {
+//                    //$('td', row).eq(0).html('');
+//                    $(row).attr('id', 'item_' + index);
+//                }
             });
+            console.log('document is ready');
         });
     </script>
+    <style>
+        table thead tr th{
+            vertical-align: middle;
+            text-align: center;
+        }
+    </style>
