@@ -115,7 +115,7 @@
                                                             </td>
                                                             <td style="vertical-align: middle" class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
                                                             <td style="vertical-align: middle"> <?php echo date("d M Y", strtotime(substr($value->tgl_mulai, 0, 19))) ?> - <?php echo date("d M Y", strtotime(substr($value->tgl_selesai, 0, 19))) ?></td>
-                                                            <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;                       ?>"><?php foreach ($users as $value2) { ?>
+                                                            <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;                            ?>"><?php foreach ($users as $value2) { ?>
                                                                     <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                                                                 <?php } ?></td>
                                                             <td style="vertical-align: middle" id="pekerjaan_saya_status_<?php echo $value->id_pekerjaan; ?>"><span class="label <?= $label_status[$value->flag_usulan] ?> label-mini"><?= $list_status[$value->flag_usulan] ?></span></td>
@@ -219,11 +219,21 @@
                 console.log('tabel pekerjaan saya is destroyed');
             }
             tabel_pekerjaan_saya = $('#tabel_pekerjaan_saya').dataTable({
-                
+                bServerSide: true,
+                sServerMethod: 'post',
+                sAjaxSource: site_url + 'pekerjaan/get_pekerjaan_saya_datatable',
+                bProcessing: true,
+                fnCreatedRow: function (row, data, index) {
+                    console.log(row);
+                    console.log(data);
+                    console.log(index);
+                },
+                fnServerParams: function (aoData) {
+                    aoData.push({"name": "more_data", "value": "my_value"});
+                }
 //                processing: true,
 //                serverSide: true,
-//                //bServerSide:true,
-//                //bProcessing:true,
+
 //                ajax: {
 //                    method: 'post',
 //                    url: site_url + "/pekerjaan2/get_pekerjaan_saya_datatable",
