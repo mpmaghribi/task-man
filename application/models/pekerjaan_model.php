@@ -26,7 +26,9 @@ class pekerjaan_model extends CI_Model {
                  inner join pekerjaan 
                  on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan 
                  and detil_pekerjaan.id_akun = '$id_akun' 
-                 where pekerjaan.tgl_mulai::date <= now()::date and pekerjaan.tgl_selesai::date >= now()::date";
+                 where pekerjaan.tgl_mulai::date <= now()::date
+                 and detil_pekerjaan.tgl_read is not null
+                 and pekerjaan.tgl_selesai::date >= now()::date";
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -71,7 +73,9 @@ class pekerjaan_model extends CI_Model {
                  inner join pekerjaan 
                  on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan 
                  and detil_pekerjaan.id_akun = '$id_akun' 
-                 where pekerjaan.tgl_mulai::date > now()::date ";
+                 where pekerjaan.tgl_mulai::date > now()::date
+                 or detil_pekerjaan.tgl_read is null
+                ";
         $query = $this->db->query($query);
         return $query->result();
     }
