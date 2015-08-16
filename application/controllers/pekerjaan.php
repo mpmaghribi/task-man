@@ -1115,15 +1115,17 @@ class pekerjaan extends ceklogin {
                     $berhak_usulan = $berhak_usulan || ($session ['user_id'] == $pekerjaan[0]->id_pengusul && $usulan);
                     //$admin = $session['hakakses'] == 'Administrator';
                     if (($berhak_pekerjaan && !$usulan) || $berhak_usulan) {
-                        $this->pekerjaan_model->update_pekerjaan($update, $cur_id_pekerjaan);
+                        
                         //echo 'id pekerjaan yang akan dibatalkan untuk staffku=' . $cur_id_pekerjaan . "<br>\n";
-                        $this->pekerjaan_model->batalkan_task($cur_id_pekerjaan);
+                        
+                        //$this->pekerjaan_model->update_pekerjaan($update, $cur_id_pekerjaan);
                         $list_berkas = $this->berkas_model->get_berkas_of_pekerjaan($cur_id_pekerjaan);
                         foreach ($list_berkas as $berkas) {
                             $this->berkas_model->hapus_file($berkas->id_file);
                             if (file_exists($berkas->nama_file))
                                 unlink($berkas->nama_file);
                         }
+                        $this->pekerjaan_model->batalkan_task($cur_id_pekerjaan);
                     }
                 }
             }

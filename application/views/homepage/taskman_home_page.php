@@ -114,7 +114,7 @@
                                                                 </a>
                                                             </td>
                                                             <td style="vertical-align: middle" class="hidden-phone"><?php echo $value->nama_pekerjaan ?></td>
-                                                            <td style="vertical-align: middle"> <?php echo date("d M Y", strtotime(substr($value->tgl_mulai, 0, 19))) ?> - <?php echo date("d M Y", strtotime(substr($value->tgl_selesai, 0, 19))) ?></td>
+                                                            <td style="vertical-align: middle"> <?php echo $value->tanggal_mulai ?> - <?php echo $value->tanggal_selesai ?></td>
                                                             <td style="vertical-align: middle" id="assign_to_<?php //echo $value->id_pekerjaan;                             ?>"><?php foreach ($users as $value2) { ?>
                                                                     <?php if ($value->id_akun == $value2->id_akun) { ?><?php echo $value2->nama ?><?php } ?>
                                                                 <?php } ?></td>
@@ -185,26 +185,31 @@
     <?php $this->load->view("taskman_footer_page") ?>
     <script>
         var detil_pekerjaan_saya = jQuery.parseJSON('<?php if (isset($detil_pekerjaan_saya)) echo json_encode($detil_pekerjaan_saya); ?>');
-            var tgl_selesai_pekerjaan_saya = [];
-            var tgl_mulai_pekerjaan_saya = [];
-            var flag_usulan_pekerjaan_saya = [];
+        var tgl_selesai_pekerjaan_saya = [];
+        var tgl_mulai_pekerjaan_saya = [];
+        var flag_usulan_pekerjaan_saya = [];
 <?php foreach ($pkj_karyawan as $pekerjaan_saya) { ?>
         tgl_selesai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_selesai; ?>';
-            flag_usulan_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->flag_usulan; ?>';
-                tgl_mulai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_mulai; ?>';<?php }
+        flag_usulan_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->flag_usulan; ?>';
+        tgl_mulai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_mulai; ?>';<?php }
 ?>
-        document.title = "
-    DashBoard - Task Management";
+        
+        document.title = "DashBoard - Task Management";
         var jumlah_detil_saya = 0
-    if (detil_pekerjaan_saya != null)
-        jumlah_detil_saya = detil_pekerjaan_saya.length;
-        for (var i = 0; i < jumlah_detil_saya; i++) {             var detil = detil_pekerjaan_saya[i];
+        
+        if (detil_pekerjaan_saya != null)
+            jumlah_detil_saya = detil_pekerjaan_saya.length;
+        
+        for (var i = 0; i < jumlah_detil_saya; i++) {
+            var detil = detil_pekerjaan_saya[i];
             if (detil['id_akun'] == '<?php echo $data_akun['id_akun']; ?>') {
-                        ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'], tgl_mulai_pekerjaan_saya[detil['id_pekerjaan']], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);             }
+                    ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'], tgl_mulai_pekerjaan_saya[detil['id_pekerjaan']], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);             
+                }
         }
     </script>
+    
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
-
+    
     <script>
         var tabel_pekerjaan_saya = null;
         var site_url = "<?php echo site_url() ?>";
@@ -213,44 +218,26 @@
                 if (tabel_pekerjaan_saya != null) {
                     tabel_pekerjaan_saya.fnDestroy();
                     console.log('tabel pekerjaan saya is destroyed');
-            }
+                }
                 tabel_pekerjaan_saya = $('#tabel_pekerjaan_saya').dataTable({
-                bServerSide: true,
+                    bServerSide: true,
                     sServerMethod: 'post',
                     sAjaxSource: site_url + 'pekerjaan/get_pekerjaan_saya_datatable',
-                bProcessing: true,
+                    bProcessing: true,
                     fnCreatedRow: function (row, data, index) {
                         console.log(row);
                         console.log(data);
                         console.log(index);
-                },
+                    },
                     fnServerParams: function (aoData) {
                         aoData.push({"name": "more_data", "value": "my_value"});
-                }
-                    //                processing: true,
-//                serverSide: true,
-
-//                ajax: {
-//                    method: 'post',
-//                    url: site_url + "/pekerjaan2/get_pekerjaan_saya_datatable",
-//                    data: {
-//                    },
-//                    dataSrc: function (json) {
-//                        jsonData = json.data;
-//                        return json.data;
-//                    }
-//                },
-//                createdRow: function (row, data, index) {
-//                    //$('td', row).eq(0).html('');
-//                    $(row).attr('id', 'item_' + index);
-//                }
+                    }
+                });
             });
-                console.log('document is ready');
-        });
     </script>
     <style>
         table thead tr th{
             vertical-align: middle;
-            text-align: center;
+            //text-align: center;
         }
     </style>

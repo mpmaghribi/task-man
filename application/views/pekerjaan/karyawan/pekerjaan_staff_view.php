@@ -36,7 +36,7 @@
                                     <tr style="vertical-align: middle">
                                         <td style=""> <?php echo $counter; ?></td>
                                         <td style=""> <?php echo $kerja->nama_pekerjaan; ?></td>
-                                        <td style=""><?= date("d M Y", strtotime(substr($kerja->tgl_mulai, 0, 10))) ?> - <?= date("d M Y", strtotime(substr($kerja->tgl_selesai, 0, 19))) ?></td>
+                                        <td style=""><?= $kerja->tanggal_mulai ?> - <?= $kerja->tanggal_selesai ?></td>
                                         <td style="" id="list_staff_<?= $kerja->id_pekerjaan; ?>"></td>
                                         <td style=""><span class="label <?= $label_prioritas[$kerja->level_prioritas]; ?> label-mini"><?= $prioritas[$kerja->level_prioritas] ?></span></td>
                                         <td style="" id="pekerjaan_staff_status_<?= $kerja->id_pekerjaan ?>"><span class="label <?= $label_status[$kerja->flag_usulan] ?> label-mini"><?= $list_status[$kerja->flag_usulan] ?></span></td>

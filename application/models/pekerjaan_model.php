@@ -14,7 +14,8 @@ class pekerjaan_model extends CI_Model {
     }
     
     public function alltask($id_akun) {
-        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun = " . pg_escape_string($id_akun) . "";
+        $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun = '" . pg_escape_string($id_akun) . "'";
+        //echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -61,7 +62,9 @@ class pekerjaan_model extends CI_Model {
                  inner join pekerjaan 
                  on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan 
                  and detil_pekerjaan.id_akun = '$id_akun' 
-                 where pekerjaan.tgl_selesai::date < now()::date";
+                 where pekerjaan.tgl_selesai::date < now()::date 
+                 and detil_pekerjaan.progress=100";
+        //echo $query;
         $query = $this->db->query($query);
         return $query->result();
     }
@@ -321,7 +324,10 @@ public function get_progress_by_id($list_id_progress){
 
     public function get_list_draft($user_id,$offset=0,$limit=100) {
         $query = "select pekerjaan.* from pekerjaan "
-                . " where flag_usulan='5' and id_penanggung_jawab='$user_id' "
+                . "where (flag_usulan='5' "
+                . "or pekerjaan.id_pekerjaan not in "
+                . "(select detil_pekerjaan.id_pekerjaan from detil_pekerjaan)) "
+                . "and id_penanggung_jawab='$user_id' "
                 . "order by pekerjaan.level_prioritas limit $limit offset $offset";
         $query = $this->db->query($query);
         return $query->result();
@@ -399,6 +405,12 @@ public function get_progress_by_id($list_id_progress){
                 . "where pekerjaan.flag_usulan in ('1','2','9') "
                 . "and detil_pekerjaan.id_akun in (" . implode(",", $list_staff) . ")"
                 . "order by pekerjaan.id_pekerjaan limit $limit offset $offset";
+        $query = "select pekerjaan.*,detil_pekerjaan.*, now() as sekarang, to_char(pekerjaan.tgl_mulai,'YYYY-MM-DD') as tanggal_mulai,to_char(pekerjaan.tgl_selesai,'YYYY-MM-DD') as tanggal_selesai  "
+                . "from pekerjaan inner join detil_pekerjaan on "
+                . "detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan "
+                . "where pekerjaan.flag_usulan in ('1','2','9') "
+                . "and detil_pekerjaan.id_akun in (" . implode(",", $list_staff) . ")"
+                . "order by pekerjaan.id_pekerjaan";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();
@@ -469,10 +481,15 @@ public function get_progress_by_id($list_id_progress){
     }
 
     public function batalkan_task($id_pekerjaan) {
+        $query = "delete from detil_progress where detil_progress.id_detil_pekerjaan in (select detil_pekerjaan.id_detil_pekerjaan from detil_pekerjaan where detil_pekerjaan.id_pekerjaan='$id_pekerjaan')";
+        $this->db->query($query); 
         $query = "delete from detil_pekerjaan where id_pekerjaan='$id_pekerjaan' ";
-        $query = "update detil_pekerjaan set status='Batal' where id_pekerjaan='$id_pekerjaan' ";
+        //$query = "update detil_pekerjaan set status='Batal' where id_pekerjaan='$id_pekerjaan' ";
         //$query2 = "update pekerjaan set flag_usulan='3' where id_pekerjaan='$id_pekerjaan'";
-        return $this->db->query($query); //&& $this->db->query($query2);
+        $this->db->query($query); //&& $this->db->query($query2);
+        $query = "delete from pekerjaan where id_pekerjaan='$id_pekerjaan' ";
+        $this->db->query($query); 
+        return true;
     }
 
 }
