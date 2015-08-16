@@ -16,6 +16,7 @@
             <file>file:/C:/xampp/htdocs/taskmanagement/application/views/login/taskman_login_page.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/config/config.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/models/akun.php</file>
+            <file>file:/C:/xampp/htdocs/taskmanagement/application/models/taskman_repository.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/assets/js/status_pekerjaan.js</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/views/pekerjaan/karyawan/pekerjaan_staff_view.php</file>
             <file>file:/C:/xampp/htdocs/taskmanagement/application/libraries/ceklogin.php</file>
