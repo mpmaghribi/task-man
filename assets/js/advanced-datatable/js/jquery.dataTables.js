@@ -9326,7 +9326,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoFiltered": "(difilted dari _MAX_ total item)",
+			"sInfoFiltered": "(difilter dari _MAX_ total item)",
 		
 		
 			/**
