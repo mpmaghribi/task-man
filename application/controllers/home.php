@@ -16,6 +16,7 @@ class home extends ceklogin {
     public function index() {
         $this->load->model(array('akun'));
         $temp = $this->session->userdata('logged_in');
+        //print_r($temp['user_email']);
         $bisa_lihat_pekerjaanku = in_array(1, $temp['idmodul']);
         if ($bisa_lihat_pekerjaanku) {
             $result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);

@@ -375,8 +375,9 @@ class draft extends ceklogin {
                     if (file_exists($berkas->nama_file))
                         unlink($berkas->nama_file);
                 }
-                $update['flag_usulan'] = '6';
-                $this->pekerjaan_model->update_pekerjaan($update, $id_draft);
+                //$update['flag_usulan'] = '6';
+                //$this->pekerjaan_model->update_pekerjaan($update, $id_draft);
+                $this->pekerjaan_model->batalkan_task($id_draft);
             }
         }
         redirect(base_url() . 'draft');

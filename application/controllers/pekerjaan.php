@@ -16,7 +16,7 @@ class pekerjaan extends ceklogin {
     }
 
     function pengaduan() {
-        $url = str_replace('taskmanagement', 'integrarsud/helpdesk', str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
+        $url = str_replace('taskmanagement', 'helpdesk', str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
         $data["pengaduan"] = json_decode(file_get_contents($url));
         $url2 = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["pegawai"] = json_decode(file_get_contents($url2));
@@ -162,7 +162,7 @@ class pekerjaan extends ceklogin {
     }
 
     public function karyawan() {
-        $this->session->set_userdata('prev', 'karyawan');
+        $this->session->set_userdata('prev', 'pekerjaan/karyawan');
         $this->load->model("pekerjaan_model");
         $this->load->model("akun");
         $temp = $this->session->userdata('logged_in');
@@ -383,8 +383,10 @@ class pekerjaan extends ceklogin {
         $this->load->model("pekerjaan_model");
         $my_staff = $this->akun->my_staff($temp['user_id']);
         $mystaff = array();
+        $myStaffByIdAkun = array();
         foreach ($my_staff as $s) {
             $mystaff[] = $s->id_akun;
+            $myStaffByIdAkun[$s->id_akun] = $s;
         }
 
         foreach ($staff as $s) {
@@ -413,35 +415,61 @@ class pekerjaan extends ceklogin {
             $data['data_akun'] = $temp;
             $this->load->view('pekerjaan/kesalahan', $data);
         }
+
+        //tidak terdapat kesalahan dalam pengisian form, maka pekerjaan baru dibuat
         if ($status == 0) {
+            $this->db->trans_start();
             $id_pekerjaan = $this->pekerjaan_model->usul_pekerjaan2($insert);
             if ($id_pekerjaan != NULL) {
-
-                foreach ($staff as $index => $val) {//val itu nip
+                $emailDestinationPool = array();
+                foreach ($staff as $index => $val) {//val itu id akun
                     $this->pekerjaan_model->tambah_detil_pekerjaan($val, $id_pekerjaan);
+                    $emailDestinationPool[] = $myStaffByIdAkun[$val]->email;
                 }
-
-                //echo "path = $path<br/>";
+                $emailSubject = $nama_pkj;
+                $emailMessage = $deskripsi_pkj;
+                $this->kirimEmail($emailDestinationPool, $emailSubject, $emailMessage);
                 if (isset($_FILES["berkas"])) {
                     $path = './uploads/' . date('Y') . '/' . date('m') . '/' . date('d') . '/' . $id_pekerjaan . '/';
-                    //$this->load->library('upload');
-
                     $files = $_FILES["berkas"];
-                    if (count($files) > 0)
+                    if (count($files) > 0) {
                         if (!file_exists($path)) {
                             mkdir($path, 0777, true);
                         }
+                    }
                     $this->upload_file($files, $path, $id_pekerjaan);
                 }
                 $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " baru saja memberikan pekerjaan kepada staffnya.");
                 //$this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
+                $this->db->trans_complete();
             }
             redirect($lempar);
         }
-//        } else {
-//            $this->session->set_flashdata('status', 4);
-//            redirect("login");
-//        }
+    }
+
+    private function kirimEmail($listEmailTujuan, $emailSubject, $emailMessage) {
+        $config = Array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.googlemail.com',
+            'smtp_port' => 465,
+            'smtp_user' => 'mohammad.zarkasi@gmail.com', // change it to yours
+            'smtp_pass' => 'mzoahrakmamsaid11111990', // change it to yours
+            'mailtype' => 'html',
+            'charset' => 'iso-8859-1',
+            'wordwrap' => TRUE
+        );
+
+        $this->load->library('email', $config);
+        $this->email->set_newline("\r\n");
+        $this->email->from('zarkasi09@mhs.if.its.ac.id'); // change it to yours
+        $this->email->to($listEmailTujuan); // change it to yours
+        $this->email->subject($emailSubject);
+        $this->email->message($emailMessage);
+        if ($this->email->send()) {
+            //echo 'Email sent.';
+        } else {
+            return $this->email->print_debugger();
+        }
     }
 
     public function upload_file($files, $path, $id_pekerjaan, $id_progress = null) {
@@ -680,8 +708,8 @@ class pekerjaan extends ceklogin {
             foreach ($my_staff as $ms) {
                 $mystaff[] = $ms->id_akun;
             }
-            if(count($mystaff)>0)
-            $pekerjaan_staff = $this->pekerjaan_model->get_pekerjaan_staff($mystaff);
+            if (count($mystaff) > 0)
+                $pekerjaan_staff = $this->pekerjaan_model->get_pekerjaan_staff($mystaff);
 //            $list_id_pekerjaan = array();
 //            if (count($pekerjaan_staff) > 0){
 //                foreach ($pekerjaan_staff as $kerja) {
@@ -997,11 +1025,11 @@ class pekerjaan extends ceklogin {
 
     public function pekerjaan_staff() {
         $temp = $this->session->userdata('logged_in');
+        //print_r($temp);
         $data["data_akun"] = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat progress pekerjaan dari para staffnya.");
         $this->load->model("akun");
         $data["my_staff"] = $this->akun->my_staff($temp["user_id"]);
-        //print_r($data);
         $this->load->view("pekerjaan/lihat_daftar_pekerjaan_staff_page", $data);
     }
 
@@ -1094,7 +1122,7 @@ class pekerjaan extends ceklogin {
         }
         //echo "id staff ";
         //print_r($id_staff);
-        $update['flag_usulan'] = '3';
+        //$update['flag_usulan'] = '3';
 
         foreach ($id_pekerjaan as $key => $val) {
             if (strlen($val) > 0) {
@@ -1104,20 +1132,19 @@ class pekerjaan extends ceklogin {
                     $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan(array($cur_id_pekerjaan));
                     $list_pekerja = array();
                     $berhak_pekerjaan = true;
-                    foreach ($detil_pekerjaan as $detil) {
+                    /*foreach ($detil_pekerjaan as $detil) {
                         if (!in_array($detil->id_akun, $id_staff)) {
                             $berhak_pekerjaan = false;
                             break;
                         }
-                    }
+                    }*/
                     $usulan = $pekerjaan[0]->flag_usulan == '1';
                     $berhak_usulan = ($session ['user_id'] == $pekerjaan[0]->id_penanggung_jawab && $usulan);
                     $berhak_usulan = $berhak_usulan || ($session ['user_id'] == $pekerjaan[0]->id_pengusul && $usulan);
                     //$admin = $session['hakakses'] == 'Administrator';
                     if (($berhak_pekerjaan && !$usulan) || $berhak_usulan) {
-                        
+
                         //echo 'id pekerjaan yang akan dibatalkan untuk staffku=' . $cur_id_pekerjaan . "<br>\n";
-                        
                         //$this->pekerjaan_model->update_pekerjaan($update, $cur_id_pekerjaan);
                         $list_berkas = $this->berkas_model->get_berkas_of_pekerjaan($cur_id_pekerjaan);
                         foreach ($list_berkas as $berkas) {

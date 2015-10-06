@@ -173,7 +173,6 @@
                                                         <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                         <div class="col-lg-6">
                                                             <select name="sifat_pkj2" class="form-control m-bot15">
-                                                                <option value="">--Pekerjaan--</option>    
                                                                 <option value="1">Personal</option>
                                                                 <option value="2">Umum</option>
                                                             </select>
@@ -214,7 +213,6 @@
                                                         <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
                                                         <div class="col-lg-6">
                                                             <select name="prioritas2" class="form-control m-bot15">
-                                                                <option value="">--Prioritas--</option>    
                                                                 <option value="1">Urgent</option>
                                                                 <option value="2">Tinggi</option>
                                                                 <option value="3">Sedang</option>

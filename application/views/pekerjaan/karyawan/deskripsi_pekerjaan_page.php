@@ -75,11 +75,11 @@ foreach ($users as $u) {
                                                     if (json.status === "OK") {
 <?php
 $lempar_url = 'pekerjaan/karyawan';
-if ($this->session->userdata('prev') != null) {
+/*if ($this->session->userdata('prev') != null) {
     $lempar_url = $this->session->userdata('prev');
-}
+}*/
 ?>
-                                                        window.location = '<?php echo base_url() . $lempar_url; ?>';
+                                                        window.location = '<?php echo site_url() .'/'. $lempar_url; ?>';
                                                     } else {
                                                         alert("Gagal membatalkan pekerjaan, " + json.reason);
                                                     }
