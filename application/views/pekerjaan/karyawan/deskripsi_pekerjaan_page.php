@@ -61,7 +61,7 @@ foreach ($users as $u) {
                                     ?>
                                 </div>
                                 <script>
-                                    $('#tombol_batalkan_usulan').click(function(e) {
+                                    $('#tombol_batalkan_usulan').click(function (e) {
                                         var c = confirm('Anda yakin ingin membatalkan pekerjaan "<?php echo $deskripsi_pekerjaan[0]->nama_pekerjaan; ?>"?');
                                         if (c === false) {
                                             e.preventDefault();
@@ -70,16 +70,16 @@ foreach ($users as $u) {
                                                 data: "id_pekerjaan=::" + '<?php echo $deskripsi_pekerjaan[0]->id_pekerjaan; ?>', // get the form data
                                                 type: "get", // GET or POST
                                                 url: "<?php echo site_url(); ?>/pekerjaan/batalkan_pekerjaan", // the file to call
-                                                success: function(response) { // on success..
+                                                success: function (response) { // on success..
                                                     var json = jQuery.parseJSON(response);
                                                     if (json.status === "OK") {
 <?php
 $lempar_url = 'pekerjaan/karyawan';
-/*if ($this->session->userdata('prev') != null) {
+if ($this->session->userdata('prev') != null) {
     $lempar_url = $this->session->userdata('prev');
-}*/
+}
 ?>
-                                                        window.location = '<?php echo site_url() .'/'. $lempar_url; ?>';
+                                                        window.location = '<?php echo site_url() . '/' . $lempar_url; ?>';
                                                     } else {
                                                         alert("Gagal membatalkan pekerjaan, " + json.reason);
                                                     }
@@ -445,7 +445,7 @@ $lempar_url = 'pekerjaan/karyawan';
                                                                         <input class="file_progress" type="file" id="file1" name="file1" value="" multiple=""/>
 <!--                                                                        <input class="form-control" placeholder="Masukkan nama file anda" title="Format: nama file_nama anda" type="text" id="nama_file" name="nama_file" value="" />-->
 <!--                                                                        <small>Format: nama file_nama anda</small><br>-->
-<!--                                                                        <button class="btn btn-warning btn-xs" onclick="uploadFile()" type="button"> Upload File</button>-->
+                                                                        <!--                                                                        <button class="btn btn-warning btn-xs" onclick="uploadFile()" type="button"> Upload File</button>-->
 
                                                                     </div>
                                                                 </div>
@@ -484,7 +484,7 @@ $lempar_url = 'pekerjaan/karyawan';
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                        ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                         ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -564,7 +564,7 @@ $lempar_url = 'pekerjaan/karyawan';
                                                         }, // get the form data
                                                         type: "get", // GET or POST
                                                         url: "<?php echo site_url(); ?>/pekerjaan/hapus_file", // the file to call
-                                                        success: function(response) { // on success..
+                                                        success: function (response) { // on success..
                                                             var json = jQuery.parseJSON(response);
                                                             //alert(response);
                                                             if (json.status === "OK") {
@@ -588,13 +588,13 @@ $lempar_url = 'pekerjaan/karyawan';
                                                             }, // get the form data
                                                     type: "GET", // GET or POST
                                                     url: "<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan_by_id", // the file to call
-                                                    success: function(response) { // on success..
+                                                    success: function (response) { // on success..
                                                         var json = jQuery.parseJSON(response);
                                                         //alert(json.data);
                                                         $("#komentar_pkj_ubah").val(json.data);
                                                     }
                                                 });
-                                                $('#ubah_komen').click(function(e) {
+                                                $('#ubah_komen').click(function (e) {
                                                     //alert("pekerjaan yg divalidasi " + id_pekerjaan);
                                                     e.preventDefault();
                                                     //alert(document.getElementById('komentar_pkj_ubah').value);
@@ -607,7 +607,7 @@ $lempar_url = 'pekerjaan/karyawan';
                                                                 }, // get the form data
                                                         type: "GET", // GET or POST
                                                         url: "<?php echo site_url(); ?>/pekerjaan/ubah_komentar_pekerjaan", // the file to call
-                                                        success: function(response) { // on success..
+                                                        success: function (response) { // on success..
                                                             //var json = jQuery.parseJSON(response);
                                                             $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
                                                         }
@@ -616,7 +616,7 @@ $lempar_url = 'pekerjaan/karyawan';
                                             }
 
                                             function hapus(id) {
-                                                $('#hapus_komen').click(function(e) {
+                                                $('#hapus_komen').click(function (e) {
                                                     //alert("pekerjaan yg divalidasi " + id_pekerjaan);
                                                     e.preventDefault();
                                                     var id_pkj = document.getElementById('id_detail_pkj').value;
@@ -626,7 +626,7 @@ $lempar_url = 'pekerjaan/karyawan';
                                                                     id_komentar: id
                                                                 }, // get the form data                     type: "GET", // GET or POST
                                                         url: "<?php echo site_url(); ?>/pekerjaan/hapus_komentar_pekerjaan", // the file to call
-                                                        success: function(response) { // on success..
+                                                        success: function (response) { // on success..
                                                             $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
                                                         }
                                                     });
@@ -634,7 +634,7 @@ $lempar_url = 'pekerjaan/karyawan';
                                             }
 
 
-                                            $('#save_komen').click(function(e) {
+                                            $('#save_komen').click(function (e) {
                                                 //alert("pekerjaan yg divalidasi " + id_pekerjaan);
                                                 e.preventDefault();
                                                 var id_pkj = document.getElementById('id_detail_pkj').value;
@@ -647,7 +647,7 @@ $lempar_url = 'pekerjaan/karyawan';
                                                             }, // get the form data
                                                     type: "GET", // GET or POST
                                                     url: "<?php echo site_url(); ?>/pekerjaan/komentar_pekerjaan", // the file to call
-                                                    success: function(response) { // on success..
+                                                    success: function (response) { // on success..
                                                         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
                                                         document.getElementById('komentar_pkj').value = '';
                                                     }
@@ -665,7 +665,7 @@ $lempar_url = 'pekerjaan/karyawan';
                 data: "id_pekerjaan=" + id_pekerjaan, // get the form data
                 type: "POST", // GET or POST
                 url: "<?php echo site_url(); ?>/pekerjaan/validasi_usulan", // the file to call
-                success: function(response) { // on success..
+                success: function (response) { // on success..
                     var json = jQuery.parseJSON(response);
                     //alert(response);
                     if (json.status === "OK") {
@@ -686,7 +686,7 @@ $lempar_url = 'pekerjaan/karyawan';
                 },
                 type: "POST", // GET or POST
                 url: "<?php echo site_url(); ?>/pekerjaan/req_perpanjangan", // the file to call
-                success: function(response) { // on success..
+                success: function (response) { // on success..
                     var json = jQuery.parseJSON(response);
                     //alert(response);
                     if (json.status === "OK") {
@@ -701,11 +701,13 @@ $lempar_url = 'pekerjaan/karyawan';
                 }
             });
         }
-
-        document.title = 'Deskripsi Pekerjaan: <?php echo $nama_pekerjaan; ?> - Task Management';
-        //$('#komentar').trigger();
-        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + document.getElementById('id_detail_pkj').value);
-        $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+        $(document).ready(function () {
+            document.title = 'Deskripsi Pekerjaan: <?php echo $nama_pekerjaan; ?> - Task Management';
+            //$('#komentar').trigger();
+            $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + document.getElementById('id_detail_pkj').value);
+            $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+            //$('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+        });
 
 
         function show_progress(id_detail_pkj, id_user)
@@ -720,7 +722,7 @@ $lempar_url = 'pekerjaan/karyawan';
                 type: "POST", // GET or POST
                 url: "<?php echo site_url() ?>/pekerjaan/show_progress", // the file to call
                 cache: false,
-                success: function(response) { // on success..
+                success: function (response) { // on success..
                     var json = jQuery.parseJSON(response);
 
                     if (json.status === "OK") {
@@ -744,7 +746,7 @@ $lempar_url = 'pekerjaan/karyawan';
                 type: "POST", // GET or POST
                 url: "<?php echo site_url(); ?>/pekerjaan/show_log_progress", // the file to call
                 cache: false,
-                success: function(response) { // on success..
+                success: function (response) { // on success..
                     var json = jQuery.parseJSON(response);
                     if (json.status === "OK") {
                         var count = 1;
@@ -792,7 +794,7 @@ $lempar_url = 'pekerjaan/karyawan';
                 }
             });
         }
-        $(function() {
+        $(function () {
             $('#table_list_file').dataTable();
             $('#staff_pekerjaan').dataTable({"aaSorting": [[1, 'asc']]});
             var now = new Date();
@@ -800,23 +802,23 @@ $lempar_url = 'pekerjaan/karyawan';
             console.log(now);
             var tanggal = $('#tanggal_baru').datepicker({
                 format: 'dd-mm-yyyy',
-                onRender: function(date) {
+                onRender: function (date) {
                     return date.valueOf() < now.valueOf() ? 'disabled' : '';
                 }
-            }).on('changeDate', function(ev) {
+            }).on('changeDate', function (ev) {
                 tanggal.hide();
             }).data('datepicker');
         });
 
-        $('#setuju_perpanjang').click(function() {
+        $('#setuju_perpanjang').click(function () {
             $('#div_tanggap_perpanjang').show();
             document.getElementById('tanggal_baru').value = '';
             document.getElementById('komentar_perpanjang').value = '';
         });
-        $('#tombol_batal_perpanjang').click(function() {
+        $('#tombol_batal_perpanjang').click(function () {
             $('#div_tanggap_perpanjang').hide();
         });
-        $('#tombol_simpan_perpanjang').click(function() {
+        $('#tombol_simpan_perpanjang').click(function () {
             $('#div_tanggap_perpanjang').hide();
             $.ajax({// create an AJAX call...
                 data: {
@@ -827,7 +829,7 @@ $lempar_url = 'pekerjaan/karyawan';
                 type: "POST", // GET or POST
                 url: "<?php echo site_url() ?>/pekerjaan/perpanjang",
                 cache: false,
-                success: function(response) { // on success..
+                success: function (response) { // on success..
                     var json = jQuery.parseJSON(response);
                     if (json.status === "OK") {
                         $('#setuju_perpanjang').remove();
@@ -838,7 +840,7 @@ $lempar_url = 'pekerjaan/karyawan';
                 }
             });
         });
-        $("#batal_progress").click(function(e) {
+        $("#batal_progress").click(function (e) {
             $(".tampil_progress").css("display", "none");
         });
         function _(el) {
@@ -885,7 +887,7 @@ $lempar_url = 'pekerjaan/karyawan';
                 type: "POST", // GET or POST
                 url: "<?php echo site_url() ?>/pekerjaan/update_progress", // the file to call
                 cache: false,
-                success: function(response) { // on success..
+                success: function (response) { // on success..
                     var json = jQuery.parseJSON(response);
 
                     if (json.status === "OK") {
@@ -900,9 +902,9 @@ $lempar_url = 'pekerjaan/karyawan';
                         var formdata = new FormData();
                         var berkas = _("file1").files;
                         var p = berkas.length;
-                        for(var i=0;i<p;i++){
-                        formdata.append("berkas[]", berkas[i]);
-                    }
+                        for (var i = 0; i < p; i++) {
+                            formdata.append("berkas[]", berkas[i]);
+                        }
                         formdata.append("id_progress", id_progress);
                         ajax.send(formdata);
 

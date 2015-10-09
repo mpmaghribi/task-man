@@ -99,14 +99,14 @@
         <?php $this->load->view('taskman_rightbar_page') ?>
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
+    
     <script src="<?php echo base_url() ?>assets/js/morris-chart/raphael-min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/morris-chart/morris.js"></script>
     <script src="<?php echo base_url() ?>assets/js/highchart/js/highcharts.js"></script>
     <script src="<?php echo base_url() ?>assets/js/highchart/js/modules/exporting.js"></script>
+    
     <script id="list_variabel">
-
         document.title = "Daftar Pekerjaan <?php echo $nama_staff; ?> - Task Management";
-
         var my_staff = jQuery.parseJSON('<?php echo json_encode($my_staff); ?>');
         var detil_pekerjaan = jQuery.parseJSON('<?php echo $detil_pekerjaan; ?>');
         var detil_progress = [];

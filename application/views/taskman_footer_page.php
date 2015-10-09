@@ -55,8 +55,8 @@
 <!--icheck init -->
 <script src="<?php echo base_url() ?>assets/js/icheck-init.js"></script>
 
-<script src="<?php echo base_url() ?>assets/js/advanced-datatable/js/jquery.dataTables.js"></script>
-<!--<script src="<?php echo base_url() ?>assets/datatables-1.10.7/media/js/jquery.dataTables.js"></script>-->
+<!--<script src="<?php echo base_url() ?>assets/js/advanced-datatable/js/jquery.dataTables.js"></script>-->
+<script src="<?php echo base_url() ?>assets/datatables-1.10.7/media/js/jquery.dataTables.js"></script>
 <script src="<?php echo base_url() ?>assets/js/data-tables/DT_bootstrap.js"></script>
 
 <script src="<?php echo base_url() ?>assets/js/dynamic_table_init.js"></script>

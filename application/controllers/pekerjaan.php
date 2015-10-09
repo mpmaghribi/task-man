@@ -428,7 +428,7 @@ class pekerjaan extends ceklogin {
                 }
                 $emailSubject = $nama_pkj;
                 $emailMessage = $deskripsi_pkj;
-                $this->kirimEmail($emailDestinationPool, $emailSubject, $emailMessage);
+                //$this->kirimEmail($emailDestinationPool, $emailSubject, $emailMessage);
                 if (isset($_FILES["berkas"])) {
                     $path = './uploads/' . date('Y') . '/' . date('m') . '/' . date('d') . '/' . $id_pekerjaan . '/';
                     $files = $_FILES["berkas"];

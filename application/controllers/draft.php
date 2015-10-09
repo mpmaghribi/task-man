@@ -64,7 +64,7 @@ class draft extends ceklogin {
             }
             $list_draft = $this->pekerjaan_model->get_list_draft($session['user_id']);
             //$draft_create_submit=base_url().'pekerjaan/usulan_pekerjaan2';
-            $this->load->view('pekerjaan/draft/draft_body', array('draft_create_submit' => base_url() . 'draft/create', 'data_akun' => $session, 'list_draft' => $list_draft));
+            $this->load->view('draft/draft_body', array('draft_create_submit' => base_url() . 'draft/create', 'data_akun' => $session, 'list_draft' => $list_draft));
         } else {
             $data['data_akun'] = $session;
             $data['judul_kesalahan'] = 'Tidak Berhak';

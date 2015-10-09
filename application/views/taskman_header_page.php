@@ -63,7 +63,7 @@
 
         <link href="<?php echo base_url() ?>assets/js/advanced-datatable/css/demo_page.css" rel="stylesheet" />
         <link href="<?php echo base_url() ?>assets/js/advanced-datatable/css/demo_table.css" rel="stylesheet" />
-<!--        <link rel="stylesheet" href="<?php echo base_url() ?>assets/datatables-1.10.7/media/css/jquery.dataTables.css" />-->
-<!--        <link rel="stylesheet" href="<?php echo base_url() ?>assets/datatables-1.10.7/media/css/jquery.dataTables_themeroller.css" />-->
+        <link rel="stylesheet" href="<?php echo base_url() ?>assets/datatables-1.10.7/media/css/jquery.dataTables.css" />
+        <link rel="stylesheet" href="<?php echo base_url() ?>assets/datatables-1.10.7/media/css/jquery.dataTables_themeroller.css" />
         <link rel="stylesheet" href="<?php echo base_url() ?>assets/js/data-tables/DT_bootstrap.css" />
     </head>
