@@ -29,23 +29,27 @@ class pekerjaan_staff extends ceklogin {
         $data["my_staff"] = $this->akun->my_staff($session["user_id"]);
         $this->load->view("pekerjaan_staff/view_pekerjaan_staff", $data);
     }
-    function detail(){
-        $id_pekerjaan=(int)$this->input->get('id_pekerjaan');
-        $q=$this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
-        $pekerjaan=null;
-        if(count($q)>0){
-            $pekerjaan=$q[0];
+
+    function detail() {
+        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $pekerjaan = null;
+        if (count($q) > 0) {
+            $pekerjaan = $q[0];
         }
-        if($pekerjaan==null){
-            redirect(base_url().'pekerjaan_staff');
+        if ($pekerjaan == null) {
+            redirect(base_url() . 'pekerjaan_staff');
             return;
         }
-        $detil_pekerjaan=$this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
-        $data=array(
-            'pekerjaan'=>$pekerjaan,
-            'detil_pekerjaan'=>$detil_pekerjaan
+        $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $data = array(
+            'pekerjaan' => $pekerjaan,
+            'detil_pekerjaan' => $detil_pekerjaan
         );
-        $this->load->view('pekerjaan_staff/view_detail',$data);
+        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $data["users"] = json_decode(file_get_contents($url));
+        $data['data_akun'] = $this->session->userdata('logged_in');
+        $this->load->view('pekerjaan_staff/view_detail', $data);
     }
 
     function staff() {
@@ -56,9 +60,9 @@ class pekerjaan_staff extends ceklogin {
         $session = $this->session->userdata('logged_in');
         $list_id_staff_enroll = $this->input->post('staff_enroll');
 //        var_dump($list_id_staff_enroll);
-        if(!is_array($list_id_staff_enroll)){
+        if (!is_array($list_id_staff_enroll)) {
 //            $list_id_staff_enroll=array();
-            redirect(base_url().'pekerjaan_staff');
+            redirect(base_url() . 'pekerjaan_staff');
             return;
         }
         $sifat_pekerjaan = (int) $this->input->post('sifat_pkj');
@@ -70,8 +74,10 @@ class pekerjaan_staff extends ceklogin {
         $prioritas = (int) $this->input->post('prioritas');
         $list_staff = $this->akun->my_staff($session["user_id"]);
         $list_id_staff = array();
+        $list_staff2 = array();
         foreach ($list_staff as $staff) {
             $list_id_staff[] = $staff->id_akun;
+            $list_staff2[$staff->id_akun] = $staff;
         }
         foreach ($list_id_staff_enroll as $key => $id_staff) {
             if (!in_array($id_staff, $list_id_staff)) {
@@ -101,8 +107,12 @@ class pekerjaan_staff extends ceklogin {
         $this->db->insert('pekerjaan', $pekerjaan);
         $id_pekerjaan = $this->db->insert_id();
         if (count($list_id_staff_enroll) > 0) {
+            require_once APPPATH . '/libraries/my_email.php';
+            $eml = new my_email();
             foreach ($list_id_staff_enroll as $id_staff) {
                 $this->db->query("insert into detil_pekerjaan (id_pekerjaan,id_akun) values ($id_pekerjaan,$id_staff)");
+                //$eml->kirim_email($list_staff2[$id_staff]->email, 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
+                //$eml->kirim_email('mohammad.zarkasi@gmail.com', 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
             }
             $this->db->trans_complete();
             redirect(base_url() . 'pekerjaan_staff/detail?id_pekerjaan=' . $id_pekerjaan);
