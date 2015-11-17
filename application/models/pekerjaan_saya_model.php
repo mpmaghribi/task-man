@@ -13,7 +13,7 @@
  */
 require APPPATH . '/libraries/dtpg.php';
 
-class pekerjaan_saya_model extends CI_Model {
+class pekerjaan_saya_model extends dtpg {
 
     function get_list_pekerjaan_saya_datatable($request, $userId) {
         $sqlCount = "select count(p.id_pekerjaan)
@@ -34,8 +34,14 @@ class pekerjaan_saya_model extends CI_Model {
                 from detil_pekerjaan dp
                 where dp.id_akun = '$userId'
             )";
-        $column=array('id_pekerjaan','nama_pekerjaan','deadline','assignto','status_nama');
-        return dtpg::query_datatable($sqlCount, $sql, $request);
+        $columns = array(
+            array('name' => 'id_pekerjaan'),
+            array('name' => 'nama_pekerjaan'),
+            array('name' => 'deadline'),
+            array('name' => 'assignto'),
+            array('name' => 'status_nama')
+        );
+        return $this->get_datatable($sql, $columns, $request);
     }
 
 }

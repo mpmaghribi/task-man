@@ -54,10 +54,10 @@ class pekerjaan_saya extends ceklogin {
     }
     
     public function get_list_pekerjaan_saya_datatable(){
-        $this->load->mode(array('pekerjaan_saya_model'));
+        $this->load->model(array('pekerjaan_saya_model'));
         $session = $this->session->userdata('logged_in');
-        $param = $_GET;
-        echo json_encode($this->pekerjaan_saya_model->get_list_pekerjaan_saya_datatable($param,$session['user_id']));
+        
+        echo json_encode($this->pekerjaan_saya_model->get_list_pekerjaan_saya_datatable($_POST,$session['user_id']));
     }
 
 }

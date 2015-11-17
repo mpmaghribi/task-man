@@ -51,7 +51,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -202,109 +202,15 @@
 
     </section>
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
-    <script type="text/javascript">
-                    $(function () {
-                        var nowTemp = new Date();
-                        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-                        var checkin = $('.dpd1').datepicker({
-                            format: 'dd-mm-yyyy',
-                            onRender: function (date) {
-                                return date.valueOf() < now.valueOf() ? 'disabled' : '';
-                            }
-                        }).on('changeDate', function (ev) {
-                            if (ev.date.valueOf() > checkout.date.valueOf()) {
-                                var newDate = new Date(ev.date)
-                                newDate.setDate(newDate.getDate() + 1);
-                                checkout.setValue(newDate);
-                            }
-                            checkin.hide();
-                            $('.dpd2')[0].focus();
-                        }).data('datepicker');
-                        var checkout = $('.dpd2').datepicker({
-                            format: 'dd-mm-yyyy',
-                            onRender: function (date) {
-                                return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
-                            }
-                        }).on('changeDate', function (ev) {
-                            checkout.hide();
-                        }).data('datepicker');
-
-                        var checkin2 = $('.dpd3').datepicker({
-                            format: 'dd-mm-yyyy',
-                            onRender: function (date) {
-                                return date.valueOf() < now.valueOf() ? 'disabled' : '';
-                            }
-                        }).on('changeDate', function (ev) {
-                            if (ev.date.valueOf() > checkout2.date.valueOf()) {
-                                var newDate = new Date(ev.date)
-                                newDate.setDate(newDate.getDate() + 1);
-                                checkout2.setValue(newDate);
-                            }
-                            checkin2.hide();
-                            $('.dpd4')[0].focus();
-                        }).data('datepicker');
-                        var checkout2 = $('.dpd4').datepicker({
-                            format: 'dd-mm-yyyy',
-                            onRender: function (date) {
-                                return date.valueOf() <= checkin2.date.valueOf() ? 'disabled' : '';
-                            }
-                        }).on('changeDate', function (ev) {
-                            checkout2.hide();
-                        }).data('datepicker');
-                    });
-    </script>
+    <script src="<?= base_url()?>assets/js2/date_picker_init.js" type="text/javascript"></script>
+    <script src="<?= base_url()?>assets/js2/pekerjaan_saya/js1.js" type="text/javascript"></script>
 
     <?php $this->load->view("taskman_footer_page") ?>
 
     <script>
-        jQuery(document).ready(function () {
-            //$('#tabel_pkj_saya').dataTable();
-            //$('#tabel_pkj_saya2').dataTable();
-            initTablePekerjaanSaya();
-        });
-        var tablePekerjaanSaya = null;
-        function initTablePekerjaanSaya() {
-            console.log('fungsi initTablePekerjaanSaya');
-            if (tablePekerjaanSaya !== null) {
-                tablePekerjaanSaya.fnDestroy();
-            }
-            tablePekerjaanSaya = $("#tablePekerjaanSaya").dataTable({
-                order: [[0, "desc"]],
-                "processing": true,
-                "serverSide": true,
-                "ajax": {
-                    'method': 'get',
-                    'data': {
-                    },
-                    "url": "<?= site_url()?>/pekerjaan_saya/get_list_pekerjaan_saya_datatable",
-                    "dataSrc": function (json) {
-                        var jsonData = json.data;
-                        return jsonData;
-                    }
-                },
-                "createdRow": function (row, data, index) {
-//                    var id = data[0];
-//                    var nomor = index + 1;
-//                    var harga = parseFloat(data[2]);
-//                    var kode = data[1];
-//                    var tanggal = data[10];
-//                    var kategori = data[3];
-//                    var status = data[4];
-//                    $('td', row).eq(0).html(nomor);
-//                    $('td', row).eq(1).html(kode);
-//                    $('td', row).eq(2).html(tanggal);
-//                    $('td', row).eq(3).html(harga.formatMoney(2, ',', '.'));
-//                    $('td', row).eq(4).html(kategori);
-//                    $('td', row).eq(5).html(status);
-//                    var status_validasi = parseInt(data[9]);
-//                    
-//                    $('td', row).eq(6).html(html);
-//                    $(row).attr('id', 'opname_' + id)
-                }
-            });
-        }
+        var site_url='<?=site_url()?>';
 
-<?php if (true /*count($my_staff) > 0*/) { ?>
+<?php if (true /* count($my_staff) > 0 */) { ?>
 
             var list_nip = [];
             var list_nama = [];
