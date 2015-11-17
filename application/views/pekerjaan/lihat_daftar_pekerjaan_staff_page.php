@@ -208,20 +208,20 @@
         <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
 
         <!-- END JAVASCRIPTS -->
-<?php $this->load->view('taskman_rightbar_page') ?>
+        <?php $this->load->view('taskman_rightbar_page'); ?>
         <!--right sidebar end-->
     </section>
-<?php $this->load->view("taskman_footer_page") ?>
+    <?php $this->load->view("taskman_footer_page"); ?>
     <script type="text/javascript">
-                                                            $(function() {
+                                                            $(function () {
                                                                 var nowTemp = new Date();
                                                                 var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
                                                                 var checkin = $('.dpd1').datepicker({
                                                                     format: 'dd-mm-yyyy',
-                                                                    onRender: function(date) {
+                                                                    onRender: function (date) {
                                                                         return date.valueOf() < now.valueOf() ? 'disabled' : '';
                                                                     }
-                                                                }).on('changeDate', function(ev) {
+                                                                }).on('changeDate', function (ev) {
                                                                     if (ev.date.valueOf() > checkout.date.valueOf()) {
                                                                         var newDate = new Date(ev.date)
                                                                         newDate.setDate(newDate.getDate() + 1);
@@ -232,10 +232,10 @@
                                                                 }).data('datepicker');
                                                                 var checkout = $('.dpd2').datepicker({
                                                                     format: 'dd-mm-yyyy',
-                                                                    onRender: function(date) {
+                                                                    onRender: function (date) {
                                                                         return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
                                                                     }
-                                                                }).on('changeDate', function(ev) {
+                                                                }).on('changeDate', function (ev) {
                                                                     checkout.hide();
                                                                 }).data('datepicker');
                                                                 $('#tabel_pekerjaan_staff').dataTable({
@@ -249,7 +249,7 @@
                                                                     data: "id_pekerjaan=" + id_pekerjaan, // get the form data
                                                                     type: "POST", // GET or POST
                                                                     url: "<?php echo site_url(); ?>/pekerjaan/validasi_usulan", // the file to call
-                                                                    success: function(response) { // on success..
+                                                                    success: function (response) { // on success..
                                                                         var json = jQuery.parseJSON(response);
                                                                         //alert(response);
                                                                         if (json.status === "OK") {
@@ -357,7 +357,7 @@
                                                                 $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
                                                             }
 
-                                                            $('#pilih_berkas_assign').change(function() {
+                                                            $('#pilih_berkas_assign').change(function () {
                                                                 var pilih_berkas = document.getElementById('pilih_berkas_assign');
                                                                 var files = pilih_berkas.files;
                                                                 populate_file('berkas_baru', files);
@@ -372,7 +372,7 @@
                                                                             '</tr>');
                                                                 }
                                                             }
-                                                            $('#button_trigger_file').click(function() {
+                                                            $('#button_trigger_file').click(function () {
                                                                 $('#pilih_berkas_assign').click();
                                                             });
                                                             function format_ukuran_file(s) {

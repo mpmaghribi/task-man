@@ -53,7 +53,7 @@
                                 </li>
                             <?php } else if ($value == 5) { ?>
                                 <li class="sub-menu">
-                                    <a href="<?php echo base_url(); ?>pekerjaan/pekerjaan_staff">
+                                    <a href="<?php echo base_url(); ?>pekerjaan_staff">
                                         <i class="fa fa-book"></i>
                                         <span>Pekerjaan Staff</span>
                                     </a>

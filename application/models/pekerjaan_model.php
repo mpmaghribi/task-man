@@ -1,6 +1,6 @@
 <?php
-
-class pekerjaan_model extends CI_Model {
+require APPPATH . '/libraries/dtpg.php';
+class pekerjaan_model extends dtpg {
 
     public function __construct() {
         parent::__construct();

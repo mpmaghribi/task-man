@@ -8,6 +8,7 @@ if (!defined('BASEPATH'))
  *
  * @author mozar
  */
+//require APPPATH . '/libraries/my_model.php';
 class dtpg extends CI_Model {
 
     public function get_datatable($query, $columns = array(), $request) {
