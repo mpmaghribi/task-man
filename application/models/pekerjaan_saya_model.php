@@ -16,13 +16,6 @@ require APPPATH . '/libraries/dtpg.php';
 class pekerjaan_saya_model extends dtpg {
 
     function get_list_pekerjaan_saya_datatable($request, $userId) {
-        $sqlCount = "select count(p.id_pekerjaan)
-            from pekerjaan p
-            where p.id_pekerjaan in (
-                select dp.id_pekerjaan
-                from detil_pekerjaan dp
-                where dp.id_akun = '$userId'
-            )";
         $sql = "select p.id_pekerjaan, p.nama_pekerjaan,
             concat(p.tgl_mulai, p.tgl_selesai) as deadline,
             0 as assignto, s.status_nama
