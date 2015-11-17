@@ -2,7 +2,7 @@ $(document).ready(function () {
     $('#tabel_pekerjaan_staff').dataTable();
     $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     document.title = "Daftar Pekerjaan Staff - Task Management";
-    $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+    $('#submenu_pekerjaan_ul').show();
 });
 
 var list_nip = [];

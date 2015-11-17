@@ -41,19 +41,42 @@ class pekerjaan_staff extends ceklogin {
             redirect(base_url() . 'pekerjaan_staff');
             return;
         }
+        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         $data = array(
             'pekerjaan' => $pekerjaan,
-            'detil_pekerjaan' => $detil_pekerjaan
+            'detil_pekerjaan' => $detil_pekerjaan,
+            'users' => json_decode(file_get_contents($url)),
+            'data_akun' => $this->session->userdata('logged_in')
         );
-        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-        $data["users"] = json_decode(file_get_contents($url));
-        $data['data_akun'] = $this->session->userdata('logged_in');
         $this->load->view('pekerjaan_staff/view_detail', $data);
     }
 
     function staff() {
         $id_staff = (int) $this->input->get('id_staff');
+        $session = $this->session->userdata('logged_in');
+        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $data = array(
+            "my_staff" => $this->akun->my_staff($session["user_id"]),
+            'data_akun' => $this->session->userdata('logged_in'),
+            'id_staff'=>$id_staff
+        );
+        $list_staff = $data['my_staff'];
+        $data['nama_staff'] = '';
+        $staff_valid=false;
+        foreach ($list_staff as $staff) {
+            if ($staff->id_akun == $id_staff) {
+                $data['nama_staff'] = $staff->nama;
+                $staff_valid=true;
+                break;
+            }
+        }
+        if(!$staff_valid){
+            redirect(base_url().'pekerjaan_staff');
+            return;
+        }
+        $data['pekerjaan_staff'] = $this->db->query("select * from pekerjaan where id_pekerjaan in (select id_pekerjaan from detil_pekerjaan where id_akun='$id_staff')")->result_array();
+        $this->load->view('pekerjaan_staff/view_pekerjaan_per_staff', $data);
     }
 
     function add() {

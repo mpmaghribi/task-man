@@ -1,3 +1,4 @@
+
 <!--Core js-->
 
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-migrate-1.2.1.min.js"></script>
