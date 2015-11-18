@@ -11,7 +11,7 @@
  *
  * @author mozar
  */
-require APPPATH . '/libraries/dtpg.php';
+require_once APPPATH . '/libraries/dtpg.php';
 
 class pekerjaan_saya_model extends dtpg {
 

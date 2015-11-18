@@ -1,5 +1,7 @@
 <?php
-require APPPATH . '/libraries/dtpg.php';
+
+require_once APPPATH . '/libraries/dtpg.php';
+
 class pekerjaan_model extends dtpg {
 
     public function __construct() {
@@ -392,10 +394,15 @@ class pekerjaan_model extends dtpg {
     }
 
     public function get_pekerjaan($id_pekerjaan) {
-        $query = "select pekerjaan.*, now() as sekarang from pekerjaan "
-                . "where pekerjaan.id_pekerjaan = $id_pekerjaan";
-        $query = $this->db->query($query);
-        return $query->result();
+//        $query = "select pekerjaan.*, now() as sekarang from pekerjaan "
+//                . "where pekerjaan.id_pekerjaan = $id_pekerjaan";
+//        $query = $this->db->query($query);
+        $q = $this->db->query("select *,now() from pekerjaan p inner join sifat_pekerjaan s on s.id_sifat_pekerjaan=p.id_sifat_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) > 0) {
+            return $q[0];
+        }
+        return null;
+//        return $query->result();
     }
 
     public function get_pekerjaan_staff($list_staff, $offset = 0, $limit = 100) {

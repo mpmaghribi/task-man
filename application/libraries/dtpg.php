@@ -12,7 +12,7 @@ if (!defined('BASEPATH'))
 class dtpg extends CI_Model {
 
     public function get_datatable($query, $columns = array(), $request) {
-        $my_limit = "limit " . (int) $request['start'] . " offset " . (int) $request['length'];
+        $my_limit = "limit " . (int) $request['length'] . " offset " . (int) $request['start'];
         $my_filter = '';
         if (strlen($request['search']['value']) > 0) {
             if (is_array($columns) && count($columns) > 0) {
