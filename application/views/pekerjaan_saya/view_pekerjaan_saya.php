@@ -202,101 +202,102 @@
 
     </section>
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
-    <script src="<?= base_url()?>assets/js2/date_picker_init.js" type="text/javascript"></script>
-    <script src="<?= base_url()?>assets/js2/pekerjaan_saya/js1.js" type="text/javascript"></script>
+    <script src="<?= base_url() ?>assets/js2/date_picker_init.js" type="text/javascript"></script>
+    <script src="<?= base_url() ?>assets/js2/pekerjaan_saya/js1.js" type="text/javascript"></script>
 
     <?php $this->load->view("taskman_footer_page") ?>
 
     <script>
-        var site_url='<?=site_url()?>';
-
+                    var site_url = '<?= site_url() ?>';
+                    var list_user =<?= json_encode($users) ?>;
+                    var base_url='<?=base_url()?>';
 <?php if (true /* count($my_staff) > 0 */) { ?>
 
-            var list_nip = [];
-            var list_nama = [];
-            var list_departemen = [];
-            var list_id = [];
-            var sudah_diproses = false;
-            function query_staff() {
-                //var tubuh = $("#tabel_list_enroll_staff_body");
+                        var list_nip = [];
+                        var list_nama = [];
+                        var list_departemen = [];
+                        var list_id = [];
+                        var sudah_diproses = false;
+                        function query_staff() {
+                            //var tubuh = $("#tabel_list_enroll_staff_body");
 
-                if (list_id.length === 0) {
-                    $.ajax({// create an AJAX call...
-                        data: "", // get the form data
-                        type: "GET", // GET or POST
-                        url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
-                        success: function (response) { // on success..
-                            var json = jQuery.parseJSON(response);
-                            //alert(response);
-                            if (json.status === "OK") {
-                                var jumlah_data = json.data.length;
-                                for (var i = 0; i < jumlah_data; i++) {
-                                    //var id = json.data[i]["id_akun"];
-                                    list_nip[i] = json.data[i]['nip'];
-                                    list_nama[i] = json.data[i]['nama'];
-                                    list_departemen[i] = json.data[i]['nama_departemen'];
-                                    list_id[i] = json.data[i]["id_akun"];
-                                    var id = list_id[i];
-                                    sudah_diproses = true;
-                                    var cell = $('#nama_staff_' + id);
-                                    if (cell.length > 0) {
-                                        cell.html(list_nama[i]);
+                            if (list_id.length === 0) {
+                                $.ajax({// create an AJAX call...
+                                    data: "", // get the form data
+                                    type: "GET", // GET or POST
+                                    url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
+                                    success: function (response) { // on success..
+                                        var json = jQuery.parseJSON(response);
+                                        //alert(response);
+                                        if (json.status === "OK") {
+                                            var jumlah_data = json.data.length;
+                                            for (var i = 0; i < jumlah_data; i++) {
+                                                //var id = json.data[i]["id_akun"];
+                                                list_nip[i] = json.data[i]['nip'];
+                                                list_nama[i] = json.data[i]['nama'];
+                                                list_departemen[i] = json.data[i]['nama_departemen'];
+                                                list_id[i] = json.data[i]["id_akun"];
+                                                var id = list_id[i];
+                                                sudah_diproses = true;
+                                                var cell = $('#nama_staff_' + id);
+                                                if (cell.length > 0) {
+                                                    cell.html(list_nama[i]);
+                                                }
+                                            }
+                                        } else {
+                                        }
                                     }
-                                }
-                            } else {
+                                });
                             }
                         }
-                    });
-                }
-            }
-            query_staff();
-            var tubuh = $("#tabel_list_enroll_staff_body");
-            function tampilkan_staff() {
-                if (sudah_diproses === false)
-                    query_staff();
-                var jumlah_staff = list_id.length;
-                //alert("jumlah data" + jumlah_staff)
-                tubuh.html("");
-                var assigned = $('#staff').val();
-                var crow = 0;
-                for (var i = 0; i < jumlah_staff; i++) {
-                    if (assigned.indexOf('::' + list_id[i] + '::') >= 0)
-                        continue;
-                    crow++;
-                    tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');
-                    var row = $('#tabel_list_enroll_staff_row_' + list_id[i]);
-                    row.append('<td>' + crow + '</td>');
-                    row.append('<td>' + list_nip[i] + '</td>');
-                    row.append('<td>' + list_departemen[i] + '</td>');
-                    row.append('<td>' + list_nama[i] + '</td>');
-                    //row.append('<td>0</td>');
-                    row.append('<td><input type="checkbox" id="enroll_' + list_id[i] + '" name="enroll_' + list_id[i] + '"/></td>');
-                    //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
-                    $('#enroll_' + list_id[i]).attr('checked', false);
-                }
-                var assigned = $('#staff').val().split('::');
-            }
-            function pilih_staff_ok() {
-                var jumlah_data = list_id.length;
-                var staf = $('#staff');
-                //staf.val('::');
-                //$('#span_list_assign_staff').html('');
-                for (var i = 0; i < jumlah_data; i++) {
-                    if ($('#enroll_' + list_id[i]).attr('checked')) {
-                        staf.val(staf.val() + list_id[i] + '::');
-                        $('#span_list_assign_staff').append('<div id="div_staff_' + list_id[i] + '"><span><a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="hapus_staff(' + list_id[i] + ');">Hapus</a></span><span style="margin-left: 5px">' + list_nama[i] + '</span></div>');
-                    }
-                }
-                $('#tombol_tutup').click();
-            }
-            function hapus_staff(id_staff) {
-                $('#div_staff_' + id_staff).remove();
-                $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
-            }
+                        query_staff();
+                        var tubuh = $("#tabel_list_enroll_staff_body");
+                        function tampilkan_staff() {
+                            if (sudah_diproses === false)
+                                query_staff();
+                            var jumlah_staff = list_id.length;
+                            //alert("jumlah data" + jumlah_staff)
+                            tubuh.html("");
+                            var assigned = $('#staff').val();
+                            var crow = 0;
+                            for (var i = 0; i < jumlah_staff; i++) {
+                                if (assigned.indexOf('::' + list_id[i] + '::') >= 0)
+                                    continue;
+                                crow++;
+                                tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');
+                                var row = $('#tabel_list_enroll_staff_row_' + list_id[i]);
+                                row.append('<td>' + crow + '</td>');
+                                row.append('<td>' + list_nip[i] + '</td>');
+                                row.append('<td>' + list_departemen[i] + '</td>');
+                                row.append('<td>' + list_nama[i] + '</td>');
+                                //row.append('<td>0</td>');
+                                row.append('<td><input type="checkbox" id="enroll_' + list_id[i] + '" name="enroll_' + list_id[i] + '"/></td>');
+                                //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
+                                $('#enroll_' + list_id[i]).attr('checked', false);
+                            }
+                            var assigned = $('#staff').val().split('::');
+                        }
+                        function pilih_staff_ok() {
+                            var jumlah_data = list_id.length;
+                            var staf = $('#staff');
+                            //staf.val('::');
+                            //$('#span_list_assign_staff').html('');
+                            for (var i = 0; i < jumlah_data; i++) {
+                                if ($('#enroll_' + list_id[i]).attr('checked')) {
+                                    staf.val(staf.val() + list_id[i] + '::');
+                                    $('#span_list_assign_staff').append('<div id="div_staff_' + list_id[i] + '"><span><a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="hapus_staff(' + list_id[i] + ');">Hapus</a></span><span style="margin-left: 5px">' + list_nama[i] + '</span></div>');
+                                }
+                            }
+                            $('#tombol_tutup').click();
+                        }
+                        function hapus_staff(id_staff) {
+                            $('#div_staff_' + id_staff).remove();
+                            $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
+                        }
 
 
 
-            document.title = "Task Management - Edit Pekerjaan";
+                        document.title = "Task Management - Edit Pekerjaan";
 
         </script>
     <?php } ?>

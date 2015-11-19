@@ -89,5 +89,5 @@
     <script>
                                         var base_url = '<?= base_url() ?>';
                                         var id_staff = '<?= $id_staff ?>';
-                                        var list_staff =<?= json_encode($my_staff) ?>
+                                        var list_staff =<?= json_encode($my_staff) ?>;
     </script>

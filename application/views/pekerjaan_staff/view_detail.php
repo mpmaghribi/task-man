@@ -37,7 +37,7 @@ foreach ($users as $u) {
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                     <a class="btn btn-info btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi_usulan(<?= $pekerjaan['id_pekerjaan'] ?>);">Validasi</a>
                                     <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
-                                    <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
+                                    <a class="btn btn-warning btn-xs" href="javascript:batalkan_pekerjaan();" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                     <a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px">Perpanjangan Telah Dikirim</a><a class="btn btn-primary btn-xs" href="javascript:void(0);" id="setuju_perpanjang"  style="font-size: 10px">Minta Diperpanjang</a>
                                     <a class="btn btn-primary btn-xs" data-toggle="modal" href="#modal_perpanjang" id="tombol_perpanjang" style="font-size: 10px">Minta Perpanjang</a>
                                 </div>
@@ -407,13 +407,7 @@ foreach ($users as $u) {
 
 
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <section class="panel">
-
-                        </section>
-                    </div>
-                </div>
+                
                 <!--script for this page only-->
                 <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
             </section>
@@ -440,6 +434,13 @@ foreach ($users as $u) {
                                                                         });
 
                                                                     });
+                                                                    function batalkan_pekerjaan(){
+                                                                        var teks="Apakah Anda yakin untuk membatalkan pekerjaan ini?";
+                                                                        if(confirm(teks)==true){
+                                                                            window.location=base_url+'pekerjaan_staff/batalkan?id_pekerjaan='+id_pekerjaan;
+                                                                        }
+                                                                    }
+                                                                    
                                                                     function _(el) {
                                                                         return document.getElementById(el);
                                                                     }

@@ -100,6 +100,28 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">Angka Kredit</label>
+                                                    <div class="col-lg-6">
+                                                        <input type="text" class="form-control" id="angka_kredit" name="angka_kredit"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">Kuantitas Output</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="text" class="form-control" id="kuantitas_output" name="kuantitas_output"/>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <input type="text" class="form-control" id="satuan_kuantitas" name="satuan_kuantitas" value="item" placeholder="satuan kuanttias"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">Kualitas Mutu</label>
+                                                    <div class="col-lg-6">
+                                                        <input type="text" class="form-control" id="kualitas_mutu" name="kualitas_mutu"/>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="form-group ">
                                                     <label for="deadline" class="control-label col-lg-3">Deadline</label>
                                                     <div class="col-lg-6 ">
                                                         <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
@@ -107,6 +129,21 @@
                                                             <span class="input-group-addon">Sampai</span>
                                                             <input readonly type="text" class="form-control dpd2" value="" name="tgl_selesai_pkj">
                                                         </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">Pakai Biaya</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="pakai_biaya" id="pakai_biaya" class="form-control">
+                                                            <option value="0">Tanpa Biaya</option>
+                                                            <option value="1">Biaya</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">Biaya</label>
+                                                    <div class="col-lg-6">
+                                                        <input type="text" class="form-control" id="biaya" name="biaya"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
@@ -120,6 +157,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                
                                                 <div class="form-group ">
                                                     <label for="prioritas" class="control-label col-lg-3">File</label>
                                                     <div class="col-lg-6">
