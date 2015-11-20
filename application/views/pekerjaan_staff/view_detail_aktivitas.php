@@ -34,16 +34,8 @@ foreach ($users as $u) {
                                                 <p style="font-size: larger"><?= $pekerjaan['deskripsi_pekerjaan'] ?></p>
                                                 <h4 style="color: #1FB5AD;">Jenis Pekerjaan</h4>
                                                 <p style="font-size: larger"><?php echo $pekerjaan['nama_sifat_pekerjaan']; ?></p>
-                                                <h4 style="color: #1FB5AD;">Kategori Pekerjaan</h4>
-                                                <p style="font-size: larger"><?php echo $pekerjaan['kategori']; ?></p>
-                                                <h4 style="color: #1FB5AD;">Deadline</h4>
-                                                <p style="font-size: larger">
-                                                    <?php
-                                                    echo date("d M Y", strtotime(substr($pekerjaan['tgl_mulai'], 0, 19)));
-                                                    echo " - ";
-                                                    echo date("d M Y", strtotime(substr($pekerjaan['tgl_selesai'], 0, 19)));
-                                                    ?>
-                                                </p>
+                                                <h4 style="color: #1FB5AD;">Periode</h4>
+                                                <p style="font-size: larger"><?=$pekerjaan['periode']?></p>
                                             </section>
                                         </div>
                                         <div class="col-md-12" id="list_aktivitas">
@@ -131,6 +123,7 @@ foreach ($users as $u) {
     <script>
         var id_pekerjaan = <?= $pekerjaan['id_pekerjaan'] ?>;
         var base_url = '<?= base_url() ?>';
+        var site_url='<?=site_url()?>';
         var id_staff = '<?= $detil_pekerjaan['id_akun'] ?>';
         var list_user =<?= json_encode($users) ?>;
         var detil_pekerjaan=<?=json_encode($detil_pekerjaan)?>;
@@ -159,7 +152,7 @@ foreach ($users as $u) {
                         id_staff: id_staff,
                         id_pekerjaan: id_pekerjaan
                     },
-                    "url": base_url + "aktivitas_pekerjaan/get_list_aktivitas_pekerjaan",
+                    "url": site_url + "/aktivitas_pekerjaan/get_list_aktivitas_pekerjaan",
                     "dataSrc": function (json) {
                         var jsonData = json.data;
                         return jsonData;

@@ -26,7 +26,7 @@ function init_tabel_pekerjaan_staff() {
             'data': {
                 id_staff: id_staff
             },
-            "url": base_url + "pekerjaan_staff/get_list_pekerjaan",
+            "url": site_url + "/pekerjaan_staff/get_list_skp",
             "dataSrc": function (json) {
                 var jsonData = json.data;
                 return jsonData;
@@ -62,7 +62,7 @@ function init_tabel_pekerjaan_staff() {
             
             var html = '<span class="label '+warna_label[status_pekerjaan_arr[0]]+' label-mini">' + status_pekerjaan_arr[1] + '</span>';
             $('td', row).eq(4).html(html);
-            $('td',row).eq(5).html('<a  href="'+base_url+'pekerjaan_staff/detail?id_pekerjaan='+data[0]+'" class="btn btn-success btn-xs"><i class="fa fa-eye">View</i></a>');
+            $('td',row).eq(5).html('<a  href="'+site_url+'/pekerjaan_staff/detail_skp?id_pekerjaan='+data[0]+'" class="btn btn-success btn-xs"><i class="fa fa-eye">View</i></a>');
             $(row).attr('id', 'row_' + index)
         }
     });

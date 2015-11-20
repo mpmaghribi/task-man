@@ -13,7 +13,7 @@
  */
 require_once APPPATH . '/libraries/dtpg.php';
 class pekerjaan_staff_model extends dtpg {
-    function get_list_pekerjaan_staff($my_id=0,$id_staff=0,$request=array()){
+    function get_list_skp_staff($my_id=0,$id_staff=0,$request=array()){
         $sql="select 
             case when dp.tgl_read is null then '1, Belum Dilihat'
                  when dp.tgl_read is not null and dp.sasaran_kuantitas_output <= dp.realisasi_kuantitas_output then '4, Selesai'
@@ -44,13 +44,12 @@ class pekerjaan_staff_model extends dtpg {
         $columns=array(
             array('name'=>'id_pekerjaan'),
             array('name'=>'nama_pekerjaan'),
-            array('name'=>'tgl_mulai'),
+            array('name'=>'periode'),
             array('name'=>'id_akuns'),
             array('name'=>'sasaran_kuantitas_output'),
             array('name'=>'sasaran_waktu'),
             array('name'=>'realisasi_kuantitas_output'),
             array('name'=>'realisasi_waktu'),
-            array('name'=>'tgl_selesai'),
             array('name'=>'sekarang'),
             array('name'=>'status_pekerjaan2')
         );

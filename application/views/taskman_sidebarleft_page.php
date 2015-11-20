@@ -5,7 +5,7 @@
         <div class="leftside-navigation">
             <ul class="sidebar-menu" id="nav-accordion">
                 <li>
-                    <a href="<?php echo base_url() ?>home">
+                    <a href="<?php echo site_url() ?>/home">
                         <i class="fa fa-dashboard"></i>
                         <span>Dashboard</span>
                     </a>
@@ -16,7 +16,7 @@
                         <span>Akun Saya</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="<?php echo base_url() ?>profil">Akun</a></li>
+                        <li><a href="<?php echo site_url() ?>/profil">Akun</a></li>
                     </ul>
                 </li>
                 <?php //foreach ($temp["idmodul"] as $value) { ?>
@@ -30,14 +30,14 @@
                         <?php foreach ($temp["idmodul"] as $value) { ?>
                             <?php if ($value == 7) { ?>
                                 <li class="sub-menu">
-                                    <a href="<?php echo base_url(); ?>pekerjaan/pengaduan">
+                                    <a href="<?php echo site_url(); ?>/pekerjaan/pengaduan">
                                         <i class="fa fa-book"></i>
                                         <span>Pengaduan</span>
                                     </a>
                                 </li>
                             <?php } else if ($value == 1) { ?>
                                 <li class="sub-menu">
-                                    <a href="<?php echo base_url() ?>pekerjaan_saya">
+                                    <a href="<?php echo site_url() ?>/pekerjaan_saya">
                                         <i class="fa fa-book"></i>
 
                                         <span>Pekerjaan Saya</span>
@@ -46,21 +46,21 @@
                             <?php } else if ($value == 2 && false) { ?>
 
                                 <li class="sub-menu">
-                                    <a href="<?php echo base_url(); ?>pekerjaan/lihat_usulan">
+                                    <a href="<?php echo site_url(); ?>/pekerjaan/lihat_usulan">
                                         <i class="fa fa-book"></i>
                                         <span>Usulan Pekerjaan Staff</span>
                                     </a>
                                 </li>
                             <?php } else if ($value == 5) { ?>
                                 <li class="sub-menu">
-                                    <a href="<?php echo base_url(); ?>pekerjaan_staff">
+                                    <a href="<?php echo site_url(); ?>/pekerjaan_staff">
                                         <i class="fa fa-book"></i>
                                         <span>Pekerjaan Staff</span>
                                     </a>
                                 </li>
                             <?php } else if ($value == 3) { ?>
                                 <li class="sub-menu">
-                                    <a href="<?php echo base_url(); ?>draft">
+                                    <a href="<?php echo site_url(); ?>/draft">
                                         <i class="fa fa-book"></i>
                                         <span>Draft Pekerjaan</span>
                                     </a>
@@ -78,7 +78,7 @@
                     <ul class="sub">
                         <?php foreach ($temp["idmodul"] as $value) { ?>
                             <?php if ($value == 9) { ?>
-                                <li><a href="<?php echo base_url() ?>laporan">Laporan Pekerjaan Staff</a></li>
+                                <li><a href="<?php echo site_url() ?>/laporan">Laporan Pekerjaan Staff</a></li>
                             <?php } else if ($value == 8) { ?>
                                 <li><a href="#exportPeriodePkjSaya" data-toggle="modal">Laporan Pekerjaan Saya</a></li>
                             <?php } ?>

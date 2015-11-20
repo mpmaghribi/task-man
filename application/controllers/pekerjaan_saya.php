@@ -53,7 +53,7 @@ class pekerjaan_saya extends ceklogin {
         }
     }
 
-    function detail() {
+    function detail_skp() {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
         $session = $this->session->userdata('logged_in');
         $pekerjaan = null;
@@ -62,7 +62,7 @@ class pekerjaan_saya extends ceklogin {
             $pekerjaan = $q[0];
         }
         if ($pekerjaan == null) {
-            redirect(base_url() . 'pekerjaan_saya');
+            redirect(site_url() . '/pekerjaan_saya');
             return;
         }
         $detil_pekerjaans = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
@@ -74,7 +74,7 @@ class pekerjaan_saya extends ceklogin {
             }
         }
         if ($detil_pekerjaan == null) {
-            redirect(base_url() . 'pekerjaan_saya');
+            redirect(site_url() . '/pekerjaan_saya');
             return;
         }
         $data = array(
@@ -88,11 +88,11 @@ class pekerjaan_saya extends ceklogin {
         $this->load->view('pekerjaan_saya/view_detail', $data);
     }
 
-    public function get_list_pekerjaan_saya_datatable() {
+    public function get_list_skp_saya_datatable() {
         $this->load->model(array('pekerjaan_saya_model'));
         $session = $this->session->userdata('logged_in');
 
-        echo json_encode($this->pekerjaan_saya_model->get_list_pekerjaan_saya_datatable($_POST, $session['user_id']));
+        echo json_encode($this->pekerjaan_saya_model->get_list_skp_saya_datatable($_POST, $session['user_id']));
     }
 
 }

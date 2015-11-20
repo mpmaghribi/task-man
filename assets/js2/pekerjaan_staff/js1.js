@@ -30,8 +30,19 @@ function query_staff() {
         }
     }
 }
-
-
+var tab_aktif='';
+function tampilkan_staff_skp(){
+    tab_aktif='skp';
+    tampilkan_staff();
+}
+function tampilkan_staff_tugas_tambahan(){
+    tab_aktif='tambahan';
+    tampilkan_staff();
+}
+function tampilkan_staff_kreativitas(){
+    tab_aktif='kreatif';
+    tampilkan_staff();
+}
 function tampilkan_staff() {
     var tubuh = $("#tabel_list_enroll_staff_body");
     if (sudah_diproses === false) {
@@ -42,10 +53,9 @@ function tampilkan_staff() {
         tabel_list_enroll_staff.fnDestroy();
     }
     tubuh.html("");
-    var assigned = $('#staff').val();
     var crow = 0;
     for (var i = 0; i < jumlah_staff; i++) {
-        if ($('#staff_' + list_id[i]).length > 0)
+        if ($('#staff_'+tab_aktif+'_' + list_id[i]).length > 0)
             continue;
         var row_id = 'tabel_list_enroll_staff_row_' + list_id[i];
         var new_row = true;
@@ -74,19 +84,17 @@ function pilih_staff_ok() {
     var form = $('#form_tambah_pekerjaan2');
     for (var i = 0; i < jumlah_data; i++) {
         if ($('#enroll_' + list_id[i]).attr('checked')) {
-            //staf.val(staf.val() + list_id[i] + '::');
-            var enrolled_staff = $('<input></input>').attr({id: 'staff_enroll_' + list_id[i], name: 'staff_enroll[]', value: list_id[i], type: 'hidden'});
-            //form.append(enrolled_staff);
-            $('#tabel_assign_staff').append('<tr id="staff_' + list_id[i] + '">' +
-                    '<td id="nama_staff_' + list_id[i] + '">' + list_nama[i] + '</td>' +
-                    '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(' + list_id[i] + ')">Hapus</a></td>' +
+            var enrolled_staff = $('<input></input>').attr({id: 'staff_enroll_skp_' + list_id[i], name: 'staff_enroll[]', value: list_id[i], type: 'hidden'});
+            $('#tabel_assign_staff_skp').append('<tr id="staff_skp_' + list_id[i] + '">' +
+                    '<td id="nama_staff_skp_' + list_id[i] + '">' + list_nama[i] + '</td>' +
+                    '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff_skp(' + list_id[i] + ')">Hapus</a></td>' +
                     '</tr>');
-            $('#nama_staff_' + list_id[i]).append(enrolled_staff);
+            $('#nama_staff_skp_' + list_id[i]).append(enrolled_staff);
         }
     }
     $('#tombol_tutup').click();
 }
-function hapus_staff(id_staff) {
+function hapus_staff_skp(id_staff) {
     $('#staff_' + id_staff).remove();
     //$('#staff').val($('#staff').val().replace('::' + id_staff, ''));
 }

@@ -13,10 +13,11 @@
                 <!-- page start-->
                 <div class="row">
                     <div class="col-md-12">
-                        <section class="panel">
-                            <header class="panel-heading" id="header_pekerjaan_staff">
+                        <header class="panel-heading" id="header_pekerjaan_staff">
                                 Daftar Pekerjaan <?php echo $nama_staff ?>
                             </header>
+                        <section class="panel">
+                            
                             <div class="panel-body">
                                 <div class="form">
                                     <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_staff">
@@ -24,7 +25,7 @@
                                             <tr>
                                                 <th style="width: 10px" id="kolom_nomor">No</th>
                                                 <th style="width: 240px">Nama Pekerjaan</th>
-                                                <th style="width: 180px">Deadline</th>
+                                                <th>Periode</th>
                                                 <th>Assign To</th>
                                                 <th style="width: 170px">Status</th>
                                                 <th style="width: 50px"></th>
@@ -88,6 +89,7 @@
     <script src="<?= base_url() ?>assets/js2/pekerjaan_staff/js2.js"></script>
     <script>
                                         var base_url = '<?= base_url() ?>';
+                                        var site_url='<?=site_url()?>';
                                         var id_staff = '<?= $id_staff ?>';
                                         var list_staff =<?= json_encode($my_staff) ?>;
     </script>

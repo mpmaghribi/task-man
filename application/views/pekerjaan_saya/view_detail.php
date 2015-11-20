@@ -58,16 +58,8 @@ foreach ($users as $u) {
                                                 <p style="font-size: larger"><?= $pekerjaan['deskripsi_pekerjaan'] ?></p>
                                                 <h4 style="color: #1FB5AD;">Jenis Pekerjaan</h4>
                                                 <p style="font-size: larger"><?php echo $pekerjaan['nama_sifat_pekerjaan']; ?></p>
-                                                <h4 style="color: #1FB5AD;">Kategori Pekerjaan</h4>
-                                                <p style="font-size: larger"><?php echo $pekerjaan['kategori']; ?></p>
-                                                <h4 style="color: #1FB5AD;">Deadline</h4>
-                                                <p style="font-size: larger">
-                                                    <?php
-                                                    echo date("d M Y", strtotime(substr($pekerjaan['tgl_mulai'], 0, 19)));
-                                                    echo " - ";
-                                                    echo date("d M Y", strtotime(substr($pekerjaan['tgl_selesai'], 0, 19)));
-                                                    ?>
-                                                </p>
+                                                <h4 style="color: #1FB5AD;">Periode</h4>
+                                                <p style="font-size: larger"><?= $pekerjaan['periode'] ?></p>
                                             </section>
                                         </div>
                                         <div class="col-md-12">
@@ -222,7 +214,40 @@ foreach ($users as $u) {
                                                             </tr>
                                                         </thead>
                                                         <tbody id="tabel_aktivitas_body">
-
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <table class="table table-striped table-hover table-condensed" id="" >
+                                                        <thead>
+                                                            <tr >
+                                                                <th style="vertical-align: middle" rowspan="2">Kegiatan</th>
+                                                                <th style="vertical-align: middle; text-align: center" colspan="5">Sasaran</th>
+                                                                <th style="vertical-align: middle; text-align: center" colspan="5">Realisasi</th>
+                                                                <th style="vertical-align: middle" rowspan="2">Penghitungan</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>AK</th>
+                                                                <th>Kuantitas Output</th>
+                                                                <th>Kualitas Mutu</th>
+                                                                <th>Waktu</th>
+                                                                <th>Biaya</th>
+                                                                <th>AK</th>
+                                                                <th>Kuantitas Output</th>
+                                                                <th>Kualitas Mutu</th>
+                                                                <th>Waktu</th>
+                                                                <th>Biaya</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="">
+                                                            <tr>
+                                                                <td><?= $pekerjaan['nama_pekerjaan'] ?></td>
+                                                                <td><?= $detil_pekerjaan['sasaran_angka_kredit'] ?></td>
+                                                                <td><?= $detil_pekerjaan['sasaran_kuantitas_output'].' '.$detil_pekerjaan['satuan_kuantitas'] ?></td>
+                                                                <td><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
+                                                                <td><?= $detil_pekerjaan['sasaran_waktu'] ?></td>
+                                                                <td><?= $detil_pekerjaan['pakai_biaya']=='1'? $detil_pekerjaan['sasaran_biaya']:'-' ?></td>
+                                                            </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -409,7 +434,7 @@ foreach ($users as $u) {
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                            ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                             ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -452,7 +477,7 @@ foreach ($users as $u) {
                 </div>
 
                 <!--script for this page only-->
-                
+
             </section>
         </section>
         <!--main content end-->
@@ -469,16 +494,17 @@ foreach ($users as $u) {
     <script>
                                                                 var id_pekerjaan = <?= $pekerjaan['id_pekerjaan'] ?>;
                                                                 var base_url = '<?= base_url() ?>';
+                                                                var site_url = '<?= site_url() ?>';
                                                                 var id_staff = '<?= $detil_pekerjaan['id_akun'] ?>';
-                                                                var list_akun=<?= json_encode( $users) ?>;
-                                                                var detil_pekerjaan=<?=  json_encode($detil_pekerjaan)?>;
+                                                                var list_akun =<?= json_encode($users) ?>;
+                                                                var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
                                                                 $(document).ready(function () {
                                                                     document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
                                                                     $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + $('#id_detail_pkj').val());
-                                                                    
-                                                                    
+
+
                                                                 });
-                                                                
+
                                                                 function _(el) {
                                                                     return document.getElementById(el);
                                                                 }

@@ -71,7 +71,7 @@
         var bulan = ["Januari", "February", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         $.ajax({// create an AJAX call...
             type: "GET", // GET or POST
-            url: "<?php echo base_url(); ?>pekerjaan/req_pending_task", // the file to call
+            url: "<?php echo site_url(); ?>/pekerjaan/req_pending_task", // the file to call
             success: function(response) { // on success..
                 var json = jQuery.parseJSON(response);
                 //alert(response);

@@ -1,7 +1,5 @@
 $(document).ready(function () {
-    $('#staff_pekerjaan').dataTable({
-        
-        
+    $('#staff_pekerjaan').dataTable({        
     });
     init_tabel_aktivitas();
     $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
@@ -25,7 +23,7 @@ function init_tabel_aktivitas() {
                 id_staff: id_staff,
                 id_pekerjaan: id_pekerjaan
             },
-            "url": base_url + "aktivitas_pekerjaan/get_list_aktivitas_pekerjaan",
+            "url": site_url + "/aktivitas_pekerjaan/get_list_aktivitas_pekerjaan",
             "dataSrc": function (json) {
                 var jsonData = json.data;
                 return jsonData;

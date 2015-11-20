@@ -30,7 +30,7 @@ class pekerjaan_staff extends ceklogin {
         $this->load->view("pekerjaan_staff/view_pekerjaan_staff", $data);
     }
 
-    function detail() {
+    function detail_skp() {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
         $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
 //        $q = $this->db->query("select * from pekerjaan p inner join sifat_pekerjaan s on s.id_sifat_pekerjaan=p.id_sifat_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
@@ -113,7 +113,7 @@ class pekerjaan_staff extends ceklogin {
         $this->load->view('pekerjaan_staff/view_pekerjaan_per_staff', $data);
     }
 
-    function add() {
+    function add_skp() {
         $session = $this->session->userdata('logged_in');
         $list_id_staff_enroll = $this->input->post('staff_enroll');
 //        var_dump($list_id_staff_enroll);
@@ -126,16 +126,17 @@ class pekerjaan_staff extends ceklogin {
         $kategori_pekerjaan = $this->input->post('kategori');
         $nama_pekerjaan = $this->input->post('nama_pkj');
         $deskripsi_pekerjaan = $this->input->post('deskripsi_pkj');
-        $tanggal_mulai = $this->input->post('tgl_mulai_pkj');
-        $tanggal_selesai = $this->input->post('tgl_selesai_pkj');
+//        $tanggal_mulai = $this->input->post('tgl_mulai_pkj');
+//        $tanggal_selesai = $this->input->post('tgl_selesai_pkj');
+        $periode = abs(intval($this->input->post('periode')));
         $prioritas = (int) $this->input->post('prioritas');
         $list_staff = $this->akun->my_staff($session["user_id"]);
-        $angka_kredit=abs(floatval($this->input->post('angka_kredit')));
-        $kuantitas_output=abs(floatval($this->input->post('kuantitas_output')));
-        $kualitas_mutu=abs(floatval($this->input->post('kualitas_mutu')));
-        $biaya=abs(floatval($this->input->post('biaya')));
-        $pakai_biaya=abs(intval($this->input->post('pakai_biaya')));
-        $satuan_kuantitas=$this->input->post('satuan_kuantitas');
+        $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
+        $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
+        $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
+        $biaya = abs(floatval($this->input->post('biaya')));
+        $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
+        $satuan_kuantitas = $this->input->post('satuan_kuantitas');
         $list_id_staff = array();
         $list_staff2 = array();
         foreach ($list_staff as $staff) {
@@ -157,13 +158,12 @@ class pekerjaan_staff extends ceklogin {
             'id_sifat_pekerjaan' => $sifat_pekerjaan,
             'nama_pekerjaan' => $nama_pekerjaan,
             'deskripsi_pekerjaan' => $deskripsi_pekerjaan,
-            'tgl_mulai' => $tanggal_mulai,
-            'tgl_selesai' => $tanggal_selesai,
+            'periode' => $periode,
             'asal_pekerjaan' => 'taskmanagement',
             'level_prioritas' => $prioritas,
-            'flag_usulan' => 2,
             'kategori' => 'rutin',
-            'id_penanggung_jawab' => $session['user_id']
+            'id_penanggung_jawab' => $session['user_id'],
+            'status_pekerjaan' => 7
         );
         $this->db->trans_begin();
         $this->db->query("set datestyle to 'European'");
@@ -171,22 +171,22 @@ class pekerjaan_staff extends ceklogin {
         $id_pekerjaan = $this->db->insert_id();
         if (count($list_id_staff_enroll) > 0) {
             require_once APPPATH . '/libraries/my_email.php';
-            $eml = new my_email();
+//            $eml = new my_email();
             foreach ($list_id_staff_enroll as $id_staff) {
                 $this->db->query("insert into detil_pekerjaan (id_pekerjaan,id_akun, sasaran_angka_kredit,"
-                        . " sasaran_kuantitas_output, sasaran_kualitas_mutu, sasaran_biaya, pakai_biaya,"
+                        . " sasaran_kuantitas_output, sasaran_kualitas_mutu,sasaran_waktu, sasaran_biaya, pakai_biaya,"
                         . " satuan_kuantitas, satuan_waktu) values ($id_pekerjaan,$id_staff, $angka_kredit,"
-                        . "$kuantitas_output, $kualitas_mutu, $biaya, $pakai_biaya, '$satuan_kuantitas', 'bulan')");
+                        . "$kuantitas_output, $kualitas_mutu,12, $biaya, $pakai_biaya, '$satuan_kuantitas', 'bulan')");
                 //$eml->kirim_email($list_staff2[$id_staff]->email, 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
                 //$eml->kirim_email('mohammad.zarkasi@gmail.com', 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
             }
             $this->db->trans_complete();
-            //redirect(base_url() . 'pekerjaan_staff/detail?id_pekerjaan=' . $id_pekerjaan);
+            redirect(site_url() . '/pekerjaan_staff/detail_skp?id_pekerjaan=' . $id_pekerjaan);
             echo "tersimpan";
         } else {
             $this->db->trans_rollback();
             echo "rollback";
-//            redirect(base_url() . 'pekerjaan_staff');
+            redirect(site_url() . '/pekerjaan_staff');
         }
     }
 
@@ -216,10 +216,10 @@ class pekerjaan_staff extends ceklogin {
         }
         $this->db->query("delete from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->query("delete from pekerjaan where id_pekerjaan='$id_pekerjaan'");
-        redirect(base_url() . 'pekerjaan_staff');
+        redirect(site_url() . '/pekerjaan_staff');
     }
 
-    function get_list_pekerjaan() {
+    function get_list_skp() {
         $session = $this->session->userdata('logged_in');
         $id_staff = (int) $this->input->post('id_staff');
         $list_staff = $this->akun->my_staff($session["user_id"]);
@@ -238,7 +238,7 @@ class pekerjaan_staff extends ceklogin {
         }
         $my_id = $session['user_id'];
         $this->load->model(array('pekerjaan_staff_model'));
-        $result = $this->pekerjaan_staff_model->get_list_pekerjaan_staff($my_id, $id_staff, $_POST);
+        $result = $this->pekerjaan_staff_model->get_list_skp_staff($my_id, $id_staff, $_POST);
         echo json_encode($result);
     }
 

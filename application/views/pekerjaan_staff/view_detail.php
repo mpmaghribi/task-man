@@ -72,9 +72,9 @@ foreach ($users as $u) {
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
                                                     <?php
-                                                    if ($pekerjaan['flag_usulan'] == '2') {
+                                                    if ($pekerjaan['status_pekerjaan'] == '7') {
                                                         echo 'Pembuat Pekerjaan';
-                                                    } else if ($pekerjaan['flag_usulan'] == '1' || $pekerjaan['flag_usulan'] == '9') {
+                                                    } else  {
                                                         echo 'Ditujukan Kepada';
                                                     }
                                                     ?>
@@ -86,16 +86,8 @@ foreach ($users as $u) {
                                                 <p style="font-size: larger"><?= $pekerjaan['deskripsi_pekerjaan'] ?></p>
                                                 <h4 style="color: #1FB5AD;">Jenis Pekerjaan</h4>
                                                 <p style="font-size: larger"><?php echo $pekerjaan['nama_sifat_pekerjaan']; ?></p>
-                                                <h4 style="color: #1FB5AD;">Kategori Pekerjaan</h4>
-                                                <p style="font-size: larger"><?php echo $pekerjaan['kategori']; ?></p>
-                                                <h4 style="color: #1FB5AD;">Deadline</h4>
-                                                <p style="font-size: larger">
-                                                    <?php
-                                                    echo date("d M Y", strtotime(substr($pekerjaan['tgl_mulai'], 0, 19)));
-                                                    echo " - ";
-                                                    echo date("d M Y", strtotime(substr($pekerjaan['tgl_selesai'], 0, 19)));
-                                                    ?>
-                                                </p>
+                                                <h4 style="color: #1FB5AD;">Periode</h4>
+                                                <p style="font-size: larger"><?=$pekerjaan['periode']?></p>
                                             </section>
                                         </div>
                                         <div class="col-md-12">
@@ -200,7 +192,7 @@ foreach ($users as $u) {
                                                                     continue;
                                                                 $counter++;
                                                                 echo '<tr>';
-                                                                echo '<td><a  href="'.base_url().'pekerjaan_staff/detail_aktivitas?id_pekerjaan='.$pekerjaan['id_pekerjaan'].'&id_staff='.$dp['id_akun'].'" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye"> Lihat Aktivitas</i></a></td>';
+                                                                echo '<td><a  href="'.site_url().'/pekerjaan_staff/detail_aktivitas?id_pekerjaan='.$pekerjaan['id_pekerjaan'].'&id_staff='.$dp['id_akun'].'" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye"> Lihat Aktivitas</i></a></td>';
                                                                 echo '<td>'.$user[$dp['id_akun']]->nama.'</td>';
                                                                 echo '<td>'.  number_format(floatval($dp['skor']),2).'</td>';
                                                                 echo '</tr>';
@@ -424,6 +416,7 @@ foreach ($users as $u) {
     <script>
                                                                     var id_pekerjaan = <?= $pekerjaan['id_pekerjaan'] ?>;
                                                                     var base_url = '<?= base_url() ?>';
+                                                                    var site_url='<?=site_url()?>';
                                                                     $(document).ready(function () {
                                                                         document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
                                                                         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + $('#id_detail_pkj').val());
@@ -437,7 +430,7 @@ foreach ($users as $u) {
                                                                     function batalkan_pekerjaan(){
                                                                         var teks="Apakah Anda yakin untuk membatalkan pekerjaan ini?";
                                                                         if(confirm(teks)==true){
-                                                                            window.location=base_url+'pekerjaan_staff/batalkan?id_pekerjaan='+id_pekerjaan;
+                                                                            window.location=site_url+'/pekerjaan_staff/batalkan?id_pekerjaan='+id_pekerjaan;
                                                                         }
                                                                     }
                                                                     

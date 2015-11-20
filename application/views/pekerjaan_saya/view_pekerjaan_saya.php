@@ -43,15 +43,13 @@
                                                             <tr>
                                                                 <th> No</th>
                                                                 <th class="hidden-phone">Pekerjaan</th>
-                                                                <th>Deadline</th>
+                                                                <th>Periode</th>
                                                                 <th>Assign To</th>
                                                                 <th style="min-width: 150px">Status</th>
                                                                 <th></th>
-    <!--                                                            <th>Progress</th>-->
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
                                                         </tbody>
                                                     </table>
                                                 </div>

@@ -20,7 +20,13 @@
                                         <a data-toggle="tab" href="#PekerjaanStaff">Pekerjaan Staff</a>
                                     </li>
                                     <li class="">
-                                        <a data-toggle="tab" href="#assignPekerjaan">Assign Pekerjaan</a>
+                                        <a data-toggle="tab" href="#div_skp">SKP</a>
+                                    </li>
+                                    <li class="">
+                                        <a data-toggle="tab" href="#div_tambahan">Tugas Tambahan</a>
+                                    </li>
+                                    <li class="">
+                                        <a data-toggle="tab" href="#div_kreativitas">Kreativitas</a>
                                     </li>
                                 </ul>
                             </header>
@@ -55,18 +61,18 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="assignPekerjaan" class="tab-pane">
+                                    <div id="div_skp" class="tab-pane">
                                         <div class="form">
-                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo base_url() ?>pekerjaan_staff/add" enctype="multipart/form-data">
+                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan_staff/add_skp" enctype="multipart/form-data">
                                                 <input type="hidden" name="jenis_usulan" value="usulan"/>
                                                 <div class="form-group ">
                                                     <label for="staff" class="control-label col-lg-3">Staff</label>
                                                     <div class="col-lg-6">
                                                         <div id="span_list_assign_staff">
-                                                            <table id="tabel_assign_staff" class="table table-hover general-table">
+                                                            <table id="tabel_assign_staff_skp" class="table table-hover general-table">
                                                             </table>
                                                         </div>
-                                                        <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff();">Tambah Staff</a>
+                                                        <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff_skp();">Tambah Staff</a>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
@@ -78,15 +84,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="form-group ">
-                                                    <label for="kategori" class="control-label col-lg-3">Kategori</label>
-                                                    <div class="col-lg-6">
-                                                        <select name="kategori" class="form-control m-bot15">
-                                                            <option value="rutin">Rutin</option>
-                                                            <option value="project">Project</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                                
                                                 <div class="form-group ">
                                                     <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
                                                     <div class="col-lg-6">
@@ -120,15 +118,10 @@
                                                         <input type="text" class="form-control" id="kualitas_mutu" name="kualitas_mutu"/>
                                                     </div>
                                                 </div>
-                                                
                                                 <div class="form-group ">
-                                                    <label for="deadline" class="control-label col-lg-3">Deadline</label>
-                                                    <div class="col-lg-6 ">
-                                                        <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                                                            <input id="d" readonly type="text" class="form-control dpd1" value="" name="tgl_mulai_pkj">
-                                                            <span class="input-group-addon">Sampai</span>
-                                                            <input readonly type="text" class="form-control dpd2" value="" name="tgl_selesai_pkj">
-                                                        </div>
+                                                    <label for="prioritas" class="control-label col-lg-3">Periode</label>
+                                                    <div class="col-lg-6">
+                                                        <input type="text" class="form-control" id="periode" name="periode" value="<?=date('Y')?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
@@ -180,6 +173,12 @@
                                             </form>
                                         </div>                                            
                                     </div>
+                                    <div id="div_tambahan" class="tab-pane">
+                                        
+                                    </div>
+                                    <div id="div_kreativitas" class="tab-pane">
+                                        
+                                    </div>
                                     <div id="PekerjaanStaff" class="tab-pane active">
                                         <section class="panel">
                                             <header class="panel-heading">
@@ -218,7 +217,7 @@
                                                                         <td><?= $staff->nama_jabatan ?></td>
                                                                         <td><?= $staff->nama_departemen ?></td>
                                                                         <td><?= $staff->email ?></td>
-                                                                        <td><a class="btn btn-success btn-xs" href="<?= base_url() ?>pekerjaan_staff/staff?id_staff=<?= $staff->id_akun ?>"/><i class="fa fa-eye"></i>View</a></td>
+                                                                        <td><a class="btn btn-success btn-xs" href="<?= site_url() ?>/pekerjaan_staff/staff?id_staff=<?= $staff->id_akun ?>"/><i class="fa fa-eye"></i>View</a></td>
                                                                     </tr>
                                                                     <?php
                                                                 }
