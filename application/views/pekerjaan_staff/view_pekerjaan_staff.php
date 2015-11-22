@@ -174,7 +174,82 @@
                                         </div>                                            
                                     </div>
                                     <div id="div_tambahan" class="tab-pane">
-                                        
+                                        <div class="form">
+                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan_staff/add_tambahan" enctype="multipart/form-data">
+                                                <div class="form-group ">
+                                                    <label for="staff" class="control-label col-lg-3">Staff</label>
+                                                    <div class="col-lg-6">
+                                                        <div id="span_list_assign_staff">
+                                                            <table id="tabel_assign_staff_tambahan" class="table table-hover general-table">
+                                                            </table>
+                                                        </div>
+                                                        <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff_tugas_tambahan();">Tambah Staff</a>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="sifat_pkj" class="form-control m-bot15">
+                                                            <option value="1" >Personal</option>
+                                                            <option value="2" >Umum</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <input class=" form-control" id="firstname" name="nama_pkj" type="text" value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
+                                                    <div class="col-lg-6">
+                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"></textarea>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">Periode</label>
+                                                    <div class="col-lg-6">
+                                                        <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
+                                                            <input readonly type="text" class="form-control dpd1" value="" name="tgl_mulai">
+                                                            <span class="input-group-addon">Sampai</span>
+                                                            <input readonly type="text" class="form-control dpd2" value="" name="tgl_selesai">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="prioritas" class="form-control m-bot15">
+                                                            <option value="1" >Urgent</option>
+                                                            <option value="2" >Tinggi</option>
+                                                            <option value="3" >Sedang</option>
+                                                            <option value="4" >Rendah</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">File</label>
+                                                    <div class="col-lg-6">
+                                                        <div id="list_file_upload_assign">
+                                                            <div id="file_baru">
+                                                                <table  class="table table-hover general-table" id="berkas_baru"></table>
+                                                            </div>
+                                                        </div>
+                                                        <div style="display:none">
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                        </div>
+                                                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-lg-offset-3 col-lg-6">
+                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div> 
                                     </div>
                                     <div id="div_kreativitas" class="tab-pane">
                                         

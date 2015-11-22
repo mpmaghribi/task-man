@@ -37,6 +37,22 @@
                                                 Daftar Pekerjaan yang Saya Kerjakan
                                             </header>
                                             <div class="panel-body">
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-lg-1">Periode</label>
+                                                        <div class="col-lg-3">
+                                                            <select class="form-control" id="select_periode">
+                                                                <?php
+                                                                for ($i = $tahun_max; $i >= $tahun_min; $i--) {
+                                                                    echo '<option value="' . $i . '">' . $i . '</option>';
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body">
                                                 <div class="form">
                                                     <table class="table table-striped table-hover table-condensed" id="tablePekerjaanSaya">
                                                         <thead>
@@ -49,7 +65,7 @@
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody id="tablePekerjaanSaya_body">
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -207,8 +223,8 @@
 
     <script>
                     var site_url = '<?= site_url() ?>';
-                    var list_user =<?= json_encode($users) ?>;
-                    var base_url='<?=base_url()?>';
+                    var list_user = <?= json_encode($users) ?>;
+                    var base_url = '<?= base_url() ?>';
 <?php if (true /* count($my_staff) > 0 */) { ?>
 
                         var list_nip = [];

@@ -89,7 +89,7 @@ foreach ($users as $u) {
                                                                 }
                                                                 $counter++;
                                                                 echo '<tr>';
-                                                                echo '<td><a  href="' . base_url() . 'pekerjaan_staff/detail_aktivitas?id_pekerjaan=' . $pekerjaan['id_pekerjaan'] . '&id_staff=' . $dp['id_akun'] . '" class="btn btn-success btn-xs" target=""><i class="fa fa-eye"> Lihat Aktivitas</i></a></td>';
+                                                                echo '<td><a  href="' . site_url() . '/pekerjaan_staff/detail_aktivitas?id_pekerjaan=' . $pekerjaan['id_pekerjaan'] . '&id_staff=' . $dp['id_akun'] . '" class="btn btn-success btn-xs" target=""><i class="fa fa-eye"> Lihat Aktivitas</i></a></td>';
                                                                 echo '<td>' . $user[$dp['id_akun']]->nama . '</td>';
                                                                 echo '<td>' . number_format(floatval($dp['skor']), 2) . '</td>';
                                                                 echo '</tr>';

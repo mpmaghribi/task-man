@@ -9,3 +9,4 @@ application/logs/*
 !application/logs/.htaccess
 nbproject/private/private.xml
 nbproject/private/private.xml
+nbproject/private/private.xml

@@ -14,11 +14,29 @@
                 <div class="row">
                     <div class="col-md-12">
                         <header class="panel-heading" id="header_pekerjaan_staff">
-                                Daftar Pekerjaan <?php echo $nama_staff ?>
-                            </header>
+                            Daftar Pekerjaan <?php echo $nama_staff ?>
+                        </header>
                         <section class="panel">
-                            
                             <div class="panel-body">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-1">Periode</label>
+                                        <div class="col-lg-3">
+                                            <select id="select_periode" class="form-control" onchange="ubah_periode()">
+                                                <?php
+                                                for ($tahun = $tahun_max; $tahun >= $tahun_min; $tahun--) {
+                                                    echo '<option value="' . $tahun . '">' . $tahun . '</option>';
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <header class="panel-heading" id="">
+                                    Pekerjaan SKP
+                                </header>
                                 <div class="form">
                                     <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_staff">
                                         <thead>
@@ -36,6 +54,48 @@
                                     </table>
                                 </div>
                             </div>
+                            <!--                            <div class="panel-body">
+                                                            <header class="panel-heading" id="">
+                                                                Pekerjaan Tambahan
+                                                            </header>
+                                                            <div class="form">
+                                                                <table class="table table-striped table-hover table-condensed" id="tabel_tugas_tambahan">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width: 10px" id="kolom_nomor">No</th>
+                                                                            <th style="width: 240px">Nama Pekerjaan</th>
+                                                                            <th>Deadline</th>
+                                                                            <th>Assign To</th>
+                                                                            <th style="width: 170px">Status</th>
+                                                                            <th style="width: 50px"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="tabel_tugas_tambahan_body">
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <header class="panel-heading" id="">
+                                                                Pekerjaan Kreativitas
+                                                            </header>
+                                                            <div class="form">
+                                                                <table class="table table-striped table-hover table-condensed" id="tabel_tugas_kreativitas">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width: 10px" id="kolom_nomor">No</th>
+                                                                            <th style="width: 240px">Nama Pekerjaan</th>
+                                                                            <th>Deadline</th>
+                                                                            <th>Assign To</th>
+                                                                            <th style="width: 170px">Status</th>
+                                                                            <th style="width: 50px"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="tabel_tugas_kreativitas_body">
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>-->
                         </section>
                     </div>
                     <div class="modal fade" id="modalFilterPekerjaan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -86,10 +146,10 @@
     <script src="<?php echo base_url() ?>assets/js/highchart/js/highcharts.js"></script>
     <script src="<?php echo base_url() ?>assets/js/highchart/js/modules/exporting.js"></script>
 
-    <script src="<?= base_url() ?>assets/js2/pekerjaan_staff/js2.js"></script>
+    <script src="<?= base_url() ?>assets/js2/pekerjaan_staff/js_perstaff.js"></script>
     <script>
                                         var base_url = '<?= base_url() ?>';
-                                        var site_url='<?=site_url()?>';
+                                        var site_url = '<?= site_url() ?>';
                                         var id_staff = '<?= $id_staff ?>';
                                         var list_staff =<?= json_encode($my_staff) ?>;
     </script>

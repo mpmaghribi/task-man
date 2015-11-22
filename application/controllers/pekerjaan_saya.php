@@ -22,29 +22,34 @@ class pekerjaan_saya extends ceklogin {
 
     public function index() {
         $this->session->set_userdata('prev', 'pekerjaan/karyawan');
-        $this->load->model("pekerjaan_model");
+//        $this->load->model("pekerjaan_model");
         $this->load->model("akun");
         $temp = $this->session->userdata('logged_in');
+        $data=array();
         if (in_array(1, $temp['idmodul'])) {
-            //$result = $this->taskman_repository->sp_view_pekerjaan($temp['user_id']);
             $data['data_akun'] = $this->session->userdata('logged_in');
-            //$data['pkj_karyawan'] = $result;
-            //$list_id_pekerjaan = array();
-//            foreach ($result as $pekerjaan) {
-//                $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
-//            }
-            //$staff = $this->akun->my_staff($temp["user_id"]);
-            //$detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
-            //$data["detil_pekerjaan"] = $detil_pekerjaan;
-            //$data["my_staff"] = json_encode($staff);
             $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang berada di halaman pekerjaan.");
-            //var_dump($data["pkj_karyawan"]);
             if (in_array(2, $temp['idmodul'])) {
                 $atasan = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $temp["user_id"] . "/format/json";
                 $data["atasan"] = json_decode(file_get_contents($atasan));
             }
             $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
             $data["users"] = json_decode(file_get_contents($url));
+            $tahun_max = date('Y');
+            $q = $this->db->query("select max(coalesce(date_part('year',tgl_selesai),periode,date_part('year',now()))) as tahun_max from pekerjaan")->result_array();
+            if (count($q) > 0) {
+                $tahun = (int) $q[0]['tahun_max'];
+                if ($tahun_max < $tahun) {
+                    $tahun_max = $tahun;
+                }
+            }
+            $tahun_min = $tahun_max - 10;
+            $q = $this->db->query("select min(coalesce(date_part('year',tgl_mulai),periode,date_part('year',now()))) as tahun_min from pekerjaan")->result_array();
+            if (count($q) > 0) {
+                $tahun_min = (int) $q[0]['tahun_min'];
+            }
+            $data['tahun_max'] = $tahun_max;
+            $data['tahun_min'] = $tahun_min;
             $this->load->view('pekerjaan_saya/view_pekerjaan_saya', $data);
         } else {
             $data['judul_kesalahan'] = 'Tidak berhak';
@@ -88,11 +93,11 @@ class pekerjaan_saya extends ceklogin {
         $this->load->view('pekerjaan_saya/view_detail', $data);
     }
 
-    public function get_list_skp_saya_datatable() {
+    public function get_list_skp_saya() {
         $this->load->model(array('pekerjaan_saya_model'));
         $session = $this->session->userdata('logged_in');
-
-        echo json_encode($this->pekerjaan_saya_model->get_list_skp_saya_datatable($_POST, $session['user_id']));
+        $periode=abs(intval($this->input->post('periode')));
+        echo json_encode($this->pekerjaan_saya_model->get_list_skp_saya($session['user_id'],$periode));
     }
 
 }
