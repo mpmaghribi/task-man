@@ -34,9 +34,9 @@
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <header class="panel-heading" id="">
+<!--                                <header class="panel-heading" id="">
                                     Pekerjaan SKP
-                                </header>
+                                </header>-->
                                 <div class="form">
                                     <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_staff">
                                         <thead>

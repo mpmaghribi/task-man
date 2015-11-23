@@ -40,7 +40,7 @@ function tampilkan_staff_tugas_tambahan() {
     tampilkan_staff();
 }
 function tampilkan_staff_kreativitas() {
-    tab_aktif = 'kreatif';
+    tab_aktif = 'kreativitas';
     tampilkan_staff();
 }
 function tampilkan_staff() {
