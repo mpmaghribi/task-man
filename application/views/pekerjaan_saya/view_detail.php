@@ -249,6 +249,11 @@ foreach ($users as $u) {
                                                                 <td><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
                                                                 <td><?= $detil_pekerjaan['sasaran_waktu'] ?></td>
                                                                 <td><?= $detil_pekerjaan['pakai_biaya']=='1'? $detil_pekerjaan['sasaran_biaya']:'-' ?></td>
+																<td><?= $detil_pekerjaan['realisasi_angka_kredit'] ?></td>
+                                                                <td><?= $detil_pekerjaan['realisasi_kuantitas_output'].' '.$detil_pekerjaan['satuan_kuantitas'] ?></td>
+                                                                <td><?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>%</td>
+                                                                <td><?= $detil_pekerjaan['realisasi_waktu'] ?></td>
+                                                                <td><?= $detil_pekerjaan['pakai_biaya']=='1'? $detil_pekerjaan['realisasi_biaya']:'-' ?></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

@@ -94,14 +94,14 @@ class pekerjaan_staff_model extends dtpg {
                  (
                     case when dp.sasaran_kuantitas_output <= dp.realisasi_kuantitas_output then '4, Selesai'
                         when now()::date > p.tgl_selesai::date then '5, Terlambat'
-                        when now()::date <= p.tgl_selesai::date then '3, Dikerjakan'
+                        when now()::date <= p.tgl_selesai::date and dp.realisasi_kuantitas_output>0 then '3, Dikerjakan'
                         else '2, Sudah Dibaca'
                     end
                  )
                  else (
                     case when dp.progress>=100 then '3, Selesai'
                         when now()::date > p.tgl_selesai::date then '5, Terlambat'
-                        when now()::date <= p.tgl_selesai::date then '3, Dikerjakan'
+                        when now()::date <= p.tgl_selesai::date and dp.tglasli_mulai is not null then '3, Dikerjakan'
                         else '2, Sudah Dibaca'
                     end
                  )

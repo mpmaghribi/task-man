@@ -67,7 +67,7 @@ function tampilkan_form_tambah_aktivitas() {
 function simpan_aktivitas() {
     $.ajax({
         type: "POST",
-        url: base_url + "aktivitas_pekerjaan/add",
+        url: base_url + "index.php/aktivitas_pekerjaan/add",
         data: {
             id_pekerjaan:id_pekerjaan,
             id_akun:id_staff,
