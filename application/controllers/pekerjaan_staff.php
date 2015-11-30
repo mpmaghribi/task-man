@@ -55,7 +55,6 @@ class pekerjaan_staff extends ceklogin {
 ////        $this->mark_read($my_id, $id_pekerjaan);
 //        $this->load->view('pekerjaan_staff/view_detail_tambahan', $data);
 //    }
-
 //    function detail_kreativitas() {
 //        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
 //        $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
@@ -84,20 +83,26 @@ class pekerjaan_staff extends ceklogin {
 
     function detail() {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
+        $id_staff = abs(intval($this->input->get('id_staff')));
         $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
         $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
         if ($pekerjaan == null) {
             redirect(site_url() . '/pekerjaan_staff');
             return;
         }
+        $session = $this->session->userdata('logged_in');
+        if ($session['user_id'] != $pekerjaan['id_penanggung_jawab']) {
+            redirect(site_url() . '/pekerjaan_staff');
+            return;
+        }
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $detil_pekerjaan = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
-        $session = $this->session->userdata('logged_in');
         $data = array(
             'pekerjaan' => $pekerjaan,
             'detil_pekerjaan' => $detil_pekerjaan,
             'users' => json_decode(file_get_contents($url)),
-            'data_akun' => $session
+            'data_akun' => $session,
+            'id_staff' => $id_staff
         );
         $my_id = $session['user_id'];
         $this->load->view('pekerjaan_staff/view_detail', $data);
@@ -128,7 +133,6 @@ class pekerjaan_staff extends ceklogin {
 ////        $this->mark_read($my_id, $id_pekerjaan);
 //        $this->load->view('pekerjaan_staff/view_detail', $data);
 //    }
-
 //    private function mark_read($id_akun, $id_pekerjaan) {
 //        $this->db->query("update detil_pekerjaan set tgl_read=now() where id_akun='$id_akun' and id_pekerjaan='$id_pekerjaan' and tgl_read is null");
 //    }
@@ -280,7 +284,6 @@ class pekerjaan_staff extends ceklogin {
 //            redirect(site_url() . '/pekerjaan_staff');
 //        }
 //    }
-
 //    function add_tambahan() {
 //        $session = $this->session->userdata('logged_in');
 //        $list_id_staff_enroll = $this->input->post('staff_enroll');
@@ -375,6 +378,7 @@ class pekerjaan_staff extends ceklogin {
         $kategori_pakerjaan = $this->input->post('kategori_pekerjaan');
         $list_id_staff = array();
         $list_staff2 = array();
+
         foreach ($list_staff as $staff) {
             $list_id_staff[] = $staff->id_akun;
             $list_staff2[$staff->id_akun] = $staff;
@@ -401,13 +405,14 @@ class pekerjaan_staff extends ceklogin {
             $pekerjaan['periode'] = $periode;
             $pekerjaan['tgl_mulai'] = $periode . "-1-1";
             $pekerjaan['tgl_selesai'] = $periode . "-12-31";
-            $pekerjaan['kategori'] = 'skp';
+            $pekerjaan['kategori'] = 'rutin';
         } else {
             $pekerjaan['tgl_mulai'] = $tanggal_mulai;
             $pekerjaan['tgl_selesai'] = $tanggal_selesai;
             if (in_array($kategori_pakerjaan, array('project', 'tambahan', 'kreativitas'))) {
                 $pekerjaan['kategori'] = $kategori_pakerjaan;
             } else {
+                redirect(site_url() . '/pekerjaan_staff');
                 return;
             }
             $date1 = new DateTime($tanggal_mulai);
@@ -428,10 +433,24 @@ class pekerjaan_staff extends ceklogin {
         }
         $this->db->trans_begin();
         $this->db->query("set datestyle to 'European'");
-        $this->db->insert('pekerjaan', $pekerjaan);
-        $id_pekerjaan = $this->db->insert_id();
+
         if (count($list_id_staff_enroll) > 0) {
-            require_once APPPATH . '/libraries/my_email.php';
+            $this->db->insert('pekerjaan', $pekerjaan);
+            $id_pekerjaan = $this->db->insert_id();
+            $this->load->library(array('myuploadlib'));
+            $uploader = new MyUploadLib();
+            $uploader->prosesUpload('berkas');
+            $uploadedFiles = $uploader->getUploadedFiles();
+            foreach ($uploadedFiles as $file) {
+//                $file_upload = array(
+//                    'id_pekerjaan' => $id_pekerjaan,
+//                    'nama_file' => $file['name'],
+//                    'path' => $file['filePath']
+//                );
+                $sql = "insert into file (id_pekerjaan,nama_file,waktu, path) values ($id_pekerjaan,'" . $file['name'] . "',now(),'" . $file['filePath'] . "')";
+                $this->db->query($sql);
+            }
+//            require_once APPPATH . '/libraries/my_email.php';
 //            $eml = new my_email();
             $pekerjaan_rutin = $kategori_pakerjaan == 'rutin';
             $pekerjaan_project = $kategori_pakerjaan == 'project';
@@ -462,7 +481,7 @@ class pekerjaan_staff extends ceklogin {
                 //$eml->kirim_email('mohammad.zarkasi@gmail.com', 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
             }
             $this->db->trans_complete();
-            redirect(site_url() . '/pekerjaan_staff/detail_skp?id_pekerjaan=' . $id_pekerjaan);
+            redirect(site_url() . '/pekerjaan_staff/detail?id_pekerjaan=' . $id_pekerjaan);
             echo "tersimpan";
         } else {
             $this->db->trans_rollback();
@@ -542,7 +561,9 @@ class pekerjaan_staff extends ceklogin {
 
     function batalkan() {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
+        $id_staff_c = abs(intval($this->input->get('id_staff')));
         $session = $this->session->userdata('logged_in');
+        $this->db->trans_begin();
         $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         $pekerjaan = null;
         if (count($q) > 0) {
@@ -564,9 +585,15 @@ class pekerjaan_staff extends ceklogin {
         foreach ($list_id_staff as $id_staff) {
             $this->db->query("delete from aktivitas_pekerjaan where id_pekerjaan='$id_pekerjaan' and id_akun='$id_staff'");
         }
+        $q=$this->db->query("select * from file where id_pekerjaan='$id_pekerjaan'")->result_array();
+        foreach ($q as $f){
+            unlink($f['path']);
+        }
+        $this->db->query("delete from file where id_pekerjaan='$id_pekerjaan'");
         $this->db->query("delete from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->query("delete from pekerjaan where id_pekerjaan='$id_pekerjaan'");
-        redirect(site_url() . '/pekerjaan_staff');
+        $this->db->trans_complete();
+        redirect(site_url() . '/pekerjaan_staff/staff?id_staff=' . $id_staff_c);
     }
 
     function get_list_tugas_tambahan() {

@@ -88,7 +88,7 @@
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Ketegroi Pekerjaan</label>
                                                     <div class="col-lg-6">
                                                         <select name="kategori_pekerjaan" class="form-control m-bot15" id="select_kategori_pekerjaan">
-                                                            <option value="skp" >Rutin</option>
+                                                            <option value="rutin" >Rutin</option>
                                                             <option value="project" >Project</option>
                                                             <option value="tambahan" >Tambahan</option>
                                                             <option value="kreativitas" >Kretivitas</option>

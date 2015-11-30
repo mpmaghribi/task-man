@@ -36,7 +36,7 @@ foreach ($users as $u) {
 
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                     <a class="btn btn-info btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi_usulan(<?= $pekerjaan['id_pekerjaan'] ?>);">Validasi</a>
-                                    <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
+                                    <a class="btn btn-danger btn-xs" href="<?php echo site_url(); ?>index.php/pekerjaan/edit?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-warning btn-xs" href="javascript:batalkan_pekerjaan();" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                     <a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px">Perpanjangan Telah Dikirim</a><a class="btn btn-primary btn-xs" href="javascript:void(0);" id="setuju_perpanjang"  style="font-size: 10px">Minta Diperpanjang</a>
                                     <a class="btn btn-primary btn-xs" data-toggle="modal" href="#modal_perpanjang" id="tombol_perpanjang" style="font-size: 10px">Minta Perpanjang</a>
@@ -438,6 +438,7 @@ foreach ($users as $u) {
                                                                     var id_pekerjaan = <?= $pekerjaan['id_pekerjaan'] ?>;
                                                                     var base_url = '<?= base_url() ?>';
                                                                     var site_url = '<?= site_url() ?>';
+                                                                    var id_staff=<?=$id_staff?>;
                                                                     $(document).ready(function () {
                                                                         document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
                                                                         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + $('#id_detail_pkj').val());
@@ -451,7 +452,7 @@ foreach ($users as $u) {
                                                                     function batalkan_pekerjaan() {
                                                                         var teks = "Apakah Anda yakin untuk membatalkan pekerjaan ini?";
                                                                         if (confirm(teks) == true) {
-                                                                            window.location = site_url + '/pekerjaan_staff/batalkan?id_pekerjaan=' + id_pekerjaan;
+                                                                            window.location = site_url + '/pekerjaan_staff/batalkan?id_pekerjaan=' + id_pekerjaan+'&id_staff='+id_staff;
                                                                         }
                                                                     }
 
