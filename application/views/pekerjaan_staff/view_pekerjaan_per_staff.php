@@ -45,6 +45,7 @@
                                                 <th style="width: 240px">Nama Pekerjaan</th>
                                                 <th>Periode</th>
                                                 <th>Assign To</th>
+                                                <th>Kategori Pekerjaan</th>
                                                 <th style="width: 170px">Status</th>
                                                 <th style="width: 50px"></th>
                                             </tr>

@@ -30,67 +30,63 @@ class pekerjaan_staff extends ceklogin {
         $this->load->view("pekerjaan_staff/view_pekerjaan_staff", $data);
     }
 
-    function detail_tambahan() {
-        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
-        $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
-        $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
-        if ($pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_staff');
-            return;
-        }
-        if ($pekerjaan['kategori'] != 'tambahan') {
-            redirect(site_url() . '/pekerjaan_staff');
-            return;
-        }
-        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-        $detil_pekerjaan = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
-        $session = $this->session->userdata('logged_in');
-        $data = array(
-            'pekerjaan' => $pekerjaan,
-            'detil_pekerjaan' => $detil_pekerjaan,
-            'users' => json_decode(file_get_contents($url)),
-            'data_akun' => $session
-        );
-        $my_id = $session['user_id'];
-//        $this->mark_read($my_id, $id_pekerjaan);
-        $this->load->view('pekerjaan_staff/view_detail_tambahan', $data);
-    }
+//    function detail_tambahan() {
+//        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
+//        $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
+//        $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
+//        if ($pekerjaan == null) {
+//            redirect(site_url() . '/pekerjaan_staff');
+//            return;
+//        }
+//        if ($pekerjaan['kategori'] != 'tambahan') {
+//            redirect(site_url() . '/pekerjaan_staff');
+//            return;
+//        }
+//        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+//        $detil_pekerjaan = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
+//        $session = $this->session->userdata('logged_in');
+//        $data = array(
+//            'pekerjaan' => $pekerjaan,
+//            'detil_pekerjaan' => $detil_pekerjaan,
+//            'users' => json_decode(file_get_contents($url)),
+//            'data_akun' => $session
+//        );
+//        $my_id = $session['user_id'];
+////        $this->mark_read($my_id, $id_pekerjaan);
+//        $this->load->view('pekerjaan_staff/view_detail_tambahan', $data);
+//    }
 
-    function detail_kreativitas() {
-        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
-        $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
-        $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
-        if ($pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_staff');
-            return;
-        }
-        if ($pekerjaan['kategori'] != 'kreativitas') {
-            redirect(site_url() . '/pekerjaan_staff');
-            return;
-        }
-        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-        $detil_pekerjaan = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
-        $session = $this->session->userdata('logged_in');
-        $data = array(
-            'pekerjaan' => $pekerjaan,
-            'detil_pekerjaan' => $detil_pekerjaan,
-            'users' => json_decode(file_get_contents($url)),
-            'data_akun' => $session
-        );
-        $my_id = $session['user_id'];
-//        $this->mark_read($my_id, $id_pekerjaan);
-        $this->load->view('pekerjaan_staff/view_detail_kreativitas', $data);
-    }
+//    function detail_kreativitas() {
+//        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
+//        $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
+//        $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
+//        if ($pekerjaan == null) {
+//            redirect(site_url() . '/pekerjaan_staff');
+//            return;
+//        }
+//        if ($pekerjaan['kategori'] != 'kreativitas') {
+//            redirect(site_url() . '/pekerjaan_staff');
+//            return;
+//        }
+//        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+//        $detil_pekerjaan = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
+//        $session = $this->session->userdata('logged_in');
+//        $data = array(
+//            'pekerjaan' => $pekerjaan,
+//            'detil_pekerjaan' => $detil_pekerjaan,
+//            'users' => json_decode(file_get_contents($url)),
+//            'data_akun' => $session
+//        );
+//        $my_id = $session['user_id'];
+////        $this->mark_read($my_id, $id_pekerjaan);
+//        $this->load->view('pekerjaan_staff/view_detail_kreativitas', $data);
+//    }
 
-    function detail_skp() {
+    function detail() {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
         $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
         $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
         if ($pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_staff');
-            return;
-        }
-        if ($pekerjaan['kategori'] != 'skp') {
             redirect(site_url() . '/pekerjaan_staff');
             return;
         }
@@ -104,9 +100,34 @@ class pekerjaan_staff extends ceklogin {
             'data_akun' => $session
         );
         $my_id = $session['user_id'];
-//        $this->mark_read($my_id, $id_pekerjaan);
         $this->load->view('pekerjaan_staff/view_detail', $data);
     }
+
+//    function detail_skp() {
+//        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
+//        $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
+//        $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
+//        if ($pekerjaan == null) {
+//            redirect(site_url() . '/pekerjaan_staff');
+//            return;
+//        }
+//        if ($pekerjaan['kategori'] != 'skp') {
+//            redirect(site_url() . '/pekerjaan_staff');
+//            return;
+//        }
+//        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+//        $detil_pekerjaan = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
+//        $session = $this->session->userdata('logged_in');
+//        $data = array(
+//            'pekerjaan' => $pekerjaan,
+//            'detil_pekerjaan' => $detil_pekerjaan,
+//            'users' => json_decode(file_get_contents($url)),
+//            'data_akun' => $session
+//        );
+//        $my_id = $session['user_id'];
+////        $this->mark_read($my_id, $id_pekerjaan);
+//        $this->load->view('pekerjaan_staff/view_detail', $data);
+//    }
 
 //    private function mark_read($id_akun, $id_pekerjaan) {
 //        $this->db->query("update detil_pekerjaan set tgl_read=now() where id_akun='$id_akun' and id_pekerjaan='$id_pekerjaan' and tgl_read is null");
@@ -186,149 +207,149 @@ class pekerjaan_staff extends ceklogin {
         $this->load->view('pekerjaan_staff/view_pekerjaan_per_staff', $data);
     }
 
-    function add_kreativitas() {
-        $session = $this->session->userdata('logged_in');
-        $list_id_staff_enroll = $this->input->post('staff_enroll');
-        if (!is_array($list_id_staff_enroll)) {
-            redirect(site_url() . '/pekerjaan_staff');
-            return;
-        }
-        $sifat_pekerjaan = (int) $this->input->post('sifat_pkj');
-        $nama_pekerjaan = $this->input->post('nama_pkj');
-        $deskripsi_pekerjaan = $this->input->post('deskripsi_pkj');
-        $periode = abs(intval($this->input->post('periode')));
-        $prioritas = (int) $this->input->post('prioritas');
-        $list_staff = $this->akun->my_staff($session["user_id"]);
-        $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
-        $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
-        $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
-        $biaya = abs(floatval($this->input->post('biaya')));
-        $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
-        $satuan_kuantitas = $this->input->post('satuan_kuantitas');
-        $tgl_mulai = $this->input->post('tgl_mulai');
-        $tgl_selesai = $this->input->post('tgl_selesai');
-        $level_manfaat = intval($this->input->post('select_kemanfaatan'));
-        $list_id_staff = array();
-        $list_staff2 = array();
-        foreach ($list_staff as $staff) {
-            $list_id_staff[] = $staff->id_akun;
-            $list_staff2[$staff->id_akun] = $staff;
-        }
-        foreach ($list_id_staff_enroll as $key => $id_staff) {
-            if (!in_array($id_staff, $list_id_staff)) {
-                unset($list_id_staff_enroll[$key]);
-            }
-        }
-        if (!in_array($sifat_pekerjaan, array(1, 2))) {
-            $sifat_pekerjaan = 1;
-        }
-        if (!in_array($level_manfaat, array(1, 2, 3))) {
-            $level_manfaat = 1;
-        }
-        $pekerjaan = array(
-            'id_sifat_pekerjaan' => $sifat_pekerjaan,
-            'nama_pekerjaan' => $nama_pekerjaan,
-            'deskripsi_pekerjaan' => $deskripsi_pekerjaan,
-            'asal_pekerjaan' => 'taskmanagement',
-            'level_prioritas' => $prioritas,
-            'kategori' => 'kreativitas',
-            'id_penanggung_jawab' => $session['user_id'],
-            'status_pekerjaan' => 7,
-            'tgl_mulai' => $tgl_mulai,
-            'tgl_selesai' => $tgl_selesai,
-            'level_manfaat' => $level_manfaat
-        );
-        $this->db->trans_begin();
-        $this->db->query("set datestyle to 'European'");
-        $this->db->insert('pekerjaan', $pekerjaan);
-        $id_pekerjaan = $this->db->insert_id();
-        if (count($list_id_staff_enroll) > 0) {
-            require_once APPPATH . '/libraries/my_email.php';
-//            $eml = new my_email();
-            foreach ($list_id_staff_enroll as $id_staff) {
-                $this->db->query("insert into detil_pekerjaan (id_pekerjaan,id_akun) values ($id_pekerjaan,$id_staff)");
-                //$eml->kirim_email($list_staff2[$id_staff]->email, 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
-                //$eml->kirim_email('mohammad.zarkasi@gmail.com', 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
-            }
-            $this->db->trans_complete();
-            redirect(site_url() . '/pekerjaan_staff/detail_kreativitas?id_pekerjaan=' . $id_pekerjaan);
-            echo "tersimpan";
-        } else {
-            $this->db->trans_rollback();
-            echo "rollback";
-            redirect(site_url() . '/pekerjaan_staff');
-        }
-    }
+//    function add_kreativitas() {
+//        $session = $this->session->userdata('logged_in');
+//        $list_id_staff_enroll = $this->input->post('staff_enroll');
+//        if (!is_array($list_id_staff_enroll)) {
+//            redirect(site_url() . '/pekerjaan_staff');
+//            return;
+//        }
+//        $sifat_pekerjaan = (int) $this->input->post('sifat_pkj');
+//        $nama_pekerjaan = $this->input->post('nama_pkj');
+//        $deskripsi_pekerjaan = $this->input->post('deskripsi_pkj');
+//        $periode = abs(intval($this->input->post('periode')));
+//        $prioritas = (int) $this->input->post('prioritas');
+//        $list_staff = $this->akun->my_staff($session["user_id"]);
+//        $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
+//        $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
+//        $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
+//        $biaya = abs(floatval($this->input->post('biaya')));
+//        $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
+//        $satuan_kuantitas = $this->input->post('satuan_kuantitas');
+//        $tgl_mulai = $this->input->post('tgl_mulai');
+//        $tgl_selesai = $this->input->post('tgl_selesai');
+//        $level_manfaat = intval($this->input->post('select_kemanfaatan'));
+//        $list_id_staff = array();
+//        $list_staff2 = array();
+//        foreach ($list_staff as $staff) {
+//            $list_id_staff[] = $staff->id_akun;
+//            $list_staff2[$staff->id_akun] = $staff;
+//        }
+//        foreach ($list_id_staff_enroll as $key => $id_staff) {
+//            if (!in_array($id_staff, $list_id_staff)) {
+//                unset($list_id_staff_enroll[$key]);
+//            }
+//        }
+//        if (!in_array($sifat_pekerjaan, array(1, 2))) {
+//            $sifat_pekerjaan = 1;
+//        }
+//        if (!in_array($level_manfaat, array(1, 2, 3))) {
+//            $level_manfaat = 1;
+//        }
+//        $pekerjaan = array(
+//            'id_sifat_pekerjaan' => $sifat_pekerjaan,
+//            'nama_pekerjaan' => $nama_pekerjaan,
+//            'deskripsi_pekerjaan' => $deskripsi_pekerjaan,
+//            'asal_pekerjaan' => 'taskmanagement',
+//            'level_prioritas' => $prioritas,
+//            'kategori' => 'kreativitas',
+//            'id_penanggung_jawab' => $session['user_id'],
+//            'status_pekerjaan' => 7,
+//            'tgl_mulai' => $tgl_mulai,
+//            'tgl_selesai' => $tgl_selesai,
+//            'level_manfaat' => $level_manfaat
+//        );
+//        $this->db->trans_begin();
+//        $this->db->query("set datestyle to 'European'");
+//        $this->db->insert('pekerjaan', $pekerjaan);
+//        $id_pekerjaan = $this->db->insert_id();
+//        if (count($list_id_staff_enroll) > 0) {
+//            require_once APPPATH . '/libraries/my_email.php';
+////            $eml = new my_email();
+//            foreach ($list_id_staff_enroll as $id_staff) {
+//                $this->db->query("insert into detil_pekerjaan (id_pekerjaan,id_akun) values ($id_pekerjaan,$id_staff)");
+//                //$eml->kirim_email($list_staff2[$id_staff]->email, 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
+//                //$eml->kirim_email('mohammad.zarkasi@gmail.com', 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
+//            }
+//            $this->db->trans_complete();
+//            redirect(site_url() . '/pekerjaan_staff/detail_kreativitas?id_pekerjaan=' . $id_pekerjaan);
+//            echo "tersimpan";
+//        } else {
+//            $this->db->trans_rollback();
+//            echo "rollback";
+//            redirect(site_url() . '/pekerjaan_staff');
+//        }
+//    }
 
-    function add_tambahan() {
-        $session = $this->session->userdata('logged_in');
-        $list_id_staff_enroll = $this->input->post('staff_enroll');
-        if (!is_array($list_id_staff_enroll)) {
-            redirect(site_url() . '/pekerjaan_staff');
-            return;
-        }
-        $sifat_pekerjaan = (int) $this->input->post('sifat_pkj');
-        $nama_pekerjaan = $this->input->post('nama_pkj');
-        $deskripsi_pekerjaan = $this->input->post('deskripsi_pkj');
-        $periode = abs(intval($this->input->post('periode')));
-        $prioritas = (int) $this->input->post('prioritas');
-        $list_staff = $this->akun->my_staff($session["user_id"]);
-        $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
-        $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
-        $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
-        $biaya = abs(floatval($this->input->post('biaya')));
-        $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
-        $satuan_kuantitas = $this->input->post('satuan_kuantitas');
-        $tgl_mulai = $this->input->post('tgl_mulai');
-        $tgl_selesai = $this->input->post('tgl_selesai');
-        $list_id_staff = array();
-        $list_staff2 = array();
-        foreach ($list_staff as $staff) {
-            $list_id_staff[] = $staff->id_akun;
-            $list_staff2[$staff->id_akun] = $staff;
-        }
-        foreach ($list_id_staff_enroll as $key => $id_staff) {
-            if (!in_array($id_staff, $list_id_staff)) {
-                unset($list_id_staff_enroll[$key]);
-            }
-        }
-        if (!in_array($sifat_pekerjaan, array(1, 2))) {
-            $sifat_pekerjaan = 1;
-        }
-
-        $pekerjaan = array(
-            'id_sifat_pekerjaan' => $sifat_pekerjaan,
-            'nama_pekerjaan' => $nama_pekerjaan,
-            'deskripsi_pekerjaan' => $deskripsi_pekerjaan,
-            'asal_pekerjaan' => 'taskmanagement',
-            'level_prioritas' => $prioritas,
-            'kategori' => 'tambahan',
-            'id_penanggung_jawab' => $session['user_id'],
-            'status_pekerjaan' => 7,
-            'tgl_mulai' => $tgl_mulai,
-            'tgl_selesai' => $tgl_selesai
-        );
-        $this->db->trans_begin();
-        $this->db->query("set datestyle to 'European'");
-        $this->db->insert('pekerjaan', $pekerjaan);
-        $id_pekerjaan = $this->db->insert_id();
-        if (count($list_id_staff_enroll) > 0) {
-            require_once APPPATH . '/libraries/my_email.php';
-//            $eml = new my_email();
-            foreach ($list_id_staff_enroll as $id_staff) {
-                $this->db->query("insert into detil_pekerjaan (id_pekerjaan,id_akun) values ($id_pekerjaan,$id_staff)");
-                //$eml->kirim_email($list_staff2[$id_staff]->email, 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
-                //$eml->kirim_email('mohammad.zarkasi@gmail.com', 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
-            }
-            $this->db->trans_complete();
-            redirect(site_url() . '/pekerjaan_staff/detail_tambahan?id_pekerjaan=' . $id_pekerjaan);
-            echo "tersimpan";
-        } else {
-            $this->db->trans_rollback();
-            echo "rollback";
-            redirect(site_url() . '/pekerjaan_staff');
-        }
-    }
+//    function add_tambahan() {
+//        $session = $this->session->userdata('logged_in');
+//        $list_id_staff_enroll = $this->input->post('staff_enroll');
+//        if (!is_array($list_id_staff_enroll)) {
+//            redirect(site_url() . '/pekerjaan_staff');
+//            return;
+//        }
+//        $sifat_pekerjaan = (int) $this->input->post('sifat_pkj');
+//        $nama_pekerjaan = $this->input->post('nama_pkj');
+//        $deskripsi_pekerjaan = $this->input->post('deskripsi_pkj');
+//        $periode = abs(intval($this->input->post('periode')));
+//        $prioritas = (int) $this->input->post('prioritas');
+//        $list_staff = $this->akun->my_staff($session["user_id"]);
+//        $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
+//        $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
+//        $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
+//        $biaya = abs(floatval($this->input->post('biaya')));
+//        $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
+//        $satuan_kuantitas = $this->input->post('satuan_kuantitas');
+//        $tgl_mulai = $this->input->post('tgl_mulai');
+//        $tgl_selesai = $this->input->post('tgl_selesai');
+//        $list_id_staff = array();
+//        $list_staff2 = array();
+//        foreach ($list_staff as $staff) {
+//            $list_id_staff[] = $staff->id_akun;
+//            $list_staff2[$staff->id_akun] = $staff;
+//        }
+//        foreach ($list_id_staff_enroll as $key => $id_staff) {
+//            if (!in_array($id_staff, $list_id_staff)) {
+//                unset($list_id_staff_enroll[$key]);
+//            }
+//        }
+//        if (!in_array($sifat_pekerjaan, array(1, 2))) {
+//            $sifat_pekerjaan = 1;
+//        }
+//
+//        $pekerjaan = array(
+//            'id_sifat_pekerjaan' => $sifat_pekerjaan,
+//            'nama_pekerjaan' => $nama_pekerjaan,
+//            'deskripsi_pekerjaan' => $deskripsi_pekerjaan,
+//            'asal_pekerjaan' => 'taskmanagement',
+//            'level_prioritas' => $prioritas,
+//            'kategori' => 'tambahan',
+//            'id_penanggung_jawab' => $session['user_id'],
+//            'status_pekerjaan' => 7,
+//            'tgl_mulai' => $tgl_mulai,
+//            'tgl_selesai' => $tgl_selesai
+//        );
+//        $this->db->trans_begin();
+//        $this->db->query("set datestyle to 'European'");
+//        $this->db->insert('pekerjaan', $pekerjaan);
+//        $id_pekerjaan = $this->db->insert_id();
+//        if (count($list_id_staff_enroll) > 0) {
+//            require_once APPPATH . '/libraries/my_email.php';
+////            $eml = new my_email();
+//            foreach ($list_id_staff_enroll as $id_staff) {
+//                $this->db->query("insert into detil_pekerjaan (id_pekerjaan,id_akun) values ($id_pekerjaan,$id_staff)");
+//                //$eml->kirim_email($list_staff2[$id_staff]->email, 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
+//                //$eml->kirim_email('mohammad.zarkasi@gmail.com', 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
+//            }
+//            $this->db->trans_complete();
+//            redirect(site_url() . '/pekerjaan_staff/detail_tambahan?id_pekerjaan=' . $id_pekerjaan);
+//            echo "tersimpan";
+//        } else {
+//            $this->db->trans_rollback();
+//            echo "rollback";
+//            redirect(site_url() . '/pekerjaan_staff');
+//        }
+//    }
 
     function add() {
         $session = $this->session->userdata('logged_in');
@@ -441,75 +462,6 @@ class pekerjaan_staff extends ceklogin {
                 //$eml->kirim_email('mohammad.zarkasi@gmail.com', 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
             }
             $this->db->trans_complete();
-//            redirect(site_url() . '/pekerjaan_staff/detail_skp?id_pekerjaan=' . $id_pekerjaan);
-            echo "tersimpan";
-        } else {
-            $this->db->trans_rollback();
-            echo "rollback";
-//            redirect(site_url() . '/pekerjaan_staff');
-        }
-    }
-
-    function add_skp() {
-        $session = $this->session->userdata('logged_in');
-        $list_id_staff_enroll = $this->input->post('staff_enroll');
-        if (!is_array($list_id_staff_enroll)) {
-            redirect(site_url() . '/pekerjaan_staff');
-            return;
-        }
-        $sifat_pekerjaan = (int) $this->input->post('sifat_pkj');
-        $nama_pekerjaan = $this->input->post('nama_pkj');
-        $deskripsi_pekerjaan = $this->input->post('deskripsi_pkj');
-        $periode = abs(intval($this->input->post('periode')));
-        $prioritas = (int) $this->input->post('prioritas');
-        $list_staff = $this->akun->my_staff($session["user_id"]);
-        $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
-        $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
-        $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
-        $biaya = abs(floatval($this->input->post('biaya')));
-        $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
-        $satuan_kuantitas = $this->input->post('satuan_kuantitas');
-        $list_id_staff = array();
-        $list_staff2 = array();
-        foreach ($list_staff as $staff) {
-            $list_id_staff[] = $staff->id_akun;
-            $list_staff2[$staff->id_akun] = $staff;
-        }
-        foreach ($list_id_staff_enroll as $key => $id_staff) {
-            if (!in_array($id_staff, $list_id_staff)) {
-                unset($list_id_staff_enroll[$key]);
-            }
-        }
-        if (!in_array($sifat_pekerjaan, array(1, 2))) {
-            $sifat_pekerjaan = 1;
-        }
-        $pekerjaan = array(
-            'id_sifat_pekerjaan' => $sifat_pekerjaan,
-            'nama_pekerjaan' => $nama_pekerjaan,
-            'deskripsi_pekerjaan' => $deskripsi_pekerjaan,
-            'periode' => $periode,
-            'asal_pekerjaan' => 'taskmanagement',
-            'level_prioritas' => $prioritas,
-            'kategori' => 'skp',
-            'id_penanggung_jawab' => $session['user_id'],
-            'status_pekerjaan' => 7
-        );
-        $this->db->trans_begin();
-        $this->db->query("set datestyle to 'European'");
-        $this->db->insert('pekerjaan', $pekerjaan);
-        $id_pekerjaan = $this->db->insert_id();
-        if (count($list_id_staff_enroll) > 0) {
-            require_once APPPATH . '/libraries/my_email.php';
-//            $eml = new my_email();
-            foreach ($list_id_staff_enroll as $id_staff) {
-                $this->db->query("insert into detil_pekerjaan (id_pekerjaan,id_akun, sasaran_angka_kredit,"
-                        . " sasaran_kuantitas_output, sasaran_kualitas_mutu,sasaran_waktu, sasaran_biaya, pakai_biaya,"
-                        . " satuan_kuantitas, satuan_waktu) values ($id_pekerjaan,$id_staff, $angka_kredit,"
-                        . "$kuantitas_output, $kualitas_mutu,12, $biaya, $pakai_biaya, '$satuan_kuantitas', 'bulan')");
-                //$eml->kirim_email($list_staff2[$id_staff]->email, 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
-                //$eml->kirim_email('mohammad.zarkasi@gmail.com', 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
-            }
-            $this->db->trans_complete();
             redirect(site_url() . '/pekerjaan_staff/detail_skp?id_pekerjaan=' . $id_pekerjaan);
             echo "tersimpan";
         } else {
@@ -518,6 +470,75 @@ class pekerjaan_staff extends ceklogin {
             redirect(site_url() . '/pekerjaan_staff');
         }
     }
+
+//    function add_skp() {
+//        $session = $this->session->userdata('logged_in');
+//        $list_id_staff_enroll = $this->input->post('staff_enroll');
+//        if (!is_array($list_id_staff_enroll)) {
+//            redirect(site_url() . '/pekerjaan_staff');
+//            return;
+//        }
+//        $sifat_pekerjaan = (int) $this->input->post('sifat_pkj');
+//        $nama_pekerjaan = $this->input->post('nama_pkj');
+//        $deskripsi_pekerjaan = $this->input->post('deskripsi_pkj');
+//        $periode = abs(intval($this->input->post('periode')));
+//        $prioritas = (int) $this->input->post('prioritas');
+//        $list_staff = $this->akun->my_staff($session["user_id"]);
+//        $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
+//        $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
+//        $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
+//        $biaya = abs(floatval($this->input->post('biaya')));
+//        $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
+//        $satuan_kuantitas = $this->input->post('satuan_kuantitas');
+//        $list_id_staff = array();
+//        $list_staff2 = array();
+//        foreach ($list_staff as $staff) {
+//            $list_id_staff[] = $staff->id_akun;
+//            $list_staff2[$staff->id_akun] = $staff;
+//        }
+//        foreach ($list_id_staff_enroll as $key => $id_staff) {
+//            if (!in_array($id_staff, $list_id_staff)) {
+//                unset($list_id_staff_enroll[$key]);
+//            }
+//        }
+//        if (!in_array($sifat_pekerjaan, array(1, 2))) {
+//            $sifat_pekerjaan = 1;
+//        }
+//        $pekerjaan = array(
+//            'id_sifat_pekerjaan' => $sifat_pekerjaan,
+//            'nama_pekerjaan' => $nama_pekerjaan,
+//            'deskripsi_pekerjaan' => $deskripsi_pekerjaan,
+//            'periode' => $periode,
+//            'asal_pekerjaan' => 'taskmanagement',
+//            'level_prioritas' => $prioritas,
+//            'kategori' => 'skp',
+//            'id_penanggung_jawab' => $session['user_id'],
+//            'status_pekerjaan' => 7
+//        );
+//        $this->db->trans_begin();
+//        $this->db->query("set datestyle to 'European'");
+//        $this->db->insert('pekerjaan', $pekerjaan);
+//        $id_pekerjaan = $this->db->insert_id();
+//        if (count($list_id_staff_enroll) > 0) {
+//            require_once APPPATH . '/libraries/my_email.php';
+////            $eml = new my_email();
+//            foreach ($list_id_staff_enroll as $id_staff) {
+//                $this->db->query("insert into detil_pekerjaan (id_pekerjaan,id_akun, sasaran_angka_kredit,"
+//                        . " sasaran_kuantitas_output, sasaran_kualitas_mutu,sasaran_waktu, sasaran_biaya, pakai_biaya,"
+//                        . " satuan_kuantitas, satuan_waktu) values ($id_pekerjaan,$id_staff, $angka_kredit,"
+//                        . "$kuantitas_output, $kualitas_mutu,12, $biaya, $pakai_biaya, '$satuan_kuantitas', 'bulan')");
+//                //$eml->kirim_email($list_staff2[$id_staff]->email, 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
+//                //$eml->kirim_email('mohammad.zarkasi@gmail.com', 'Pekerjaan baru Taskmanagement', "Anda mendapat tugas baru");
+//            }
+//            $this->db->trans_complete();
+//            redirect(site_url() . '/pekerjaan_staff/detail_skp?id_pekerjaan=' . $id_pekerjaan);
+//            echo "tersimpan";
+//        } else {
+//            $this->db->trans_rollback();
+//            echo "rollback";
+//            redirect(site_url() . '/pekerjaan_staff');
+//        }
+//    }
 
     function batalkan() {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
