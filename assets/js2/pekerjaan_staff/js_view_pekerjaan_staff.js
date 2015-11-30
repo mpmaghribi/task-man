@@ -3,8 +3,35 @@ $(document).ready(function () {
     $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     document.title = "Daftar Pekerjaan Staff - Task Management";
     $('#submenu_pekerjaan_ul').show();
+    $('#select_kategori_pekerjaan').on('change', function () {
+        ubah_view_input(this.value);
+    });
+    ubah_view_input('skp');
 });
-
+function ubah_view_input(kategori) {
+    if (kategori == 'skp' || kategori == 'project') {
+        display_element(true, ['div_angka_kredit', 'div_kuantitas', 'div_kualitas', 'div_periode_tahun', 'div_pakai_biaya', 'div_biaya']);
+        display_element(false, ['div_manfaat', 'div_periode_tanggal']);
+        if (kategori == 'project') {
+            display_element(true, ['div_periode_tanggal']);
+            display_element(false, ['div_periode_tahun']);
+        }
+    } else {
+        display_element(true, ['div_periode_tanggal']);
+        display_element(false, ['div_angka_kredit', 'div_kuantitas', 'div_kualitas', 'div_periode_tahun', 'div_manfaat', 'div_pakai_biaya', 'div_biaya']);
+        if (kategori == 'kreativitas') {
+            display_element(true, ['div_manfaat']);
+        }
+    }
+}
+function display_element(displayed, list_element) {
+    for (var i = 0, n = list_element.length; i < n; i++) {
+        if (displayed == true)
+            $('#' + list_element[i]).show();
+        else
+            $('#' + list_element[i]).hide();
+    }
+}
 var list_nip = [];
 var list_nama = [];
 var list_departemen = [];
@@ -12,7 +39,6 @@ var list_id = [];
 var sudah_diproses = false;
 var tabel_list_enroll_staff = null;
 function query_staff() {
-
     if (list_id.length === 0) {
         var jumlah_data = list_staff.length;
         for (var i = 0; i < jumlah_data; i++) {
@@ -86,15 +112,15 @@ function pilih_staff_ok() {
             var enrolled_staff = $('<input></input>').attr({id: 'staff_enroll_' + tab_aktif + '_' + list_id[i], name: 'staff_enroll[]', value: list_id[i], type: 'hidden'});
             $('#tabel_assign_staff_' + tab_aktif).append('<tr id="staff_' + tab_aktif + '_' + list_id[i] + '">' +
                     '<td id="nama_staff_' + tab_aktif + '_' + list_id[i] + '">' + list_nama[i] + '</td>' +
-                    '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="delete_enrolled_staff(' + list_id[i] + ',\''+tab_aktif+'\')">Hapus</a></td>' +
+                    '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="delete_enrolled_staff(' + list_id[i] + ',\'' + tab_aktif + '\')">Hapus</a></td>' +
                     '</tr>');
             $('#nama_staff_' + tab_aktif + '_' + list_id[i]).append(enrolled_staff);
         }
     }
     $('#tombol_tutup').click();
 }
-function delete_enrolled_staff(id_staff,tab) {
-    $('#staff_'+tab+'_' + id_staff).remove();
+function delete_enrolled_staff(id_staff, tab) {
+    $('#staff_' + tab + '_' + id_staff).remove();
 }
 $('#pilih_berkas_assign').change(function () {
     var pilih_berkas = document.getElementById('pilih_berkas_assign');
