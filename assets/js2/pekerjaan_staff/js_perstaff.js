@@ -165,7 +165,7 @@ function init_tabel_skp_staff() {
                 }
                 var periode = p['periode'];
                 var halaman_detail = 'detail';
-                if (p['kategori'] != 'skp') {
+                if (p['kategori'] != 'rutin') {
                     var mulai = p['tgl_mulai'];
                     var selesai = p['tgl_selesai'];
                     var mulai2 = mulai.split('+');
@@ -179,13 +179,13 @@ function init_tabel_skp_staff() {
 //                        halaman_detail = 'detail_kreativitas';
 //                    }
                 }
-                var kategori_pekerjaan='Rutin';
-                if(p['kategori']=='project'){
-                    kategori_pekerjaan='Project';
-                }else if(p['kategori']=='tambahan'){
-                    kategori_pekerjaan='Pekerjaan Tambahan';
-                }else if(p['kategori']=='kreativitas'){
-                    kategori_pekerjaan='Pekerjaan Kreativitas';
+                var kategori_pekerjaan = 'Rutin';
+                if (p['kategori'] == 'project') {
+                    kategori_pekerjaan = 'Project';
+                } else if (p['kategori'] == 'tambahan') {
+                    kategori_pekerjaan = 'Pekerjaan Tambahan';
+                } else if (p['kategori'] == 'kreativitas') {
+                    kategori_pekerjaan = 'Pekerjaan Kreativitas';
                 }
                 var status_pekerjaan_arr = p['status_pekerjaan2'].split(',');
                 var status_pekerjaan = '<span class="label ' + warna_label[status_pekerjaan_arr[0]] + ' label-mini">' + status_pekerjaan_arr[1] + '</span>';
@@ -194,7 +194,7 @@ function init_tabel_skp_staff() {
                         + '<td id="pekerjaan_nama_' + p['id_pekerjaan'] + '"></td>'
                         + '<td id="pekerjaan_periode_' + p['id_pekerjaan'] + '"></td>'
                         + '<td id="pekerjaan_anggota_' + p['id_pekerjaan'] + '"></td>'
-                + '<td id="pekerjaan_kategori_' + p['id_pekerjaan'] + '"></td>'
+                        + '<td id="pekerjaan_kategori_' + p['id_pekerjaan'] + '"></td>'
                         + '<td id="pekerjaan_status_' + p['id_pekerjaan'] + '"></td>'
                         + '<td id="pekerjaan_view_' + p['id_pekerjaan'] + '"></td>'
                         + '</tr>';

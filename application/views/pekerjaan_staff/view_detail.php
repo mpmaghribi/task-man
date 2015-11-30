@@ -74,9 +74,20 @@ foreach ($users as $u) {
                                                     <?php
                                                     if ($pekerjaan['status_pekerjaan'] == '7') {
                                                         echo 'Pembuat Pekerjaan';
-                                                    } else  {
+                                                    } else {
                                                         echo 'Ditujukan Kepada';
                                                     }
+                                                    $list_kategori = array(
+                                                        'rutin' => 'SKP Rutin',
+                                                        'project' => 'SKP Project',
+                                                        'tambahan' => 'Pekerjaan Tambahan',
+                                                        'kreativitas' => 'Pekerjaan Kreativitas'
+                                                    );
+                                                    $list_tingkat_manfaat = array(
+                                                        1 => 'Bermanfaat bagi Unit Kerja',
+                                                        2 => 'Bermanfaat bagi Organisasi',
+                                                        3 => 'Bermanfaat bagi Negara'
+                                                    );
                                                     ?>
                                                 </h4>
                                                 <p style="font-size: larger" id="nama_penanggung_jawab"><?= $user[$pekerjaan['id_penanggung_jawab']]->nama ?></p>
@@ -87,9 +98,17 @@ foreach ($users as $u) {
                                                 <h4 style="color: #1FB5AD;">Jenis Pekerjaan</h4>
                                                 <p style="font-size: larger"><?php echo $pekerjaan['nama_sifat_pekerjaan']; ?></p>
                                                 <h4 style="color: #1FB5AD;">Kategori Pekerjaan</h4>
-                                                <p style="font-size: larger">Pekerjaan Rutin</p>
+                                                <p style="font-size: larger"><?= $list_kategori[$pekerjaan['kategori']] ?></p>
+                                                <?php
+                                                if ($pekerjaan['kategori'] == 'kreativitas') {
+                                                    ?>
+                                                    <h4 style="color: #1FB5AD;">Tingkat Kemanfaatan</h4>
+                                                    <p style="font-size: larger"><?= $list_tingkat_manfaat[$pekerjaan['level_manfaat']] ?></p>
+                                                    <?php
+                                                }
+                                                ?>
                                                 <h4 style="color: #1FB5AD;">Periode</h4>
-                                                <p style="font-size: larger"><?=$pekerjaan['periode']?></p>
+                                                <p style="font-size: larger"><?= $pekerjaan['kategori'] == 'rutin' ? $pekerjaan['periode'] : explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
                                             </section>
                                         </div>
                                         <div class="col-md-12">
@@ -190,13 +209,13 @@ foreach ($users as $u) {
                                                             <?php
                                                             $counter = 0;
                                                             foreach ($detil_pekerjaan as $dp) {
-                                                                if(!isset($user[$dp['id_akun']]))
+                                                                if (!isset($user[$dp['id_akun']]))
                                                                     continue;
                                                                 $counter++;
                                                                 echo '<tr>';
-                                                                echo '<td><a  href="'.site_url().'/pekerjaan_staff/detail_aktivitas?id_pekerjaan='.$pekerjaan['id_pekerjaan'].'&id_staff='.$dp['id_akun'].'" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye"> Lihat Aktivitas</i></a></td>';
-                                                                echo '<td>'.$user[$dp['id_akun']]->nama.'</td>';
-                                                                echo '<td>'.  number_format(floatval($dp['skor']),2).'</td>';
+                                                                echo '<td><a  href="' . site_url() . '/pekerjaan_staff/detail_aktivitas?id_pekerjaan=' . $pekerjaan['id_pekerjaan'] . '&id_staff=' . $dp['id_akun'] . '" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye"> Lihat Aktivitas</i></a></td>';
+                                                                echo '<td>' . $user[$dp['id_akun']]->nama . '</td>';
+                                                                echo '<td>' . number_format(floatval($dp['skor']), 2) . '</td>';
                                                                 echo '</tr>';
                                                             }
                                                             ?>
@@ -354,7 +373,7 @@ foreach ($users as $u) {
                                         </div>
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                    ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                        ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -401,7 +420,7 @@ foreach ($users as $u) {
 
 
                 </div>
-                
+
                 <!--script for this page only-->
                 <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
             </section>
@@ -418,7 +437,7 @@ foreach ($users as $u) {
     <script>
                                                                     var id_pekerjaan = <?= $pekerjaan['id_pekerjaan'] ?>;
                                                                     var base_url = '<?= base_url() ?>';
-                                                                    var site_url='<?=site_url()?>';
+                                                                    var site_url = '<?= site_url() ?>';
                                                                     $(document).ready(function () {
                                                                         document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
                                                                         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + $('#id_detail_pkj').val());
@@ -429,13 +448,13 @@ foreach ($users as $u) {
                                                                         });
 
                                                                     });
-                                                                    function batalkan_pekerjaan(){
-                                                                        var teks="Apakah Anda yakin untuk membatalkan pekerjaan ini?";
-                                                                        if(confirm(teks)==true){
-                                                                            window.location=site_url+'/pekerjaan_staff/batalkan?id_pekerjaan='+id_pekerjaan;
+                                                                    function batalkan_pekerjaan() {
+                                                                        var teks = "Apakah Anda yakin untuk membatalkan pekerjaan ini?";
+                                                                        if (confirm(teks) == true) {
+                                                                            window.location = site_url + '/pekerjaan_staff/batalkan?id_pekerjaan=' + id_pekerjaan;
                                                                         }
                                                                     }
-                                                                    
+
                                                                     function _(el) {
                                                                         return document.getElementById(el);
                                                                     }
