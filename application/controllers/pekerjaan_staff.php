@@ -97,14 +97,15 @@ class pekerjaan_staff extends ceklogin {
         }
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $detil_pekerjaan = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
+        $list_file = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_progress is null")->result_array();
         $data = array(
             'pekerjaan' => $pekerjaan,
             'detil_pekerjaan' => $detil_pekerjaan,
             'users' => json_decode(file_get_contents($url)),
             'data_akun' => $session,
-            'id_staff' => $id_staff
+            'id_staff' => $id_staff,
+            'list_file' => $list_file
         );
-        $my_id = $session['user_id'];
         $this->load->view('pekerjaan_staff/view_detail', $data);
     }
 
@@ -585,15 +586,48 @@ class pekerjaan_staff extends ceklogin {
         foreach ($list_id_staff as $id_staff) {
             $this->db->query("delete from aktivitas_pekerjaan where id_pekerjaan='$id_pekerjaan' and id_akun='$id_staff'");
         }
-        $q=$this->db->query("select * from file where id_pekerjaan='$id_pekerjaan'")->result_array();
-        foreach ($q as $f){
+        $q = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan'")->result_array();
+        foreach ($q as $f) {
             unlink($f['path']);
         }
-        $this->db->query("delete from file where id_pekerjaan='$id_pekerjaan'");
+        //$this->db->query("delete from file where id_pekerjaan='$id_pekerjaan'");
         $this->db->query("delete from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->query("delete from pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->trans_complete();
         redirect(site_url() . '/pekerjaan_staff/staff?id_staff=' . $id_staff_c);
+    }
+
+    function hapus_file() {
+        $id_file = abs(intval($this->input->get('id_file')));
+        $session = $this->session->userdata('logged_in');
+        $q = $this->db->query("select * from file where id_file='$id_file'")->result_array();
+        $berkas = null;
+        $pekerjaan = null;
+        $detil_pekerjaan = null;
+        $berhak = false;
+        if (count($q) > 0) {
+            $berkas = $q[0];
+        }
+        if ($berkas == null) {
+            echo "Dokumen tidak dapat ditemukan";
+            return;
+        }
+        $id_pekerjaan = $berkas['id_pekerjaan'];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) > 0) {
+            $pekerjaan = $q[0];
+        }
+        if ($pekerjaan == null) {
+            echo "Pekerjaan tidak dapat ditemukan";
+            return;
+        }
+        if ($pekerjaan['id_penanggung_jawab'] != $session['user_id']) {
+            echo "Anda tidak berhak menghapus berkas di pekerjaan ini";
+            return;
+        }
+        $this->db->query("delete from file where id_file='$id_file'");
+        unlink($berkas['path']);
+        echo "OK";
     }
 
     function get_list_tugas_tambahan() {

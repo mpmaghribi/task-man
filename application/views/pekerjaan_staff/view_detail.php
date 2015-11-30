@@ -36,7 +36,7 @@ foreach ($users as $u) {
 
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                     <a class="btn btn-info btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi_usulan(<?= $pekerjaan['id_pekerjaan'] ?>);">Validasi</a>
-                                    <a class="btn btn-danger btn-xs" href="<?php echo site_url(); ?>index.php/pekerjaan/edit?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
+                                    <a class="btn btn-danger btn-xs" href="<?php echo site_url(); ?>/pekerjaan_staff/edit?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-warning btn-xs" href="javascript:batalkan_pekerjaan();" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                     <a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px">Perpanjangan Telah Dikirim</a><a class="btn btn-primary btn-xs" href="javascript:void(0);" id="setuju_perpanjang"  style="font-size: 10px">Minta Diperpanjang</a>
                                     <a class="btn btn-primary btn-xs" data-toggle="modal" href="#modal_perpanjang" id="tombol_perpanjang" style="font-size: 10px">Minta Perpanjang</a>
@@ -117,28 +117,26 @@ foreach ($users as $u) {
                                                     File Pendukung
                                                 </h4>
                                                 <div class="panel-body">
-                                                    <table class="table table-striped table-hover table-condensed" id="table_list_file">
+                                                    <table class="table table-striped table-hover table-condensed" id="tabel_file_pendukung">
                                                         <thead>
                                                             <tr>
                                                                 <th style="width: 70px">#</th>
                                                                 <th>Nama File</th>
-                                                                <th style="width: 250px"></th>
+                                                                <th style="width: 250px">Aksi</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <?php
-                                                            if (isset($list_berkas)) {
+                                                            if (isset($list_file)) {
                                                                 $i = 1;
-                                                                foreach ($list_berkas as $berkas) {
+                                                                foreach ($list_file as $berkas) {
                                                                     ?>
-                                                                    <tr id="berkas_<?php echo $berkas->id_file; ?>" title="diupload pada <?php echo date("d M Y H:i", strtotime($berkas->waktu)); ?>">
+                                                                    <tr id="berkas_<?php echo $berkas['id_file']; ?>" title="diupload pada <?php echo date("d M Y H:i", strtotime($berkas['waktu'])); ?>">
                                                                         <td><?php echo $i; ?></td>
-                                                                        <td><?php echo basename($berkas->nama_file); ?></td>
+                                                                        <td><?php echo $berkas['nama_file']; ?></td>
                                                                         <td style="text-align: right">
-                                                                            <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() ?>download?id_file=<?= $berkas->id_file; ?>');">Download</a>
-                                                                            <?php if ($atasan || $pengusul) { ?>
-                                                                                <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
-                                                                            <?php } ?>
+                                                                            <a class="btn btn-info btn-xs" href="<?php echo site_url() ?>/download?id_file=<?= $berkas['id_file']; ?>" id="" style="font-size: 10px" target="_blank">Download</a>
+                                                                            <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas['id_file'] ?>, '<?php echo $berkas['nama_file']; ?>');">Hapus</a>
                                                                         </td>
                                                                     </tr>
                                                                     <?php
@@ -166,26 +164,7 @@ foreach ($users as $u) {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <?php
-                                                            if (isset($file_progress)) {
-                                                                $i = 1;
-                                                                foreach ($file_progress as $berkas) {
-                                                                    ?>
-                                                                    <tr id="berkas_<?php echo $berkas->id_file; ?>" title="diupload pada <?php echo date("d M Y H:i", strtotime($berkas->waktu)); ?>">
-                                                                        <td><?php echo $i; ?></td>
-                                                                        <td><?php echo basename($berkas->nama_file); ?></td>
-                                                                        <td style="text-align: right">
-                                                                            <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() ?>download?id_file=<?= $berkas->id_file; ?>');">Download</a>
-                                                                            <?php if ($atasan || $pengusul) { ?>
-                                                                                <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
-                                                                            <?php } ?>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <?php
-                                                                    $i++;
-                                                                }
-                                                            }
-                                                            ?>
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -373,7 +352,7 @@ foreach ($users as $u) {
                                         </div>
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                        ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                          ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -404,8 +383,6 @@ foreach ($users as $u) {
                                                                 <button id="save_komen" class="btn btn-primary" type="button">Tambah Komentar</button>
                                                             </div>
                                                         </div>
-
-
                                                     </form>
                                                 </div>
                                             </div>
@@ -438,7 +415,7 @@ foreach ($users as $u) {
                                                                     var id_pekerjaan = <?= $pekerjaan['id_pekerjaan'] ?>;
                                                                     var base_url = '<?= base_url() ?>';
                                                                     var site_url = '<?= site_url() ?>';
-                                                                    var id_staff=<?=$id_staff?>;
+                                                                    var id_staff =<?= $id_staff ?>;
                                                                     $(document).ready(function () {
                                                                         document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
                                                                         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + $('#id_detail_pkj').val());
@@ -447,12 +424,14 @@ foreach ($users as $u) {
                                                                         $('#staff_pekerjaan').dataTable({
                                                                             "columnDefs": [{"targets": [0], "orderable": false}],
                                                                         });
-
+                                                                        $('#tabel_file_pendukung').dataTable({
+                                                                            "columnDefs": [{"targets": [2], "orderable": false}],
+                                                                        });
                                                                     });
                                                                     function batalkan_pekerjaan() {
                                                                         var teks = "Apakah Anda yakin untuk membatalkan pekerjaan ini?";
                                                                         if (confirm(teks) == true) {
-                                                                            window.location = site_url + '/pekerjaan_staff/batalkan?id_pekerjaan=' + id_pekerjaan+'&id_staff='+id_staff;
+                                                                            window.location = site_url + '/pekerjaan_staff/batalkan?id_pekerjaan=' + id_pekerjaan + '&id_staff=' + id_staff;
                                                                         }
                                                                     }
 
@@ -515,15 +494,14 @@ foreach ($users as $u) {
                                                                         var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
                                                                         if (c == true) {
                                                                             $.ajax({// create an AJAX call...
-                                                                                data: {id_file: id_file,
-                                                                                    id_pekerjaan: <?php echo $pekerjaan['id_pekerjaan']; ?>
+                                                                                data: {
+                                                                                    id_file: id_file
                                                                                 }, // get the form data
                                                                                 type: "get", // GET or POST
-                                                                                url: "<?php echo site_url(); ?>/pekerjaan/hapus_file", // the file to call
+                                                                                url: "<?php echo site_url(); ?>/pekerjaan_staff/hapus_file", // the file to call
                                                                                 success: function (response) { // on success..
-                                                                                    var json = jQuery.parseJSON(response);
-                                                                                    //alert(response);
-                                                                                    if (json.status === "OK") {
+
+                                                                                    if (response === "OK") {
                                                                                         $('#berkas_' + id_file).remove();
                                                                                         //$('#tombol_validasi_usulan').remove();
                                                                                     } else {
