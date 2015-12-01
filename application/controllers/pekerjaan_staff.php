@@ -170,6 +170,37 @@ class pekerjaan_staff extends ceklogin {
         $this->load->view('pekerjaan_staff/view_detail_aktivitas', $data);
     }
 
+    function edit() {
+        $id_pekerjaan = abs(intval($this->input->get('id_pekerjaan')));
+        $this->load->model(array('akun'));
+        $pekerjaan = null;
+        $q = $this->db->query("select *, to_char(tgl_mulai,'DD-MM-YYYY') as tanggal_mulai, to_char(tgl_selesai,'DD-MM-YYYY') as tanggal_selesai from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) > 0) {
+            $pekerjaan = $q[0];
+        }
+        if ($pekerjaan == null) {
+            echo 'Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $session = $this->session->userdata('logged_in');
+        if ($session['user_id'] != $pekerjaan['id_penanggung_jawab']) {
+            echo 'Anda tidak berhak mengubah pekerjaan ini';
+            return;
+        }
+        $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $list_file = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_progress is null")->result_array();
+        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $list_staff = $this->akun->my_staff($session["user_id"]);
+        $data = array(
+            'pekerjaan' => $pekerjaan,
+            'detil_pekerjaan' => $detil_pekerjaan,
+            'list_file' => $list_file,
+            'list_staff' => $list_staff,
+            'data_akun' => $session
+        );
+        $this->load->view('pekerjaan_staff/view_edit', $data);
+    }
+
     function staff() {
         $id_staff = (int) $this->input->get('id_staff');
         $session = $this->session->userdata('logged_in');

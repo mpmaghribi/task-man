@@ -6,10 +6,10 @@ $(document).ready(function () {
     $('#select_kategori_pekerjaan').on('change', function () {
         ubah_view_input(this.value);
     });
-    ubah_view_input('skp');
+    ubah_view_input('rutin');
 });
 function ubah_view_input(kategori) {
-    if (kategori == 'skp' || kategori == 'project') {
+    if (kategori == 'rutin' || kategori == 'project') {
         display_element(true, ['div_angka_kredit', 'div_kuantitas', 'div_kualitas', 'div_periode_tahun', 'div_pakai_biaya', 'div_biaya']);
         display_element(false, ['div_manfaat', 'div_periode_tanggal']);
         if (kategori == 'project') {
