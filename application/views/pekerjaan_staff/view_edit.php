@@ -1,8 +1,8 @@
-<?php 
+<?php
 $this->load->view("taskman_header_page");
-$dp=array();
-if(count($detil_pekerjaan)>0){
-    $dp=$detil_pekerjaan[0];
+$dp = array();
+if (count($detil_pekerjaan) > 0) {
+    $dp = $detil_pekerjaan[0];
 }
 ?> 
 <body>
@@ -55,10 +55,13 @@ if(count($detil_pekerjaan)>0){
                                         </div>
                                     </div>
                                     <div id="div_skp" class="tab-pane active">
-                                        <?php print_r($pekerjaan); ?>
+                                        <?php 
+                                        //print_r($pekerjaan); 
+                                        ?>
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan_staff/update" enctype="multipart/form-data">
                                                 <input type="hidden" name="jenis_usulan" value="usulan"/>
+                                                <input type="hidden" name="id_pekerjaan" value="<?=$pekerjaan['id_pekerjaan']?>"/>
                                                 <div class="form-group ">
                                                     <label for="staff" class="control-label col-lg-3">Staff</label>
                                                     <div class="col-lg-6">
@@ -83,55 +86,55 @@ if(count($detil_pekerjaan)>0){
                                                     <div class="col-lg-6">
                                                         <select name="kategori_pekerjaan" class="form-control m-bot15" id="select_kategori_pekerjaan">
                                                             <option value="rutin" >Rutin</option>
-                                                            <option value="project" <?=$pekerjaan['kategori']=='project'?'selected=""':''?>>Project</option>
-                                                            <option value="tambahan" <?=$pekerjaan['kategori']=='tambahan'?'selected=""':''?>>Tambahan</option>
-                                                            <option value="kreativitas" <?=$pekerjaan['kategori']=='kreativitas'?'selected=""':''?>>Kreativitas</option>
+                                                            <option value="project" <?= $pekerjaan['kategori'] == 'project' ? 'selected=""' : '' ?>>Project</option>
+                                                            <option value="tambahan" <?= $pekerjaan['kategori'] == 'tambahan' ? 'selected=""' : '' ?>>Tambahan</option>
+                                                            <option value="kreativitas" <?= $pekerjaan['kategori'] == 'kreativitas' ? 'selected=""' : '' ?>>Kreativitas</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
                                                     <div class="col-lg-6">
-                                                        <input class=" form-control" id="firstname" name="nama_pkj" type="text" value="<?=$pekerjaan['nama_pekerjaan']?>"/>
+                                                        <input class=" form-control" id="firstname" name="nama_pkj" type="text" value="<?= $pekerjaan['nama_pekerjaan'] ?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
                                                     <div class="col-lg-6">
-                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"><?=$pekerjaan['deskripsi_pekerjaan']?></textarea>
+                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"><?= $pekerjaan['deskripsi_pekerjaan'] ?></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-group " id="div_angka_kredit">
                                                     <label for="prioritas" class="control-label col-lg-3">Angka Kredit</label>
                                                     <div class="col-lg-6">
-                                                        <input type="text" class="form-control" id="angka_kredit" name="angka_kredit" value="<?=$dp['sasaran_angka_kredit']?>"/>
+                                                        <input type="text" class="form-control" id="angka_kredit" name="angka_kredit" value="<?= $dp['sasaran_angka_kredit'] ?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group " id="div_kuantitas">
                                                     <label for="prioritas" class="control-label col-lg-3">Kuantitas Output</label>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" id="kuantitas_output" name="kuantitas_output" value="<?=$dp['sasaran_kuantitas_output']?>"/>
+                                                        <input type="text" class="form-control" id="kuantitas_output" name="kuantitas_output" value="<?= $dp['sasaran_kuantitas_output'] ?>"/>
                                                     </div>
                                                     <div class="col-lg-2">
-                                                        <input type="text" class="form-control" id="satuan_kuantitas" name="satuan_kuantitas" value="item" placeholder="satuan kuanttias" value="<?=$dp['satuan_kuantitas']?>"/>
+                                                        <input type="text" class="form-control" id="satuan_kuantitas" name="satuan_kuantitas" value="item" placeholder="satuan kuanttias" value="<?= $dp['satuan_kuantitas'] ?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group" id="div_kualitas">
                                                     <label for="prioritas" class="control-label col-lg-3">Kualitas Mutu</label>
                                                     <div class="col-lg-6">
-                                                        <input type="text" class="form-control" id="kualitas_mutu" name="kualitas_mutu" value="<?=$dp['sasaran_kualitas_mutu']?>"/>
+                                                        <input type="text" class="form-control" id="kualitas_mutu" name="kualitas_mutu" value="<?= $dp['sasaran_kualitas_mutu'] ?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group " >
                                                     <label for="prioritas" class="control-label col-lg-3">Periode</label>
                                                     <div class="col-lg-6" id="div_periode_tahun">
-                                                        <input type="text" class="form-control" id="periode" name="periode" value="<?= $pekerjaan['periode'] ?>"/>
+                                                        <input type="text" class="form-control" id="periode" name="periode" value="<?= intval($pekerjaan['periode']) > 0 ? $pekerjaan['periode'] : date('Y') ?>"/>
                                                     </div>
                                                     <div class="col-lg-6" id="div_periode_tanggal">
                                                         <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                                                            <input readonly type="text" class="form-control dpd1" value="<?= $pekerjaan['tanggal_mulai']?>" name="tgl_mulai">
+                                                            <input readonly type="text" class="form-control dpd1" value="<?= $pekerjaan['tanggal_mulai'] ?>" name="tgl_mulai">
                                                             <span class="input-group-addon">Sampai</span>
-                                                            <input readonly type="text" class="form-control dpd2" value="<?= $pekerjaan['tanggal_selesai']?>" name="tgl_selesai">
+                                                            <input readonly type="text" class="form-control dpd2" value="<?= $pekerjaan['tanggal_selesai'] ?>" name="tgl_selesai">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -140,14 +143,14 @@ if(count($detil_pekerjaan)>0){
                                                     <div class="col-lg-6">
                                                         <select name="pakai_biaya" id="pakai_biaya" class="form-control">
                                                             <option value="0">Tanpa Biaya</option>
-                                                            <option value="1" <?=$dp['pakai_biaya']=='1'?'selected=""':''?>>Biaya</option>
+                                                            <option value="1" <?= $dp['pakai_biaya'] == '1' ? 'selected=""' : '' ?>>Biaya</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group " id="div_biaya">
                                                     <label for="prioritas" class="control-label col-lg-3">Biaya</label>
                                                     <div class="col-lg-6">
-                                                        <input type="text" class="form-control" id="biaya" name="biaya" value="<?=$dp['sasaran_biaya']?>"/>
+                                                        <input type="text" class="form-control" id="biaya" name="biaya" value="<?= $dp['sasaran_biaya'] ?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group " id="div_manfaat">
@@ -155,8 +158,8 @@ if(count($detil_pekerjaan)>0){
                                                     <div class="col-lg-6">
                                                         <select name="select_kemanfaatan" class="form-control">
                                                             <option value="1">Bermanfaat bagi unit kerjanya</option>
-                                                            <option value="2" <?=$pekerjaan['level_manfaat']=='2'?'selected=""':''?>>Bermanfaat bagi oragnisasinya</option>
-                                                            <option value="3" <?=$pekerjaan['level_manfaat']=='3'?'selected=""':''?>>Bermanfaat bagi negara</option>
+                                                            <option value="2" <?= $pekerjaan['level_manfaat'] == '2' ? 'selected=""' : '' ?>>Bermanfaat bagi oragnisasinya</option>
+                                                            <option value="3" <?= $pekerjaan['level_manfaat'] == '3' ? 'selected=""' : '' ?>>Bermanfaat bagi negara</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -165,9 +168,9 @@ if(count($detil_pekerjaan)>0){
                                                     <div class="col-lg-6">
                                                         <select name="prioritas" class="form-control m-bot15">
                                                             <option value="1" >Urgent</option>
-                                                            <option value="2" <?=$pekerjaan['level_prioritas']=='2'?'selected=""':''?>>Tinggi</option>
-                                                            <option value="3" <?=$pekerjaan['level_prioritas']=='3'?'selected=""':''?>>Sedang</option>
-                                                            <option value="4" <?=$pekerjaan['level_prioritas']=='4'?'selected=""':''?>>Rendah</option>
+                                                            <option value="2" <?= $pekerjaan['level_prioritas'] == '2' ? 'selected=""' : '' ?>>Tinggi</option>
+                                                            <option value="3" <?= $pekerjaan['level_prioritas'] == '3' ? 'selected=""' : '' ?>>Sedang</option>
+                                                            <option value="4" <?= $pekerjaan['level_prioritas'] == '4' ? 'selected=""' : '' ?>>Rendah</option>
                                                         </select>
                                                     </div>
                                                 </div>
