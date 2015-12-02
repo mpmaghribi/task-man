@@ -61,6 +61,7 @@
                                                                 <th class="hidden-phone">Pekerjaan</th>
                                                                 <th>Periode</th>
                                                                 <th>Assign To</th>
+                                                                <th>Kategori</th>
                                                                 <th style="min-width: 150px">Status</th>
                                                                 <th></th>
                                                             </tr>
@@ -85,6 +86,7 @@
                                                                     <th class="hidden-phone">Pekerjaan</th>
                                                                     <th>Deadline</th>
                                                                     <th>Assign To</th>
+                                                                    <th>Kategori</th>
                                                                     <th style="min-width: 150px">Status</th>
                                                                     <th></th>
                                                                 </tr>
@@ -217,7 +219,7 @@
     </section>
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
     <script src="<?= base_url() ?>assets/js2/date_picker_init.js" type="text/javascript"></script>
-    <script src="<?= base_url() ?>assets/js2/pekerjaan_saya/js1.js" type="text/javascript"></script>
+    <script src="<?= base_url() ?>assets/js2/pekerjaan_saya/js_view_pekerjaan_saya.js" type="text/javascript"></script>
 
     <?php $this->load->view("taskman_footer_page") ?>
 

@@ -148,6 +148,10 @@ class pekerjaan_staff extends ceklogin {
             redirect(site_url() . '/pekerjaan_staff');
             return;
         }
+        if ($pekerjaan['id_penanggung_jawab'] != $session['user_id']) {
+            redirect(site_url() . '/pekerjaan_staff');
+            return;
+        }
         $list_detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         $detil_pekerjaan = null;
         foreach ($list_detil_pekerjaan as $dp) {
@@ -408,6 +412,7 @@ class pekerjaan_staff extends ceklogin {
         $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
         $satuan_kuantitas = $this->input->post('satuan_kuantitas');
         $kategori_pakerjaan = $this->input->post('kategori_pekerjaan');
+        $level_manfaat = intval($this->input->post('select_kemanfaatan'));
         $list_id_staff = array();
         $list_staff2 = array();
 
@@ -443,6 +448,12 @@ class pekerjaan_staff extends ceklogin {
             $pekerjaan['tgl_selesai'] = $tanggal_selesai;
             if (in_array($kategori_pakerjaan, array('project', 'tambahan', 'kreativitas'))) {
                 $pekerjaan['kategori'] = $kategori_pakerjaan;
+                if ($kategori_pakerjaan == 'kreativitas') {
+                    if (!in_array($level_manfaat, array(1, 2, 3))) {
+                        $level_manfaat = 1;
+                    }
+                    $pekerjaan['level_manfaat'] = $level_manfaat;
+                }
             } else {
                 redirect(site_url() . '/pekerjaan_staff');
                 return;

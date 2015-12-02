@@ -38,8 +38,8 @@ function init_tabel_skp() {
                     }
                 }
                 var periode = p['periode'];
-                var halaman_detail='detail_skp';
-                if (p['kategori'] != 'skp') {
+                var halaman_detail = 'detail';
+                if (p['kategori'] != 'rutin') {
                     var mulai = p['tgl_mulai'];
                     var selesai = p['tgl_selesai'];
                     var mulai2 = mulai.split('+');
@@ -47,20 +47,28 @@ function init_tabel_skp() {
                     var mulai3 = mulai2[0].split(' ');
                     var selesai3 = selesai2[0].split(' ');
                     periode = mulai3[0] + ' - ' + selesai3[0];
-                    if(p['kategori']=='tambahan'){
-                        halaman_detail='detail_tambahan';
-                    }else if(p['kategori']=='kreativitas'){
-                        halaman_detail='detail_kreativitas';
-                    }
+//                    if(p['kategori']=='tambahan'){
+//                        halaman_detail='detail_tambahan';
+//                    }else if(p['kategori']=='kreativitas'){
+//                        halaman_detail='detail_kreativitas';
+//                    }
                 }
                 var status_pekerjaan_arr = p['status_pekerjaan2'].split(',');
                 var status_pekerjaan = '<span class="label ' + warna_label[status_pekerjaan_arr[0]] + ' label-mini">' + status_pekerjaan_arr[1] + '</span>';
-                
+                var kategori_pekerjaan = 'Rutin';
+                if (p['kategori'] == 'project') {
+                    kategori_pekerjaan = 'Project';
+                } else if (p['kategori'] == 'tambahan') {
+                    kategori_pekerjaan = 'Pekerjaan Tambahan';
+                } else if (p['kategori'] == 'kreativitas') {
+                    kategori_pekerjaan = 'Pekerjaan Kreativitas';
+                }
                 var html = '<tr>'
                         + '<td id="pekerjaan_no_' + p['id_pekerjaan'] + '"></td>'
                         + '<td id="pekerjaan_nama_' + p['id_pekerjaan'] + '"></td>'
                         + '<td id="pekerjaan_periode_' + p['id_pekerjaan'] + '"></td>'
                         + '<td id="pekerjaan_anggota_' + p['id_pekerjaan'] + '"></td>'
+                        + '<td id="pekerjaan_kategori_' + p['id_pekerjaan'] + '"></td>'
                         + '<td id="pekerjaan_status_' + p['id_pekerjaan'] + '"></td>'
                         + '<td id="pekerjaan_view_' + p['id_pekerjaan'] + '"></td>'
                         + '</tr>';
@@ -69,8 +77,9 @@ function init_tabel_skp() {
                 $('#pekerjaan_nama_' + p['id_pekerjaan']).html(p['nama_pekerjaan']);
                 $('#pekerjaan_periode_' + p['id_pekerjaan']).html(periode);
                 $('#pekerjaan_anggota_' + p['id_pekerjaan']).html(anggota);
+                $('#pekerjaan_kategori_' + p['id_pekerjaan']).html(kategori_pekerjaan);
                 $('#pekerjaan_status_' + p['id_pekerjaan']).html(status_pekerjaan);
-                $('#pekerjaan_view_' + p['id_pekerjaan']).html('<a  href="' + site_url + '/pekerjaan_saya/'+halaman_detail+'?id_pekerjaan=' + p['id_pekerjaan'] + '" class="btn btn-success btn-xs"><i class="fa fa-eye">View</i></a>');
+                $('#pekerjaan_view_' + p['id_pekerjaan']).html('<a  href="' + site_url + '/pekerjaan_saya/' + halaman_detail + '?id_pekerjaan=' + p['id_pekerjaan'] + '" class="btn btn-success btn-xs"><i class="fa fa-eye">View</i></a>');
             }
             tabel_skp = $('#tablePekerjaanSaya').dataTable({"columnDefs": [{"targets": [5], "orderable": false}], });
         },

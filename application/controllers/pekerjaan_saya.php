@@ -58,87 +58,87 @@ class pekerjaan_saya extends ceklogin {
         }
     }
 
-    function detail_tambahan() {
-        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
-        $session = $this->session->userdata('logged_in');
-        $pekerjaan = null;
-        $q = $this->db->query("select * from pekerjaan p inner join sifat_pekerjaan s on s.id_sifat_pekerjaan=p.id_sifat_pekerjaan where p.id_pekerjaan='$id_pekerjaan'")->result_array();
-        if (count($q) > 0) {
-            $pekerjaan = $q[0];
-        }
-        if ($pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_saya');
-            return;
-        }
-        if($pekerjaan['kategori']!='tambahan'){
-            redirect(site_url() . '/pekerjaan_saya');
-            return;
-        }
-        $detil_pekerjaans = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
-        $detil_pekerjaan = null;
-        foreach ($detil_pekerjaans as $dp) {
-            if ($dp['id_akun'] == $session['user_id']) {
-                $detil_pekerjaan = $dp;
-                break;
-            }
-        }
-        if ($detil_pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_saya');
-            return;
-        }
-        $data = array(
-            'data_akun' => $session,
-            'pekerjaan' => $pekerjaan,
-            'detil_pekerjaans' => $detil_pekerjaans,
-            'detil_pekerjaan' => $detil_pekerjaan
-        );
-        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-        $data["users"] = json_decode(file_get_contents($url));
-        $this->mark_read($session['user_id'], $id_pekerjaan);
-        $this->load->view('pekerjaan_saya/view_detail_tambahan', $data);
-    }
+//    function detail_tambahan() {
+//        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
+//        $session = $this->session->userdata('logged_in');
+//        $pekerjaan = null;
+//        $q = $this->db->query("select * from pekerjaan p inner join sifat_pekerjaan s on s.id_sifat_pekerjaan=p.id_sifat_pekerjaan where p.id_pekerjaan='$id_pekerjaan'")->result_array();
+//        if (count($q) > 0) {
+//            $pekerjaan = $q[0];
+//        }
+//        if ($pekerjaan == null) {
+//            redirect(site_url() . '/pekerjaan_saya');
+//            return;
+//        }
+//        if($pekerjaan['kategori']!='tambahan'){
+//            redirect(site_url() . '/pekerjaan_saya');
+//            return;
+//        }
+//        $detil_pekerjaans = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+//        $detil_pekerjaan = null;
+//        foreach ($detil_pekerjaans as $dp) {
+//            if ($dp['id_akun'] == $session['user_id']) {
+//                $detil_pekerjaan = $dp;
+//                break;
+//            }
+//        }
+//        if ($detil_pekerjaan == null) {
+//            redirect(site_url() . '/pekerjaan_saya');
+//            return;
+//        }
+//        $data = array(
+//            'data_akun' => $session,
+//            'pekerjaan' => $pekerjaan,
+//            'detil_pekerjaans' => $detil_pekerjaans,
+//            'detil_pekerjaan' => $detil_pekerjaan
+//        );
+//        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+//        $data["users"] = json_decode(file_get_contents($url));
+//        $this->mark_read($session['user_id'], $id_pekerjaan);
+//        $this->load->view('pekerjaan_saya/view_detail_tambahan', $data);
+//    }
 
-    function detail_kreativitas() {
-        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
-        $session = $this->session->userdata('logged_in');
-        $pekerjaan = null;
-        $q = $this->db->query("select * from pekerjaan p inner join sifat_pekerjaan s on s.id_sifat_pekerjaan=p.id_sifat_pekerjaan where p.id_pekerjaan='$id_pekerjaan'")->result_array();
-        if (count($q) > 0) {
-            $pekerjaan = $q[0];
-        }
-        if ($pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_saya');
-            return;
-        }
-        if($pekerjaan['kategori']!='kreativitas'){
-            redirect(site_url() . '/pekerjaan_saya');
-            return;
-        }
-        $detil_pekerjaans = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
-        $detil_pekerjaan = null;
-        foreach ($detil_pekerjaans as $dp) {
-            if ($dp['id_akun'] == $session['user_id']) {
-                $detil_pekerjaan = $dp;
-                break;
-            }
-        }
-        if ($detil_pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_saya');
-            return;
-        }
-        $data = array(
-            'data_akun' => $session,
-            'pekerjaan' => $pekerjaan,
-            'detil_pekerjaans' => $detil_pekerjaans,
-            'detil_pekerjaan' => $detil_pekerjaan
-        );
-        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-        $data["users"] = json_decode(file_get_contents($url));
-        $this->mark_read($session['user_id'], $id_pekerjaan);
-        $this->load->view('pekerjaan_saya/view_detail_kreativitas', $data);
-    }
+//    function detail_kreativitas() {
+//        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
+//        $session = $this->session->userdata('logged_in');
+//        $pekerjaan = null;
+//        $q = $this->db->query("select * from pekerjaan p inner join sifat_pekerjaan s on s.id_sifat_pekerjaan=p.id_sifat_pekerjaan where p.id_pekerjaan='$id_pekerjaan'")->result_array();
+//        if (count($q) > 0) {
+//            $pekerjaan = $q[0];
+//        }
+//        if ($pekerjaan == null) {
+//            redirect(site_url() . '/pekerjaan_saya');
+//            return;
+//        }
+//        if($pekerjaan['kategori']!='kreativitas'){
+//            redirect(site_url() . '/pekerjaan_saya');
+//            return;
+//        }
+//        $detil_pekerjaans = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+//        $detil_pekerjaan = null;
+//        foreach ($detil_pekerjaans as $dp) {
+//            if ($dp['id_akun'] == $session['user_id']) {
+//                $detil_pekerjaan = $dp;
+//                break;
+//            }
+//        }
+//        if ($detil_pekerjaan == null) {
+//            redirect(site_url() . '/pekerjaan_saya');
+//            return;
+//        }
+//        $data = array(
+//            'data_akun' => $session,
+//            'pekerjaan' => $pekerjaan,
+//            'detil_pekerjaans' => $detil_pekerjaans,
+//            'detil_pekerjaan' => $detil_pekerjaan
+//        );
+//        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+//        $data["users"] = json_decode(file_get_contents($url));
+//        $this->mark_read($session['user_id'], $id_pekerjaan);
+//        $this->load->view('pekerjaan_saya/view_detail_kreativitas', $data);
+//    }
 
-    function detail_skp() {
+    function detail() {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
         $session = $this->session->userdata('logged_in');
         $pekerjaan = null;
@@ -150,10 +150,7 @@ class pekerjaan_saya extends ceklogin {
             redirect(site_url() . '/pekerjaan_saya');
             return;
         }
-        if($pekerjaan['kategori']!='skp'){
-            redirect(site_url() . '/pekerjaan_saya');
-            return;
-        }
+        
         $detil_pekerjaans = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         $detil_pekerjaan = null;
         foreach ($detil_pekerjaans as $dp) {

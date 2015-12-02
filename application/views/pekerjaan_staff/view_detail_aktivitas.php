@@ -4,6 +4,17 @@ $user = array();
 foreach ($users as $u) {
     $user[$u->id_akun] = $u;
 }
+$list_kategori = array(
+    'rutin' => 'SKP Rutin',
+    'project' => 'SKP Project',
+    'tambahan' => 'Pekerjaan Tambahan',
+    'kreativitas' => 'Pekerjaan Kreativitas'
+);
+$list_tingkat_manfaat = array(
+    1 => 'Bermanfaat bagi Unit Kerja',
+    2 => 'Bermanfaat bagi Organisasi',
+    3 => 'Bermanfaat bagi Negara'
+);
 ?>
 <body>
 
@@ -34,8 +45,18 @@ foreach ($users as $u) {
                                                 <p style="font-size: larger"><?= $pekerjaan['deskripsi_pekerjaan'] ?></p>
                                                 <h4 style="color: #1FB5AD;">Jenis Pekerjaan</h4>
                                                 <p style="font-size: larger"><?php echo $pekerjaan['nama_sifat_pekerjaan']; ?></p>
+                                                <h4 style="color: #1FB5AD;">Kategori Pekerjaan</h4>
+                                                <p style="font-size: larger"><?= $list_kategori[$pekerjaan['kategori']] ?></p>
+                                                <?php
+                                                if ($pekerjaan['kategori'] == 'kreativitas') {
+                                                    ?>
+                                                    <h4 style="color: #1FB5AD;">Tingkat Kemanfaatan</h4>
+                                                    <p style="font-size: larger"><?= $list_tingkat_manfaat[$pekerjaan['level_manfaat']] ?></p>
+                                                    <?php
+                                                }
+                                                ?>
                                                 <h4 style="color: #1FB5AD;">Periode</h4>
-                                                <p style="font-size: larger"><?=$pekerjaan['periode']?></p>
+                                                <p style="font-size: larger"><?= $pekerjaan['kategori'] == 'rutin' ? $pekerjaan['periode'] : explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
                                             </section>
                                         </div>
                                         <div class="col-md-12" id="list_aktivitas">
@@ -123,16 +144,17 @@ foreach ($users as $u) {
     <script>
         var id_pekerjaan = <?= $pekerjaan['id_pekerjaan'] ?>;
         var base_url = '<?= base_url() ?>';
-        var site_url='<?=site_url()?>';
+        var site_url = '<?= site_url() ?>';
         var id_staff = '<?= $detil_pekerjaan['id_akun'] ?>';
         var list_user =<?= json_encode($users) ?>;
-        var detil_pekerjaan=<?=json_encode($detil_pekerjaan)?>;
+        var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
         $(document).ready(function () {
             document.title = 'Detail Aktivitas Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
             $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
             $('#submenu_pekerjaan_ul').show();
             $('#staff_pekerjaan').dataTable({
-                "columnDefs": [{"targets": [0], "orderable": false}],
+                columnDefs: [{targets: [0], orderable: false}],
+                order: [[1, "asc"]]
             });
             init_tabel_aktivitas();
         });

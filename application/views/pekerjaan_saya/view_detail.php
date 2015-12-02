@@ -59,9 +59,17 @@ foreach ($users as $u) {
                                                 <h4 style="color: #1FB5AD;">Jenis Pekerjaan</h4>
                                                 <p style="font-size: larger"><?php echo $pekerjaan['nama_sifat_pekerjaan']; ?></p>
                                                 <h4 style="color: #1FB5AD;">Kategori Pekerjaan</h4>
-                                                <p style="font-size: larger">Pekerjaan Rutin</p>
+                                                <p style="font-size: larger"><?= $list_kategori[$pekerjaan['kategori']] ?></p>
+                                                <?php
+                                                if ($pekerjaan['kategori'] == 'kreativitas') {
+                                                    ?>
+                                                    <h4 style="color: #1FB5AD;">Tingkat Kemanfaatan</h4>
+                                                    <p style="font-size: larger"><?= $list_tingkat_manfaat[$pekerjaan['level_manfaat']] ?></p>
+                                                    <?php
+                                                }
+                                                ?>
                                                 <h4 style="color: #1FB5AD;">Periode</h4>
-                                                <p style="font-size: larger"><?= $pekerjaan['periode'] ?></p>
+                                                <p style="font-size: larger"><?= $pekerjaan['kategori'] == 'rutin' ? $pekerjaan['periode'] : explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
                                             </section>
                                         </div>
                                         <div class="col-md-12">
@@ -245,15 +253,15 @@ foreach ($users as $u) {
                                                             <tr>
                                                                 <td><?= $pekerjaan['nama_pekerjaan'] ?></td>
                                                                 <td><?= $detil_pekerjaan['sasaran_angka_kredit'] ?></td>
-                                                                <td><?= $detil_pekerjaan['sasaran_kuantitas_output'].' '.$detil_pekerjaan['satuan_kuantitas'] ?></td>
+                                                                <td><?= $detil_pekerjaan['sasaran_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
                                                                 <td><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
                                                                 <td><?= $detil_pekerjaan['sasaran_waktu'] ?></td>
-                                                                <td><?= $detil_pekerjaan['pakai_biaya']=='1'? $detil_pekerjaan['sasaran_biaya']:'-' ?></td>
-																<td><?= $detil_pekerjaan['realisasi_angka_kredit'] ?></td>
-                                                                <td><?= $detil_pekerjaan['realisasi_kuantitas_output'].' '.$detil_pekerjaan['satuan_kuantitas'] ?></td>
+                                                                <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? $detil_pekerjaan['sasaran_biaya'] : '-' ?></td>
+                                                                <td><?= $detil_pekerjaan['realisasi_angka_kredit'] ?></td>
+                                                                <td><?= $detil_pekerjaan['realisasi_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
                                                                 <td><?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>%</td>
                                                                 <td><?= $detil_pekerjaan['realisasi_waktu'] ?></td>
-                                                                <td><?= $detil_pekerjaan['pakai_biaya']=='1'? $detil_pekerjaan['realisasi_biaya']:'-' ?></td>
+                                                                <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? $detil_pekerjaan['realisasi_biaya'] : '-' ?></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -441,7 +449,7 @@ foreach ($users as $u) {
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                             ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                              ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
