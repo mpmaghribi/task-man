@@ -286,7 +286,7 @@ if ($this->session->userdata('prev') != null) {
                                                                         <td><?php echo $i; ?></td>
                                                                         <td id="nama_staff_"><?php foreach ($users as $value2) { ?>
                                                                                 <?php
-                                                                                if ($value->id_akun == $value2->id_akun) {
+                                                                                if ($value->id_akun == $value2->id_akun ) {
                                                                                     ?><a target="_blank" href="<?php echo base_url(); ?>pekerjaan/pekerjaan_per_staff?id_akun=<?php echo $value2->id_akun; ?>"><?php echo $value2->nama; ?></a><?php
                                                                                 }
                                                                             }
@@ -303,9 +303,9 @@ if ($this->session->userdata('prev') != null) {
                                                                         </td>
                                                                         <td>
                                                                             <?php
-                                                                            if ($value->id_akun == $data_akun['user_id'] && $value->flag_usulan == 2 || $atasan) {
+                                                                            if ($value->id_akun == $data_akun['user_id'] && $value->flag_usulan == 2 || $atasan || true) {
                                                                                 //if(($ikut_serta&&!$usulan)||$atasan){
-                                                                                if ($terlambat <= 0 && !$atasan) {
+                                                                                if (($terlambat <= 0 && !$atasan) || true) {
                                                                                     ?>
                                                                                     <a class=" btn btn-primary btn-xs" href="#UbahProgress" data-toggle="modal" onclick="show_progress('<?php echo $value->id_detil_pekerjaan ?>', '<?php echo $value->id_akun ?>')">Ubah Progress</a>
                                                                                 <?php } ?>

@@ -613,14 +613,19 @@ class pekerjaan_staff extends ceklogin {
         foreach ($q as $dp) {
             $list_id_staff[] = $dp['id_akun'];
         }
-        foreach ($list_id_staff as $id_staff) {
-            $this->db->query("delete from aktivitas_pekerjaan where id_pekerjaan='$id_pekerjaan' and id_akun='$id_staff'");
-        }
+//        foreach ($list_id_staff as $id_staff) {
+        
+//        }
         $q = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan'")->result_array();
         foreach ($q as $f) {
-            unlink($f['path']);
+            if (file_exists($f['path']))
+                unlink($f['path']);
         }
-        //$this->db->query("delete from file where id_pekerjaan='$id_pekerjaan'");
+        $this->db->query("delete from komentar where id_pekerjaan='$id_pekerjaan' ");
+        $this->db->query("delete from detil_progress where id_pekerjaan='$id_pekerjaan' ");
+        $this->db->query("delete from aktivitas_pekerjaan where id_pekerjaan='$id_pekerjaan' ");
+        $this->db->query("delete from file where id_pekerjaan='$id_pekerjaan'");
+        
         $this->db->query("delete from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->query("delete from pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->trans_complete();

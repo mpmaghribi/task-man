@@ -787,7 +787,7 @@ class pekerjaan extends ceklogin {
             //$admin = $temp['hakakses'] == 'Administrator';
             $data["listassign_pekerjaan"] = $this->pekerjaan_model->sp_listassign_pekerjaan($id_detail_pkj);
             $detil_pekerjaan = $data['listassign_pekerjaan'];
-            $ikut_serta = false;
+            $ikut_serta = true;
             $diassign_ke_bawahan_saya = true; //menandakan bahwa yang mengerjakan suatu pekerjaan seluruhnya adalah bawahanku
             foreach ($detil_pekerjaan as $detil) {
                 if ($detil->id_akun == $temp['user_id']) {
@@ -819,9 +819,9 @@ class pekerjaan extends ceklogin {
                 $atasan = true;
             }
             $sifat_terbuka = strtolower($deskripsi_pekerjaan[0]->nama_sifat_pekerjaan) == 'umum';
-            //$data['bisa_edit'] = $data['bisa_edit']&&in_array(4, $temp['idmodul']);
-            //$data['bisa_validasi'] =$data['bisa_validasi'] && in_array(4, $temp['idmodul']);
-            //$data['bisa_batalkan'] =$data['bisa_batalkan'] && in_array(4, $temp['idmodul']);
+            $data['bisa_edit'] = $data['bisa_edit']&&in_array(4, $temp['idmodul']);
+            $data['bisa_validasi'] =$data['bisa_validasi'] && in_array(4, $temp['idmodul']);
+            $data['bisa_batalkan'] =$data['bisa_batalkan'] && in_array(4, $temp['idmodul']);
             $debug = false;
             if ($data['bisa_validasi'] || $data['bisa_edit'] || $data['bisa_batalkan'] || $sifat_terbuka || $ikut_serta) {
                 

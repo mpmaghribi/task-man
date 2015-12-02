@@ -294,7 +294,7 @@ class pekerjaan_model extends dtpg {
                 . "pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan "
                 . "inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan "
                 . "= pekerjaan.id_sifat_pekerjaan where pekerjaan.id_pekerjaan = "
-                . $id_detail_pkj . " and detil_pekerjaan.status!='Batal' limit $limit offset $offset;";
+                . $id_detail_pkj . "  ";
         //echo $query;
         $query = $this->db->query($query);
         return $query->result();

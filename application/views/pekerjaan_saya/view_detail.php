@@ -4,7 +4,17 @@ $user = array();
 foreach ($users as $u) {
     $user[$u->id_akun] = $u;
 }
-//var_dump($user);
+$list_kategori = array(
+    'rutin' => 'SKP Rutin',
+    'project' => 'SKP Project',
+    'tambahan' => 'Pekerjaan Tambahan',
+    'kreativitas' => 'Pekerjaan Kreativitas'
+);
+$list_tingkat_manfaat = array(
+    1 => 'Bermanfaat bagi Unit Kerja',
+    2 => 'Bermanfaat bagi Organisasi',
+    3 => 'Bermanfaat bagi Negara'
+);
 ?>
 <body>
 
@@ -88,18 +98,15 @@ foreach ($users as $u) {
                                                         </thead>
                                                         <tbody>
                                                             <?php
-                                                            if (isset($list_berkas)) {
+                                                            if (isset($list_file_pendukung)) {
                                                                 $i = 1;
-                                                                foreach ($list_berkas as $berkas) {
+                                                                foreach ($list_file_pendukung as $berkas) {
                                                                     ?>
-                                                                    <tr id="berkas_<?php echo $berkas->id_file; ?>" title="diupload pada <?php echo date("d M Y H:i", strtotime($berkas->waktu)); ?>">
-                                                                        <td><?php echo $i; ?></td>
-                                                                        <td><?php echo basename($berkas->nama_file); ?></td>
+                                                                    <tr id="berkas_<?php echo $berkas['id_file']; ?>" title="diupload pada <?php echo date("d-m-Y H:i", strtotime($berkas['waktu'])); ?>">
+                                                                        <td><?= $i; ?></td>
+                                                                        <td><?= $berkas['nama_file'] ?></td>
                                                                         <td style="text-align: right">
-                                                                            <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() ?>download?id_file=<?= $berkas->id_file; ?>');">Download</a>
-                                                                            <?php if ($atasan || $pengusul) { ?>
-                                                                                <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
-                                                                            <?php } ?>
+                                                                            <a class="btn btn-info btn-xs" href="<?= site_url() ?>/download?id_file=<?= $berkas['id_file']; ?>" id="" style="font-size: 10px" target="_blank">Download</a>
                                                                         </td>
                                                                     </tr>
                                                                     <?php
@@ -161,53 +168,79 @@ foreach ($users as $u) {
                                                     <button class="btn btn-success" id="button_tampilkan_form_aktivitas" onclick="tampilkan_form_tambah_aktivitas()" type="button">Tambah Aktivitas</button>
                                                 </div>
                                                 <div class="panel-body" id="div_form_tambah_aktivitas" style="display:none">
-                                                    <div class="form-horizontal">
-                                                        <div class="form-group">
-                                                            <label class="col-lg-2 control-label">Keterangan</label>
-                                                            <div class="col-lg-8">
-                                                                <input type="text" class="form-control" id="keterangan_baru"/>
+                                                    <form method="post" action="<?= site_url() ?>/aktivitas_pekerjaan/add_v2" enctype="multipart/form-data" id="form_tambah_aktivitas" target="frame_tambah_aktivitas">
+                                                        <div class="form-horizontal">
+                                                            <div class="form-group">
+                                                                <label class="col-lg-2 control-label">Keterangan</label>
+                                                                <div class="col-lg-8">
+                                                                    <input type="text" class="form-control" id="keterangan_baru" name="keterangan"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" id="div_aktivitas_angka_kredit">
+                                                                <label class="col-lg-2 control-label">Angka Kredit</label>
+                                                                <div class="col-lg-8">
+                                                                    <input type="text" class="form-control" id="ak_baru" name="ak"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" id="div_aktivitas_kuantitas_output">
+                                                                <label class="col-lg-2 control-label">Kuantitas Output</label>
+                                                                <div class="col-lg-8">
+                                                                    <input type="text" class="form-control" id="kuantitas_output_baru" name="kuantitas_output"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" id="div_aktivitas_kualitas_mutu">
+                                                                <label class="col-lg-2 control-label">Kualitas Mutu</label>
+                                                                <div class="col-lg-8">
+                                                                    <input type="text" class="form-control" id="kualitas_mutu_baru" name="kualitas_mutu"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" id="div_nilai_progress">
+                                                                <label class="col-lg-2 control-label" >Progress</label>
+                                                                <div class="col-lg-8">
+                                                                    <select name="nilai_progress" class="form-control">
+                                                                        <?php
+                                                                        for ($i = 10; $i <= 100; $i+=10) {
+                                                                            echo '<option value="' . $i . '">' . $i . '%</option>';
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" id="div_aktivitas_waktu">
+                                                                <label class="col-lg-2 control-label">Waktu</label>
+                                                                <div class="col-lg-4">
+                                                                    <input type="text" class="form-control" id="waktu_mulai_baru" name="waktu_mulai"/>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <input type="text" class="form-control" id="waktu_selesai_baru" name="waktu_selesai"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" id="div_aktivitas_biaya">
+                                                                <label class="col-lg-2 control-label">Biaya</label>
+                                                                <div class="col-lg-8">
+                                                                    <input type="text" class="form-control" id="biaya_baru" name="biaya"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" id="div_file_aktivitas">
+                                                                <label class="col-lg-2 control-label">File Lampiran</label>
+                                                                <div class="col-lg-8">
+                                                                    <table class="table" id="tabel_berkas_aktivitas"></table>
+                                                                    <button class="btn btn-info" id="button_pilih_berkas_aktivitas" onclick="return pilih_berkas_aktivitas();
+                                                                            return false;">Pilih Berkas</button>
+                                                                    <div style="display:none">
+                                                                        <input type="file" id="file_berkas_aktivitas" name="berkas_aktivitas[]" multiple=""/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-lg-8 col-lg-offset-2">
+                                                                    <button class="btn btn-warning" id="button_simpan_aktivitas" onclick="simpan_aktivitas()" type="button">Simpan Aktivitas</button>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label class="col-lg-2 control-label">Angka Kredit</label>
-                                                            <div class="col-lg-8">
-                                                                <input type="text" class="form-control" id="ak_baru"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-lg-2 control-label">Kuantitas Output</label>
-                                                            <div class="col-lg-8">
-                                                                <input type="text" class="form-control" id="kuantitas_output_baru"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-lg-2 control-label">Kualitas Mutu</label>
-                                                            <div class="col-lg-8">
-                                                                <input type="text" class="form-control" id="kualitas_mutu_baru"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-lg-2 control-label">Waktu</label>
-                                                            <div class="col-lg-4">
-                                                                <input type="text" class="form-control" id="waktu_mulai_baru"/>
-                                                            </div>
-                                                            <div class="col-lg-4">
-                                                                <input type="text" class="form-control" id="waktu_selesai_baru"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="col-lg-2 control-label">Biaya</label>
-                                                            <div class="col-lg-8">
-                                                                <input type="text" class="form-control" id="biaya_baru"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-
-                                                            <div class="col-lg-8 col-lg-offset-2">
-                                                                <button class="btn btn-warning" id="button_simpan_aktivitas" onclick="simpan_aktivitas()" type="button">Simpan Aktivitas</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                        <input type="hidden" name="id_pekerjaan" value="<?= $pekerjaan['id_pekerjaan'] ?>"/>
+                                                        <input type="hidden" name="id_akun" value="<?= $detil_pekerjaan['id_akun'] ?>"/>
+                                                    </form>
                                                 </div>
                                                 <div class="panel-body">
                                                     <table class="table table-striped table-hover table-condensed" id="tabel_aktivitas">
@@ -226,8 +259,23 @@ foreach ($users as $u) {
                                                         <tbody id="tabel_aktivitas_body">
                                                         </tbody>
                                                     </table>
+                                                    <table class="table table-striped table-hover table-condensed" id="tabel_progress">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Aksi</th>
+                                                                <th>No</th>
+                                                                <th>Keterangan</th>
+                                                                <th>Nilai Progress</th>
+                                                                <th>Waktu</th>
+                                                                <th>Berkas</th>
+                                                                <th>Validation</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tabel_aktivitas_body">
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-                                                <div class="panel-body">
+                                                <div class="panel-body" id="div_penilaian_skp" style="display:none">
                                                     <table class="table table-striped table-hover table-condensed" id="" >
                                                         <thead>
                                                             <tr >
@@ -275,12 +323,13 @@ foreach ($users as $u) {
                                                     Anggota Tim
                                                 </h4>
                                                 <div class="panel-body">
+                                                    <?php $skp = in_array($pekerjaan['kategori'], array('rutin', 'project')); ?>
                                                     <table class="table table-striped table-hover table-condensed" id="staff_pekerjaan">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
                                                                 <th>Nama</th>
-                                                                <th>Nilai</th>
+                                                                <th><?=$skp==true?'Nilai':'Progress'?></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -292,12 +341,20 @@ foreach ($users as $u) {
                                                                 $counter++;
                                                                 echo '<tr>';
                                                                 if ($pekerjaan['id_sifat_pekerjaan'] == '2') {
-                                                                    echo '<td><a  href="' . base_url() . 'pekerjaan_staff/detail_aktivitas?id_pekerjaan=' . $pekerjaan['id_pekerjaan'] . '&id_staff=' . $dp['id_akun'] . '" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye"> Lihat Aktivitas</i></a></td>';
+                                                                    echo '<td><a  href="' . site_url() . '/pekerjaan_staff/detail_aktivitas?id_pekerjaan=' . $pekerjaan['id_pekerjaan'] . '&id_staff=' . $dp['id_akun'] . '" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye"> Lihat Aktivitas</i></a></td>';
                                                                 } else {
                                                                     echo '<td>' . $counter . '</td>';
                                                                 }
                                                                 echo '<td>' . $user[$dp['id_akun']]->nama . '</td>';
-                                                                echo '<td>' . number_format(floatval($dp['skor']), 2) . '</td>';
+                                                                if ($skp == true) {
+                                                                    echo '<td>' . number_format(floatval($dp['skor']), 2) . '</td>';
+                                                                } else {
+                                                                    echo '<td><div class="progress progress-striped progress-xs">'
+                                                                    . '<div style="width: ' . $dp['progress'] . '%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="' .$dp['progress']. '" role="progressbar" class="progress-bar progress-bar-warning" title="progress '.$dp['progress'].'%">'
+                                                                    . '<span class="sr-only">'.$dp['progress'].'% Complete (success)</span>'
+                                                                    . '</div>'
+                                                                    . '</div></td>';
+                                                                }
                                                                 echo '</tr>';
                                                             }
                                                             ?>
@@ -449,7 +506,7 @@ foreach ($users as $u) {
 
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                              ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                                 ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -495,6 +552,7 @@ foreach ($users as $u) {
 
             </section>
         </section>
+        <iframe id="frame_tambah_aktivitas" name="frame_tambah_aktivitas" style="display:none"></iframe>
         <!--main content end-->
         <!--right sidebar start-->
         <?php $this->load->view('taskman_rightbar_page') ?>
@@ -513,11 +571,10 @@ foreach ($users as $u) {
                                                                 var id_staff = '<?= $detil_pekerjaan['id_akun'] ?>';
                                                                 var list_akun =<?= json_encode($users) ?>;
                                                                 var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
+                                                                var pekerjaan = <?= json_encode($pekerjaan) ?>;
                                                                 $(document).ready(function () {
                                                                     document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
                                                                     $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + $('#id_detail_pkj').val());
-
-
                                                                 });
 
                                                                 function _(el) {

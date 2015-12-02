@@ -97,7 +97,6 @@ class pekerjaan_saya extends ceklogin {
 //        $this->mark_read($session['user_id'], $id_pekerjaan);
 //        $this->load->view('pekerjaan_saya/view_detail_tambahan', $data);
 //    }
-
 //    function detail_kreativitas() {
 //        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
 //        $session = $this->session->userdata('logged_in');
@@ -150,7 +149,7 @@ class pekerjaan_saya extends ceklogin {
             redirect(site_url() . '/pekerjaan_saya');
             return;
         }
-        
+
         $detil_pekerjaans = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         $detil_pekerjaan = null;
         foreach ($detil_pekerjaans as $dp) {
@@ -163,11 +162,15 @@ class pekerjaan_saya extends ceklogin {
             redirect(site_url() . '/pekerjaan_saya');
             return;
         }
+        $id_detil_pekerjaan = $detil_pekerjaan['id_detil_pekerjaan'];
+        $list_file_pendukung = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_progress is null")->result_array();
+        $list_file_progress = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
         $data = array(
             'data_akun' => $session,
             'pekerjaan' => $pekerjaan,
             'detil_pekerjaans' => $detil_pekerjaans,
-            'detil_pekerjaan' => $detil_pekerjaan
+            'detil_pekerjaan' => $detil_pekerjaan,
+            'list_file_pendukung' => $list_file_pendukung
         );
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["users"] = json_decode(file_get_contents($url));
