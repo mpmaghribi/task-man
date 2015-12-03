@@ -249,11 +249,12 @@ $list_tingkat_manfaat = array(
                                                                 <th>Aksi</th>
                                                                 <th>No</th>
                                                                 <th>Keterangan</th>
-                                                                <th>AK</th>
+                                                                <!--<th>AK</th>-->
                                                                 <th>Kuantitas Output</th>
-                                                                <th>Kualitas Mutu</th>
+                                                                <!--<th>Kualitas Mutu</th>-->
                                                                 <th>Waktu</th>
-                                                                <th>Biaya</th>
+                                                                <!--<th>Biaya</th>-->
+                                                                <th>Validation</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="tabel_aktivitas_body">

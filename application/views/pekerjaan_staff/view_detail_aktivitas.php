@@ -71,15 +71,30 @@ $list_tingkat_manfaat = array(
                                                                 <th>Aksi</th>
                                                                 <th>No</th>
                                                                 <th>Keterangan</th>
-                                                                <th>AK</th>
+                                                                <!--<th>AK</th>-->
                                                                 <th>Kuantitas Output</th>
-                                                                <th>Kualitas Mutu</th>
+                                                                <!--<th>Kualitas Mutu</th>-->
                                                                 <th>Waktu</th>
-                                                                <th>Biaya</th>
+                                                                <!--<th>Biaya</th>-->
+                                                                <th>Validation</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="tabel_aktivitas_body">
-
+                                                        </tbody>
+                                                    </table>
+                                                    <table class="table table-striped table-hover table-condensed" id="tabel_progress">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Aksi</th>
+                                                                <th>No</th>
+                                                                <th>Keterangan</th>
+                                                                <th>Nilai Progress</th>
+                                                                <th>Waktu</th>
+                                                                <th>Berkas</th>
+                                                                <th>Validation</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tabel_aktivitas_body">
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -91,12 +106,13 @@ $list_tingkat_manfaat = array(
                                                     Staff Lain yang Mengerjakan Tugas Ini
                                                 </h4>
                                                 <div class="panel-body">
+                                                    <?php $skp = in_array($pekerjaan['kategori'], array('rutin', 'project')); ?>
                                                     <table class="table table-striped table-hover table-condensed" id="staff_pekerjaan">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
                                                                 <th>Nama</th>
-                                                                <th>Nilai</th>
+                                                                <th><?= $skp ? 'Nilai' : 'Progress' ?></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -112,7 +128,16 @@ $list_tingkat_manfaat = array(
                                                                 echo '<tr>';
                                                                 echo '<td><a  href="' . site_url() . '/pekerjaan_staff/detail_aktivitas?id_pekerjaan=' . $pekerjaan['id_pekerjaan'] . '&id_staff=' . $dp['id_akun'] . '" class="btn btn-success btn-xs" target=""><i class="fa fa-eye"> Lihat Aktivitas</i></a></td>';
                                                                 echo '<td>' . $user[$dp['id_akun']]->nama . '</td>';
-                                                                echo '<td>' . number_format(floatval($dp['skor']), 2) . '</td>';
+//                                                                echo '<td>' . number_format(floatval($dp['skor']), 2) . '</td>';
+                                                                if ($skp == true) {
+                                                                    echo '<td>' . number_format(floatval($dp['skor']), 2) . '</td>';
+                                                                } else {
+                                                                    echo '<td><div class="progress progress-striped progress-xs">'
+                                                                    . '<div style="width: ' . $dp['progress'] . '%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="' . $dp['progress'] . '" role="progressbar" class="progress-bar progress-bar-warning" title="progress ' . $dp['progress'] . '%">'
+                                                                    . '<span class="sr-only">' . $dp['progress'] . '% Complete (success)</span>'
+                                                                    . '</div>'
+                                                                    . '</div></td>';
+                                                                }
                                                                 echo '</tr>';
                                                             }
                                                             ?>
@@ -148,6 +173,7 @@ $list_tingkat_manfaat = array(
         var id_staff = '<?= $detil_pekerjaan['id_akun'] ?>';
         var list_user =<?= json_encode($users) ?>;
         var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
+        var pekerjaan = <?= json_encode($pekerjaan); ?>;
         $(document).ready(function () {
             document.title = 'Detail Aktivitas Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
             $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
@@ -156,9 +182,78 @@ $list_tingkat_manfaat = array(
                 columnDefs: [{targets: [0], orderable: false}],
                 order: [[1, "asc"]]
             });
-            init_tabel_aktivitas();
+            if (pekerjaan['kategori'] == 'rutin' || pekerjaan['kategori'] == 'project') {
+                init_tabel_aktivitas();
+                $('#tabel_progress').hide();
+            } else {
+                init_tabel_progress();
+                $('#tabel_aktivitas').hide();
+            }
         });
         var tabel_aktivitas = null;
+        function init_tabel_progress() {
+            if (tabel_aktivitas != null) {
+                tabel_aktivitas.fnDestroy();
+            }
+            tabel_aktivitas = $('#tabel_progress').dataTable({
+                order: [[1, "asc"]],
+                "columnDefs": [{"targets": [0], "orderable": false}],
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    'method': 'post',
+                    'data': {
+                        id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
+                        id_pekerjaan: id_pekerjaan
+                    },
+                    "url": site_url + "/aktivitas_pekerjaan/get_list_progress_pekerjaan_datatable",
+                    "dataSrc": function (json) {
+                        var jsonData = json.data;
+                        return jsonData;
+                    }
+                },
+                "createdRow": function (row, data, index) {
+                    var tgl_mulai = data[4];
+                    var tgl_mulai_tmzn = tgl_mulai.split('+');
+                    var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
+                    var tgl_selesai = data[6];
+                    var tgl_selesai_tmzn = tgl_selesai.split('+');
+                    var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
+                    var id = data[1];
+
+                    var validated = parseInt(data[7]);
+                    var list_berkas = JSON.parse(data[8]);
+                    var list_id_berkas = JSON.parse(data[9]);
+                    var html_berkas = '';
+                    if (list_berkas != null) {
+                        for (var i = 0, n = list_berkas.length; i < n; i++) {
+                            html_berkas += '<a href="' + site_url + '/download?id_file=' + list_id_berkas[i] + '" target="_blank" title="' + list_berkas[i] + '"><i class="fa fa-paperclip fa-fw"></i></a> ';
+                        }
+                    }
+                    var html = '<div class="btn-group">'
+                            + '<button class="btn btn-default btn-xs dropdown-toggle btn-info" data-toggle="dropdown">Aksi <span class="caret"></span></button>'
+                            + '<ul class="dropdown-menu">';
+                    if (validated == 0) {
+                        html += '<li><a href="javascript:viewValidateProgress(' + id + ');"><i class="fa fa-check fa-fw"></i> Validasi</a></li>';
+                    }
+                    html += '<li><a href="javascript:viewHapusProgress(' + id + ');"><i class="fa fa-times fa-fw"></i> Hapus</a></li>';
+                    html += '</ul></div>';
+
+                    $('td', row).eq(4).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+                    $('td', row).eq(0).html(html);
+
+                    $('td', row).eq(1).html(index + 1);
+                    $('td', row).eq(3).html(data[3] + '%');
+                    $('td', row).eq(5).html(html_berkas);
+                    $('td', row).eq(6).html('Unvalidated');
+                    if (validated == 1) {
+                        $('td', row).eq(6).html('Validated');
+                    }
+
+                    $(row).attr('id', 'row_' + id)
+                }
+            });
+        }
         function init_tabel_aktivitas() {
             if (tabel_aktivitas != null) {
                 tabel_aktivitas.fnDestroy();
@@ -171,7 +266,7 @@ $list_tingkat_manfaat = array(
                 "ajax": {
                     'method': 'post',
                     'data': {
-                        id_staff: id_staff,
+                        id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
                         id_pekerjaan: id_pekerjaan
                     },
                     "url": site_url + "/aktivitas_pekerjaan/get_list_aktivitas_pekerjaan",
@@ -181,19 +276,130 @@ $list_tingkat_manfaat = array(
                     }
                 },
                 "createdRow": function (row, data, index) {
+                    var id = data[1];
                     var tgl_mulai = data[6];
                     var tgl_mulai_tmzn = tgl_mulai.split('+');
                     var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
                     var tgl_selesai = data[8];
                     var tgl_selesai_tmzn = tgl_selesai.split('+');
                     var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
-                    $('td', row).eq(6).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
-                    $('td', row).eq(0).html('');
-                    $('td', row).eq(4).html(data[4] + ' ' + detil_pekerjaan['satuan_kuantitas']);
-                    $('td', row).eq(5).html(data[5] + '%');
-//            $('td', row).eq(5).html('<a  href="' + base_url + 'pekerjaan_staff/detail?id_pekerjaan=' + data[0] + '" class="btn btn-success btn-xs"><i class="fa fa-eye">View</i></a>');
-                    $(row).attr('id', 'row_' + index)
+                    var status_validasi = parseInt(data[10]);
+                    var html = '<div class="btn-group">'
+                            + '<button class="btn btn-default btn-xs dropdown-toggle btn-info" data-toggle="dropdown">Aksi <span class="caret"></span></button>'
+                            + '<ul class="dropdown-menu">';
+                    if (status_validasi == 0) {
+                        html += '<li><a href="javascript:viewValidasiAktivitas(' + id + ');"><i class="fa fa-check fa-fw"></i> Validasi</a></li>';
+                    }
+                    html += '<li><a href="javascript:viewHapusAktivitas(' + id + ');"><i class="fa fa-times fa-fw"></i> Hapus</a></li>';
+                    html += '</ul></div>';
+                    $('td', row).eq(0).html(html);
+                    $('td', row).eq(1).html(index + 1);
+                    $('td', row).eq(3).html(data[4] + ' ' + detil_pekerjaan['satuan_kuantitas']);
+                    $('td', row).eq(4).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+
+                    if (status_validasi == 1) {
+                        $('td', row).eq(5).html('Validated');
+                    } else {
+                        $('td', row).eq(5).html('Unvalidated');
+                    }
+                    $(row).attr('id', 'row_' + id)
                 }
             });
+        }
+        function viewValidateProgress(id) {
+            var row = $('#row_' + id);
+            var deskripsi = $(row.children()[2]).html();
+            if (confirm('Anda akan memvalidasi progress ' + deskripsi + '?') == true) {
+                $.ajax({
+                    type: "POST",
+                    url: site_url + "/aktivitas_pekerjaan/validate_progress",
+                    data: {
+                        id_progress: id
+                    },
+                    success: function (data) {
+                        if (data == 'ok') {
+                            tabel_aktivitas.fnDraw();
+                        } else {
+                            alert(data);
+                        }
+                        $('.snake_loader').remove();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $('.snake_loader').remove();
+                    }
+                });
+            }
+        }
+        function viewValidasiAktivitas(id) {
+            var row = $('#row_' + id);
+            var deskripsi = $(row.children()[2]).html();
+            if (confirm('Anda akan memvalidasi aktivitas ' + deskripsi + '?') == true) {
+                $.ajax({
+                    type: "POST",
+                    url: site_url + "/aktivitas_pekerjaan/validate_aktivitas",
+                    data: {
+                        id_aktivitas: id
+                    },
+                    success: function (data) {
+                        if (data == 'ok') {
+                            tabel_aktivitas.fnDraw();
+                        } else {
+                            alert(data);
+                        }
+                        $('.snake_loader').remove();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $('.snake_loader').remove();
+                    }
+                });
+            }
+        }
+        function viewHapusProgress(id) {
+            var row = $('#row_' + id);
+            var deskripsi = $(row.children()[2]).html();
+            if (confirm('Anda akan menghapus progress ' + deskripsi + '?') == true) {
+                $.ajax({
+                    type: "POST",
+                    url: site_url + "/aktivitas_pekerjaan/hapus_progress",
+                    data: {
+                        id_progress: id
+                    },
+                    success: function (data) {
+                        if (data == 'ok') {
+                            tabel_aktivitas.fnDraw();
+                        } else {
+                            alert(data);
+                        }
+                        $('.snake_loader').remove();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $('.snake_loader').remove();
+                    }
+                });
+            }
+        }
+        function viewHapusAktivitas(id){
+            var row = $('#row_' + id);
+            var deskripsi = $(row.children()[2]).html();
+            if (confirm('Anda akan menghapus aktivitas ' + deskripsi + '?') == true) {
+                $.ajax({
+                    type: "POST",
+                    url: site_url + "/aktivitas_pekerjaan/hapus_aktivitas",
+                    data: {
+                        id_aktivitas: id
+                    },
+                    success: function (data) {
+                        if (data == 'ok') {
+                            tabel_aktivitas.fnDraw();
+                        } else {
+                            alert(data);
+                        }
+                        $('.snake_loader').remove();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $('.snake_loader').remove();
+                    }
+                });
+            }
         }
     </script>

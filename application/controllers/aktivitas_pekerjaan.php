@@ -116,8 +116,13 @@ class aktivitas_pekerjaan extends ceklogin {
 //            }
         }
 //        $this->db->query($sql);
+        $this->mark_started($detil_pekerjaan['id_detil_pekerjaan']);
         $this->db->trans_complete();
         return 'ok';
+    }
+
+    private function mark_started($id_detil_pekerjaan = 0) {
+        $this->db->query("update detil_pekerjaan set tglasli_mulai=now() where id_detil_pekerjaan='$id_detil_pekerjaan' and tglasli_mulai is null");
     }
 
     function add_v1() {
@@ -133,6 +138,63 @@ class aktivitas_pekerjaan extends ceklogin {
             echo 'parent.alert("' . $res . '");';
         }
         echo '</script></body></html>';
+    }
+
+    function hapus_aktivitas() {
+        $id_aktivitas = intval($this->input->post('id_aktivitas'));
+        $q = $this->db->query("select * from aktivitas_pekerjaan where id_aktivitas='$id_aktivitas'")->result_array();
+        if (count($q) <= 0) {
+            echo 'Aktivitas tidak dapat ditemukan';
+            return;
+        }
+        $aktivitas = $q[0];
+        $id_pekerjaan = $aktivitas['id_pekerjaan'];
+        $id_detil_pekerjaan = $aktivitas['id_detil_pekerjaan'];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $pekerjaan = $q[0];
+        $session = $this->session->userdata('logged_in');
+        if ($session['user_id'] == $pekerjaan['id_penanggung_jawab']) {
+            //user adalaha penanggung jawab, berhak
+        } else {
+            $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+            if (count($q) <= 0) {
+                echo 'Detil Pekerjaan tidak dapat ditemukan';
+                return;
+            }
+            $detil_pekerjaan = $q[0];
+            if ($detil_pekerjaan['id_akun'] != $session['user_id']) {
+                echo 'Anda tidak berhak menghapus aktivitas pekerjaan orang lain';
+                return;
+            }
+            if ($aktivitas['status_validasi'] == 1) {
+                echo 'Anda tidak berhak menghapus aktivitas yang telah divalidasi';
+                return;
+            }
+        }
+        $this->db->trans_begin();
+        $list_file = $this->db->query("select * from file where id_aktivitas='$id_aktivitas'")->result_array();
+        foreach ($list_file as $f) {
+            if (file_exists($f['path'])) {
+                unlink($f['path']);
+            }
+        }
+        $this->db->query("delete from file where id_aktivitas='$id_aktivitas'");
+        $this->db->query("delete from aktivitas_pekerjaan where id_aktivitas='$id_aktivitas'");
+        
+        $q = $this->db->query("select coalesce(sum(kuantitas_output),0) as jumlah from aktivitas_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan' and status_validasi='1'")->result_array();
+        $total_kuantitas = 0;
+        if (count($q) > 0) {
+            $kuant = $q[0];
+            $total_kuantitas = $kuant['jumlah'];
+        }
+        $this->db->query("update detil_pekerjaan set realisasi_kuantitas_output='$total_kuantitas' where id_detil_pekerjaan='$id_detil_pekerjaan'");
+        
+        $this->db->trans_complete();
+        echo 'ok';
     }
 
     function hapus_progress() {
@@ -191,8 +253,107 @@ class aktivitas_pekerjaan extends ceklogin {
         }
         $this->db->query("delete from file where id_progress='$id_progress'");
         $this->db->query("delete from detil_progress where id_detil_progress='$id_progress'");
+
+        $sql = "select * from detil_progress where id_detil_pekerjaan='$id_detil_pekerjaan' and validated=1 order by waktu_mulai desc limit 1";
+        $q = $this->db->query($sql)->result_array();
+        if (count($q) > 0) {
+            $last = $q[0];
+            $this->db->update('detil_pekerjaan', array('progress' => $last['progress']), array('id_detil_pekerjaan' => $id_detil_pekerjaan));
+        } else {
+            $this->db->update('detil_pekerjaan', array('progress' => 0), array('id_detil_pekerjaan' => $id_detil_pekerjaan));
+        }
+
         $this->db->trans_complete();
         echo 'ok';
+    }
+
+    function validate_aktivitas() {
+        $id_aktivitas = intval($this->input->post('id_aktivitas'));
+        $q = $this->db->get_where('aktivitas_pekerjaan', array('id_aktivitas' => $id_aktivitas))->result_array();
+        if (count($q) <= 0) {
+            echo 'Aktivitas tidak dapat ditemukan';
+            return;
+        }
+        $aktivitas = $q[0];
+        $id_detil_pekerjaan = $aktivitas['id_detil_pekerjaan'];
+        $id_pekerjaan = $aktivitas['id_pekerjaan'];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $pekerjaan = $q[0];
+        $session = $this->session->userdata('logged_in');
+        if ($session['user_id'] != $pekerjaan['id_penanggung_jawab']) {
+            echo 'Anda tidak berhak memvalidasi aktivitas';
+            return;
+        }
+        $this->db->trans_begin();
+        $this->db->query("update aktivitas_pekerjaan set status_validasi='1' where id_aktivitas='$id_aktivitas'");
+
+        $q = $this->db->query("select coalesce(sum(kuantitas_output),0) as jumlah from aktivitas_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan' and status_validasi='1'")->result_array();
+        $total_kuantitas = 0;
+        if (count($q) > 0) {
+            $kuant = $q[0];
+            $total_kuantitas = $kuant['jumlah'];
+        }
+        $this->db->query("update detil_pekerjaan set realisasi_kuantitas_output='$total_kuantitas' where id_detil_pekerjaan='$id_detil_pekerjaan'");
+        $this->db->trans_complete();
+        echo 'ok';
+    }
+
+    function validate_progress() {
+        $id_progress = intval($this->input->post('id_progress'));
+        $q = $this->db->query("select * from detil_progress where id_detil_progress='$id_progress'")->result_array();
+        $detil_progress = null;
+        if (count($q) > 0) {
+            $detil_progress = $q[0];
+        }
+        if ($detil_progress == null) {
+            echo 'progress tidak dapat ditemukan';
+            return;
+        }
+        $id_pekerjaan = $detil_progress['id_pekerjaan'];
+        $id_detil_pekerjaan = $detil_progress['id_detil_pekerjaan'];
+        $session = $this->session->userdata('logged_in');
+        $pekerjaan = null;
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) > 0) {
+            $pekerjaan = $q[0];
+        }
+        if ($pekerjaan == null) {
+            echo 'Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        if ($pekerjaan['id_penanggung_jawab'] == $session['user_id']) {
+            
+        } else {
+            echo 'Anda tidak berhak menghapus progress di pekerjaan ini';
+            return;
+        }
+
+        $this->db->trans_begin();
+        $this->db->update('detil_progress', array('validated' => 1, 'validated_by' => $session['user_id']), array('id_detil_progress' => $id_progress));
+        $id_detil_pekerjaan = $detil_progress['id_detil_pekerjaan'];
+
+        $sql = "select * from detil_progress where id_detil_pekerjaan='$id_detil_pekerjaan' and validated=1 order by waktu_mulai desc limit 1";
+        $q = $this->db->query($sql)->result_array();
+        if (count($q) > 0) {
+            $last = $q[0];
+            $this->db->update('detil_pekerjaan', array('progress' => $last['progress']), array('id_detil_pekerjaan' => $id_detil_pekerjaan));
+            if ($last['progress'] >= 100) {
+                $this->mark_finished($id_detil_pekerjaan);
+            }
+        } else {
+            $this->db->update('detil_pekerjaan', array('progress' => 0), array('id_detil_pekerjaan' => $id_detil_pekerjaan));
+        }
+
+        $this->db->trans_complete();
+        echo 'ok';
+    }
+
+    private function mark_finished($id_detil_pekerjaan = 0) {
+        $this->db->query("update detil_pekerjaan set tglasli_selesai=now() where id_detil_pekerjaan='$id_detil_pekerjaan' and tglasli_selesai is null");
     }
 
     function get_list_aktivitas_pekerjaan() {

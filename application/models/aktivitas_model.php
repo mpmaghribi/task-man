@@ -44,8 +44,8 @@ class aktivitas_model extends dtpg {
                 on berkas.id_progress=dp.id_detil_progress
                 where dp.id_detil_pekerjaan='$id_deti_pekerjaan'";
         $columns = array(
-            array('name' => 'id_detil_progress'),
             array('name' => 'id_detil_pekerjaan'),
+            array('name' => 'id_detil_progress'),
             array('name' => 'deskripsi'),
             array('name' => 'progress'),
             array('name' => 'waktu_mulai'),
