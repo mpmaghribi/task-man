@@ -186,8 +186,8 @@ ALTER TABLE aktivitas_pekerjaan_seq OWNER TO postgres;
 CREATE TABLE aktivitas_pekerjaan (
     id_aktivitas integer DEFAULT nextval('aktivitas_pekerjaan_seq'::regclass) NOT NULL,
     id_pekerjaan integer,
-    id_akun integer,
-    tanggal_transaksi timestamp with time zone,
+    id_detil_pekerjaan integer,
+    tanggal_transaksi timestamp with time zone DEFAULT now(),
     waktu_mulai timestamp with time zone,
     waktu_selesai timestamp with time zone,
     kuantitas_output double precision,
@@ -242,7 +242,8 @@ CREATE TABLE detil_pekerjaan (
     realisasi_biaya double precision DEFAULT 0,
     pakai_biaya integer DEFAULT 1,
     satuan_kuantitas character varying(200) DEFAULT 'item'::character varying,
-    satuan_waktu character varying(200) DEFAULT 'bulan'::character varying
+    satuan_waktu character varying(200) DEFAULT 'bulan'::character varying,
+    waktu_transaksi timestamp with time zone DEFAULT now()
 );
 
 
@@ -255,10 +256,15 @@ ALTER TABLE detil_pekerjaan OWNER TO postgres;
 CREATE TABLE detil_progress (
     id_detil_progress integer NOT NULL,
     id_detil_pekerjaan integer,
-    deksripsi text,
+    deskripsi text,
     progress integer,
     total_progress integer,
-    waktu timestamp with time zone
+    waktu timestamp with time zone,
+    id_pekerjaan integer,
+    waktu_mulai timestamp with time zone DEFAULT now(),
+    waktu_selesai timestamp with time zone DEFAULT now(),
+    validated integer DEFAULT 0,
+    validated_by integer
 );
 
 
@@ -272,10 +278,10 @@ COMMENT ON COLUMN detil_progress.id_detil_pekerjaan IS 'foreign key dari detil_p
 
 
 --
--- Name: COLUMN detil_progress.deksripsi; Type: COMMENT; Schema: public; Owner: postgres
+-- Name: COLUMN detil_progress.deskripsi; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON COLUMN detil_progress.deksripsi IS 'deksripsi, keterangan progress yang dilakukan';
+COMMENT ON COLUMN detil_progress.deskripsi IS 'deksripsi, keterangan progress yang dilakukan';
 
 
 --
@@ -341,9 +347,12 @@ ALTER TABLE tbl_file_id OWNER TO postgres;
 CREATE TABLE file (
     id_file integer DEFAULT nextval('tbl_file_id'::regclass) NOT NULL,
     id_pekerjaan integer,
-    nama_file character varying(100),
-    waktu timestamp with time zone,
-    id_progress integer
+    nama_file character varying(1000),
+    waktu timestamp with time zone DEFAULT now(),
+    id_progress integer,
+    path character varying(3000),
+    id_detil_pekerjaan integer,
+    id_aktivitas integer
 );
 
 
@@ -442,22 +451,23 @@ ALTER TABLE tbl_pekerjaan_id OWNER TO postgres;
 
 CREATE TABLE pekerjaan (
     id_pekerjaan integer DEFAULT nextval('tbl_pekerjaan_id'::regclass) NOT NULL,
-    id_sifat_pekerjaan integer,
+    id_sifat_pekerjaan integer DEFAULT 1,
     parent_pekerjaan integer,
-    nama_pekerjaan character varying(2000),
-    deskripsi_pekerjaan text,
+    nama_pekerjaan character varying(2000) DEFAULT 'pekerjaan'::character varying,
+    deskripsi_pekerjaan text DEFAULT 'deskripsi pekerjaan'::text,
     tgl_mulai timestamp with time zone,
     tgl_selesai timestamp with time zone,
-    asal_pekerjaan character varying(50),
-    level_prioritas integer,
+    asal_pekerjaan character varying(50) DEFAULT 'taskmanagement'::character varying,
+    level_prioritas integer DEFAULT 1,
     flag_usulan character varying,
     id_pengaduan integer,
-    kategori character varying(1000),
+    kategori character varying(1000) DEFAULT 'rutin'::character varying,
     id_penanggung_jawab integer,
     id_pengusul integer,
-    status_pekerjaan integer,
-    periode integer,
-    level_manfaat integer
+    status_pekerjaan integer DEFAULT 6,
+    periode integer DEFAULT date_part('year'::text, now()),
+    level_manfaat integer DEFAULT 0,
+    waktu_transaksi timestamp with time zone DEFAULT now()
 );
 
 
@@ -704,6 +714,65 @@ ALTER TABLE ONLY tipe_nilai ALTER COLUMN id_tipe_nilai SET DEFAULT nextval('tipe
 --
 
 COPY activity (id_activity, id_akun, id_detil_pekerjaan, nama_activity, deskripsi_activity, tanggal_activity) FROM stdin;
+2948	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-11-30 20:16:45.802+07
+2949	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-11-30 20:17:57.628+07
+2950	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-11-30 20:25:39.407+07
+2951	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-11-30 20:31:18.268+07
+2952	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-11-30 20:33:54.285+07
+2953	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-11-30 20:39:48.202+07
+2954	1	0	Aktivitas Login	dr. Dodo Anondo, MPH sedang berada di halaman dashboard.	2015-12-01 07:26:27.842+07
+2955	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-01 07:26:53.376+07
+2956	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-01 07:47:07.294+07
+2957	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-01 09:00:59.982+07
+2958	1	0	Aktivitas Login	dr. Dodo Anondo, MPH sedang berada di halaman dashboard.	2015-12-01 10:17:59.183+07
+2959	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-01 10:18:10.033+07
+2960	1	0	Aktivitas Login	dr. Dodo Anondo, MPH sedang berada di halaman dashboard.	2015-12-01 22:28:36.629+07
+2961	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-01 22:32:14.129+07
+2962	1	0	Aktivitas Login	dr. Dodo Anondo, MPH sedang berada di halaman dashboard.	2015-12-02 10:25:11.736+07
+2963	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang berada di halaman pekerjaan.	2015-12-02 10:25:18.22+07
+2964	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-02 10:25:27.247+07
+2965	2	0	Aktivitas Login	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman dashboard.	2015-12-02 11:37:40.924+07
+2966	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 11:37:45.353+07
+2967	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 11:37:49.559+07
+2968	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 11:38:04.253+07
+2969	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 11:39:59.833+07
+2970	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 11:40:08.611+07
+2971	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 11:41:02.898+07
+2972	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 13:30:34.273+07
+2973	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-02 13:31:29.935+07
+2974	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-02 13:31:41.685+07
+2975	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 13:32:22.6+07
+2976	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 13:33:15.25+07
+2977	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 13:35:13.34+07
+2978	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-02 13:35:28.652+07
+2979	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-02 13:35:57.706+07
+2980	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-02 13:38:52.7+07
+2981	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-02 13:40:21.615+07
+2982	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-02 13:40:46.7+07
+2983	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 13:41:33.047+07
+2984	2	0	Aktivitas Login	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman dashboard.	2015-12-02 16:40:48.975+07
+2985	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 16:41:00.181+07
+2986	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-02 16:56:11.98+07
+2987	2	0	Aktivitas Komentar	Drs. Pungky Hendriastjarjo, M.Ak baru saja memberikan komentar : sek	2015-12-02 17:29:06.793+07
+2988	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang berada di halaman pekerjaan.	2015-12-02 18:02:48.03+07
+2989	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang berada di halaman pekerjaan.	2015-12-02 18:03:20.002+07
+2990	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 18:03:36.007+07
+2991	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 18:04:00.915+07
+2992	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang melihat detail tentang pekerjaannya.	2015-12-02 18:21:46.333+07
+2993	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang melihat detail tentang pekerjaannya.	2015-12-02 18:22:35.787+07
+2994	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang melihat detail tentang pekerjaannya.	2015-12-02 18:24:14.708+07
+2995	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang melihat detail tentang pekerjaannya.	2015-12-02 18:24:34.831+07
+2996	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang melihat detail tentang pekerjaannya.	2015-12-02 18:24:51.675+07
+2997	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang melihat detail tentang pekerjaannya.	2015-12-02 18:25:14.049+07
+2998	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang melihat detail tentang pekerjaannya.	2015-12-02 18:26:55.025+07
+2999	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang melihat detail tentang pekerjaannya.	2015-12-02 18:27:02.825+07
+3000	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang melihat detail tentang pekerjaannya.	2015-12-02 18:27:59.349+07
+3001	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang melihat detail tentang pekerjaannya.	2015-12-02 18:28:09.248+07
+3002	1	0	Aktivitas Login	dr. Dodo Anondo, MPH sedang berada di halaman dashboard.	2015-12-02 20:44:10.956+07
+3003	2	0	Aktivitas Login	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman dashboard.	2015-12-02 20:44:42.948+07
+3004	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 20:44:48.186+07
+3005	1	0	Aktivitas Pekerjaan	dr. Dodo Anondo, MPH sedang melihat progress pekerjaan dari para staffnya.	2015-12-02 22:11:05.712+07
+3006	2	0	Aktivitas Pekerjaan	Drs. Pungky Hendriastjarjo, M.Ak sedang berada di halaman pekerjaan.	2015-12-02 22:17:20.388+07
 \.
 
 
@@ -711,8 +780,7 @@ COPY activity (id_activity, id_akun, id_detil_pekerjaan, nama_activity, deskrips
 -- Data for Name: aktivitas_pekerjaan; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY aktivitas_pekerjaan (id_aktivitas, id_pekerjaan, id_akun, tanggal_transaksi, waktu_mulai, waktu_selesai, kuantitas_output, kualitas_mutu, biaya, angka_kredit, keterangan, status_validasi) FROM stdin;
-20	179	2	2015-11-25 12:09:23.48+07	2015-11-23 00:00:00+07	2015-11-27 00:00:00+07	10	100	0	0	ket	0
+COPY aktivitas_pekerjaan (id_aktivitas, id_pekerjaan, id_detil_pekerjaan, tanggal_transaksi, waktu_mulai, waktu_selesai, kuantitas_output, kualitas_mutu, biaya, angka_kredit, keterangan, status_validasi) FROM stdin;
 \.
 
 
@@ -727,31 +795,19 @@ SELECT pg_catalog.setval('aktivitas_pekerjaan_seq', 20, true);
 -- Data for Name: detil_pekerjaan; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY detil_pekerjaan (id_detil_pekerjaan, id_pekerjaan, id_akun, tgl_read, tglasli_mulai, tglasli_selesai, skor, progress, status, sasaran_angka_kredit, sasaran_kuantitas_output, sasaran_kualitas_mutu, sasaran_waktu, sasaran_biaya, realisasi_angka_kredit, realisasi_kuantitas_output, realisasi_kualitas_mutu, realisasi_waktu, realisasi_biaya, pakai_biaya, satuan_kuantitas, satuan_waktu) FROM stdin;
-243	181	3	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan
-244	181	5	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan
-245	181	7	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan
-246	181	20	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan
-239	180	2	2015-11-23	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan
-237	179	2	2015-11-22	\N	\N	0	0	\N	1	100	100	12	100	0	0	0	0	0	1	po	bulan
-238	179	3	\N	\N	\N	0	0	\N	1	100	100	12	100	0	0	0	0	0	1	po	bulan
-240	180	3	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan
-241	180	4	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan
-242	181	2	2015-11-23	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan
-247	182	2	\N	\N	\N	0	0	\N	1	1000	100	12	1000000	0	0	0	0	0	1	item	bulan
-248	182	3	\N	\N	\N	0	0	\N	1	1000	100	12	1000000	0	0	0	0	0	1	item	bulan
-252	184	2	\N	\N	\N	0	0	\N	1	0	0	0	0	0	0	0	0	0	1	item	bulan
-253	184	3	\N	\N	\N	0	0	\N	1	0	0	0	0	0	0	0	0	0	1	item	bulan
-254	185	2	\N	\N	\N	0	0	\N	1	0	0	0	0	0	0	0	0	0	1	item	bulan
-255	185	3	\N	\N	\N	0	0	\N	1	0	0	0	0	0	0	0	0	0	1	item	bulan
-256	186	2	\N	\N	\N	0	0	\N	1	0	0	0	0	0	0	0	0	0	1	item	bulan
-257	186	3	\N	\N	\N	0	0	\N	1	0	0	0	0	0	0	0	0	0	1	item	bulan
-258	187	2	\N	\N	\N	0	0	\N	1	0	0	0	0	0	0	0	0	0	1	item	bulan
-259	187	3	\N	\N	\N	0	0	\N	1	0	0	0	0	0	0	0	0	0	1	item	bulan
-260	188	2	\N	\N	\N	0	0	\N	1	0	0	1	0	0	0	0	0	0	1	item	bulan
-261	188	3	\N	\N	\N	0	0	\N	1	0	0	1	0	0	0	0	0	0	1	item	bulan
-262	189	2	\N	\N	\N	0	0	\N	1	0	0	1	0	0	0	0	0	0	1	item	bulan
-263	189	3	\N	\N	\N	0	0	\N	1	0	0	1	0	0	0	0	0	0	1	item	bulan
+COPY detil_pekerjaan (id_detil_pekerjaan, id_pekerjaan, id_akun, tgl_read, tglasli_mulai, tglasli_selesai, skor, progress, status, sasaran_angka_kredit, sasaran_kuantitas_output, sasaran_kualitas_mutu, sasaran_waktu, sasaran_biaya, realisasi_angka_kredit, realisasi_kuantitas_output, realisasi_kualitas_mutu, realisasi_waktu, realisasi_biaya, pakai_biaya, satuan_kuantitas, satuan_waktu, waktu_transaksi) FROM stdin;
+278	192	20	\N	\N	\N	0	0	\N	1	100	100	11	8000000	0	0	0	0	0	1	item	bulan	2015-12-01 23:09:18.958+07
+276	192	6	\N	\N	\N	0	0	\N	1	100	100	11	8000000	0	0	0	0	0	1	item	bulan	2015-12-01 23:09:18.958+07
+273	192	4	\N	\N	\N	0	0	\N	1	100	100	11	8000000	0	0	0	0	0	1	item	bulan	2015-12-01 23:09:18.958+07
+272	192	3	\N	\N	\N	0	0	\N	1	100	100	11	8000000	0	0	0	0	0	1	item	bulan	2015-12-01 23:09:18.958+07
+279	192	2	2015-12-02	\N	\N	0	0	\N	1	100	100	11	8000000	0	0	0	0	0	1	item	bulan	2015-12-02 10:26:11.575+07
+288	194	3	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan	2015-12-02 13:35:52.4+07
+289	194	4	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan	2015-12-02 13:35:52.4+07
+290	194	5	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan	2015-12-02 13:35:52.4+07
+291	194	7	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan	2015-12-02 13:35:52.4+07
+292	194	6	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan	2015-12-02 13:35:52.4+07
+293	194	20	\N	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan	2015-12-02 13:35:52.4+07
+287	194	2	2015-12-02	\N	\N	0	0	\N	0	0	0	0	0	0	0	0	0	0	1	item	bulan	2015-12-02 13:35:52.4+07
 \.
 
 
@@ -759,7 +815,7 @@ COPY detil_pekerjaan (id_detil_pekerjaan, id_pekerjaan, id_akun, tgl_read, tglas
 -- Data for Name: detil_progress; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY detil_progress (id_detil_progress, id_detil_pekerjaan, deksripsi, progress, total_progress, waktu) FROM stdin;
+COPY detil_progress (id_detil_progress, id_detil_pekerjaan, deskripsi, progress, total_progress, waktu, id_pekerjaan, waktu_mulai, waktu_selesai, validated, validated_by) FROM stdin;
 \.
 
 
@@ -767,14 +823,14 @@ COPY detil_progress (id_detil_progress, id_detil_pekerjaan, deksripsi, progress,
 -- Name: detil_progress_id_detil_progress_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('detil_progress_id_detil_progress_seq', 16, true);
+SELECT pg_catalog.setval('detil_progress_id_detil_progress_seq', 29, true);
 
 
 --
 -- Data for Name: file; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY file (id_file, id_pekerjaan, nama_file, waktu, id_progress) FROM stdin;
+COPY file (id_file, id_pekerjaan, nama_file, waktu, id_progress, path, id_detil_pekerjaan, id_aktivitas) FROM stdin;
 \.
 
 
@@ -805,17 +861,9 @@ SELECT pg_catalog.setval('nilai_pekerjaan_id_nilai_seq', 48, true);
 -- Data for Name: pekerjaan; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY pekerjaan (id_pekerjaan, id_sifat_pekerjaan, parent_pekerjaan, nama_pekerjaan, deskripsi_pekerjaan, tgl_mulai, tgl_selesai, asal_pekerjaan, level_prioritas, flag_usulan, id_pengaduan, kategori, id_penanggung_jawab, id_pengusul, status_pekerjaan, periode, level_manfaat) FROM stdin;
-180	1	\N	tambahan1	tambahan2	2015-11-22 00:00:00+07	2015-11-27 00:00:00+07	taskmanagement	1	\N	\N	tambahan	1	\N	7	\N	\N
-181	1	\N	kreativitas1	kreativitas1	2015-11-23 00:00:00+07	2015-11-30 00:00:00+07	taskmanagement	1	\N	\N	kreativitas	1	\N	7	\N	1
-184	1	\N	pro1	pro1	2015-11-01 00:00:00+07	2015-11-30 00:00:00+07	taskmanagement	1	\N	\N	project	1	\N	7	\N	\N
-185	1	\N	pro1	pro1	2015-11-01 00:00:00+07	2015-11-30 00:00:00+07	taskmanagement	1	\N	\N	project	1	\N	7	\N	\N
-186	1	\N	pro1	pro1	2015-11-01 00:00:00+07	2015-11-30 00:00:00+07	taskmanagement	1	\N	\N	project	1	\N	7	\N	\N
-187	1	\N	pro1	pro1	2015-11-01 00:00:00+07	2015-11-30 00:00:00+07	taskmanagement	1	\N	\N	project	1	\N	7	\N	\N
-188	1	\N	pro1	pro1	2015-11-01 00:00:00+07	2015-11-30 00:00:00+07	taskmanagement	1	\N	\N	project	1	\N	7	\N	\N
-189	1	\N	pro1	pro1	2015-11-01 00:00:00+07	2015-11-30 00:00:00+07	taskmanagement	1	\N	\N	project	1	\N	7	\N	\N
-179	2	\N	skp1	skp1	\N	\N	taskmanagement	1	\N	\N	rutin	1	\N	7	2015	\N
-182	1	\N	skp3	aa	\N	\N	taskmanagement	1	\N	\N	rutin	1	\N	7	2015	\N
+COPY pekerjaan (id_pekerjaan, id_sifat_pekerjaan, parent_pekerjaan, nama_pekerjaan, deskripsi_pekerjaan, tgl_mulai, tgl_selesai, asal_pekerjaan, level_prioritas, flag_usulan, id_pengaduan, kategori, id_penanggung_jawab, id_pengusul, status_pekerjaan, periode, level_manfaat, waktu_transaksi) FROM stdin;
+192	1	\N	project1	project1 hohoho	2015-01-29 00:00:00+07	2015-12-24 00:00:00+07	taskmanagement	1	\N	\N	project	1	\N	7	2015	\N	2015-12-01 23:08:37.005+07
+194	1	\N	t1	t1	2015-12-01 00:00:00+07	2015-12-31 00:00:00+07	taskmanagement	1	\N	\N	tambahan	1	\N	7	2015	0	2015-12-02 13:35:52.4+07
 \.
 
 
@@ -895,7 +943,7 @@ COPY status_pekerjaan (id_status_pekerjaan, nama_status_pekerjaan) FROM stdin;
 -- Name: tbl_activity_id; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('tbl_activity_id', 2947, true);
+SELECT pg_catalog.setval('tbl_activity_id', 3006, true);
 
 
 --
@@ -916,14 +964,14 @@ SELECT pg_catalog.setval('tbl_departemen_id', 5, true);
 -- Name: tbl_detil_pekerjaan_id; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('tbl_detil_pekerjaan_id', 263, true);
+SELECT pg_catalog.setval('tbl_detil_pekerjaan_id', 307, true);
 
 
 --
 -- Name: tbl_file_id; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('tbl_file_id', 112, true);
+SELECT pg_catalog.setval('tbl_file_id', 130, true);
 
 
 --
@@ -937,14 +985,14 @@ SELECT pg_catalog.setval('tbl_jabatan_id', 3, true);
 -- Name: tbl_komentar_id; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('tbl_komentar_id', 107, true);
+SELECT pg_catalog.setval('tbl_komentar_id', 108, true);
 
 
 --
 -- Name: tbl_pekerjaan_id; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('tbl_pekerjaan_id', 189, true);
+SELECT pg_catalog.setval('tbl_pekerjaan_id', 196, true);
 
 
 --
