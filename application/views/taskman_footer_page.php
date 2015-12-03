@@ -62,6 +62,7 @@
 
 <script src="<?php echo base_url() ?>assets/js/dynamic_table_init.js"></script>
 <script>
+    var data_akun=<?=json_encode($data_akun)?>;
     var satuhari = 1000*60*60*24;
     function req_notifikasi() {
 

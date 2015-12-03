@@ -13,9 +13,8 @@ class laporan extends CI_Controller {
         $this->load->model('taskman_repository');
         $this->load->model('akun');
     }
-    
-    public function cetak_form_skp()
-    {
+
+    public function cetak_form_skp() {
         $id = $this->input->get('id_akun');
         $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
         $data["jabatan"] = $this->input->get('jabatan');
@@ -31,8 +30,8 @@ class laporan extends CI_Controller {
         $id_penilai = $temp["user_id"];
         $jabatan = json_decode(
                 file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id_penilai."/format/json"
-                        ));
+                        str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"
+        ));
         $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
         $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
         $data["nama_penilai"] = $jabatan[0]->nama;
@@ -52,11 +51,10 @@ class laporan extends CI_Controller {
 
         $this->load->view('laporan/cetak_form_skp', $data);
     }
-    
-    public function cetak_form_ckp()
-    {
+
+    public function cetak_form_ckp() {
         $id = $this->input->get('id_akun');
-         $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
+        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
         $data["nama"] = $this->input->get('nama');
@@ -70,8 +68,8 @@ class laporan extends CI_Controller {
         $id_penilai = $temp["user_id"];
         $jabatan = json_decode(
                 file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id_penilai."/format/json"
-                        ));
+                        str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"
+        ));
         $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
         $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
         $data["nama_penilai"] = $jabatan[0]->nama;
@@ -98,8 +96,24 @@ class laporan extends CI_Controller {
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat laporan pekerjaan dari para staffnya.");
         $this->load->model("akun");
         $data["my_staff"] = $this->akun->my_staff($temp["user_id"]);
+        $tahun_max = date('Y');
+        $q = $this->db->query("select max(coalesce(date_part('year',tgl_selesai),periode,date_part('year',now()))) as tahun_max from pekerjaan")->result_array();
+        if (count($q) > 0) {
+            $tahun = (int) $q[0]['tahun_max'];
+            if ($tahun_max < $tahun) {
+                $tahun_max = $tahun;
+            }
+        }
+        $tahun_min = $tahun_max - 10;
+        $q = $this->db->query("select min(coalesce(date_part('year',tgl_mulai),periode,date_part('year',now()))) as tahun_min from pekerjaan")->result_array();
+        if (count($q) > 0) {
+            $tahun_min = (int) $q[0]['tahun_min'];
+        }
+        $data['tahun_max'] = $tahun_max;
+        $data['tahun_min'] = $tahun_min;
         $this->load->view("laporan/laporan_pekerjaan_page", $data);
     }
+
     function exportFormCKP() {
         $id = $this->input->get('id_akun');
         $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
@@ -116,8 +130,8 @@ class laporan extends CI_Controller {
         $id_penilai = $temp["user_id"];
         $jabatan = json_decode(
                 file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id_penilai."/format/json"
-                        ));
+                        str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"
+        ));
         $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
         $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
         $data["nama_penilai"] = $jabatan[0]->nama;
@@ -143,113 +157,107 @@ class laporan extends CI_Controller {
         //header("Content-Disposition:attachment;filename=" . $filename);
         echo generate_pdf($html, $filename, false);
     }
-    
-    function laporan_pekerjaan_saya()
-    {
-        
+
+    function laporan_pekerjaan_saya() {
+
         $jenis = $this->input->get("jenis_laporan");
         $periode = $this->input->get("periode");
         //print_r($jenis);
         //print_r($periode);
-        if ($jenis == 1){
-            $periode = $this->input->get("periode");
-            $data["periode"] = $periode;
-        $temp = $this->session->userdata("logged_in");
-        $data['data_akun'] = $temp;
-        $data['temp'] = $temp;
-        $id = $temp["user_id"];
-        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
-        $jabatan = json_decode(
-                file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id."/format/json"
-                        ));
-        $data["jabatan"] = $jabatan[0]->nama_jabatan;
-        $data["departemen"] = $jabatan[0]->nama_departemen;
-        $data["nama"] = $jabatan[0]->nama;
-        $data["nip"] = $jabatan[0]->nip;
-        
-        $atasan = json_decode(
-                file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/".$id."/format/json"
-                        ));
-       if ($atasan != NULL){
-            $data["jabatan_penilai"] = $atasan[0]->nama_jabatan;
-            $data["departemen_penilai"] = $atasan[0]->nama_departemen;
-            $data["nama_penilai"] = $atasan[0]->nama;
-            $data["nip_penilai"] = $atasan[0]->nip;
-        }
-        else
-        {
-            $data["jabatan_penilai"] = "-";
-            $data["departemen_penilai"] = "-";
-            $data["nama_penilai"] = "-";
-            $data["nip_penilai"] = "-";
-        }
-        
-        $this->load->helper(array('pdf', 'date'));
-        $filename = 'Laporan SKP '.$data['nama'].'.pdf';
-        $data['state'] = 'Report';
-        $this->load->model("pekerjaan_model");
-        $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
-        $data['pkj_karyawan'] = $result;
-        $html = $this->load->view('laporan/laporan_pekerjaan_pdf', $data, true);
-        //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
-        header("Content-type:application/pdf");
-
-        // It will be called downloaded.pdf
-        //header("Content-Disposition:attachment;filename=" . $filename);
-        echo generate_pdf($html, $filename, false);
-        }
-        else{
+        if ($jenis == 1) {
             $periode = $this->input->get("periode");
             $data["periode"] = $periode;
             $temp = $this->session->userdata("logged_in");
-        $data['data_akun'] = $temp;
-        $data['temp'] = $temp;
-        $id = $temp["user_id"];
-        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
-        $jabatan = json_decode(
-                file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id."/format/json"
-                        ));
-        $atasan = json_decode(
-                file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/".$id."/format/json"
-                        ));
-                        //print_r($atasan);
-        if ($atasan != NULL){
-            $data["jabatan_penilai"] = $atasan[0]->nama_jabatan;
-            $data["departemen_penilai"] = $atasan[0]->nama_departemen;
-            $data["nama_penilai"] = $atasan[0]->nama;
-            $data["nip_penilai"] = $atasan[0]->nip;
-        }
-        else
-        {
-            $data["jabatan_penilai"] = "-";
-            $data["departemen_penilai"] = "-";
-            $data["nama_penilai"] = "-";
-            $data["nip_penilai"] = "-";
-        }
-        $data["jabatan"] = $jabatan[0]->nama_jabatan;
-        $data["departemen"] = $jabatan[0]->nama_departemen;
-        $data["nama"] = $jabatan[0]->nama;
-        $data["nip"] = $jabatan[0]->nip;
-        $this->load->helper(array('pdf', 'date'));
-        $filename = 'Laporan CKP '.$data['nama'].'.pdf';
-        $data['state'] = 'Report';
-        $this->load->model("pekerjaan_model");
-        $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
-        $data['pkj_karyawan'] = $result;
-        $html = $this->load->view('laporan/laporan_ckp_pdf', $data,TRUE );
-        //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
-        header("Content-type:application/pdf");
+            $data['data_akun'] = $temp;
+            $data['temp'] = $temp;
+            $id = $temp["user_id"];
+            $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
+            $jabatan = json_decode(
+                    file_get_contents(
+                            str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id . "/format/json"
+            ));
+            $data["jabatan"] = $jabatan[0]->nama_jabatan;
+            $data["departemen"] = $jabatan[0]->nama_departemen;
+            $data["nama"] = $jabatan[0]->nama;
+            $data["nip"] = $jabatan[0]->nip;
 
-        // It will be called downloaded.pdf
-        //header("Content-Disposition:attachment;filename=" . $filename);
-        echo generate_pdf($html, $filename, false);
+            $atasan = json_decode(
+                    file_get_contents(
+                            str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $id . "/format/json"
+            ));
+            if ($atasan != NULL) {
+                $data["jabatan_penilai"] = $atasan[0]->nama_jabatan;
+                $data["departemen_penilai"] = $atasan[0]->nama_departemen;
+                $data["nama_penilai"] = $atasan[0]->nama;
+                $data["nip_penilai"] = $atasan[0]->nip;
+            } else {
+                $data["jabatan_penilai"] = "-";
+                $data["departemen_penilai"] = "-";
+                $data["nama_penilai"] = "-";
+                $data["nip_penilai"] = "-";
+            }
+
+            $this->load->helper(array('pdf', 'date'));
+            $filename = 'Laporan SKP ' . $data['nama'] . '.pdf';
+            $data['state'] = 'Report';
+            $this->load->model("pekerjaan_model");
+            $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
+            $data['pkj_karyawan'] = $result;
+            $html = $this->load->view('laporan/laporan_pekerjaan_pdf', $data, true);
+            //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
+            header("Content-type:application/pdf");
+
+            // It will be called downloaded.pdf
+            //header("Content-Disposition:attachment;filename=" . $filename);
+            echo generate_pdf($html, $filename, false);
+        } else {
+            $periode = $this->input->get("periode");
+            $data["periode"] = $periode;
+            $temp = $this->session->userdata("logged_in");
+            $data['data_akun'] = $temp;
+            $data['temp'] = $temp;
+            $id = $temp["user_id"];
+            $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
+            $jabatan = json_decode(
+                    file_get_contents(
+                            str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id . "/format/json"
+            ));
+            $atasan = json_decode(
+                    file_get_contents(
+                            str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $id . "/format/json"
+            ));
+            //print_r($atasan);
+            if ($atasan != NULL) {
+                $data["jabatan_penilai"] = $atasan[0]->nama_jabatan;
+                $data["departemen_penilai"] = $atasan[0]->nama_departemen;
+                $data["nama_penilai"] = $atasan[0]->nama;
+                $data["nip_penilai"] = $atasan[0]->nip;
+            } else {
+                $data["jabatan_penilai"] = "-";
+                $data["departemen_penilai"] = "-";
+                $data["nama_penilai"] = "-";
+                $data["nip_penilai"] = "-";
+            }
+            $data["jabatan"] = $jabatan[0]->nama_jabatan;
+            $data["departemen"] = $jabatan[0]->nama_departemen;
+            $data["nama"] = $jabatan[0]->nama;
+            $data["nip"] = $jabatan[0]->nip;
+            $this->load->helper(array('pdf', 'date'));
+            $filename = 'Laporan CKP ' . $data['nama'] . '.pdf';
+            $data['state'] = 'Report';
+            $this->load->model("pekerjaan_model");
+            $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
+            $data['pkj_karyawan'] = $result;
+            $html = $this->load->view('laporan/laporan_ckp_pdf', $data, TRUE);
+            //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
+            header("Content-type:application/pdf");
+
+            // It will be called downloaded.pdf
+            //header("Content-Disposition:attachment;filename=" . $filename);
+            echo generate_pdf($html, $filename, false);
         }
     }
-    
+
     function laporan_ckp_per_periode() {
         $temp = $this->session->userdata("logged_in");
         $periode = $this->input->get("periode2");
@@ -259,8 +267,8 @@ class laporan extends CI_Controller {
         $id_penilai = $temp["user_id"];
         $jabatan = json_decode(
                 file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id_penilai."/format/json"
-                        ));
+                        str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"
+        ));
         $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
         $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
         $data["nama_penilai"] = $jabatan[0]->nama;
@@ -287,7 +295,7 @@ class laporan extends CI_Controller {
         //header("Content-Disposition:attachment;filename=" . $filename);
         echo generate_pdf($html, $filename, false);
     }
-    
+
     function laporan_per_periode() {
         $temp = $this->session->userdata("logged_in");
         $periode = $this->input->get("periode");
@@ -297,8 +305,8 @@ class laporan extends CI_Controller {
         $id_penilai = $temp["user_id"];
         $jabatan = json_decode(
                 file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id_penilai."/format/json"
-                        ));
+                        str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"
+        ));
         $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
         $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
         $data["nama_penilai"] = $jabatan[0]->nama;
@@ -447,6 +455,7 @@ Data Pengaduan ' . $ket . '
 
     function exportToPDF() {
         $id = $this->input->get('id_akun');
+        $periode = intval($this->input->get('periode'));
         $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
@@ -461,8 +470,8 @@ Data Pengaduan ' . $ket . '
         $id_penilai = $temp["user_id"];
         $jabatan = json_decode(
                 file_get_contents(
-                        str_replace('taskmanagement','integrarsud',str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/".$id_penilai."/format/json"
-                        ));
+                        str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"
+        ));
         $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
         $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
         $data["nama_penilai"] = $jabatan[0]->nama;

@@ -20,6 +20,20 @@
                                 Pekerjaan Staff
                             </header>
                             <div class="panel-body">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-1">Periode</label>
+                                        <div class="col-lg-2">
+                                            <select id="select_periode" name="select_periode" class="form-control">
+                                                <?php
+                                                for ($i = $tahun_max; $i >= $tahun_min; $i--) {
+                                                    echo '<option value="' . $i . '">' . $i . '</option>';
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="form">
                                     <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_staff">
                                         <thead>
@@ -40,48 +54,50 @@
                                             if (isset($my_staff)) {
                                                 //var_dump($my_staff);
                                                 $counter = 0;
-												//print_r($my_staff);
+                                                //print_r($my_staff);
                                                 foreach ($my_staff as $staff) {
-												
+
                                                     $counter++;
                                                     echo '<tr>';
                                                     echo '<td >' . $counter . '</td>';
                                                     echo '<td>' . $staff->nip . '</td>';
                                                     echo '<td>' . $staff->nama . '</td>';
                                                     echo '<td>' . $staff->nama_jabatan . '</td>';
-                                                    echo '<td>' . $staff->nama_departemen. '</td>';
-                                                    echo '<td>' . $staff->email . '</td>';?>
-                                            <td>
-                                            <div class="btn-group">
-                                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button"> Print <span class="caret"></span> </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/cetak_form_skp?id_akun='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" >Form SKP</a></li>
-                                                    <li><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/cetak_form_ckp?id_akun='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" >Form CKP</a></li>
-                                                    
-                                                </ul>
-                                            </div>
-                                        </td>
-                                         <td>
-                                            <div class="btn-group">
-                                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button"> Simpan PDF<span class="caret"></span> </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/exportToPDF?id_akun='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" >Form SKP</a></li>
-                                                    <li><a href="#" id="export<?php echo $staff->id_akun?>" onclick="window.open('<?= site_url('laporan/exportFormCKP?id_akun='.$staff->id_akun.'&jabatan='.$staff->nama_jabatan.'&departemen='.$staff->nama_departemen.'&nama='.$staff->nama.'&nip='.$staff->nip.'') ?>', '_blank')" >Form CKP</a></li>
-                                                    <li><a href="#exportPeriode" data-toggle="modal"  onclick="exportPeriode('<?php echo $staff->id_akun?>','<?php echo $staff->nama?>','<?php echo $staff->nama_jabatan?>','<?php echo $staff->nama_departemen?>','<?php echo $staff->nip?>')" >Laporan SKP per Periode</a></li>
-                                                    <li><a href="#exportPeriode2" data-toggle="modal"  onclick="exportPeriode2('<?php echo $staff->id_akun?>','<?php echo $staff->nama?>','<?php echo $staff->nama_jabatan?>','<?php echo $staff->nama_departemen?>','<?php echo $staff->nip?>')" >Laporan CKP per Periode</a></li>
-                                                    <li></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                            <?php        echo '<td ><form method="get" action="' . base_url() . 'pekerjaan/pekerjaan_per_staff"><input type="hidden" name="id_akun" value="' . $staff->id_akun . '"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>';
+                                                    echo '<td>' . $staff->nama_departemen . '</td>';
+                                                    echo '<td>' . $staff->email . '</td>';
                                                     ?>
-                                           
-                                        
-                                        
-                                                    <?php echo '</tr>';
-                                                }
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button"> Print <span class="caret"></span> </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="#" id="export<?php echo $staff->id_akun ?>" onclick="print_form({url: '<?= site_url() ?>/laporan/cetak_form_skp', id_akun: '<?= $staff->id_akun ?>', jabatan: '<?= $staff->nama_jabatan ?>', departemen: '<?= $staff->nama_departemen ?>', nama: '<?= $staff->nama ?>', nip: '<?= $staff->nip ?>'})" >Form SKP</a></li>
+                                                            <li><a href="#" id="export<?php echo $staff->id_akun ?>" onclick="print_form({url: '<?= site_url() ?>/laporan/cetak_form_ckp', id_akun: '<?= $staff->id_akun ?>', jabatan: '<?= $staff->nama_jabatan ?>', departemen: '<?= $staff->nama_departemen ?>', nama: '<?= $staff->nama ?>', nip: '<?= $staff->nip ?>'})" >Form CKP</a></li>
+
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button"> Simpan PDF<span class="caret"></span> </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="#" id="export<?php echo $staff->id_akun ?>" onclick="print_form({url: '<?= site_url() ?>/laporan/exportToPDF', id_akun: '<?= $staff->id_akun ?>', jabatan: '<?= $staff->nama_jabatan ?>', departemen: '<?= $staff->nama_departemen ?>', nama: '<?= $staff->nama ?>', nip: '<?= $staff->nip ?>'})" >Form SKP</a></li>
+                                                            <li><a href="#" id="export<?php echo $staff->id_akun ?>" onclick="print_form({url:'<?= site_url()?>/laporan/exportFormCKP',id_akun: '<?= $staff->id_akun ?>', jabatan: '<?= $staff->nama_jabatan ?>', departemen: '<?= $staff->nama_departemen ?>', nama: '<?= $staff->nama ?>', nip: '<?= $staff->nip ?>'})" >Form CKP</a></li>
+                                                            <li><a href="#exportPeriode" data-toggle="modal"  onclick="exportPeriode('<?php echo $staff->id_akun ?>', '<?php echo $staff->nama ?>', '<?php echo $staff->nama_jabatan ?>', '<?php echo $staff->nama_departemen ?>', '<?php echo $staff->nip ?>')" >Laporan SKP per Periode</a></li>
+                                                            <li><a href="#exportPeriode2" data-toggle="modal"  onclick="exportPeriode2('<?php echo $staff->id_akun ?>', '<?php echo $staff->nama ?>', '<?php echo $staff->nama_jabatan ?>', '<?php echo $staff->nama_departemen ?>', '<?php echo $staff->nip ?>')" >Laporan CKP per Periode</a></li>
+                                                            <li></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                                <?php echo '<td ><form method="get" action="' . site_url() . '/pekerjaan_staff/staff"><input type="hidden" name="id_staff" value="' . $staff->id_akun . '"/><button type="submit" class="btn btn-success btn-xs" style="float:right;"><i class="fa fa-eye"></i>View</button></form></td>';
+                                                ?>
+
+
+
+                                                <?php
+                                                echo '</tr>';
                                             }
-                                            ?>
+                                        }
+                                        ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -96,8 +112,8 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h4 class="modal-title">Pilih Periode Yang Anda Ingin Eksport</h4>
                             </div>
-                            <form action="<?php echo site_url()?>laporan/laporan_per_periode" method="GET">
-                            <div class="modal-body">
+                            <form action="<?php echo site_url() ?>laporan/laporan_per_periode" method="GET">
+                                <div class="modal-body">
 
                                     <input type="hidden" id="id_akun" name="id_akun" value="" />
                                     <input type="hidden" id="nama" name="nama" value="" />
@@ -114,11 +130,11 @@
                                     <input type="hidden" id="nama_departemen" name="nama_departemen" value="" />
                                     <input type="hidden" id="nip" name="nip" value="" />
 
-                            </div>
-                            <div class="modal-footer">
-                                <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
-                                <button class="btn btn-warning" type="submit"> Export PDF</button>
-                            </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
+                                    <button class="btn btn-warning" type="submit"> Export PDF</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -130,8 +146,8 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h4 class="modal-title">Pilih Periode Yang Anda Ingin Eksport</h4>
                             </div>
-                            <form action="<?php echo site_url()?>laporan/laporan_ckp_per_periode" method="GET">
-                            <div class="modal-body">
+                            <form action="<?php echo site_url() ?>laporan/laporan_ckp_per_periode" method="GET">
+                                <div class="modal-body">
 
                                     <input type="hidden" id="id_akun2" name="id_akun2" value="" />
                                     <input type="hidden" id="nama2" name="nama2" value="" />
@@ -148,11 +164,11 @@
                                     <input type="hidden" id="nama_departemen2" name="nama_departemen2" value="" />
                                     <input type="hidden" id="nip2" name="nip2" value="" />
 
-                            </div>
-                            <div class="modal-footer">
-                                <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
-                                <button class="btn btn-warning" type="submit"> Export PDF</button>
-                            </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
+                                    <button class="btn btn-warning" type="submit"> Export PDF</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -161,39 +177,39 @@
                 <!-- page end-->
             </section>
         </section>
+        <form style="display:none" id="form_submit"></form>
         <!--main content end-->
         <!--right sidebar start-->
         <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
 
-                <!-- END JAVASCRIPTS -->
-                <script>
-                    jQuery(document).ready(function() {
-                        EditableTableProgress.init();
-                    });
-                </script>
+        <!-- END JAVASCRIPTS -->
+        <script>
+                                                                jQuery(document).ready(function () {
+                                                                    EditableTableProgress.init();
+                                                                });</script>
         <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script>
-        function exportPeriode(id_akun,nama,jabatan,departemen,nip)
+        function exportPeriode(id_akun, nama, jabatan, departemen, nip)
         {
             $("#id_akun").val(id_akun);
             $("#nama").val(nama);
             $("#nama_jabatan").val(jabatan);
             $("#nama_departemen").val(departemen);
             $("#nip").val(nip);
-        } 
-        function exportPeriode2(id_akun,nama,jabatan,departemen,nip)
+        }
+        function exportPeriode2(id_akun, nama, jabatan, departemen, nip)
         {
             $("#id_akun2").val(id_akun);
             $("#nama2").val(nama);
             $("#nama_jabatan2").val(jabatan);
             $("#nama_departemen2").val(departemen);
             $("#nip2").val(nip);
-        } 
-                </script>
+        }
+    </script>
     <script type="text/javascript">
         function validasi(id_pekerjaan) {
             //alert("pekerjaan yg divalidasi " + id_pekerjaan);
@@ -201,7 +217,7 @@
                 data: "id_pekerjaan=" + id_pekerjaan, // get the form data
                 type: "POST", // GET or POST
                 url: "<?php echo site_url(); ?>/pekerjaan/validasi_usulan", // the file to call
-                success: function(response) { // on success..
+                success: function (response) { // on success..
                     var json = jQuery.parseJSON(response);
                     //alert(response);
                     if (json.status === "OK") {
@@ -217,7 +233,7 @@
             $.ajax({// create an AJAX call...
                 data: "", // get the form data                 type: "get", // GET or POST
                 url: "<?php echo site_url(); ?>/pekerjaan/data_pekerjaan_staff", // the file to call
-                success: function(response) { // on success..
+                success: function (response) { // on success..
                     var json = jQuery.parseJSON(response);
                     if (json.status === "OK") {
                         var jumlah_data = json.data.length;
@@ -248,17 +264,14 @@
 
                             /*mengisi nama pekerjaan */
                             $("#td_tabel_pekerjaan_staff_nama_pekerjaan_" + id_pekerjaan).html(json.data[i]["nama_pekerjaan"]);
-
                             /*mengisi deadline*/
                             $("#td_tabel_pekerjaan_staff_deadline_" + id_pekerjaan).html(json.data[i]["tgl_mulai"] + " - " + json.data[i]["tgl_selesai"]);
-
                             /*mengisi list orang yang mengerjakan suatu pekerjaan*/
                             var isi = $("#td_tabel_pekerjaan_staff_nama_staff_" + id_pekerjaan).html();
                             if (isi.length > 0) {
                                 isi += ", ";
                             }
                             $("#td_tabel_pekerjaan_staff_nama_staff_" + id_pekerjaan).html(isi + json.data[i]["nama"]);
-
                             /*mengisi status pengerjaan pekerjaan*/
                             var status = "";
                             status += "<span class=\"label label-";
@@ -319,7 +332,6 @@
                             }
                             status += "</span>";
                             $("#td_tabel_pekerjaan_staff_status_" + id_pekerjaan).html(status);
-
                             /*mengisi progress*/
                             var pemisah = "style=\"margin-top:5px\"";
                             isi = $("#td_tabel_pekerjaan_staff_progress_" + id_pekerjaan).html();
@@ -333,13 +345,11 @@
                                     "</div>";
                             //alert(progress);
                             $("#td_tabel_pekerjaan_staff_progress_" + id_pekerjaan).html(isi + progress);
-
                             /*tombol view*/
                             $("#td_tabel_pekerjaan_staff_view_" + id_pekerjaan).html("<form method=\"get\" action=\"<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan\">" +
                                     "<input type=\"hidden\" name=\"id_detail_pkj\" value=\"" + id_pekerjaan + "\"/>" +
                                     "<button type=\"submit\" class=\"btn btn-success btn-xs\"><i class=\"fa fa-eye\"></i> View </button>" +
                                     "</form>");
-
                             /*tombol validasi pekerjaan yg berstatus diajukan*/
                             if (json.data[i]["flag_usulan"] === "1") {
                                 $("#td_tabel_pekerjaan_staff_validasi_" + id_pekerjaan).html("<button id=\"validasi" + id_pekerjaan + "\" type=\"button\" class=\"btn btn-default btn-xs\" onclick=\"validasi(" + id_pekerjaan + ")\"><i class=\"fa fa-eye\"> OK</i> </button>");
@@ -352,4 +362,18 @@
         }
         get_data_pekerjaan_staff();
         document.title = "Daftar Pekerjaan Staff - Task Management";
+        var site_url = '<?= site_url() ?>';
+        function print_form(data) {
+            var form = $('#form_submit');
+            console.log('function print_form_skp(data)');
+            console.log(data);
+            form.attr({action: data.url, method: 'get', target: '_blank'});
+            form.html($('<input></input>').attr({type: 'hidden', name: 'periode', value: $('#select_periode').val()}));
+            form.append($('<input></input>').attr({type: 'hidden', name: 'departemen', value: data.departemen}));
+            form.append($('<input></input>').attr({type: 'hidden', name: 'id_akun', value: data.id_akun}));
+            form.append($('<input></input>').attr({type: 'hidden', name: 'jabatan', value: data.jabatan}));
+            form.append($('<input></input>').attr({type: 'hidden', name: 'nama', value: data.nama}));
+            form.append($('<input></input>').attr({type: 'hidden', name: 'nip', value: data.nip}));
+            form.submit();
+        }
     </script>

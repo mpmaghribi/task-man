@@ -100,6 +100,48 @@ $list_tingkat_manfaat = array(
                                                 </div>
                                             </section>                                            
                                         </div>
+                                        <div class="panel-body" id="div_penilaian_skp" style="display:none">
+                                            <h4 style="color: #1FB5AD;">
+                                                Detil Pekerjaan
+                                            </h4>
+                                            <table class="table table-striped table-hover table-condensed" id="" >
+                                                <tbody id="">
+                                                    <tr>
+                                                        <td></td>
+                                                        <th>AK</th>
+                                                        <th>Kuantitas Output</th>
+                                                        <th>Kualitas Mutu</th>
+                                                        <th>Waktu</th>
+                                                        <th>Biaya</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th >Sasaran</th>
+
+                                                        <td><?= $detil_pekerjaan['sasaran_angka_kredit'] ?></td>
+                                                        <td><?= $detil_pekerjaan['sasaran_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
+                                                        <td><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
+                                                        <td><?= $detil_pekerjaan['sasaran_waktu'] . ' ' . $detil_pekerjaan['satuan_waktu'] ?></td>
+                                                        <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['sasaran_biaya'], 2, ',', '.') : '-' ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Realisasi</th>
+                                                        <td><?= $detil_pekerjaan['realisasi_angka_kredit'] ?></td>
+                                                        <td><?= $detil_pekerjaan['realisasi_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
+                                                        <td><?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>%</td>
+                                                        <td><?= $detil_pekerjaan['realisasi_waktu'] . ' ' . $detil_pekerjaan['satuan_waktu'] ?></td>
+                                                        <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['realisasi_biaya'], 2, ',', '.') : '-' ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Penghitungan</th>
+                                                        <td colspan="5"><?= $detil_pekerjaan['progress'] ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Nilai SKP</th>
+                                                        <td colspan="5"><?= $detil_pekerjaan['skor'] ?></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         <div class="col-md-12" id="anggota_tim">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
@@ -185,6 +227,7 @@ $list_tingkat_manfaat = array(
             if (pekerjaan['kategori'] == 'rutin' || pekerjaan['kategori'] == 'project') {
                 init_tabel_aktivitas();
                 $('#tabel_progress').hide();
+                $('#div_penilaian_skp').show();
             } else {
                 init_tabel_progress();
                 $('#tabel_aktivitas').hide();
@@ -378,7 +421,7 @@ $list_tingkat_manfaat = array(
                 });
             }
         }
-        function viewHapusAktivitas(id){
+        function viewHapusAktivitas(id) {
             var row = $('#row_' + id);
             var deskripsi = $(row.children()[2]).html();
             if (confirm('Anda akan menghapus aktivitas ' + deskripsi + '?') == true) {

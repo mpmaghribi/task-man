@@ -277,7 +277,10 @@ $list_tingkat_manfaat = array(
                                                     </table>
                                                 </div>
                                                 <div class="panel-body" id="div_penilaian_skp" style="display:none">
-                                                    <table class="table table-striped table-hover table-condensed" id="" >
+                                                    <h4 style="color: #1FB5AD;">
+                                                        Detil Pekerjaan
+                                                    </h4>
+<!--                                                    <table class="table table-striped table-hover table-condensed" id="" >
                                                         <thead>
                                                             <tr >
                                                                 <th style="vertical-align: middle" rowspan="2">Kegiatan</th>
@@ -304,13 +307,50 @@ $list_tingkat_manfaat = array(
                                                                 <td><?= $detil_pekerjaan['sasaran_angka_kredit'] ?></td>
                                                                 <td><?= $detil_pekerjaan['sasaran_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
                                                                 <td><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
-                                                                <td><?= $detil_pekerjaan['sasaran_waktu'] ?></td>
-                                                                <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? $detil_pekerjaan['sasaran_biaya'] : '-' ?></td>
+                                                                <td><?= $detil_pekerjaan['sasaran_waktu'] .' '.$detil_pekerjaan['satuan_waktu'] ?></td>
+                                                                <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['sasaran_biaya'],2,',','.') : '-' ?></td>
                                                                 <td><?= $detil_pekerjaan['realisasi_angka_kredit'] ?></td>
                                                                 <td><?= $detil_pekerjaan['realisasi_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
                                                                 <td><?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>%</td>
-                                                                <td><?= $detil_pekerjaan['realisasi_waktu'] ?></td>
-                                                                <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? $detil_pekerjaan['realisasi_biaya'] : '-' ?></td>
+                                                                <td><?= $detil_pekerjaan['realisasi_waktu'] .' '.$detil_pekerjaan['satuan_waktu'] ?></td>
+                                                                <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['realisasi_biaya'],2,',','.') : '-' ?></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>-->
+                                                    <table class="table table-striped table-hover table-condensed" id="" >
+                                                        <tbody id="">
+                                                            <tr>
+                                                                <td></td>
+                                                                <th>AK</th>
+                                                                <th>Kuantitas Output</th>
+                                                                <th>Kualitas Mutu</th>
+                                                                <th>Waktu</th>
+                                                                <th>Biaya</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th >Sasaran</th>
+                                                            
+                                                                <td><?= $detil_pekerjaan['sasaran_angka_kredit'] ?></td>
+                                                                <td><?= $detil_pekerjaan['sasaran_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
+                                                                <td><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
+                                                                <td><?= $detil_pekerjaan['sasaran_waktu'] .' '.$detil_pekerjaan['satuan_waktu'] ?></td>
+                                                                <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['sasaran_biaya'],2,',','.') : '-' ?></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Realisasi</th>
+                                                                <td><?= $detil_pekerjaan['realisasi_angka_kredit'] ?></td>
+                                                                <td><?= $detil_pekerjaan['realisasi_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
+                                                                <td><?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>%</td>
+                                                                <td><?= $detil_pekerjaan['realisasi_waktu'] .' '.$detil_pekerjaan['satuan_waktu'] ?></td>
+                                                                <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['realisasi_biaya'],2,',','.') : '-' ?></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Penghitungan</th>
+                                                                <td colspan="5"><?= $detil_pekerjaan['progress'] ?></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Nilai SKP</th>
+                                                                <td colspan="5"><?= $detil_pekerjaan['skor'] ?></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
