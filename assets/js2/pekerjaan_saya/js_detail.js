@@ -120,14 +120,13 @@ function init_tabel_progress() {
             var tgl_mulai = data[4];
             var tgl_mulai_tmzn = tgl_mulai.split('+');
             var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
-            var tgl_selesai = data[6];
+            var tgl_selesai = data[7];
             var tgl_selesai_tmzn = tgl_selesai.split('+');
             var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
             var id = data[1];
-
-            var validated = parseInt(data[7]);
-            var list_berkas = JSON.parse(data[8]);
-            var list_id_berkas = JSON.parse(data[9]);
+            var validated = parseInt(data[6]);
+            var list_berkas = JSON.parse(data[9]);
+            var list_id_berkas = JSON.parse(data[5]);
             var html_berkas = '';
             if (list_berkas != null) {
                 for (var i = 0, n = list_berkas.length; i < n; i++) {
@@ -182,13 +181,13 @@ function init_tabel_aktivitas() {
         },
         "createdRow": function (row, data, index) {
             var id = data[1];
-            var tgl_mulai = data[6];
+            var tgl_mulai = data[4];
             var tgl_mulai_tmzn = tgl_mulai.split('+');
             var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
-            var tgl_selesai = data[8];
+            var tgl_selesai = data[9];
             var tgl_selesai_tmzn = tgl_selesai.split('+');
             var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
-            var status_validasi = parseInt(data[10]);
+            var status_validasi = parseInt(data[5]);
             var html = '<div class="btn-group">'
                     + '<button class="btn btn-default btn-xs dropdown-toggle btn-info" data-toggle="dropdown">Aksi <span class="caret"></span></button>'
                     + '<ul class="dropdown-menu">';
@@ -200,7 +199,7 @@ function init_tabel_aktivitas() {
             $('td', row).eq(4).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
             $('td', row).eq(1).html(index + 1);
             $('td', row).eq(0).html(html);
-            $('td', row).eq(3).html(data[4] + ' ' + detil_pekerjaan['satuan_kuantitas']);
+            $('td', row).eq(3).html(data[3] + ' ' + detil_pekerjaan['satuan_kuantitas']);
             $('td', row).eq(5).html('Unvalidated');
             if (status_validasi == '1') {
                 $('td', row).eq(5).html('Validated');

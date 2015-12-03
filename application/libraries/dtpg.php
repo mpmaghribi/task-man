@@ -19,7 +19,7 @@ class dtpg extends CI_Model {
                 $my_filter = 'where ';
                 $sep = '';
                 foreach ($columns as $column) {
-                    $my_filter .= $sep . $column['name'] . " like '%" . $request['search']['value'] . "%' ";
+                    $my_filter .= $sep . 'cast('.$column['name'] . " as text) like '%" . $request['search']['value'] . "%' ";
                     $sep = ' OR ';
                 }
             }
@@ -34,7 +34,7 @@ class dtpg extends CI_Model {
                 $c_order = $order[$i];
                 $column_number = intval($c_order['column']);
                 if ($column_number < $n_column) {
-                    $my_order.=$sep . $columns[$column_number]['name'] . ' ' . $c_order['dir'];
+                    $my_order.=$sep . 'cast('.$columns[$column_number]['name'] . ' as text) ' . $c_order['dir'];
                     $sep = ', ';
                 }
             }

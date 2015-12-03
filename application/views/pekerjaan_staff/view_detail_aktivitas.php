@@ -277,13 +277,13 @@ $list_tingkat_manfaat = array(
                 },
                 "createdRow": function (row, data, index) {
                     var id = data[1];
-                    var tgl_mulai = data[6];
+                    var tgl_mulai = data[4];
                     var tgl_mulai_tmzn = tgl_mulai.split('+');
                     var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
-                    var tgl_selesai = data[8];
+                    var tgl_selesai = data[9];
                     var tgl_selesai_tmzn = tgl_selesai.split('+');
                     var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
-                    var status_validasi = parseInt(data[10]);
+                    var status_validasi = parseInt(data[5]);
                     var html = '<div class="btn-group">'
                             + '<button class="btn btn-default btn-xs dropdown-toggle btn-info" data-toggle="dropdown">Aksi <span class="caret"></span></button>'
                             + '<ul class="dropdown-menu">';
@@ -294,7 +294,7 @@ $list_tingkat_manfaat = array(
                     html += '</ul></div>';
                     $('td', row).eq(0).html(html);
                     $('td', row).eq(1).html(index + 1);
-                    $('td', row).eq(3).html(data[4] + ' ' + detil_pekerjaan['satuan_kuantitas']);
+                    $('td', row).eq(3).html(data[3] + ' ' + detil_pekerjaan['satuan_kuantitas']);
                     $('td', row).eq(4).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
 
                     if (status_validasi == 1) {

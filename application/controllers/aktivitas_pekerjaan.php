@@ -184,17 +184,70 @@ class aktivitas_pekerjaan extends ceklogin {
         }
         $this->db->query("delete from file where id_aktivitas='$id_aktivitas'");
         $this->db->query("delete from aktivitas_pekerjaan where id_aktivitas='$id_aktivitas'");
-        
+
+        $this->hitung_nilai_aktivitas($id_detil_pekerjaan);
+
+        $this->db->trans_complete();
+        echo 'ok';
+    }
+
+    private function hitung_nilai_aktivitas($id_detil_pekerjaan) {
         $q = $this->db->query("select coalesce(sum(kuantitas_output),0) as jumlah from aktivitas_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan' and status_validasi='1'")->result_array();
         $total_kuantitas = 0;
         if (count($q) > 0) {
             $kuant = $q[0];
             $total_kuantitas = $kuant['jumlah'];
         }
-        $this->db->query("update detil_pekerjaan set realisasi_kuantitas_output='$total_kuantitas' where id_detil_pekerjaan='$id_detil_pekerjaan'");
-        
-        $this->db->trans_complete();
-        echo 'ok';
+        $q = $this->db->query("select * from aktivitas_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan' and status_validasi='1' order by waktu_mulai asc limit 1")->result_array();
+        $date1 = null;
+        $date2 = null;
+        if (count($q) > 0) {
+            $w = $q[0];
+            $date1 = new DateTime($w['waktu_mulai']);
+        }
+        $q = $this->db->query("select * from aktivitas_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan' and status_validasi='1' order by waktu_selesai desc limit 1")->result_array();
+        if (count($q) > 0) {
+            $w = $q[0];
+            $date2 = new DateTime($w['waktu_selesai']);
+        }
+        $waktu_realisasi = 0;
+        if ($date1 != null && $date2 != null) {
+            $interval = $date1->diff($date2);
+            $waktu_realisasi = $interval->m;
+            if ($interval->y > 0) {
+                $waktu_realisasi +=($interval->y * 12);
+            }
+            if ($interval->d > 0) {
+                $waktu_realisasi++;
+            }
+        }
+        $this->db->query("update detil_pekerjaan set realisasi_kuantitas_output='$total_kuantitas', realisasi_waktu='$waktu_realisasi', progress='0', skor='0' where id_detil_pekerjaan='$id_detil_pekerjaan'");
+        $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+        if (count($q) > 0) {
+            $detil_pekerjaan = $q[0];
+            $aspek_kuantitas = $detil_pekerjaan['realisasi_kuantitas_output'] * 100 / $detil_pekerjaan['sasaran_kuantitas_output'];
+            $aspek_kualitas = $detil_pekerjaan['realisasi_kualitas_mutu'] * 100 / $detil_pekerjaan['sasaran_kualitas_mutu'];
+            $efisiensi_waktu = 100 - ($detil_pekerjaan['realisasi_waktu'] * 100 / $detil_pekerjaan['sasaran_waktu']);
+            $aspek_waktu = 1.76 * ($detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) * 100 / $detil_pekerjaan['sasaran_waktu'];
+            if ($efisiensi_waktu > 24) {
+                $aspek_waktu-=24;
+            }
+            $aspek_biaya = 0;
+            if ($detil_pekerjaan['pakai_biaya']) {
+                $efisiensi_biaya = 100 - ($detil_pekerjaan['realisasi_biaya'] * 100 / $detil_pekerjaan['sasaran_biaya']);
+                $aspek_biaya = 1.76 * ($detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) * 100 / $detil_pekerjaan['sasaran_biaya'];
+                if ($efisiensi_biaya > 24) {
+                    $aspek_biaya-=24;
+                }
+            }
+            $penghitungan = $aspek_kuantitas + $aspek_kualitas + $aspek_biaya;
+            $skor = $penghitungan / 3;
+            if ($detil_pekerjaan['pakai_biaya']) {
+                $penghitungan+=$aspek_biaya;
+                $skor = $penghitungan / 4;
+            }
+            $this->db->query("update detil_pekerjaan set progress='$penghitungan', skor='$skor' where id_detil_pekerjaan='$id_detil_pekerjaan'");
+        }
     }
 
     function hapus_progress() {
@@ -254,6 +307,13 @@ class aktivitas_pekerjaan extends ceklogin {
         $this->db->query("delete from file where id_progress='$id_progress'");
         $this->db->query("delete from detil_progress where id_detil_progress='$id_progress'");
 
+        $this->hitung_nilai_progress($id_detil_pekerjaan);
+
+        $this->db->trans_complete();
+        echo 'ok';
+    }
+
+    private function hitung_nilai_progress($id_detil_pekerjaan) {
         $sql = "select * from detil_progress where id_detil_pekerjaan='$id_detil_pekerjaan' and validated=1 order by waktu_mulai desc limit 1";
         $q = $this->db->query($sql)->result_array();
         if (count($q) > 0) {
@@ -262,9 +322,6 @@ class aktivitas_pekerjaan extends ceklogin {
         } else {
             $this->db->update('detil_pekerjaan', array('progress' => 0), array('id_detil_pekerjaan' => $id_detil_pekerjaan));
         }
-
-        $this->db->trans_complete();
-        echo 'ok';
     }
 
     function validate_aktivitas() {
@@ -291,13 +348,8 @@ class aktivitas_pekerjaan extends ceklogin {
         $this->db->trans_begin();
         $this->db->query("update aktivitas_pekerjaan set status_validasi='1' where id_aktivitas='$id_aktivitas'");
 
-        $q = $this->db->query("select coalesce(sum(kuantitas_output),0) as jumlah from aktivitas_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan' and status_validasi='1'")->result_array();
-        $total_kuantitas = 0;
-        if (count($q) > 0) {
-            $kuant = $q[0];
-            $total_kuantitas = $kuant['jumlah'];
-        }
-        $this->db->query("update detil_pekerjaan set realisasi_kuantitas_output='$total_kuantitas' where id_detil_pekerjaan='$id_detil_pekerjaan'");
+        $this->hitung_nilai_aktivitas($id_detil_pekerjaan);
+
         $this->db->trans_complete();
         echo 'ok';
     }
@@ -336,17 +388,7 @@ class aktivitas_pekerjaan extends ceklogin {
         $this->db->update('detil_progress', array('validated' => 1, 'validated_by' => $session['user_id']), array('id_detil_progress' => $id_progress));
         $id_detil_pekerjaan = $detil_progress['id_detil_pekerjaan'];
 
-        $sql = "select * from detil_progress where id_detil_pekerjaan='$id_detil_pekerjaan' and validated=1 order by waktu_mulai desc limit 1";
-        $q = $this->db->query($sql)->result_array();
-        if (count($q) > 0) {
-            $last = $q[0];
-            $this->db->update('detil_pekerjaan', array('progress' => $last['progress']), array('id_detil_pekerjaan' => $id_detil_pekerjaan));
-            if ($last['progress'] >= 100) {
-                $this->mark_finished($id_detil_pekerjaan);
-            }
-        } else {
-            $this->db->update('detil_pekerjaan', array('progress' => 0), array('id_detil_pekerjaan' => $id_detil_pekerjaan));
-        }
+        $this->hitung_nilai_progress($id_detil_pekerjaan);
 
         $this->db->trans_complete();
         echo 'ok';

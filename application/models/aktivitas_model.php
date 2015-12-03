@@ -21,20 +21,21 @@ class aktivitas_model extends dtpg {
             array('name' => 'id_pekerjaan'),
             array('name' => 'id_aktivitas'),
             array('name' => 'keterangan'),
-            array('name' => 'angka_kredit'),
             array('name' => 'kuantitas_output'),
-            array('name' => 'kualitas_mutu'),
             array('name' => 'waktu_mulai'),
+            array('name' => 'status_validasi'),
+            array('name' => 'angka_kredit'),
+            array('name' => 'kualitas_mutu'),
             array('name' => 'biaya'),
             array('name' => 'waktu_selesai'),
-            array('name' => 'id_detil_pekerjaan'),
-            array('name' => 'status_validasi')
+            array('name' => 'id_detil_pekerjaan')
+            
         );
         return $this->get_datatable($sql, $columns, $request);
     }
 
     function get_list_progress_pekerjaan_datatable($id_pekerjaan, $id_deti_pekerjaan, $request) {
-        $sql = "select dp.*, berkas.nama_files, berkas.ids from detil_progress dp
+        $sql = "select dp.*, cast(berkas.nama_files as text) as nama_files, cast(berkas.ids as text) as ids from detil_progress dp
                 left join (
                     select id_progress, json_agg(nama_file) as nama_files, json_agg(id_file) as ids
                     from file
@@ -49,11 +50,12 @@ class aktivitas_model extends dtpg {
             array('name' => 'deskripsi'),
             array('name' => 'progress'),
             array('name' => 'waktu_mulai'),
+            array('name' => 'ids'),
+            array('name' => 'validated'),
             array('name' => 'id_pekerjaan'),
             array('name' => 'waktu_selesai'),
-            array('name' => 'validated'),
-            array('name' => 'nama_files'),
-            array('name' => 'ids')
+            array('name' => 'nama_files')
+            
         );
         return $this->get_datatable($sql, $columns, $request);
     }
