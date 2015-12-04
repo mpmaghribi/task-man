@@ -650,9 +650,13 @@ class pekerjaan_staff extends ceklogin {
         $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
         $satuan_kuantitas = $this->input->post('satuan_kuantitas');
         $kategori_pakerjaan = $this->input->post('kategori_pekerjaan');
+        $level_manfaat=  intval($this->input->post('select_kemanfaatan'));
         if (!is_array($list_id_staff_enroll)) {
             redirect(site_url() . '/pekerjaan_staff');
             return;
+        }
+        if(!in_array($level_manfaat,array(1,2,3))){
+            $level_manfaat=1;
         }
         $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         if (count($q) <= 0) {
@@ -715,6 +719,9 @@ class pekerjaan_staff extends ceklogin {
             $pekerjaan['tgl_selesai'] = $tanggal_selesai;
             if (in_array($kategori_pakerjaan, array('project', 'tambahan', 'kreativitas'))) {
                 $pekerjaan['kategori'] = $kategori_pakerjaan;
+                if($kategori_pakerjaan=='kreativitas'){
+                    $pekerjaan['level_manfaat']=$level_manfaat;
+                }
             } else {
                 redirect(site_url() . '/pekerjaan_staff');
                 return;

@@ -16,7 +16,8 @@ class laporan extends CI_Controller {
 
     public function cetak_form_skp() {
         $id = $this->input->get('id_akun');
-        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
+        //$data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
+        $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori from pekerjaan p inner join detil_pekerjaan dp on dp.id_pekerjaan=p.id_pekerjaan where dp.id_akun='$id' and p.status_pekerjaan=7 order by urutan_kategori")->result_array();
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
         $data["nama"] = $this->input->get('nama');
@@ -54,7 +55,8 @@ class laporan extends CI_Controller {
 
     public function cetak_form_ckp() {
         $id = $this->input->get('id_akun');
-        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
+        //$data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
+        $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori from pekerjaan p inner join detil_pekerjaan dp on dp.id_pekerjaan=p.id_pekerjaan where dp.id_akun='$id' and p.status_pekerjaan=7 order by urutan_kategori")->result_array();
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
         $data["nama"] = $this->input->get('nama');

@@ -104,6 +104,7 @@ $list_tingkat_manfaat = array(
                                             <h4 style="color: #1FB5AD;">
                                                 Detil Pekerjaan
                                             </h4>
+                                            <button class="btn btn-success" id="button_tampilkan_form_penilaian" onclick="tampilkan_form_penilaian()" type="button">Ubah Penilaian</button>
                                             <table class="table table-striped table-hover table-condensed" id="" >
                                                 <tbody id="">
                                                     <tr>
@@ -116,20 +117,19 @@ $list_tingkat_manfaat = array(
                                                     </tr>
                                                     <tr>
                                                         <th >Sasaran</th>
-
-                                                        <td><?= $detil_pekerjaan['sasaran_angka_kredit'] ?></td>
-                                                        <td><?= $detil_pekerjaan['sasaran_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
-                                                        <td><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
+                                                        <td id="td_target_ak"><?= $detil_pekerjaan['sasaran_angka_kredit'] ?></td>
+                                                        <td id="td_target_out"><?= $detil_pekerjaan['sasaran_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
+                                                        <td id="td_target_mutu"><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
                                                         <td><?= $detil_pekerjaan['sasaran_waktu'] . ' ' . $detil_pekerjaan['satuan_waktu'] ?></td>
-                                                        <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['sasaran_biaya'], 2, ',', '.') : '-' ?></td>
+                                                        <td id="td_target_biaya"><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['sasaran_biaya'], 2, ',', '.') : '-' ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Realisasi</th>
-                                                        <td><?= $detil_pekerjaan['realisasi_angka_kredit'] ?></td>
+                                                        <td id="td_real_ak"><?= $detil_pekerjaan['realisasi_angka_kredit'] ?></td>
                                                         <td><?= $detil_pekerjaan['realisasi_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
-                                                        <td><?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>%</td>
+                                                        <td id="td_real_mutu"><?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>%</td>
                                                         <td><?= $detil_pekerjaan['realisasi_waktu'] . ' ' . $detil_pekerjaan['satuan_waktu'] ?></td>
-                                                        <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['realisasi_biaya'], 2, ',', '.') : '-' ?></td>
+                                                        <td id="td_real_biaya"><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['realisasi_biaya'], 2, ',', '.') : '-' ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Penghitungan</th>
@@ -142,6 +142,13 @@ $list_tingkat_manfaat = array(
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <input type="hidden" id="target_ak" value="<?=$detil_pekerjaan['sasaran_angka_kredit']?>"/>
+                                        <input type="hidden" id="target_out" value="<?=$detil_pekerjaan['sasaran_kuantitas_output']?>"/>
+                                        <input type="hidden" id="target_mutu" value="<?=$detil_pekerjaan['sasaran_kualitas_mutu']?>"/>
+                                        <input type="hidden" id="target_biaya" value="<?=$detil_pekerjaan['sasaran_biaya']?>"/>
+                                        <input type="hidden" id="real_ak" value="<?=$detil_pekerjaan['realisasi_angka_kredit']?>"/>
+                                        <input type="hidden" id="real_mutu" value="<?=$detil_pekerjaan['realisasi_kualitas_mutu']?>"/>
+                                        <input type="hidden" id="real_biaya" value="<?=$detil_pekerjaan['realisasi_biaya']?>"/>
                                         <div class="col-md-12" id="anggota_tim">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
@@ -233,6 +240,9 @@ $list_tingkat_manfaat = array(
                 $('#tabel_aktivitas').hide();
             }
         });
+        function tampilkan_form_penilaian (){
+            
+        }
         var tabel_aktivitas = null;
         function init_tabel_progress() {
             if (tabel_aktivitas != null) {
@@ -259,14 +269,14 @@ $list_tingkat_manfaat = array(
                     var tgl_mulai = data[4];
                     var tgl_mulai_tmzn = tgl_mulai.split('+');
                     var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
-                    var tgl_selesai = data[6];
+                    var tgl_selesai = data[8];
                     var tgl_selesai_tmzn = tgl_selesai.split('+');
                     var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
                     var id = data[1];
 
-                    var validated = parseInt(data[7]);
-                    var list_berkas = JSON.parse(data[8]);
-                    var list_id_berkas = JSON.parse(data[9]);
+                    var validated = parseInt(data[6]);
+                    var list_berkas = JSON.parse(data[9]);
+                    var list_id_berkas = JSON.parse(data[5]);
                     var html_berkas = '';
                     if (list_berkas != null) {
                         for (var i = 0, n = list_berkas.length; i < n; i++) {

@@ -81,7 +81,7 @@
                                                         <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button"> Simpan PDF<span class="caret"></span> </button>
                                                         <ul class="dropdown-menu">
                                                             <li><a href="#" id="export<?php echo $staff->id_akun ?>" onclick="print_form({url: '<?= site_url() ?>/laporan/exportToPDF', id_akun: '<?= $staff->id_akun ?>', jabatan: '<?= $staff->nama_jabatan ?>', departemen: '<?= $staff->nama_departemen ?>', nama: '<?= $staff->nama ?>', nip: '<?= $staff->nip ?>'})" >Form SKP</a></li>
-                                                            <li><a href="#" id="export<?php echo $staff->id_akun ?>" onclick="print_form({url:'<?= site_url()?>/laporan/exportFormCKP',id_akun: '<?= $staff->id_akun ?>', jabatan: '<?= $staff->nama_jabatan ?>', departemen: '<?= $staff->nama_departemen ?>', nama: '<?= $staff->nama ?>', nip: '<?= $staff->nip ?>'})" >Form CKP</a></li>
+                                                            <li><a href="#" id="export<?php echo $staff->id_akun ?>" onclick="print_form({url: '<?= site_url() ?>/laporan/exportFormCKP', id_akun: '<?= $staff->id_akun ?>', jabatan: '<?= $staff->nama_jabatan ?>', departemen: '<?= $staff->nama_departemen ?>', nama: '<?= $staff->nama ?>', nip: '<?= $staff->nip ?>'})" >Form CKP</a></li>
                                                             <li><a href="#exportPeriode" data-toggle="modal"  onclick="exportPeriode('<?php echo $staff->id_akun ?>', '<?php echo $staff->nama ?>', '<?php echo $staff->nama_jabatan ?>', '<?php echo $staff->nama_departemen ?>', '<?php echo $staff->nip ?>')" >Laporan SKP per Periode</a></li>
                                                             <li><a href="#exportPeriode2" data-toggle="modal"  onclick="exportPeriode2('<?php echo $staff->id_akun ?>', '<?php echo $staff->nama ?>', '<?php echo $staff->nama_jabatan ?>', '<?php echo $staff->nama_departemen ?>', '<?php echo $staff->nip ?>')" >Laporan CKP per Periode</a></li>
                                                             <li></li>
@@ -112,19 +112,37 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h4 class="modal-title">Pilih Periode Yang Anda Ingin Eksport</h4>
                             </div>
-                            <form action="<?php echo site_url() ?>laporan/laporan_per_periode" method="GET">
+                            <form action="<?php echo site_url() ?>/laporan/laporan_per_periode" method="GET">
                                 <div class="modal-body">
 
                                     <input type="hidden" id="id_akun" name="id_akun" value="" />
                                     <input type="hidden" id="nama" name="nama" value="" />
-                                    <select name="periode" class="form-control m-bot15">
-                                        <option value="6">
-                                            6 Bulan
-                                        </option>
-                                        <option value="12">
-                                            1 Tahun
-                                        </option>
-                                    </select>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-3">Tahun</label>
+                                            <div class="col-lg-8">
+                                                <select id="select_periode2" name="tahun" class="form-control">
+                                                    <?php
+                                                    for ($i = $tahun_max; $i >= $tahun_min; $i--) {
+                                                        echo '<option value="' . $i . '">' . $i . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-3">Periode</label>
+                                            <div class="col-lg-8">
+                                                <select name="periode" class="form-control m-bot15">
+                                                    <option value="tri_1">Triwulan I</option>
+                                                    <option value="tri_2">Triwulan II</option>
+                                                    <option value="tri_3">Triwulan III</option>
+                                                    <option value="sms_1">Semester I</option>
+                                                    <option value="sms_2">Semester II</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <input type="hidden" id="nama_jabatan" name="nama_jabatan" value="" />
                                     <input type="hidden" id="nama_departemen" name="nama_departemen" value="" />
@@ -146,19 +164,38 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h4 class="modal-title">Pilih Periode Yang Anda Ingin Eksport</h4>
                             </div>
-                            <form action="<?php echo site_url() ?>laporan/laporan_ckp_per_periode" method="GET">
+                            <form action="<?php echo site_url() ?>/laporan/laporan_ckp_per_periode" method="GET">
                                 <div class="modal-body">
 
                                     <input type="hidden" id="id_akun2" name="id_akun2" value="" />
                                     <input type="hidden" id="nama2" name="nama2" value="" />
-                                    <select name="periode2" class="form-control m-bot15">
-                                        <option value="6">
-                                            6 Bulan
-                                        </option>
-                                        <option value="12">
-                                            1 Tahun
-                                        </option>
-                                    </select>
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-3">Tahun</label>
+                                            <div class="col-lg-8">
+                                                <select id="select_periode2" name="tahun2" class="form-control">
+                                                    <?php
+                                                    for ($i = $tahun_max; $i >= $tahun_min; $i--) {
+                                                        echo '<option value="' . $i . '">' . $i . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-3">Periode</label>
+                                            <div class="col-lg-8">
+                                                <select name="periode2" class="form-control m-bot15">
+                                                    <option value="tri_1">Triwulan I</option>
+                                                    <option value="tri_2">Triwulan II</option>
+                                                    <option value="tri_3">Triwulan III</option>
+                                                    <option value="sms_1">Semester I</option>
+                                                    <option value="sms_2">Semester II</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
 
                                     <input type="hidden" id="nama_jabatan2" name="nama_jabatan2" value="" />
                                     <input type="hidden" id="nama_departemen2" name="nama_departemen2" value="" />
