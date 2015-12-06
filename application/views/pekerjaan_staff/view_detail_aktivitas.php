@@ -56,7 +56,7 @@ $list_tingkat_manfaat = array(
                                                 }
                                                 ?>
                                                 <h4 style="color: #1FB5AD;">Periode</h4>
-                                                <p style="font-size: larger"><?= $pekerjaan['kategori'] == 'rutin' ? $pekerjaan['periode'] : explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
+                                                <p style="font-size: larger"><?= explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
                                             </section>
                                         </div>
                                         <div class="col-md-12" id="list_aktivitas">
@@ -104,7 +104,7 @@ $list_tingkat_manfaat = array(
                                             <h4 style="color: #1FB5AD;">
                                                 Detil Pekerjaan
                                             </h4>
-                                            <button class="btn btn-success" id="button_tampilkan_form_penilaian" onclick="tampilkan_form_penilaian()" type="button">Ubah Penilaian</button>
+                                            <button class="btn btn-success" id="button_form_penilaian" onclick="tampilkan_form_penilaian()" type="button">Ubah Penilaian</button>
                                             <table class="table table-striped table-hover table-condensed" id="" >
                                                 <tbody id="">
                                                     <tr>
@@ -117,38 +117,45 @@ $list_tingkat_manfaat = array(
                                                     </tr>
                                                     <tr>
                                                         <th >Sasaran</th>
-                                                        <td id="td_target_ak"><?= $detil_pekerjaan['sasaran_angka_kredit'] ?></td>
-                                                        <td id="td_target_out"><?= $detil_pekerjaan['sasaran_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
-                                                        <td id="td_target_mutu"><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
+                                                        <td id="td_target_ak" class="td_view_nilai"><?= $detil_pekerjaan['sasaran_angka_kredit'] ?></td>
+                                                        <td class="td_edit_nilai"><input type="text" id="input_target_ak" value="<?= $detil_pekerjaan['sasaran_angka_kredit'] ?>" placeholder="target angka kredit"/></td>
+                                                        <td id="td_target_out" class="td_view_nilai"><?= $detil_pekerjaan['sasaran_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
+                                                        <td class="td_edit_nilai"><input type="text" id="input_target_output" value="<?= $detil_pekerjaan['sasaran_kuantitas_output'] ?>" placeholder="target kuantitas output"/><input type="text" id="input_satuan_kuantitas" value="<?= $detil_pekerjaan['satuan_kuantitas'] ?>" placeholder="satuan kuantitas"/></td>
+                                                        <td id="td_target_mutu" class="td_view_nilai"><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
+                                                        <td class="td_edit_nilai"><input type="text" id="input_target_mutu" value="<?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>" placeholder="target kualitas mutu"/></td>
                                                         <td><?= $detil_pekerjaan['sasaran_waktu'] . ' ' . $detil_pekerjaan['satuan_waktu'] ?></td>
-                                                        <td id="td_target_biaya"><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['sasaran_biaya'], 2, ',', '.') : '-' ?></td>
+                                                        <td id="td_target_biaya" class="td_view_nilai"><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['sasaran_biaya'], 2, ',', '.') : '-' ?></td>
+                                                        <td class="td_edit_nilai"><input type="text" id="input_target_biaya" value="<?= $detil_pekerjaan['pakai_biaya'] == '1' ? $detil_pekerjaan['sasaran_biaya'] : '-' ?>" placeholder="target biaya"/></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Realisasi</th>
-                                                        <td id="td_real_ak"><?= $detil_pekerjaan['realisasi_angka_kredit'] ?></td>
+                                                        <td id="td_real_ak" class="td_view_nilai"><?= $detil_pekerjaan['realisasi_angka_kredit'] ?></td>
+                                                        <td class="td_edit_nilai"><input type="text" id="input_realisasi_ak" value="<?= $detil_pekerjaan['realisasi_angka_kredit'] ?>" placeholder="realisasi angka kredit"/></td>
                                                         <td><?= $detil_pekerjaan['realisasi_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
-                                                        <td id="td_real_mutu"><?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>%</td>
+                                                        <td id="td_real_mutu" class="td_view_nilai"><?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>%</td>
+                                                        <td class="td_edit_nilai"><input type="text" id="input_realisasi_mutu" value="<?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>"/></td>
                                                         <td><?= $detil_pekerjaan['realisasi_waktu'] . ' ' . $detil_pekerjaan['satuan_waktu'] ?></td>
-                                                        <td id="td_real_biaya"><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['realisasi_biaya'], 2, ',', '.') : '-' ?></td>
+                                                        <td id="td_real_biaya" class="td_view_nilai"><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['realisasi_biaya'], 2, ',', '.') : '-' ?></td>
+                                                        <td class="td_edit_nilai"><input type="text" id="input_realisasi_biaya" value="<?= $detil_pekerjaan['pakai_biaya'] == '1' ? $detil_pekerjaan['realisasi_biaya'] : '-' ?>"/></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Penghitungan</th>
-                                                        <td colspan="5"><?= $detil_pekerjaan['progress'] ?></td>
+                                                        <td colspan="5" id="nilai_penghitungan"><?= $detil_pekerjaan['progress'] ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Nilai SKP</th>
-                                                        <td colspan="5"><?= $detil_pekerjaan['skor'] ?></td>
+                                                        <td colspan="5" id="skor_skp"><?= $detil_pekerjaan['skor'] ?></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <input type="hidden" id="target_ak" value="<?=$detil_pekerjaan['sasaran_angka_kredit']?>"/>
-                                        <input type="hidden" id="target_out" value="<?=$detil_pekerjaan['sasaran_kuantitas_output']?>"/>
-                                        <input type="hidden" id="target_mutu" value="<?=$detil_pekerjaan['sasaran_kualitas_mutu']?>"/>
-                                        <input type="hidden" id="target_biaya" value="<?=$detil_pekerjaan['sasaran_biaya']?>"/>
-                                        <input type="hidden" id="real_ak" value="<?=$detil_pekerjaan['realisasi_angka_kredit']?>"/>
-                                        <input type="hidden" id="real_mutu" value="<?=$detil_pekerjaan['realisasi_kualitas_mutu']?>"/>
-                                        <input type="hidden" id="real_biaya" value="<?=$detil_pekerjaan['realisasi_biaya']?>"/>
+                                        <input type="hidden" id="target_ak" value="<?= $detil_pekerjaan['sasaran_angka_kredit'] ?>"/>
+                                        <input type="hidden" id="target_out" value="<?= $detil_pekerjaan['sasaran_kuantitas_output'] ?>"/>
+                                        <input type="hidden" id="target_mutu" value="<?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>"/>
+                                        <input type="hidden" id="target_biaya" value="<?= $detil_pekerjaan['sasaran_biaya'] ?>"/>
+                                        <input type="hidden" id="real_ak" value="<?= $detil_pekerjaan['realisasi_angka_kredit'] ?>"/>
+                                        <input type="hidden" id="real_mutu" value="<?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>"/>
+                                        <input type="hidden" id="real_biaya" value="<?= $detil_pekerjaan['realisasi_biaya'] ?>"/>
                                         <div class="col-md-12" id="anggota_tim">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
@@ -216,243 +223,306 @@ $list_tingkat_manfaat = array(
     $this->load->view("taskman_footer_page");
     ?>
     <script>
-        var id_pekerjaan = <?= $pekerjaan['id_pekerjaan'] ?>;
-        var base_url = '<?= base_url() ?>';
-        var site_url = '<?= site_url() ?>';
-        var id_staff = '<?= $detil_pekerjaan['id_akun'] ?>';
-        var list_user =<?= json_encode($users) ?>;
-        var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
-        var pekerjaan = <?= json_encode($pekerjaan); ?>;
-        $(document).ready(function () {
-            document.title = 'Detail Aktivitas Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
-            $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-            $('#submenu_pekerjaan_ul').show();
-            $('#staff_pekerjaan').dataTable({
-                columnDefs: [{targets: [0], orderable: false}],
-                order: [[1, "asc"]]
-            });
-            if (pekerjaan['kategori'] == 'rutin' || pekerjaan['kategori'] == 'project') {
-                init_tabel_aktivitas();
-                $('#tabel_progress').hide();
-                $('#div_penilaian_skp').show();
-            } else {
-                init_tabel_progress();
-                $('#tabel_aktivitas').hide();
-            }
-        });
-        function tampilkan_form_penilaian (){
-            
-        }
-        var tabel_aktivitas = null;
-        function init_tabel_progress() {
-            if (tabel_aktivitas != null) {
-                tabel_aktivitas.fnDestroy();
-            }
-            tabel_aktivitas = $('#tabel_progress').dataTable({
-                order: [[1, "asc"]],
-                "columnDefs": [{"targets": [0], "orderable": false}],
-                "processing": true,
-                "serverSide": true,
-                "ajax": {
-                    'method': 'post',
-                    'data': {
-                        id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
-                        id_pekerjaan: id_pekerjaan
-                    },
-                    "url": site_url + "/aktivitas_pekerjaan/get_list_progress_pekerjaan_datatable",
-                    "dataSrc": function (json) {
-                        var jsonData = json.data;
-                        return jsonData;
-                    }
-                },
-                "createdRow": function (row, data, index) {
-                    var tgl_mulai = data[4];
-                    var tgl_mulai_tmzn = tgl_mulai.split('+');
-                    var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
-                    var tgl_selesai = data[8];
-                    var tgl_selesai_tmzn = tgl_selesai.split('+');
-                    var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
-                    var id = data[1];
+                                                var id_pekerjaan = <?= $pekerjaan['id_pekerjaan'] ?>;
+                                                var base_url = '<?= base_url() ?>';
+                                                var site_url = '<?= site_url() ?>';
+                                                var id_staff = '<?= $detil_pekerjaan['id_akun'] ?>';
+                                                var list_user =<?= json_encode($users) ?>;
+                                                var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
+                                                var pekerjaan = <?= json_encode($pekerjaan); ?>;
+                                                $(document).ready(function () {
+                                                    document.title = 'Detail Aktivitas Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
+                                                    $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+                                                    $('#submenu_pekerjaan_ul').show();
+                                                    $('#staff_pekerjaan').dataTable({
+                                                        columnDefs: [{targets: [0], orderable: false}],
+                                                        order: [[1, "asc"]]
+                                                    });
+                                                    if (pekerjaan['kategori'] == 'rutin' || pekerjaan['kategori'] == 'project') {
+                                                        init_tabel_aktivitas();
+                                                        $('#tabel_progress').hide();
+                                                        $('#div_penilaian_skp').show();
+                                                    } else {
+                                                        init_tabel_progress();
+                                                        $('#tabel_aktivitas').hide();
+                                                    }
+                                                    sembunyikan_form_penilaian();
+                                                });
+                                                function sembunyikan_form_penilaian() {
+                                                    $('.td_edit_nilai').hide();
+                                                    $('.td_view_nilai').show();
+                                                }
+                                                var form_penilaian_showed = false;
+                                                function tampilkan_form_penilaian() {
+                                                    if (form_penilaian_showed == true) {
+                                                        simpan_penilaian();
 
-                    var validated = parseInt(data[6]);
-                    var list_berkas = JSON.parse(data[9]);
-                    var list_id_berkas = JSON.parse(data[5]);
-                    var html_berkas = '';
-                    if (list_berkas != null) {
-                        for (var i = 0, n = list_berkas.length; i < n; i++) {
-                            html_berkas += '<a href="' + site_url + '/download?id_file=' + list_id_berkas[i] + '" target="_blank" title="' + list_berkas[i] + '"><i class="fa fa-paperclip fa-fw"></i></a> ';
-                        }
-                    }
-                    var html = '<div class="btn-group">'
-                            + '<button class="btn btn-default btn-xs dropdown-toggle btn-info" data-toggle="dropdown">Aksi <span class="caret"></span></button>'
-                            + '<ul class="dropdown-menu">';
-                    if (validated == 0) {
-                        html += '<li><a href="javascript:viewValidateProgress(' + id + ');"><i class="fa fa-check fa-fw"></i> Validasi</a></li>';
-                    }
-                    html += '<li><a href="javascript:viewHapusProgress(' + id + ');"><i class="fa fa-times fa-fw"></i> Hapus</a></li>';
-                    html += '</ul></div>';
+                                                        return;
+                                                    }
+                                                    form_penilaian_showed = true;
+                                                    $('#button_form_penilaian').html("Simpan Penilaian");
+                                                    $('.td_edit_nilai').show();
+                                                    $('.td_view_nilai').hide();
+                                                }
+                                                function simpan_penilaian() {
+                                                    $.ajax({
+                                                        type: "POST",
+                                                        url: site_url + "/pekerjaan_staff/ubah_nilai",
+                                                        data: {
+                                                            id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
+                                                            target_ak: $('#input_target_ak').val(),
+                                                            target_output: $('#input_target_output').val(),
+                                                            target_mutu: $('#input_target_mutu').val(),
+                                                            satuan_kuantitas: $('#input_satuan_kuantitas').val(),
+                                                            target_biaya: $('#input_target_biaya').val(),
+                                                            realisasi_ak: $('#input_realisasi_ak').val(),
+                                                            realisasi_mutu: $('#input_realisasi_mutu').val(),
+                                                            realisasi_biaya: $('#input_realisasi_biaya').val()
+                                                        },
+                                                        success: function (data) {
+                                                            var json = JSON.parse(data);
+                                                            if (json.status == 'ok') {
+                                                                $('#input_target_ak').val(json.sasaran_angka_kredit);
+                                                                $('#input_target_output').val(json.sasaran_kuantitas_output);
+                                                                $('#input_target_mutu').val(json.sasaran_kualitas_mutu);
+                                                                $('#input_satuan_kuantitas').val(json.satuan_kuantitas);
+                                                                $('#input_target_biaya').val(parseInt(json.pakai_biaya) == 1 ? json.sasaran_biaya : '-');
+                                                                $('#input_realisasi_ak').val(json.realisasi_angka_kredit);
+                                                                $('#input_realisasi_mutu').val(json.realisasi_kualitas_mutu);
+                                                                $('#input_realisasi_biaya').val(parseInt(json.pakai_biaya) == 1 ? json.realisasi_biaya : '-');
 
-                    $('td', row).eq(4).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
-                    $('td', row).eq(0).html(html);
+                                                                $('#td_target_ak').html(json.sasaran_angka_kredit);
+                                                                $('#td_target_out').html(json.sasaran_kuantitas_output + ' ' + json.satuan_kuantitas);
+                                                                $('#td_target_mutu').html(json.sasaran_kualitas_mutu + '%');
+//                                                                $('#input_satuan_kuantitas').val(json.satuan_kuantitas);
+                                                                $('#td_target_biaya').html(parseInt(json.pakai_biaya) == 1 ? json.sasaran_biaya : '-');
+                                                                $('#td_real_ak').html(json.realisasi_angka_kredit);
+                                                                $('#td_real_mutu').html(json.realisasi_kualitas_mutu+'%');
+                                                                $('#td_real_biaya').html(parseInt(json.pakai_biaya) == 1 ? json.realisasi_biaya : '-');
+                                                                $('#nilai_penghitungan').html(json.progress);
+																$('#skor_skp').html(json.skor);
+                                                                form_penilaian_showed = false;
+                                                                $('#button_form_penilaian').html("Ubah Penilaian");
+                                                                sembunyikan_form_penilaian();
+                                                            } else {
+                                                                alert(json.reason);
+                                                            }
+                                                        },
+                                                        error: function (xhr, ajaxOptions, thrownError) {
 
-                    $('td', row).eq(1).html(index + 1);
-                    $('td', row).eq(3).html(data[3] + '%');
-                    $('td', row).eq(5).html(html_berkas);
-                    $('td', row).eq(6).html('Unvalidated');
-                    if (validated == 1) {
-                        $('td', row).eq(6).html('Validated');
-                    }
+                                                        }
+                                                    });
+                                                }
+                                                var tabel_aktivitas = null;
+                                                function init_tabel_progress() {
+                                                    if (tabel_aktivitas != null) {
+                                                        tabel_aktivitas.fnDestroy();
+                                                    }
+                                                    tabel_aktivitas = $('#tabel_progress').dataTable({
+                                                        order: [[1, "asc"]],
+                                                        "columnDefs": [{"targets": [0], "orderable": false}],
+                                                        "processing": true,
+                                                        "serverSide": true,
+                                                        "ajax": {
+                                                            'method': 'post',
+                                                            'data': {
+                                                                id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
+                                                                id_pekerjaan: id_pekerjaan
+                                                            },
+                                                            "url": site_url + "/aktivitas_pekerjaan/get_list_progress_pekerjaan_datatable",
+                                                            "dataSrc": function (json) {
+                                                                var jsonData = json.data;
+                                                                return jsonData;
+                                                            }
+                                                        },
+                                                        "createdRow": function (row, data, index) {
+                                                            var tgl_mulai = data[4];
+                                                            var tgl_mulai_tmzn = tgl_mulai.split('+');
+                                                            var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
+                                                            var tgl_selesai = data[8];
+                                                            var tgl_selesai_tmzn = tgl_selesai.split('+');
+                                                            var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
+                                                            var id = data[1];
 
-                    $(row).attr('id', 'row_' + id)
-                }
-            });
-        }
-        function init_tabel_aktivitas() {
-            if (tabel_aktivitas != null) {
-                tabel_aktivitas.fnDestroy();
-            }
-            tabel_aktivitas = $('#tabel_aktivitas').dataTable({
-                order: [[1, "asc"]],
-                "columnDefs": [{"targets": [0], "orderable": false}],
-                "processing": true,
-                "serverSide": true,
-                "ajax": {
-                    'method': 'post',
-                    'data': {
-                        id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
-                        id_pekerjaan: id_pekerjaan
-                    },
-                    "url": site_url + "/aktivitas_pekerjaan/get_list_aktivitas_pekerjaan",
-                    "dataSrc": function (json) {
-                        var jsonData = json.data;
-                        return jsonData;
-                    }
-                },
-                "createdRow": function (row, data, index) {
-                    var id = data[1];
-                    var tgl_mulai = data[4];
-                    var tgl_mulai_tmzn = tgl_mulai.split('+');
-                    var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
-                    var tgl_selesai = data[9];
-                    var tgl_selesai_tmzn = tgl_selesai.split('+');
-                    var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
-                    var status_validasi = parseInt(data[5]);
-                    var html = '<div class="btn-group">'
-                            + '<button class="btn btn-default btn-xs dropdown-toggle btn-info" data-toggle="dropdown">Aksi <span class="caret"></span></button>'
-                            + '<ul class="dropdown-menu">';
-                    if (status_validasi == 0) {
-                        html += '<li><a href="javascript:viewValidasiAktivitas(' + id + ');"><i class="fa fa-check fa-fw"></i> Validasi</a></li>';
-                    }
-                    html += '<li><a href="javascript:viewHapusAktivitas(' + id + ');"><i class="fa fa-times fa-fw"></i> Hapus</a></li>';
-                    html += '</ul></div>';
-                    $('td', row).eq(0).html(html);
-                    $('td', row).eq(1).html(index + 1);
-                    $('td', row).eq(3).html(data[3] + ' ' + detil_pekerjaan['satuan_kuantitas']);
-                    $('td', row).eq(4).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+                                                            var validated = parseInt(data[6]);
+                                                            var list_berkas = JSON.parse(data[9]);
+                                                            var list_id_berkas = JSON.parse(data[5]);
+                                                            var html_berkas = '';
+                                                            if (list_berkas != null) {
+                                                                for (var i = 0, n = list_berkas.length; i < n; i++) {
+                                                                    html_berkas += '<a href="' + site_url + '/download?id_file=' + list_id_berkas[i] + '" target="_blank" title="' + list_berkas[i] + '"><i class="fa fa-paperclip fa-fw"></i></a> ';
+                                                                }
+                                                            }
+                                                            var html = '<div class="btn-group">'
+                                                                    + '<button class="btn btn-default btn-xs dropdown-toggle btn-info" data-toggle="dropdown">Aksi <span class="caret"></span></button>'
+                                                                    + '<ul class="dropdown-menu">';
+                                                            if (validated == 0) {
+                                                                html += '<li><a href="javascript:viewValidateProgress(' + id + ');"><i class="fa fa-check fa-fw"></i> Validasi</a></li>';
+                                                            }
+                                                            html += '<li><a href="javascript:viewHapusProgress(' + id + ');"><i class="fa fa-times fa-fw"></i> Hapus</a></li>';
+                                                            html += '</ul></div>';
 
-                    if (status_validasi == 1) {
-                        $('td', row).eq(5).html('Validated');
-                    } else {
-                        $('td', row).eq(5).html('Unvalidated');
-                    }
-                    $(row).attr('id', 'row_' + id)
-                }
-            });
-        }
-        function viewValidateProgress(id) {
-            var row = $('#row_' + id);
-            var deskripsi = $(row.children()[2]).html();
-            if (confirm('Anda akan memvalidasi progress ' + deskripsi + '?') == true) {
-                $.ajax({
-                    type: "POST",
-                    url: site_url + "/aktivitas_pekerjaan/validate_progress",
-                    data: {
-                        id_progress: id
-                    },
-                    success: function (data) {
-                        if (data == 'ok') {
-                            tabel_aktivitas.fnDraw();
-                        } else {
-                            alert(data);
-                        }
-                        $('.snake_loader').remove();
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        $('.snake_loader').remove();
-                    }
-                });
-            }
-        }
-        function viewValidasiAktivitas(id) {
-            var row = $('#row_' + id);
-            var deskripsi = $(row.children()[2]).html();
-            if (confirm('Anda akan memvalidasi aktivitas ' + deskripsi + '?') == true) {
-                $.ajax({
-                    type: "POST",
-                    url: site_url + "/aktivitas_pekerjaan/validate_aktivitas",
-                    data: {
-                        id_aktivitas: id
-                    },
-                    success: function (data) {
-                        if (data == 'ok') {
-                            tabel_aktivitas.fnDraw();
-                        } else {
-                            alert(data);
-                        }
-                        $('.snake_loader').remove();
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        $('.snake_loader').remove();
-                    }
-                });
-            }
-        }
-        function viewHapusProgress(id) {
-            var row = $('#row_' + id);
-            var deskripsi = $(row.children()[2]).html();
-            if (confirm('Anda akan menghapus progress ' + deskripsi + '?') == true) {
-                $.ajax({
-                    type: "POST",
-                    url: site_url + "/aktivitas_pekerjaan/hapus_progress",
-                    data: {
-                        id_progress: id
-                    },
-                    success: function (data) {
-                        if (data == 'ok') {
-                            tabel_aktivitas.fnDraw();
-                        } else {
-                            alert(data);
-                        }
-                        $('.snake_loader').remove();
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        $('.snake_loader').remove();
-                    }
-                });
-            }
-        }
-        function viewHapusAktivitas(id) {
-            var row = $('#row_' + id);
-            var deskripsi = $(row.children()[2]).html();
-            if (confirm('Anda akan menghapus aktivitas ' + deskripsi + '?') == true) {
-                $.ajax({
-                    type: "POST",
-                    url: site_url + "/aktivitas_pekerjaan/hapus_aktivitas",
-                    data: {
-                        id_aktivitas: id
-                    },
-                    success: function (data) {
-                        if (data == 'ok') {
-                            tabel_aktivitas.fnDraw();
-                        } else {
-                            alert(data);
-                        }
-                        $('.snake_loader').remove();
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        $('.snake_loader').remove();
-                    }
-                });
-            }
-        }
+                                                            $('td', row).eq(4).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+                                                            $('td', row).eq(0).html(html);
+
+                                                            $('td', row).eq(1).html(index + 1);
+                                                            $('td', row).eq(3).html(data[3] + '%');
+                                                            $('td', row).eq(5).html(html_berkas);
+                                                            $('td', row).eq(6).html('Unvalidated');
+                                                            if (validated == 1) {
+                                                                $('td', row).eq(6).html('Validated');
+                                                            }
+
+                                                            $(row).attr('id', 'row_' + id)
+                                                        }
+                                                    });
+                                                }
+                                                function init_tabel_aktivitas() {
+                                                    if (tabel_aktivitas != null) {
+                                                        tabel_aktivitas.fnDestroy();
+                                                    }
+                                                    tabel_aktivitas = $('#tabel_aktivitas').dataTable({
+                                                        order: [[1, "asc"]],
+                                                        "columnDefs": [{"targets": [0], "orderable": false}],
+                                                        "processing": true,
+                                                        "serverSide": true,
+                                                        "ajax": {
+                                                            'method': 'post',
+                                                            'data': {
+                                                                id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
+                                                                id_pekerjaan: id_pekerjaan
+                                                            },
+                                                            "url": site_url + "/aktivitas_pekerjaan/get_list_aktivitas_pekerjaan",
+                                                            "dataSrc": function (json) {
+                                                                var jsonData = json.data;
+                                                                return jsonData;
+                                                            }
+                                                        },
+                                                        "createdRow": function (row, data, index) {
+                                                            var id = data[1];
+                                                            var tgl_mulai = data[4];
+                                                            var tgl_mulai_tmzn = tgl_mulai.split('+');
+                                                            var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
+                                                            var tgl_selesai = data[9];
+                                                            var tgl_selesai_tmzn = tgl_selesai.split('+');
+                                                            var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
+                                                            var status_validasi = parseInt(data[5]);
+                                                            var html = '<div class="btn-group">'
+                                                                    + '<button class="btn btn-default btn-xs dropdown-toggle btn-info" data-toggle="dropdown">Aksi <span class="caret"></span></button>'
+                                                                    + '<ul class="dropdown-menu">';
+                                                            if (status_validasi == 0) {
+                                                                html += '<li><a href="javascript:viewValidasiAktivitas(' + id + ');"><i class="fa fa-check fa-fw"></i> Validasi</a></li>';
+                                                            }
+                                                            html += '<li><a href="javascript:viewHapusAktivitas(' + id + ');"><i class="fa fa-times fa-fw"></i> Hapus</a></li>';
+                                                            html += '</ul></div>';
+                                                            $('td', row).eq(0).html(html);
+                                                            $('td', row).eq(1).html(index + 1);
+                                                            $('td', row).eq(3).html(data[3] + ' ' + detil_pekerjaan['satuan_kuantitas']);
+                                                            $('td', row).eq(4).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+
+                                                            if (status_validasi == 1) {
+                                                                $('td', row).eq(5).html('Validated');
+                                                            } else {
+                                                                $('td', row).eq(5).html('Unvalidated');
+                                                            }
+                                                            $(row).attr('id', 'row_' + id)
+                                                        }
+                                                    });
+                                                }
+                                                function viewValidateProgress(id) {
+                                                    var row = $('#row_' + id);
+                                                    var deskripsi = $(row.children()[2]).html();
+                                                    if (confirm('Anda akan memvalidasi progress ' + deskripsi + '?') == true) {
+                                                        $.ajax({
+                                                            type: "POST",
+                                                            url: site_url + "/aktivitas_pekerjaan/validate_progress",
+                                                            data: {
+                                                                id_progress: id
+                                                            },
+                                                            success: function (data) {
+                                                                if (data == 'ok') {
+                                                                    tabel_aktivitas.fnDraw();
+                                                                } else {
+                                                                    alert(data);
+                                                                }
+                                                                $('.snake_loader').remove();
+                                                            },
+                                                            error: function (xhr, ajaxOptions, thrownError) {
+                                                                $('.snake_loader').remove();
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                                function viewValidasiAktivitas(id) {
+                                                    var row = $('#row_' + id);
+                                                    var deskripsi = $(row.children()[2]).html();
+                                                    if (confirm('Anda akan memvalidasi aktivitas ' + deskripsi + '?') == true) {
+                                                        $.ajax({
+                                                            type: "POST",
+                                                            url: site_url + "/aktivitas_pekerjaan/validate_aktivitas",
+                                                            data: {
+                                                                id_aktivitas: id
+                                                            },
+                                                            success: function (data) {
+                                                                if (data == 'ok') {
+                                                                    tabel_aktivitas.fnDraw();
+                                                                } else {
+                                                                    alert(data);
+                                                                }
+                                                                $('.snake_loader').remove();
+                                                            },
+                                                            error: function (xhr, ajaxOptions, thrownError) {
+                                                                $('.snake_loader').remove();
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                                function viewHapusProgress(id) {
+                                                    var row = $('#row_' + id);
+                                                    var deskripsi = $(row.children()[2]).html();
+                                                    if (confirm('Anda akan menghapus progress ' + deskripsi + '?') == true) {
+                                                        $.ajax({
+                                                            type: "POST",
+                                                            url: site_url + "/aktivitas_pekerjaan/hapus_progress",
+                                                            data: {
+                                                                id_progress: id
+                                                            },
+                                                            success: function (data) {
+                                                                if (data == 'ok') {
+                                                                    tabel_aktivitas.fnDraw();
+                                                                } else {
+                                                                    alert(data);
+                                                                }
+                                                                $('.snake_loader').remove();
+                                                            },
+                                                            error: function (xhr, ajaxOptions, thrownError) {
+                                                                $('.snake_loader').remove();
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                                function viewHapusAktivitas(id) {
+                                                    var row = $('#row_' + id);
+                                                    var deskripsi = $(row.children()[2]).html();
+                                                    if (confirm('Anda akan menghapus aktivitas ' + deskripsi + '?') == true) {
+                                                        $.ajax({
+                                                            type: "POST",
+                                                            url: site_url + "/aktivitas_pekerjaan/hapus_aktivitas",
+                                                            data: {
+                                                                id_aktivitas: id
+                                                            },
+                                                            success: function (data) {
+                                                                if (data == 'ok') {
+                                                                    tabel_aktivitas.fnDraw();
+                                                                } else {
+                                                                    alert(data);
+                                                                }
+                                                                $('.snake_loader').remove();
+                                                            },
+                                                            error: function (xhr, ajaxOptions, thrownError) {
+                                                                $('.snake_loader').remove();
+                                                            }
+                                                        });
+                                                    }
+                                                }
     </script>

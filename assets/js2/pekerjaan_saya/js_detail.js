@@ -40,6 +40,7 @@ function init_tampilan_form_tambah_aktivitas() {
     $('#div_aktivitas_angka_kredit').hide();
     $('#div_aktivitas_kualitas_mutu').hide();
     $('#div_aktivitas_biaya').hide();
+    $('#div_aktivitas_kuantitas_output').hide();
     if (pekerjaan['kategori'] == 'rutin' || pekerjaan['kategori'] == 'project') {
         $('#div_nilai_progress').hide();
     } else {

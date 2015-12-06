@@ -61,7 +61,8 @@ class aktivitas_pekerjaan extends ceklogin {
                 'id_detil_pekerjaan' => $detil_pekerjaan['id_detil_pekerjaan'],
                 'waktu_mulai' => $waktu_mulai,
                 'waktu_selesai' => $waktu_selesai,
-                'kuantitas_output' => $kuantitas_output,
+                //'kuantitas_output' => $kuantitas_output,
+                'kuantitas_output' => 1,
                 'kualitas_mutu' => $kualitas_mutu,
                 'angka_kredit' => $ak,
                 'keterangan' => $keterangan
@@ -226,14 +227,16 @@ class aktivitas_pekerjaan extends ceklogin {
         if (count($q) > 0) {
             $detil_pekerjaan = $q[0];
             $aspek_kuantitas = $detil_pekerjaan['realisasi_kuantitas_output'] * 100 / $detil_pekerjaan['sasaran_kuantitas_output'];
-            $aspek_kualitas = $detil_pekerjaan['realisasi_kualitas_mutu'] * 100 / $detil_pekerjaan['sasaran_kualitas_mutu'];
+            $aspek_kualitas = 0;
+            if ($detil_pekerjaan['sasaran_kualitas_mutu'] > 0)
+                $aspek_kualitas = $detil_pekerjaan['realisasi_kualitas_mutu'] * 100 / $detil_pekerjaan['sasaran_kualitas_mutu'];
             $efisiensi_waktu = 100 - ($detil_pekerjaan['realisasi_waktu'] * 100 / $detil_pekerjaan['sasaran_waktu']);
             $aspek_waktu = 1.76 * ($detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) * 100 / $detil_pekerjaan['sasaran_waktu'];
             if ($efisiensi_waktu > 24) {
                 $aspek_waktu-=24;
             }
             $aspek_biaya = 0;
-            if ($detil_pekerjaan['pakai_biaya']) {
+            if ($detil_pekerjaan['pakai_biaya'] && $detil_pekerjaan['realisasi_biaya'] > 0) {
                 $efisiensi_biaya = 100 - ($detil_pekerjaan['realisasi_biaya'] * 100 / $detil_pekerjaan['sasaran_biaya']);
                 $aspek_biaya = 1.76 * ($detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) * 100 / $detil_pekerjaan['sasaran_biaya'];
                 if ($efisiensi_biaya > 24) {

@@ -614,7 +614,6 @@ class pekerjaan_staff extends ceklogin {
             $list_id_staff[] = $dp['id_akun'];
         }
 //        foreach ($list_id_staff as $id_staff) {
-        
 //        }
         $q = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan'")->result_array();
         foreach ($q as $f) {
@@ -625,11 +624,93 @@ class pekerjaan_staff extends ceklogin {
         $this->db->query("delete from detil_progress where id_pekerjaan='$id_pekerjaan' ");
         $this->db->query("delete from aktivitas_pekerjaan where id_pekerjaan='$id_pekerjaan' ");
         $this->db->query("delete from file where id_pekerjaan='$id_pekerjaan'");
-        
+
         $this->db->query("delete from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->query("delete from pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->trans_complete();
         redirect(site_url() . '/pekerjaan_staff/staff?id_staff=' . $id_staff_c);
+    }
+
+    function ubah_nilai() {
+        $sasaran_angka_kredit = abs(floatval($this->input->post('target_ak')));
+        $sasaran_kuantitas_output = abs(floatval($this->input->post('target_output')));
+        $sasaran_kualitas_mutu = abs(floatval($this->input->post('target_mutu')));
+        $satuan_kuantitas = $this->input->post('satuan_kuantitas');
+        $sasaran_biaya = $this->input->post('target_biaya');
+        $realisasi_angka_kredit = abs(floatval($this->input->post('realisasi_ak')));
+        $realisasi_kualitas_mutu = abs(floatval($this->input->post('realisasi_mutu')));
+        $realisasi_biaya = abs(floatval($this->input->post('realisasi_biaya')));
+        $id_detil_pekerjaan = intval($this->input->post('id_detil_pekerjaan'));
+        $session = $this->session->userdata('logged_in');
+        $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+        $result = array('status' => 'failed', 'reason' => 'unknown');
+        if (count($q) <= 0) {
+            $result['reason'] = 'Detil pekerjaan tidak dapat ditemukan';
+            echo json_encode($result);
+            return;
+        }
+        $detil_pekerjaan = $q[0];
+        $id_pekerjaan = $detil_pekerjaan['id_pekerjaan'];
+        $id_akun = $detil_pekerjaan['id_akun'];
+        $q = $this->db->query("select *, to_char(tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai, 'YYYY-MM-DD') as tanggal_selesai from pekerjaan where id_pekerjaan='$id_pekerjaan' and status_pekerjaan='7'")->result_array();
+        if (count($q) <= 0) {
+            $result['reason'] = 'Pekerjaan tidak dapat ditemukan';
+            echo json_encode($result);
+            return;
+        }
+        $pekerjaan = $q[0];
+        $update = array(
+            'sasaran_angka_kredit' => $sasaran_angka_kredit,
+            'sasaran_kuantitas_output' => $sasaran_kuantitas_output,
+            'sasaran_kualitas_mutu' => $sasaran_kualitas_mutu,
+            'satuan_kuantitas' => $satuan_kuantitas,
+            'realisasi_angka_kredit' => $realisasi_angka_kredit,
+            'realisasi_kualitas_mutu' => $realisasi_kualitas_mutu
+        );
+        if ($sasaran_biaya == '-') {
+            $update['pakai_biaya'] = 0;
+        } else {
+            $update['pakai_biaya'] = 1;
+            $update['sasaran_biaya'] = abs(floatval($sasaran_biaya));
+            $update['realisasi_biaya'] = $realisasi_biaya;
+        }
+        $this->db->update('detil_pekerjaan', $update, array('id_detil_pekerjaan' => $id_detil_pekerjaan));
+        $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+        if (count($q) > 0) {
+            $detil_pekerjaan = $q[0];
+            $aspek_kuantitas = $detil_pekerjaan['realisasi_kuantitas_output'] * 100 / $detil_pekerjaan['sasaran_kuantitas_output'];
+            $aspek_kualitas = 0;
+            if ($detil_pekerjaan['sasaran_kualitas_mutu'] > 0)
+                $aspek_kualitas = $detil_pekerjaan['realisasi_kualitas_mutu'] * 100 / $detil_pekerjaan['sasaran_kualitas_mutu'];
+            $efisiensi_waktu = 100 - ($detil_pekerjaan['realisasi_waktu'] * 100 / $detil_pekerjaan['sasaran_waktu']);
+            $aspek_waktu = 1.76 * ($detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) * 100 / $detil_pekerjaan['sasaran_waktu'];
+            if ($efisiensi_waktu > 24) {
+                $aspek_waktu-=24;
+            }
+            $aspek_biaya = 0;
+            if ($detil_pekerjaan['pakai_biaya'] && $detil_pekerjaan['realisasi_biaya'] > 0) {
+                $efisiensi_biaya = 100 - ($detil_pekerjaan['realisasi_biaya'] * 100 / $detil_pekerjaan['sasaran_biaya']);
+                $aspek_biaya = 1.76 * ($detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) * 100 / $detil_pekerjaan['sasaran_biaya'];
+                if ($efisiensi_biaya > 24) {
+                    $aspek_biaya-=24;
+                }
+            }
+            $penghitungan = $aspek_kuantitas + $aspek_kualitas + $aspek_biaya;
+            $skor = $penghitungan / 3;
+            if ($detil_pekerjaan['pakai_biaya']) {
+                $penghitungan+=$aspek_biaya;
+                $skor = $penghitungan / 4;
+            }
+            $this->db->query("update detil_pekerjaan set progress='$penghitungan', skor='$skor' where id_detil_pekerjaan='$id_detil_pekerjaan'");
+        }
+        $q = $this->db->query("select sasaran_angka_kredit,sasaran_kuantitas_output,sasaran_kualitas_mutu,sasaran_waktu,sasaran_biaya,realisasi_angka_kredit,realisasi_kuantitas_output,realisasi_kualitas_mutu,realisasi_waktu,realisasi_biaya,pakai_biaya,satuan_kuantitas,satuan_waktu,progress,skor from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+        if(count($q)<=0){
+            $result['reason']='Terjadi kesalahan pada saat membaca kembali detil pekerjaan';
+            echo json_encode($result);
+            return;
+        }
+        $result['status']='ok';
+        echo json_encode(array_merge($result,$q[0]));
     }
 
     function update() {
@@ -650,13 +731,13 @@ class pekerjaan_staff extends ceklogin {
         $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
         $satuan_kuantitas = $this->input->post('satuan_kuantitas');
         $kategori_pakerjaan = $this->input->post('kategori_pekerjaan');
-        $level_manfaat=  intval($this->input->post('select_kemanfaatan'));
+        $level_manfaat = intval($this->input->post('select_kemanfaatan'));
         if (!is_array($list_id_staff_enroll)) {
             redirect(site_url() . '/pekerjaan_staff');
             return;
         }
-        if(!in_array($level_manfaat,array(1,2,3))){
-            $level_manfaat=1;
+        if (!in_array($level_manfaat, array(1, 2, 3))) {
+            $level_manfaat = 1;
         }
         $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         if (count($q) <= 0) {
@@ -719,8 +800,8 @@ class pekerjaan_staff extends ceklogin {
             $pekerjaan['tgl_selesai'] = $tanggal_selesai;
             if (in_array($kategori_pakerjaan, array('project', 'tambahan', 'kreativitas'))) {
                 $pekerjaan['kategori'] = $kategori_pakerjaan;
-                if($kategori_pakerjaan=='kreativitas'){
-                    $pekerjaan['level_manfaat']=$level_manfaat;
+                if ($kategori_pakerjaan == 'kreativitas') {
+                    $pekerjaan['level_manfaat'] = $level_manfaat;
                 }
             } else {
                 redirect(site_url() . '/pekerjaan_staff');
