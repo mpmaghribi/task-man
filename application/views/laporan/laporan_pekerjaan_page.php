@@ -220,197 +220,49 @@
         <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
 
         <!-- END JAVASCRIPTS -->
-        <script>
-                                                                jQuery(document).ready(function () {
-                                                                    EditableTableProgress.init();
-                                                                });</script>
+
         <?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script>
-        function exportPeriode(id_akun, nama, jabatan, departemen, nip)
-        {
-            $("#id_akun").val(id_akun);
-            $("#nama").val(nama);
-            $("#nama_jabatan").val(jabatan);
-            $("#nama_departemen").val(departemen);
-            $("#nip").val(nip);
-        }
-        function exportPeriode2(id_akun, nama, jabatan, departemen, nip)
-        {
-            $("#id_akun2").val(id_akun);
-            $("#nama2").val(nama);
-            $("#nama_jabatan2").val(jabatan);
-            $("#nama_departemen2").val(departemen);
-            $("#nip2").val(nip);
-        }
-    </script>
-    <script type="text/javascript">
-        function validasi(id_pekerjaan) {
-            //alert("pekerjaan yg divalidasi " + id_pekerjaan);
-            $.ajax({// create an AJAX call...
-                data: "id_pekerjaan=" + id_pekerjaan, // get the form data
-                type: "POST", // GET or POST
-                url: "<?php echo site_url(); ?>/pekerjaan/validasi_usulan", // the file to call
-                success: function (response) { // on success..
-                    var json = jQuery.parseJSON(response);
-                    //alert(response);
-                    if (json.status === "OK") {
-                        $("#validasi" + id_pekerjaan).css("display", "none");
-                        $('#td_tabel_pekerjaan_staff_status_' + id_pekerjaan).html("<span class=\"label label-success label-mini\">Aprroved</span>");
-                    } else {
-                        alert("validasi gagal, " + json.reason);
-                    }
-                }
-            });
-        }
-        function get_data_pekerjaan_staff() {
-            $.ajax({// create an AJAX call...
-                data: "", // get the form data                 type: "get", // GET or POST
-                url: "<?php echo site_url(); ?>/pekerjaan/data_pekerjaan_staff", // the file to call
-                success: function (response) { // on success..
-                    var json = jQuery.parseJSON(response);
-                    if (json.status === "OK") {
-                        var jumlah_data = json.data.length;
-                        var nomor_baris = 1;
-                        for (var i = 0; i < jumlah_data; i++) {
-                            var html_tabel = "";
-                            var id_pekerjaan = json.data[i]["id_pekerjaan"];
-                            /* mengecek apakah element dengan id xxx telah ada pada halaman*/
-                            if ($("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).length > 0) {
-                            } else {/* element dengan id xxx belum ada pada halaman*/
-                                /*
-                                 * menambahkan row baru tentang suatu pekerjaan
-                                 */
-                                $("#tabel_pekerjaan_staff").append("<tr id=\"tr_tabel_pekerjaan_staff_" + id_pekerjaan + "\"></tr>");
-                                $("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).append("<td id=\"td_tabel_pekerjaan_staff_nomor_" + id_pekerjaan + "\">" + nomor_baris + "</td>");
-                                $("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).append("<td id=\"td_tabel_pekerjaan_staff_nama_pekerjaan_" + id_pekerjaan + "\"></td>");
-                                $("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).append("<td id=\"td_tabel_pekerjaan_staff_deadline_" + id_pekerjaan + "\"></td>");
-                                $("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).append("<td id=\"td_tabel_pekerjaan_staff_nama_staff_" + id_pekerjaan + "\"></td>");
-                                $("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).append("<td id=\"td_tabel_pekerjaan_staff_status_" + id_pekerjaan + "\"></td>");
-                                $("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).append("<td id=\"td_tabel_pekerjaan_staff_progress_" + id_pekerjaan + "\"></td>");
-                                $("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).append("<td id=\"td_tabel_pekerjaan_staff_view_" + id_pekerjaan + "\"></td>");
-                                $("#tr_tabel_pekerjaan_staff_" + id_pekerjaan).append("<td id=\"td_tabel_pekerjaan_staff_validasi_" + id_pekerjaan + "\"></td>");
-                                nomor_baris++;
-                            }
-                            /*
-                             * mengisi data tiap row
-                             */
-
-                            /*mengisi nama pekerjaan */
-                            $("#td_tabel_pekerjaan_staff_nama_pekerjaan_" + id_pekerjaan).html(json.data[i]["nama_pekerjaan"]);
-                            /*mengisi deadline*/
-                            $("#td_tabel_pekerjaan_staff_deadline_" + id_pekerjaan).html(json.data[i]["tgl_mulai"] + " - " + json.data[i]["tgl_selesai"]);
-                            /*mengisi list orang yang mengerjakan suatu pekerjaan*/
-                            var isi = $("#td_tabel_pekerjaan_staff_nama_staff_" + id_pekerjaan).html();
-                            if (isi.length > 0) {
-                                isi += ", ";
-                            }
-                            $("#td_tabel_pekerjaan_staff_nama_staff_" + id_pekerjaan).html(isi + json.data[i]["nama"]);
-                            /*mengisi status pengerjaan pekerjaan*/
-                            var status = "";
-                            status += "<span class=\"label label-";
-                            if (json.data[i]["flag_usulan"] === "1") {
-                                status += "default label-mini\">";
-                                if (json.data[i]["status"] === null || json.data[i]["status"].trim().length === 0) {
-                                    status += "Not Approved";
-                                } else {
-                                    status += json.data[i]["status"];
-                                }
-                            }
-                            else if (json.data[i]["flag_usulan"] === "2") {
-                                //status += "success label-mini\">Approved";
-                                var sekarang = json.data[i]["sekarang"];
-                                /*if (json.data[i]["tgl_read"] === null) {
-                                 status += "success label-mini\">Belum Dibaca";
-                                 }
-                                 else {*/
-
-                                if (sekarang <= json.data[i]["tgl_selesai"]) {
-                                    if (json.data[i]["tgl_read"] === null) {
-                                        status += "primary label-mini\">";
-                                        if (json.data[i]["status"] === null || json.data[i]["status"].trim().length === 0) {
-                                            status += "Belum Dibaca";
-                                        } else {
-                                            status += json.data[i]["status"];
-                                        }
-                                    }
-                                    else {
-                                        if (json.data[i]["progress"] === "0") {
-                                            status += "info label-mini\">";
-                                            if (json.data[i]["status"] === null || json.data[i]["status"].trim().length === 0) {
-                                                status += "Sudah Dibaca";
-                                            } else {
-                                                status += json.data[i]["status"];
-                                            }
-                                        } else if (json.data[i]["progress"] === "100") {
-                                            status += "success label-mini\">";
-                                            if (json.data[i]["status"] === null || json.data[i]["status"].trim().length === 0) {
-                                                status += "Selesai";
-                                            } else {
-                                                status += json.data[i]["status"];
-                                            }
-                                        } else {
-                                            status += "inverse label-mini\">";
-                                            if (json.data[i]["status"] === null || json.data[i]["status"].trim().length === 0) {
-                                                status += "Dikerjakan";
-                                            } else {
-                                                status += json.data[i]["status"];
-                                            }
-                                        }
-                                    }
-                                }
-                                else if (json.data[i]["progress"] !== "100") {
-                                    status += "danger label-mini\">Terlambat";
-                                }
-                                /*}*/
-                            }
-                            status += "</span>";
-                            $("#td_tabel_pekerjaan_staff_status_" + id_pekerjaan).html(status);
-                            /*mengisi progress*/
-                            var pemisah = "style=\"margin-top:5px\"";
-                            isi = $("#td_tabel_pekerjaan_staff_progress_" + id_pekerjaan).html();
-                            if (isi.length > 0) {
-                                pemisah = "style=\"margin-top:25px\"";
-                            }
-                            var progress = "<div class=\"progress progress-striped progress-xs\" " + pemisah + ">" +
-                                    "<div style=\"width: " + json.data[i]["progress"] + "%\" aria-valuemax=\"100\" aria-valuemin=\"0\" aria-valuenow=\"" + json.data[i]["progress"] + "\" role=\"progressbar\" class=\"progress-bar progress-bar-danger\">" +
-                                    "<span class=\"sr-only\">" + json.data[i]["progress"] + "% Complete (success)</span>" +
-                                    "</div>" +
-                                    "</div>";
-                            //alert(progress);
-                            $("#td_tabel_pekerjaan_staff_progress_" + id_pekerjaan).html(isi + progress);
-                            /*tombol view*/
-                            $("#td_tabel_pekerjaan_staff_view_" + id_pekerjaan).html("<form method=\"get\" action=\"<?php echo site_url() ?>/pekerjaan/deskripsi_pekerjaan\">" +
-                                    "<input type=\"hidden\" name=\"id_detail_pkj\" value=\"" + id_pekerjaan + "\"/>" +
-                                    "<button type=\"submit\" class=\"btn btn-success btn-xs\"><i class=\"fa fa-eye\"></i> View </button>" +
-                                    "</form>");
-                            /*tombol validasi pekerjaan yg berstatus diajukan*/
-                            if (json.data[i]["flag_usulan"] === "1") {
-                                $("#td_tabel_pekerjaan_staff_validasi_" + id_pekerjaan).html("<button id=\"validasi" + id_pekerjaan + "\" type=\"button\" class=\"btn btn-default btn-xs\" onclick=\"validasi(" + id_pekerjaan + ")\"><i class=\"fa fa-eye\"> OK</i> </button>");
-                            }
-                        }
-                    } else {
-                    }
-                }
-            });
-        }
-        get_data_pekerjaan_staff();
-        document.title = "Daftar Pekerjaan Staff - Task Management";
-        var site_url = '<?= site_url() ?>';
-        function print_form(data) {
-            var form = $('#form_submit');
-            console.log('function print_form_skp(data)');
-            console.log(data);
-            form.attr({action: data.url, method: 'get', target: '_blank'});
-            form.html($('<input></input>').attr({type: 'hidden', name: 'periode', value: $('#select_periode').val()}));
-            form.append($('<input></input>').attr({type: 'hidden', name: 'departemen', value: data.departemen}));
-            form.append($('<input></input>').attr({type: 'hidden', name: 'id_akun', value: data.id_akun}));
-            form.append($('<input></input>').attr({type: 'hidden', name: 'jabatan', value: data.jabatan}));
-            form.append($('<input></input>').attr({type: 'hidden', name: 'nama', value: data.nama}));
-            form.append($('<input></input>').attr({type: 'hidden', name: 'nip', value: data.nip}));
-            form.submit();
-        }
+                                                                jQuery(document).ready(function () {
+                                                                    EditableTableProgress.init();
+                                                                    document.title = "Daftar Staff - Laporan Task Management";
+                                                                    var tab = $($('.sidebar-menu').children()[3]).children();
+                                                                    console.log(tab);
+                                                                    $(tab[0]).attr('class', 'dcjq-parent active');
+                                                                    $(tab[1]).show();
+                                                                });
+                                                                function exportPeriode(id_akun, nama, jabatan, departemen, nip)
+                                                                {
+                                                                    $("#id_akun").val(id_akun);
+                                                                    $("#nama").val(nama);
+                                                                    $("#nama_jabatan").val(jabatan);
+                                                                    $("#nama_departemen").val(departemen);
+                                                                    $("#nip").val(nip);
+                                                                }
+                                                                function exportPeriode2(id_akun, nama, jabatan, departemen, nip)
+                                                                {
+                                                                    $("#id_akun2").val(id_akun);
+                                                                    $("#nama2").val(nama);
+                                                                    $("#nama_jabatan2").val(jabatan);
+                                                                    $("#nama_departemen2").val(departemen);
+                                                                    $("#nip2").val(nip);
+                                                                }
+                                                                var site_url = '<?= site_url() ?>';
+                                                                function print_form(data) {
+                                                                    var form = $('#form_submit');
+                                                                    console.log('function print_form_skp(data)');
+                                                                    console.log(data);
+                                                                    form.attr({action: data.url, method: 'get', target: '_blank'});
+                                                                    form.html($('<input></input>').attr({type: 'hidden', name: 'periode', value: $('#select_periode').val()}));
+                                                                    form.append($('<input></input>').attr({type: 'hidden', name: 'departemen', value: data.departemen}));
+                                                                    form.append($('<input></input>').attr({type: 'hidden', name: 'id_akun', value: data.id_akun}));
+                                                                    form.append($('<input></input>').attr({type: 'hidden', name: 'jabatan', value: data.jabatan}));
+                                                                    form.append($('<input></input>').attr({type: 'hidden', name: 'nama', value: data.nama}));
+                                                                    form.append($('<input></input>').attr({type: 'hidden', name: 'nip', value: data.nip}));
+                                                                    form.submit();
+                                                                }
     </script>

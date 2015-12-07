@@ -81,14 +81,7 @@
 
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
-    <script>
-        function exportPDF(id_akun)
-        {
-                        //alert(id_akun);
-            
-        }
-                    
-                </script>
+    
     <script type="text/javascript">
         function validasi(id_pekerjaan) {
             //alert("pekerjaan yg divalidasi " + id_pekerjaan);

@@ -130,9 +130,12 @@
                                                 </div>
                                                 <div class="form-group " >
                                                     <label for="prioritas" class="control-label col-lg-3">Periode</label>
-                                                    <div class="col-lg-6" id="div_periode_tahun">
+                                                    <div class="col-lg-6" id="">
                                                         <input type="text" class="form-control" id="periode" name="periode" value="<?= date('Y') ?>"/>
                                                     </div>
+                                                </div>
+                                                <div class="form-group " >
+                                                    <label for="prioritas" class="control-label col-lg-3">Deadline</label>
                                                     <div class="col-lg-6" id="div_periode_tanggal">
                                                         <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
                                                             <input readonly type="text" class="form-control dpd1" value="" name="tgl_mulai">
