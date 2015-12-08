@@ -144,7 +144,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group " id="div_pakai_biaya">
+                                                <div class="form-group " id="div_pakai_biaya" style="display:none">
                                                     <label for="prioritas" class="control-label col-lg-3">Pakai Biaya</label>
                                                     <div class="col-lg-6">
                                                         <select name="pakai_biaya" id="pakai_biaya" class="form-control">

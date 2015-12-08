@@ -3,7 +3,7 @@ $(document).ready(function () {
     $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     $('#submenu_pekerjaan_ul').show();
     document.title = "Daftar Pekerjaan Staff - Task Management";
-    
+
     $('#select_kategori_pekerjaan').on('change', function () {
         ubah_view_input(this.value);
     });
@@ -11,8 +11,8 @@ $(document).ready(function () {
 });
 function ubah_view_input(kategori) {
     if (kategori == 'rutin' || kategori == 'project') {
-        display_element(true, [ 'div_periode_tanggal']);
-        display_element(false, ['div_manfaat', 'div_periode_tahun', 'div_angka_kredit', 'div_kuantitas', 'div_kualitas', 'div_pakai_biaya', 'div_biaya']);
+        display_element(true, ['div_angka_kredit', 'div_kuantitas', 'div_kualitas', 'div_biaya']);
+        display_element(false, ['div_manfaat','div_pakai_biaya']);
         if (kategori == 'project') {
             display_element(true, ['div_periode_tanggal']);
             display_element(false, ['div_periode_tahun']);
@@ -107,18 +107,24 @@ function tampilkan_staff() {
 }
 function pilih_staff_ok() {
     var jumlah_data = list_id.length;
-
+    console.log('function pilih_staff_ok()');
+    console.log('jumlah data = ' + jumlah_data);
     for (var i = 0; i < jumlah_data; i++) {
-        if ($('#enroll_' + list_id[i]).attr('checked')) {
+        var id_checkbox = 'enroll_' + list_id[i];
+        if ($('#' + id_checkbox).is(':checked')) {
+            console.log(id_checkbox+' is checked');
             var enrolled_staff = $('<input></input>').attr({id: 'staff_enroll_' + tab_aktif + '_' + list_id[i], name: 'staff_enroll[]', value: list_id[i], type: 'hidden'});
             $('#tabel_assign_staff_' + tab_aktif).append('<tr id="staff_' + tab_aktif + '_' + list_id[i] + '">' +
                     '<td id="nama_staff_' + tab_aktif + '_' + list_id[i] + '">' + list_nama[i] + '</td>' +
                     '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="delete_enrolled_staff(' + list_id[i] + ',\'' + tab_aktif + '\')">Hapus</a></td>' +
                     '</tr>');
             $('#nama_staff_' + tab_aktif + '_' + list_id[i]).append(enrolled_staff);
+        }else{
+            console.log(id_checkbox+' is not checked');
         }
     }
     $('#tombol_tutup').click();
+    console.log('end of function pilih_staff_ok()');
 }
 function delete_enrolled_staff(id_staff, tab) {
     $('#staff_' + tab + '_' + id_staff).remove();

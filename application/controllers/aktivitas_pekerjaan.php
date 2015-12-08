@@ -26,6 +26,7 @@ class aktivitas_pekerjaan extends ceklogin {
         $id_akun = (int) $this->input->post('id_akun');
         $keterangan = $this->input->post('keterangan');
         $kuantitas_output = abs((double) $this->input->post('kuantitas_output'));
+        $kuantitas_output = 1;
         $kualitas_mutu = abs((double) $this->input->post('kualitas_mutu'));
         $waktu_mulai = $this->input->post('waktu_mulai');
         $waktu_selesai = $this->input->post('waktu_selesai');
@@ -48,6 +49,9 @@ class aktivitas_pekerjaan extends ceklogin {
         if ($detil_pekerjaan == null) {
             return 'Anda tidak termasuk dalam anggota staff yang mengerjakan pekerjaan ini';
         }
+        if ($detil_pekerjaan['status'] == 'locked') {
+            return 'Pekerjaan Anda telah di-lock. Anda tidak bisa menambahkan aktivitas';
+        }
         $this->db->query("set datestyle to 'European'");
         $this->db->trans_begin();
 //        $sql = "insert into aktivitas_pekerjaan (id_pekerjaan, id_akun, keterangan, angka_kredit, kuantitas_output, kualitas_mutu,"
@@ -59,10 +63,10 @@ class aktivitas_pekerjaan extends ceklogin {
             $aktivitas = array(
                 'id_pekerjaan' => $id_pekerjaan,
                 'id_detil_pekerjaan' => $detil_pekerjaan['id_detil_pekerjaan'],
-                'waktu_mulai' => $waktu_mulai,
-                'waktu_selesai' => $waktu_selesai,
-                //'kuantitas_output' => $kuantitas_output,
-                'kuantitas_output' => 1,
+                'waktu_mulai' => $waktu_mulai . ' 08:00',
+                'waktu_selesai' => $waktu_selesai . ' 16:00',
+                'kuantitas_output' => $kuantitas_output,
+//                'kuantitas_output' => 1,
                 'kualitas_mutu' => $kualitas_mutu,
                 'angka_kredit' => $ak,
                 'keterangan' => $keterangan
@@ -232,8 +236,12 @@ class aktivitas_pekerjaan extends ceklogin {
             $aspek_kualitas = 0;
             if ($detil_pekerjaan['sasaran_kualitas_mutu'] > 0)
                 $aspek_kualitas = $detil_pekerjaan['realisasi_kualitas_mutu'] * 100 / $detil_pekerjaan['sasaran_kualitas_mutu'];
-            $efisiensi_waktu = 100 - ($detil_pekerjaan['realisasi_waktu'] * 100 / $detil_pekerjaan['sasaran_waktu']);
-            $aspek_waktu = 1.76 * ($detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) * 100 / $detil_pekerjaan['sasaran_waktu'];
+            $efisiensi_waktu = 0;
+            if ($detil_pekerjaan['sasaran_waktu'] > 0)
+                $efisiensi_waktu = 100 - ($detil_pekerjaan['realisasi_waktu'] * 100 / $detil_pekerjaan['sasaran_waktu']);
+            $aspek_waktu = 0;
+            if ($detil_pekerjaan['sasaran_waktu'] > 0)
+                $aspek_waktu = 1.76 * ($detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) * 100 / $detil_pekerjaan['sasaran_waktu'];
             if ($efisiensi_waktu > 24) {
                 $aspek_waktu-=24;
             }
@@ -373,6 +381,10 @@ class aktivitas_pekerjaan extends ceklogin {
             return;
         }
         $detil_pekerjaan = $q[0];
+        if ($detil_pekerjaan['status'] == 'locked') {
+            echo 'Pekerjaan telah di-lock';
+            return;
+        }
         $id_pekerjaan = $detil_pekerjaan['id_pekerjaan'];
         $id_akun = $detil_pekerjaan['id_akun'];
         $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();

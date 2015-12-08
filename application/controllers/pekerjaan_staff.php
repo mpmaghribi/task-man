@@ -395,6 +395,7 @@ class pekerjaan_staff extends ceklogin {
         $list_id_staff_enroll = $this->input->post('staff_enroll');
         if (!is_array($list_id_staff_enroll)) {
             redirect(site_url() . '/pekerjaan_staff');
+            echo 'staff diperlukan';
             return;
         }
         $sifat_pekerjaan = (int) $this->input->post('sifat_pkj');
@@ -471,6 +472,7 @@ class pekerjaan_staff extends ceklogin {
                 }
             } else {
                 redirect(site_url() . '/pekerjaan_staff');
+                echo 'kategori tidak dikenal';
                 return;
             }
         }
@@ -497,17 +499,18 @@ class pekerjaan_staff extends ceklogin {
                 );
                 if ($pekerjaan_rutin || $pekerjaan_project) {
                     $detil_pekerjaan['sasaran_waktu'] = $bulan;
+                    $detil_pekerjaan['sasaran_angka_kredit'] = $angka_kredit;
+                    $detil_pekerjaan['sasaran_kuantitas_output'] = $kuantitas_output;
+                    $detil_pekerjaan['sasaran_kualitas_mutu'] = $kualitas_mutu;
+                    if ($biaya == '-') {
+                        $detil_pekerjaan['pakai_biaya'] = 0;
+                    } else {
+                        $detil_pekerjaan['pakai_biaya'] = 1;
+                        $detil_pekerjaan['sasaran_biaya'] = floatval($biaya);
+                    }
+//                    $detil_pekerjaan['pakai_biaya'] = $pakai_biaya;
+                    $detil_pekerjaan['satuan_kuantitas'] = $satuan_kuantitas;
                 }
-//                    $detil_pekerjaan['sasaran_angka_kredit'] = $angka_kredit;
-//                    $detil_pekerjaan['sasaran_kuantitas_output'] = $kuantitas_output;
-//                    $detil_pekerjaan['sasaran_kualitas_mutu'] = $kualitas_mutu;
-//                    $detil_pekerjaan['sasaran_biaya'] = $biaya;
-//                    $detil_pekerjaan['satuan_kuantitas'] = $satuan_kuantitas;
-//                    if ($pekerjaan_rutin) {
-//                        $detil_pekerjaan['sasaran_waktu'] = 12;
-//                    } else {
-//                        $detil_pekerjaan['sasaran_waktu'] = $bulan;
-//                    }
 //                } else {
 //                    
 //                }
@@ -763,7 +766,7 @@ class pekerjaan_staff extends ceklogin {
         $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
         $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
         $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
-        $biaya = abs(floatval($this->input->post('biaya')));
+        $biaya = $this->input->post('biaya');
         $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
         $satuan_kuantitas = $this->input->post('satuan_kuantitas');
         $kategori_pakerjaan = $this->input->post('kategori_pekerjaan');
@@ -881,13 +884,14 @@ class pekerjaan_staff extends ceklogin {
                     $detil_pekerjaan['sasaran_angka_kredit'] = $angka_kredit;
                     $detil_pekerjaan['sasaran_kuantitas_output'] = $kuantitas_output;
                     $detil_pekerjaan['sasaran_kualitas_mutu'] = $kualitas_mutu;
-                    $detil_pekerjaan['sasaran_biaya'] = $biaya;
-                    $detil_pekerjaan['satuan_kuantitas'] = $satuan_kuantitas;
-                    if ($pekerjaan_rutin) {
-                        $detil_pekerjaan['sasaran_waktu'] = 12;
+                    if ($biaya == '-') {
+                        $detil_pekerjaan['pakai_biaya'] = 0;
                     } else {
-                        $detil_pekerjaan['sasaran_waktu'] = $bulan;
+                        $detil_pekerjaan['pakai_biaya'] = 1;
+                        $detil_pekerjaan['sasaran_biaya'] = floatval($biaya);
                     }
+                    $detil_pekerjaan['satuan_kuantitas'] = $satuan_kuantitas;
+                    $detil_pekerjaan['sasaran_waktu'] = $bulan;
                 } else {
                     
                 }

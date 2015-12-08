@@ -141,7 +141,10 @@ class pekerjaan_saya extends ceklogin {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
         $session = $this->session->userdata('logged_in');
         $pekerjaan = null;
-        $q = $this->db->query("select * from pekerjaan p inner join sifat_pekerjaan s on s.id_sifat_pekerjaan=p.id_sifat_pekerjaan where p.id_pekerjaan='$id_pekerjaan'")->result_array();
+        $q = $this->db->query("select *, to_char(tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai "
+                . "from pekerjaan p "
+                . "inner join sifat_pekerjaan s on s.id_sifat_pekerjaan=p.id_sifat_pekerjaan "
+                . "where p.id_pekerjaan='$id_pekerjaan'")->result_array();
         if (count($q) > 0) {
             $pekerjaan = $q[0];
         }

@@ -214,6 +214,7 @@ $list_tingkat_manfaat = array(
                                                                 </div>
                                                                 <div class="col-lg-4">
                                                                     <input type="text" class="form-control" id="waktu_selesai_baru" name="waktu_selesai"/>
+                                                                    <!--<input type="text" class="form-control time " id="jam_selesai_baru" name="jam_selesai"/>-->
                                                                 </div>
                                                             </div>
                                                             <div class="form-group" id="div_aktivitas_biaya">
