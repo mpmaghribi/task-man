@@ -1,3 +1,4 @@
+/*
 Morris.Bar({
     element: 'graph-bar',
     data: [
@@ -63,16 +64,16 @@ Morris.Area({
 
 
 
-
+*/
 
 // Use Morris.Area instead of Morris.Line
 Morris.Donut({
     element: 'graph-donut',
     data: [
-        {value: 70, label: 'foo', formatted: 'at least 70%' },
-        {value: 15, label: 'bar', formatted: 'approx. 15%' },
-        {value: 10, label: 'baz', formatted: 'approx. 10%' },
-        {value: 5, label: 'A really really long label', formatted: 'at most 5%' }
+        {value: $('#alltaskval').val(), label: 'All', formatted: $('#alltaskval').val()+' Tasks' },
+        {value: $('#ongoingval').val(), label: 'On-Going', formatted: $('#ongoingval').val()+' Tasks' },
+        {value: $('#finishedval').val(), label: 'Finished', formatted: $('#finishedval').val()+' Tasks' },
+        {value: $('#nwyval').val(), label: 'Not Working Yet', formatted: $('#nwyval').val()+' Tasks' }
     ],
     backgroundColor: '#fff',
     labelColor: '#1fb5ac',
@@ -83,7 +84,7 @@ Morris.Donut({
 });
 
 
-
+/*
 // Use Morris.Area instead of Morris.Line
 Morris.Area({
     element: 'graph-area',
@@ -116,7 +117,7 @@ Morris.Area({
 
 });
 
-
+*/
 
 
 

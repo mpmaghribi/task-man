@@ -4,6 +4,7 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <!--<script src="<?php echo base_url() ?>assets/js/jquery.simplePagination.js"></script>-->
 
+<script src="<?php echo base_url() ?>assets/js/jquery.js"></script>
 <script src="<?php echo base_url() ?>assets/js/jquery-ui/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="<?php echo base_url() ?>assets/bs3/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url() ?>assets/js/jquery.dcjqaccordion.2.7.js"></script>
@@ -25,6 +26,7 @@
 <script src="<?php echo base_url() ?>assets/js/gauge/gauge.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 
+
 <!--clock init-->
 <script src="<?php echo base_url() ?>assets/js/css3clock/js/css3clock.js"></script>
 <!--Easy Pie Chart-->
@@ -32,8 +34,10 @@
 <!--Sparkline Chart-->
 <script src="<?php echo base_url() ?>assets/js/sparkline/jquery.sparkline.js"></script>
 <!--Morris Chart-->
+
 <script src="<?php echo base_url() ?>assets/js/morris-chart/morris.js"></script>
 <script src="<?php echo base_url() ?>assets/js/morris-chart/raphael-min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/morris.init.js"></script>
 
 <script src="<?php echo base_url() ?>assets/js/dashboard.js"></script>
 <script src="<?php echo base_url() ?>assets/js/jquery.customSelect.min.js" ></script>

@@ -33,6 +33,7 @@ var Script = function () {
     var m = date.getMonth();
     var y = date.getFullYear();
 
+    //alert('tes');
     $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',

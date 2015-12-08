@@ -14,6 +14,72 @@ class pekerjaan_model extends dtpg {
         return $query->result();
     }
 
+    //not tested yet
+    public function jobthismonth($id_akun) {
+        $query = "select pekerjaan.nama_pekerjaan, pekerjaan.tgl_mulai, pekerjaan.tgl_selesai from detil_pekerjaan 
+            inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan 
+            where detil_pekerjaan.id_akun = $id_akun 
+            and 
+            (
+            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) <= 
+            pekerjaan.tgl_mulai
+            and
+            ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) >= 
+            pekerjaan.tgl_mulai
+            )
+            or
+            (
+            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) <= 
+            pekerjaan.tgl_selesai
+            and
+            ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) <= 
+            pekerjaan.tgl_selesai
+            )
+            or
+            (
+            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) >= 
+            pekerjaan.tgl_mulai
+            and
+            ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) <= 
+            pekerjaan.tgl_selesai
+            )";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+    
+    //alljobthisyear
+    public function jobthisyear($id_akun) {
+        $query = "select COUNT(*) from detil_pekerjaan 
+            inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan 
+            where detil_pekerjaan.id_akun = $id_akun 
+            and 
+            (
+            ( select cast(date_trunc('year', current_date) as date ) as firstdate ) <= 
+            pekerjaan.tgl_mulai
+            and
+            ( select cast(date_trunc('year', current_date)+ interval '1 year - 1 day' as date ) as lastdate) >= 
+            pekerjaan.tgl_mulai
+            )
+            or
+            (
+            ( select cast(date_trunc('year', current_date + interval '1 year') as date ) as firstdate ) <= 
+            pekerjaan.tgl_selesai
+            and
+            ( select cast(date_trunc('year', current_date)+ interval '1 year - 1 day' as date ) as lastdate) <= 
+            pekerjaan.tgl_selesai
+            )
+            or
+            (
+            ( select cast(date_trunc('year', current_date + interval '1 year') as date ) as firstdate ) >= 
+            pekerjaan.tgl_mulai
+            and
+            ( select cast(date_trunc('year', current_date)+ interval '1 year - 1 day' as date ) as lastdate) <= 
+            pekerjaan.tgl_selesai
+            )";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+
     public function alltask($id_akun) {
         $query = "Select COUNT(*) from detil_pekerjaan inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan where detil_pekerjaan.id_akun = '" . pg_escape_string($id_akun) . "'";
         //echo $query;

@@ -27,11 +27,13 @@ class home extends ceklogin {
             }
             $data['detil_pekerjaan_saya'] = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan_saya);
             $data['data_akun'] = $this->session->userdata('logged_in');
-
-            $result1 = $this->pekerjaan_model->alltask($temp['user_id']);
+            
+            //$result1 = $this->pekerjaan_model->alltask($temp['user_id']);
+            $result1 = $this->pekerjaan_model->jobthisyear($temp['user_id']);
             $result2 = $this->pekerjaan_model->ongoingtask($temp['user_id']);
             $result3 = $this->pekerjaan_model->finishtask($temp['user_id']);
             $result4 = $this->pekerjaan_model->notworkingtask($temp['user_id']);
+            
             $data['alltask'] = $result1[0]->count;
             $data['ongoingtask'] = $result2[0]->count;
             $data['finishtask'] = $result3[0]->count;
@@ -40,11 +42,13 @@ class home extends ceklogin {
             //$data["temp"] = $this->session->userdata('logged_in');
             $data["users"] = json_decode(file_get_contents($url));
             $result = $this->taskman_repository->sp_insert_activity($temp['id_akun'], 0, "Aktivitas Login", $temp['user_nama'] . " sedang berada di halaman dashboard.");
-
+            
             $staff = $this->akun->my_staff($temp['user_id']);
             $data['my_staff'] = $staff;
             if (count($data['my_staff']) > 0) {
+                
                 $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
+                
                 $my_staff = array();
                 //print_r($staff);
                 //var_dump($staff);
@@ -67,6 +71,7 @@ class home extends ceklogin {
                 }
                 $data['detil_pekerjaan_staff'] = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
             }
+            
             $this->load->view('homepage/taskman_home_page', $data);
             //print_r($data);
             $this->session->set_userdata("prev", "home");
