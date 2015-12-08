@@ -108,7 +108,7 @@ foreach ($users as $u) {
                                                 }
                                                 ?>
                                                 <h4 style="color: #1FB5AD;">Periode</h4>
-                                                <p style="font-size: larger"><?= $pekerjaan['kategori'] == 'rutin' ? $pekerjaan['periode'] : explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
+                                                <p style="font-size: larger"><?=  explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
                                             </section>
                                         </div>
                                         <div class="col-md-12">

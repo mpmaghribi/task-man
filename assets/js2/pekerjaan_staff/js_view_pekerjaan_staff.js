@@ -1,8 +1,9 @@
 $(document).ready(function () {
     $('#tabel_pekerjaan_staff').dataTable();
     $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-    document.title = "Daftar Pekerjaan Staff - Task Management";
     $('#submenu_pekerjaan_ul').show();
+    document.title = "Daftar Pekerjaan Staff - Task Management";
+    
     $('#select_kategori_pekerjaan').on('change', function () {
         ubah_view_input(this.value);
     });
@@ -10,8 +11,8 @@ $(document).ready(function () {
 });
 function ubah_view_input(kategori) {
     if (kategori == 'rutin' || kategori == 'project') {
-        display_element(true, ['div_angka_kredit', 'div_kuantitas', 'div_kualitas', 'div_periode_tahun', 'div_pakai_biaya', 'div_biaya']);
-        display_element(false, ['div_manfaat', 'div_periode_tanggal']);
+        display_element(true, [ 'div_periode_tanggal']);
+        display_element(false, ['div_manfaat', 'div_periode_tahun', 'div_angka_kredit', 'div_kuantitas', 'div_kualitas', 'div_pakai_biaya', 'div_biaya']);
         if (kategori == 'project') {
             display_element(true, ['div_periode_tanggal']);
             display_element(false, ['div_periode_tahun']);

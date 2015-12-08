@@ -438,10 +438,25 @@ class pekerjaan_staff extends ceklogin {
             'status_pekerjaan' => 7
         );
         $bulan = 0;
+        $date1 = new DateTime($tanggal_mulai);
+        $date2 = new DateTime($tanggal_selesai);
+//            $t1=new DateInterval('P2D');
+//            $date2->add($t1);
+        $interval = $date1->diff($date2);
+        $bulan = $interval->m;
+        if ($interval->y > 0) {
+            $bulan+=($interval->y * 12);
+        }
+        if ($interval->d > 0) {
+            $bulan++;
+        }
+        print_r($date1);
+        print_r($date2);
+        print_r($interval);
         if ($kategori_pakerjaan == 'rutin') {
             $pekerjaan['periode'] = $periode;
-            $pekerjaan['tgl_mulai'] = $periode . "-1-1";
-            $pekerjaan['tgl_selesai'] = $periode . "-12-31";
+            $pekerjaan['tgl_mulai'] = $tanggal_mulai;
+            $pekerjaan['tgl_selesai'] = $tanggal_selesai;
             $pekerjaan['kategori'] = 'rutin';
         } else {
             $pekerjaan['tgl_mulai'] = $tanggal_mulai;
@@ -458,21 +473,6 @@ class pekerjaan_staff extends ceklogin {
                 redirect(site_url() . '/pekerjaan_staff');
                 return;
             }
-            $date1 = new DateTime($tanggal_mulai);
-            $date2 = new DateTime($tanggal_selesai);
-//            $t1=new DateInterval('P2D');
-//            $date2->add($t1);
-            $interval = $date1->diff($date2);
-            $bulan = $interval->m;
-            if ($interval->y > 0) {
-                $bulan+=($interval->y * 12);
-            }
-            if ($interval->d > 0) {
-                $bulan++;
-            }
-            print_r($date1);
-            print_r($date2);
-            print_r($interval);
         }
         $this->db->trans_begin();
         $this->db->query("set datestyle to 'European'");
@@ -496,19 +496,21 @@ class pekerjaan_staff extends ceklogin {
                     'id_akun' => $id_staff
                 );
                 if ($pekerjaan_rutin || $pekerjaan_project) {
-                    $detil_pekerjaan['sasaran_angka_kredit'] = $angka_kredit;
-                    $detil_pekerjaan['sasaran_kuantitas_output'] = $kuantitas_output;
-                    $detil_pekerjaan['sasaran_kualitas_mutu'] = $kualitas_mutu;
-                    $detil_pekerjaan['sasaran_biaya'] = $biaya;
-                    $detil_pekerjaan['satuan_kuantitas'] = $satuan_kuantitas;
-                    if ($pekerjaan_rutin) {
-                        $detil_pekerjaan['sasaran_waktu'] = 12;
-                    } else {
-                        $detil_pekerjaan['sasaran_waktu'] = $bulan;
-                    }
-                } else {
-                    
+                    $detil_pekerjaan['sasaran_waktu'] = $bulan;
                 }
+//                    $detil_pekerjaan['sasaran_angka_kredit'] = $angka_kredit;
+//                    $detil_pekerjaan['sasaran_kuantitas_output'] = $kuantitas_output;
+//                    $detil_pekerjaan['sasaran_kualitas_mutu'] = $kualitas_mutu;
+//                    $detil_pekerjaan['sasaran_biaya'] = $biaya;
+//                    $detil_pekerjaan['satuan_kuantitas'] = $satuan_kuantitas;
+//                    if ($pekerjaan_rutin) {
+//                        $detil_pekerjaan['sasaran_waktu'] = 12;
+//                    } else {
+//                        $detil_pekerjaan['sasaran_waktu'] = $bulan;
+//                    }
+//                } else {
+//                    
+//                }
                 $this->db->insert('detil_pekerjaan', $detil_pekerjaan);
             }
             $this->db->trans_complete();
@@ -682,13 +684,17 @@ class pekerjaan_staff extends ceklogin {
             $aspek_kualitas = 0;
             if ($detil_pekerjaan['sasaran_kualitas_mutu'] > 0)
                 $aspek_kualitas = $detil_pekerjaan['realisasi_kualitas_mutu'] * 100 / $detil_pekerjaan['sasaran_kualitas_mutu'];
-            $efisiensi_waktu = 100 - ($detil_pekerjaan['realisasi_waktu'] * 100 / $detil_pekerjaan['sasaran_waktu']);
-            $aspek_waktu = 1.76 * ($detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) * 100 / $detil_pekerjaan['sasaran_waktu'];
+            $efisiensi_waktu = 0;
+            if ($detil_pekerjaan['sasaran_waktu'] > 0)
+                $efisiensi_waktu = 100 - ($detil_pekerjaan['realisasi_waktu'] * 100 / $detil_pekerjaan['sasaran_waktu']);
+            $aspek_waktu = 0;
+            if ($detil_pekerjaan['sasaran_waktu'] > 0)
+                $aspek_waktu = 1.76 * ($detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) * 100 / $detil_pekerjaan['sasaran_waktu'];
             if ($efisiensi_waktu > 24) {
                 $aspek_waktu-=24;
             }
             $aspek_biaya = 0;
-            if ($detil_pekerjaan['pakai_biaya'] && $detil_pekerjaan['realisasi_biaya'] > 0) {
+            if ($detil_pekerjaan['pakai_biaya'] && $detil_pekerjaan['sasaran_biaya'] > 0) {
                 $efisiensi_biaya = 100 - ($detil_pekerjaan['realisasi_biaya'] * 100 / $detil_pekerjaan['sasaran_biaya']);
                 $aspek_biaya = 1.76 * ($detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) * 100 / $detil_pekerjaan['sasaran_biaya'];
                 if ($efisiensi_biaya > 24) {
@@ -704,13 +710,13 @@ class pekerjaan_staff extends ceklogin {
             $this->db->query("update detil_pekerjaan set progress='$penghitungan', skor='$skor' where id_detil_pekerjaan='$id_detil_pekerjaan'");
         }
         $q = $this->db->query("select sasaran_angka_kredit,sasaran_kuantitas_output,sasaran_kualitas_mutu,sasaran_waktu,sasaran_biaya,realisasi_angka_kredit,realisasi_kuantitas_output,realisasi_kualitas_mutu,realisasi_waktu,realisasi_biaya,pakai_biaya,satuan_kuantitas,satuan_waktu,progress,skor from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
-        if(count($q)<=0){
-            $result['reason']='Terjadi kesalahan pada saat membaca kembali detil pekerjaan';
+        if (count($q) <= 0) {
+            $result['reason'] = 'Terjadi kesalahan pada saat membaca kembali detil pekerjaan';
             echo json_encode($result);
             return;
         }
-        $result['status']='ok';
-        echo json_encode(array_merge($result,$q[0]));
+        $result['status'] = 'ok';
+        echo json_encode(array_merge($result, $q[0]));
     }
 
     function update() {
@@ -790,10 +796,23 @@ class pekerjaan_staff extends ceklogin {
             'status_pekerjaan' => 7
         );
         $bulan = 0;
+        $date1 = new DateTime($tanggal_mulai);
+        $date2 = new DateTime($tanggal_selesai);
+        $interval = $date1->diff($date2);
+        $bulan = $interval->m;
+        if ($interval->y > 0) {
+            $bulan+=($interval->y * 12);
+        }
+        if ($interval->d > 0) {
+            $bulan++;
+        }
+        print_r($date1);
+        print_r($date2);
+        print_r($interval);
         if ($kategori_pakerjaan == 'rutin') {
             $pekerjaan['periode'] = $periode;
-            $pekerjaan['tgl_mulai'] = $periode . "-1-1";
-            $pekerjaan['tgl_selesai'] = $periode . "-12-31";
+            $pekerjaan['tgl_mulai'] = $tanggal_mulai;
+            $pekerjaan['tgl_selesai'] = $tanggal_selesai;
             $pekerjaan['kategori'] = 'rutin';
         } else {
             $pekerjaan['tgl_mulai'] = $tanggal_mulai;
@@ -807,19 +826,6 @@ class pekerjaan_staff extends ceklogin {
                 redirect(site_url() . '/pekerjaan_staff');
                 return;
             }
-            $date1 = new DateTime($tanggal_mulai);
-            $date2 = new DateTime($tanggal_selesai);
-            $interval = $date1->diff($date2);
-            $bulan = $interval->m;
-            if ($interval->y > 0) {
-                $bulan+=($interval->y * 12);
-            }
-            if ($interval->d > 0) {
-                $bulan++;
-            }
-            print_r($date1);
-            print_r($date2);
-            print_r($interval);
         }
         $this->db->trans_begin();
         $this->db->query("set datestyle to 'European'");

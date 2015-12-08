@@ -226,7 +226,7 @@ and open the template in the editor.
                                     }
                                     $first = true;
                                     foreach ($nilai_skp as $t) {
-                                        if ($t['kategori'] != 'tambahan') {
+                                        if ($t['kategori'] != 'tambahan' || true) {
                                             continue;
                                         }
                                         $i++;
@@ -241,7 +241,7 @@ and open the template in the editor.
                                     }
                                     $first = true;
                                     foreach ($nilai_skp as $t) {
-                                        if ($t['kategori'] != 'kreativitas') {
+                                        if ($t['kategori'] != 'kreativitas' || true) {
                                             continue;
                                         }
                                         $i++;

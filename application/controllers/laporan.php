@@ -17,7 +17,13 @@ class laporan extends CI_Controller {
     public function cetak_form_skp() {
         $id = $this->input->get('id_akun');
         //$data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
-        $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori from pekerjaan p inner join detil_pekerjaan dp on dp.id_pekerjaan=p.id_pekerjaan where dp.id_akun='$id' and p.status_pekerjaan=7 order by urutan_kategori")->result_array();
+        $periode = abs(intval($this->input->get('periode')));
+        $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori "
+                        . "from pekerjaan p "
+                        . "inner join detil_pekerjaan dp on dp.id_pekerjaan=p.id_pekerjaan "
+                        . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
+                        . "and (date_part('year',tgl_mulai)='$periode' or date_part('year',tgl_selesai)='$periode') "
+                        . "order by urutan_kategori")->result_array();
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
         $data["nama"] = $this->input->get('nama');
@@ -56,7 +62,13 @@ class laporan extends CI_Controller {
     public function cetak_form_ckp() {
         $id = $this->input->get('id_akun');
         //$data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
-        $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori from pekerjaan p inner join detil_pekerjaan dp on dp.id_pekerjaan=p.id_pekerjaan where dp.id_akun='$id' and p.status_pekerjaan=7 order by urutan_kategori")->result_array();
+        $periode = abs(intval($this->input->get('periode')));
+        $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori "
+                        . "from pekerjaan p "
+                        . "inner join detil_pekerjaan dp on dp.id_pekerjaan=p.id_pekerjaan "
+                        . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
+                        . "and (date_part('year',tgl_mulai)='$periode' or date_part('year',tgl_selesai)='$periode') "
+                        . "order by urutan_kategori")->result_array();
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
         $data["nama"] = $this->input->get('nama');
@@ -118,7 +130,13 @@ class laporan extends CI_Controller {
 
     function exportFormCKP() {
         $id = $this->input->get('id_akun');
-        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
+        $periode = abs(intval($this->input->get('periode')));
+        $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori "
+                        . "from pekerjaan p "
+                        . "inner join detil_pekerjaan dp on dp.id_pekerjaan=p.id_pekerjaan "
+                        . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
+                        . "and (date_part('year',tgl_mulai)='$periode' or date_part('year',tgl_selesai)='$periode') "
+                        . "order by urutan_kategori")->result_array();
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
         $data["nama"] = $this->input->get('nama');
@@ -457,8 +475,14 @@ Data Pengaduan ' . $ket . '
 
     function exportToPDF() {
         $id = $this->input->get('id_akun');
-        $periode = intval($this->input->get('periode'));
-        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
+        $periode = abs(intval($this->input->get('periode')));
+        $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori "
+                        . "from pekerjaan p "
+                        . "inner join detil_pekerjaan dp on dp.id_pekerjaan=p.id_pekerjaan "
+                        . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
+                        . "and (date_part('year',tgl_mulai)='$periode' or date_part('year',tgl_selesai)='$periode') "
+                        . "order by urutan_kategori")->result_array();
+        $data["jabatan"] = $this->input->get('jabatan');
         $data["jabatan"] = $this->input->get('jabatan');
         $data["departemen"] = $this->input->get('departemen');
         $data["nama"] = $this->input->get('nama');
