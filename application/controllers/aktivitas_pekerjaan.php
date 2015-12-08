@@ -95,8 +95,8 @@ class aktivitas_pekerjaan extends ceklogin {
                 'deskripsi' => $keterangan,
                 'progress' => $nilai_progress,
                 'total_progress' => 100,
-                'waktu_mulai' => $waktu_mulai,
-                'waktu_selesai' => $waktu_selesai
+                'waktu_mulai' => $waktu_mulai.' 08:00',
+                'waktu_selesai' => $waktu_selesai.' 16:00'
             );
             $this->db->insert('detil_progress', $aktivitas);
             $id_progress = $this->db->insert_id();
@@ -395,6 +395,38 @@ class aktivitas_pekerjaan extends ceklogin {
         $pekerjaan = $q[0];
         $this->db->query("update aktivitas_pekerjaan set status_validasi=1 where id_detil_pekerjaan='$id_detil_pekerjaan'");
         $this->hitung_nilai_aktivitas($id_detil_pekerjaan);
+        echo 'ok';
+    }
+    
+    function validasi_semua_progress(){
+        $id_detil_pekerjaan = intval($this->input->post('id_detil_pekerjaan'));
+        $session = $this->session->userdata('logged_in');
+        $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+//        var_dump($session);
+        if (!in_array(12 || 6, $session['idmodul'])) {
+            echo 'Anda tidak berhak mengakses fungsionalitas ini';
+            return;
+        }
+        if (count($q) <= 0) {
+            echo 'Detil Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $detil_pekerjaan = $q[0];
+        if ($detil_pekerjaan['status'] == 'locked') {
+            echo 'Pekerjaan telah di-lock';
+            return;
+        }
+        $id_pekerjaan = $detil_pekerjaan['id_pekerjaan'];
+        $id_akun = $detil_pekerjaan['id_akun'];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $pekerjaan = $q[0];
+        $my_id=$session['user_id'];
+        $this->db->query("update detil_progress set validated=1, validated_by='$my_id' where id_detil_pekerjaan='$id_detil_pekerjaan'");
+        $this->hitung_nilai_progress($id_detil_pekerjaan);
         echo 'ok';
     }
 

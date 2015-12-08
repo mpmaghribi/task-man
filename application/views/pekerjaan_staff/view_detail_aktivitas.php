@@ -100,6 +100,7 @@ $list_tingkat_manfaat = array(
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                                <button class="btn btn-danger" id="button_lock_nilai_progress" onclick="lock_nilai()" type="button">Lock</button>
                                             </section>                                            
                                         </div>
                                         <div class="panel-body" id="div_penilaian_skp" style="display:none">
@@ -175,7 +176,7 @@ $list_tingkat_manfaat = array(
                                                             foreach ($detil_pekerjaans as $dp) {
                                                                 if (!isset($user[$dp['id_akun']]))
                                                                     continue;
-                                                                if ($dp['id_akun'] == $detil_pekerjaan['id_akun']) {
+                                                                if ($dp['id_akun'] == $detil_pekerjaan['id_akun'] && in_array($pekerjaan['kategori'],array('rutin','project'))) {
                                                                     continue;
                                                                 }
                                                                 $counter++;

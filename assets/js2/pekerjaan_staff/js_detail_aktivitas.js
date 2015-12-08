@@ -17,6 +17,7 @@ $(document).ready(function () {
         init_tabel_aktivitas();
         $('#tabel_progress').hide();
         $('#div_penilaian_skp').show();
+        $('#button_lock_nilai_progress').hide();
     } else {
         init_tabel_progress();
         $('#tabel_aktivitas').hide();
@@ -24,6 +25,8 @@ $(document).ready(function () {
     sembunyikan_form_penilaian();
     if (detil_pekerjaan['status'] == 'locked') {
         $('#button_lock_nilai').html('Locked');
+        $('#button_lock_nilai_progress').html('Locked');
+        $('#button_tampilkan_form_penilaian').hide();
     }
 });
 function validasi_semua_aktivitas() {
@@ -71,6 +74,7 @@ function lock_nilai() {
         success: function (data) {
             if (data == 'ok') {
                 $('#button_lock_nilai').html('Locked');
+                $('#button_lock_nilai_progress').html('Locked');
                 detil_pekerjaan['status'] = 'locked';
             } else {
                 alert(data);

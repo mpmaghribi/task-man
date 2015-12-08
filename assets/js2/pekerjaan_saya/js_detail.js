@@ -21,7 +21,7 @@ $(document).ready(function () {
     var waktu_selesai_baru = $('#waktu_selesai_baru').datepicker({
         format: 'dd-mm-yyyy',
         onRender: function (date) {
-            console.log(waktu_mulai_baru.date);
+//            console.log(waktu_mulai_baru.date);
             return date < date_min || date > date_max || waktu_mulai_baru.date > date ? 'disabled' : '';
         }
     }).data('datepicker');
@@ -128,7 +128,7 @@ function init_tabel_progress() {
     }
     tabel_aktivitas = $('#tabel_progress').dataTable({
         order: [[1, "asc"]],
-        "columnDefs": [{"targets": [0], "orderable": false}],
+        "columnDefs": [{"targets": [0,6], "orderable": false}],
         "processing": true,
         "serverSide": true,
         "ajax": {
@@ -147,7 +147,7 @@ function init_tabel_progress() {
             var tgl_mulai = data[4];
             var tgl_mulai_tmzn = tgl_mulai.split('+');
             var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
-            var tgl_selesai = data[7];
+            var tgl_selesai = data[8];
             var tgl_selesai_tmzn = tgl_selesai.split('+');
             var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
             var id = data[1];
@@ -162,15 +162,15 @@ function init_tabel_progress() {
             }
             var html = '<div class="btn-group">'
                     + '<button class="btn btn-default btn-xs dropdown-toggle btn-info" data-toggle="dropdown">Aksi <span class="caret"></span></button>'
-                    + '<ul class="dropdown-menu">'
-                    + '<li><a href="javascript:viewDetailProgress(' + id + ');"><i class="fa fa-eye fa-fw"></i> Detail</a></li>';
+                    + '<ul class="dropdown-menu">';
             if (validated == 0) {
                 html += '<li><a href="javascript:viewEditProgress(' + id + ');"><i class="fa fa-pencil-square-o fa-fw"></i> Edit</a></li>';
                 html += '<li><a href="javascript:viewHapusProgress(' + id + ');"><i class="fa fa-times fa-fw"></i> Hapus</a></li>';
             }
             html += '</ul></div>';
 
-            $('td', row).eq(4).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+//            $('td', row).eq(4).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+            $('td', row).eq(4).html(data[10] + ' - ' + data[11]);
             $('td', row).eq(0).html(html);
 
             $('td', row).eq(1).html(index + 1);
