@@ -41,7 +41,7 @@
                                                     <div class="form-group">
                                                         <label class="control-label col-lg-1">Periode</label>
                                                         <div class="col-lg-3">
-                                                            <select class="form-control" id="select_periode">
+                                                            <select class="form-control" id="select_periode" onchange="init_tabel_skp()">
                                                                 <?php
                                                                 for ($i = $tahun_max; $i >= $tahun_min; $i--) {
                                                                     echo '<option value="' . $i . '">' . $i . '</option>';

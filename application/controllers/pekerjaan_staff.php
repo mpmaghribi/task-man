@@ -633,6 +633,36 @@ class pekerjaan_staff extends ceklogin {
         redirect(site_url() . '/pekerjaan_staff/staff?id_staff=' . $id_staff_c);
     }
 
+    function lock_nilai() {
+        $session = $this->session->userdata('logged_in');
+//        var_dump($session);
+        $id_detil_pekerjaan = intval($this->input->post('id_detil_pekerjaan'));
+        if (!in_array(12 || 6, $session['idmodul'])) {
+            echo 'Anda tidak berhak mengakses fungsionalitas ini';
+            return;
+        }
+        $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'Detil Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $detil_pekerjaan = $q[0];
+        $id_pekerjaan = $detil_pekerjaan['id_pekerjaan'];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $pekerjaan = $q[0];
+//        if($pekerjaan['id_penanggung_jawab']!=$session['user_id']){
+//            echo 'Anda tidak bertanggung jawab kepada pekerjaan ini';
+//            return;
+//        }
+        $update = array('status' => 'locked');
+        $this->db->update('detil_pekerjaan', $update, array('id_detil_pekerjaan' => $id_detil_pekerjaan));
+        echo 'ok';
+    }
+
     function ubah_nilai() {
         $sasaran_angka_kredit = abs(floatval($this->input->post('target_ak')));
         $sasaran_kuantitas_output = abs(floatval($this->input->post('target_output')));

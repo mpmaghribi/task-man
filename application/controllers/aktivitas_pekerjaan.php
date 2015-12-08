@@ -226,7 +226,9 @@ class aktivitas_pekerjaan extends ceklogin {
         $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
         if (count($q) > 0) {
             $detil_pekerjaan = $q[0];
-            $aspek_kuantitas = $detil_pekerjaan['realisasi_kuantitas_output'] * 100 / $detil_pekerjaan['sasaran_kuantitas_output'];
+            $aspek_kuantitas = 0;
+            if ($detil_pekerjaan['sasaran_kuantitas_output'] > 0)
+                $aspek_kuantitas = $detil_pekerjaan['realisasi_kuantitas_output'] * 100 / $detil_pekerjaan['sasaran_kuantitas_output'];
             $aspek_kualitas = 0;
             if ($detil_pekerjaan['sasaran_kualitas_mutu'] > 0)
                 $aspek_kualitas = $detil_pekerjaan['realisasi_kualitas_mutu'] * 100 / $detil_pekerjaan['sasaran_kualitas_mutu'];
@@ -354,6 +356,33 @@ class aktivitas_pekerjaan extends ceklogin {
         $this->hitung_nilai_aktivitas($id_detil_pekerjaan);
 
         $this->db->trans_complete();
+        echo 'ok';
+    }
+
+    function validasi_semua_aktivitas() {
+        $id_detil_pekerjaan = intval($this->input->post('id_detil_pekerjaan'));
+        $session = $this->session->userdata('logged_in');
+        $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+//        var_dump($session);
+        if (!in_array(12 || 6, $session['idmodul'])) {
+            echo 'Anda tidak berhak mengakses fungsionalitas ini';
+            return;
+        }
+        if (count($q) <= 0) {
+            echo 'Detil Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $detil_pekerjaan = $q[0];
+        $id_pekerjaan = $detil_pekerjaan['id_pekerjaan'];
+        $id_akun = $detil_pekerjaan['id_akun'];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $pekerjaan = $q[0];
+        $this->db->query("update aktivitas_pekerjaan set status_validasi=1 where id_detil_pekerjaan='$id_detil_pekerjaan'");
+        $this->hitung_nilai_aktivitas($id_detil_pekerjaan);
         echo 'ok';
     }
 

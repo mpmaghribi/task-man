@@ -64,6 +64,7 @@ $list_tingkat_manfaat = array(
                                                 <h4 style="color: #1FB5AD;">
                                                     Daftar Aktivitas Pekerjaan
                                                 </h4>
+                                                <button class="btn btn-danger" id="button_validasi_semua" onclick="validasi_semua_aktivitas()" type="button">Validasi Semua</button>
                                                 <div class="panel-body">
                                                     <table class="table table-striped table-hover table-condensed" id="tabel_aktivitas">
                                                         <thead>
@@ -72,9 +73,10 @@ $list_tingkat_manfaat = array(
                                                                 <th>No</th>
                                                                 <th>Keterangan</th>
                                                                 <!--<th>AK</th>-->
-                                                                <th>Kuantitas Output</th>
+                                                                <!--<th>Kuantitas Output</th>-->
                                                                 <!--<th>Kualitas Mutu</th>-->
                                                                 <th>Waktu</th>
+                                                                <th>Berkas</th>
                                                                 <!--<th>Biaya</th>-->
                                                                 <th>Validation</th>
                                                             </tr>
@@ -104,6 +106,7 @@ $list_tingkat_manfaat = array(
                                             <h4 style="color: #1FB5AD;">
                                                 Detil Pekerjaan
                                             </h4>
+                                            <button class="btn btn-danger" id="button_lock_nilai" onclick="lock_nilai()" type="button">Lock</button>
                                             <button class="btn btn-success" id="button_tampilkan_form_penilaian" onclick="tampilkan_form_penilaian()" type="button">Ubah Penilaian</button>
                                             <button class="btn btn-success" id="button_simpan_penilaian" onclick="simpan_penilaian()" type="button">Simpan Penilaian</button>
                                             <button class="btn btn-danger" id="button_batal_penilaian" onclick="sembunyikan_form_penilaian()" type="button">Batal</button>
@@ -151,13 +154,6 @@ $list_tingkat_manfaat = array(
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <input type="hidden" id="target_ak" value="<?= $detil_pekerjaan['sasaran_angka_kredit'] ?>"/>
-                                        <input type="hidden" id="target_out" value="<?= $detil_pekerjaan['sasaran_kuantitas_output'] ?>"/>
-                                        <input type="hidden" id="target_mutu" value="<?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>"/>
-                                        <input type="hidden" id="target_biaya" value="<?= $detil_pekerjaan['sasaran_biaya'] ?>"/>
-                                        <input type="hidden" id="real_ak" value="<?= $detil_pekerjaan['realisasi_angka_kredit'] ?>"/>
-                                        <input type="hidden" id="real_mutu" value="<?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>"/>
-                                        <input type="hidden" id="real_biaya" value="<?= $detil_pekerjaan['realisasi_biaya'] ?>"/>
                                         <div class="col-md-12" id="anggota_tim">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">

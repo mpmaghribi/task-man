@@ -19,10 +19,12 @@ $(function () {
     console.log(nowTemp);
     console.log(date_min);
     console.log(date_max);
-    if ($('.dpd1').val().length <= 0)
-        $('.dpd1').val('01-01-' + (date_min.getFullYear() + 1));
-    if ($('.dpd2').val().length <= 0)
-        $('.dpd2').val('31-12-' + (date_min.getFullYear() + 1));
+    if ($('.dpd1').length > 0) {
+        if ($('.dpd1').val().length <= 0)
+            $('.dpd1').val('01-01-' + (date_min.getFullYear() + 1));
+        if ($('.dpd2').val().length <= 0)
+            $('.dpd2').val('31-12-' + (date_min.getFullYear() + 1));
+    }
     var checkin = $('.dpd1').datepicker({
         format: 'dd-mm-yyyy',
         onRender: function (date) {

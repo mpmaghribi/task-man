@@ -40,11 +40,12 @@ $list_tingkat_manfaat = array(
                                     </li>
                                 </ul>
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    <a class="btn btn-info btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi_usulan(<?= $pekerjaan['id_pekerjaan'] ?>);">Validasi</a>
-                                    <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
-                                    <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
-                                    <a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px">Perpanjangan Telah Dikirim</a><a class="btn btn-primary btn-xs" href="javascript:void(0);" id="setuju_perpanjang"  style="font-size: 10px">Minta Diperpanjang</a>
-                                    <a class="btn btn-primary btn-xs" data-toggle="modal" href="#modal_perpanjang" id="tombol_perpanjang" style="font-size: 10px">Minta Perpanjang</a>
+                                    <a class="btn btn-info btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px;display:none" onclick="validasi_usulan(<?= $pekerjaan['id_pekerjaan'] ?>);">Validasi</a>
+                                    <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px;display:none">Edit</a>
+                                    <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="tombol_batalkan_usulan" style="font-size: 10px;display:none">Batalkan</a>
+                                    <a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px;display:none">Perpanjangan Telah Dikirim</a>
+                                    <a class="btn btn-primary btn-xs" href="javascript:void(0);" id="setuju_perpanjang"  style="font-size: 10px;display:none">Minta Diperpanjang</a>
+                                    <a class="btn btn-primary btn-xs" data-toggle="modal" href="#modal_perpanjang" id="tombol_perpanjang" style="font-size: 10px;display:none">Minta Perpanjang</a>
                                 </div>
                             </header>
                             <div class="panel-body">
@@ -54,9 +55,9 @@ $list_tingkat_manfaat = array(
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
                                                     <?php
-                                                    if ($pekerjaan['flag_usulan'] == '2') {
-                                                        echo 'Pembuat Pekerjaan';
-                                                    } else if ($pekerjaan['flag_usulan'] == '1' || $pekerjaan['flag_usulan'] == '9') {
+                                                    if ($pekerjaan['status_pekerjaan'] == '7') {
+                                                        echo 'Penanggung Jawab';
+                                                    } else if ($pekerjaan['status_pekerjaan'] == '6') {
                                                         echo 'Ditujukan Kepada';
                                                     }
                                                     ?>
@@ -250,9 +251,10 @@ $list_tingkat_manfaat = array(
                                                                 <th>No</th>
                                                                 <th>Keterangan</th>
                                                                 <!--<th>AK</th>-->
-                                                                <th>Kuantitas Output</th>
+                                                                <!--<th>Kuantitas Output</th>-->
                                                                 <!--<th>Kualitas Mutu</th>-->
                                                                 <th>Waktu</th>
+                                                                <th>Berkas</th>
                                                                 <!--<th>Biaya</th>-->
                                                                 <th>Validation</th>
                                                             </tr>

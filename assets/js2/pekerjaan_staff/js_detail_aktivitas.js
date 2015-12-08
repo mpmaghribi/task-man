@@ -22,7 +22,58 @@ $(document).ready(function () {
         $('#tabel_aktivitas').hide();
     }
     sembunyikan_form_penilaian();
+    if (detil_pekerjaan['status'] == 'locked') {
+        $('#button_lock_nilai').html('Locked');
+    }
 });
+function validasi_semua_aktivitas (){
+    if(confirm('Anda akan memvalidasi semua aktivitas. Lanjutkan?')==false){
+        return;
+    }
+    $.ajax({
+        type: "POST",
+        url: site_url + "/aktivitas_pekerjaan/validasi_semua_aktivitas",
+        data: {
+            id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
+        },
+        success: function (data) {
+            if(data=='ok'){
+                tabel_aktivitas.fnDraw();
+            }else{
+                alert(data);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+
+        }
+    });
+}
+function lock_nilai(){
+    if(detil_pekerjaan['status']=='locked'){
+        return;
+    }
+    if(confirm('Anda akan mengunci penilaian. Lanjutkan?')==false){
+        return;
+    }
+    $.ajax({
+        type: "POST",
+        url: site_url + "/pekerjaan_staff/lock_nilai",
+        data: {
+            id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
+        },
+        success: function (data) {
+            if(data=='ok'){
+                $('#button_lock_nilai').html('Locked');
+                detil_pekerjaan['status']='locked';
+            }else{
+                alert(data);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+
+        }
+    });
+}
 function sembunyikan_form_penilaian() {
     $('.td_edit_nilai').hide();
     $('.td_view_nilai').show();
@@ -32,6 +83,9 @@ function sembunyikan_form_penilaian() {
 }
 var form_penilaian_showed = false;
 function tampilkan_form_penilaian() {
+    if(detil_pekerjaan['status']=='locked'){
+        return;
+    }
     $('#button_form_penilaian').html("Simpan Penilaian");
     $('.td_edit_nilai').show();
     $('.td_view_nilai').hide();
@@ -177,10 +231,10 @@ function init_tabel_aktivitas() {
         },
         "createdRow": function (row, data, index) {
             var id = data[1];
-            var tgl_mulai = data[4];
+            var tgl_mulai = data[3];
             var tgl_mulai_tmzn = tgl_mulai.split('+');
             var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
-            var tgl_selesai = data[9];
+            var tgl_selesai = data[10];
             var tgl_selesai_tmzn = tgl_selesai.split('+');
             var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
             var status_validasi = parseInt(data[5]);
@@ -192,10 +246,19 @@ function init_tabel_aktivitas() {
             }
             html += '<li><a href="javascript:viewHapusAktivitas(' + id + ');"><i class="fa fa-times fa-fw"></i> Hapus</a></li>';
             html += '</ul></div>';
+            var list_id_berkas_json=JSON.parse(data[4]);
+            var list_berkas=JSON.parse(data[12]);
+            var html_berkas='';
+            if(list_id_berkas_json!=null){
+                for (var i = 0, n = list_id_berkas_json.length; i < n; i++) {
+                    html_berkas += '<a href="' + site_url + '/download?id_file=' + list_id_berkas_json[i] + '" target="_blank" title="' + list_berkas[i] + '"><i class="fa fa-paperclip fa-fw"></i></a> ';
+                }
+            }
             $('td', row).eq(0).html(html);
             $('td', row).eq(1).html(index + 1);
-            $('td', row).eq(3).html(data[3] + ' ' + detil_pekerjaan['satuan_kuantitas']);
-            $('td', row).eq(4).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+            
+            $('td', row).eq(3).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+            $('td', row).eq(4).html(html_berkas);
 
             if (status_validasi == 1) {
                 $('td', row).eq(5).html('Validated');
