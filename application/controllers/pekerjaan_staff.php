@@ -716,31 +716,46 @@ class pekerjaan_staff extends ceklogin {
         $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
         if (count($q) > 0) {
             $detil_pekerjaan = $q[0];
-            $aspek_kuantitas = $detil_pekerjaan['realisasi_kuantitas_output'] * 100 / $detil_pekerjaan['sasaran_kuantitas_output'];
-            $aspek_kualitas = 0;
-            if ($detil_pekerjaan['sasaran_kualitas_mutu'] > 0)
-                $aspek_kualitas = $detil_pekerjaan['realisasi_kualitas_mutu'] * 100 / $detil_pekerjaan['sasaran_kualitas_mutu'];
-            $efisiensi_waktu = 0;
-            if ($detil_pekerjaan['sasaran_waktu'] > 0)
-                $efisiensi_waktu = 100 - ($detil_pekerjaan['realisasi_waktu'] * 100 / $detil_pekerjaan['sasaran_waktu']);
-            $aspek_waktu = 0;
-            if ($detil_pekerjaan['sasaran_waktu'] > 0)
-                $aspek_waktu = 1.76 * ($detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) * 100 / $detil_pekerjaan['sasaran_waktu'];
-            if ($efisiensi_waktu > 24) {
-                $aspek_waktu-=24;
+            $persen_waktu = 0;
+            if ($detil_pekerjaan['sasaran_waktu'] > 0) {
+                $persen_waktu = 100 - (100 * $detil_pekerjaan['realisasi_waktu'] / $detil_pekerjaan['sasaran_waktu']);
             }
-            $aspek_biaya = 0;
-            if ($detil_pekerjaan['pakai_biaya'] && $detil_pekerjaan['sasaran_biaya'] > 0) {
-                $efisiensi_biaya = 100 - ($detil_pekerjaan['realisasi_biaya'] * 100 / $detil_pekerjaan['sasaran_biaya']);
-                $aspek_biaya = 1.76 * ($detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) * 100 / $detil_pekerjaan['sasaran_biaya'];
-                if ($efisiensi_biaya > 24) {
-                    $aspek_biaya-=24;
+            $persen_biaya = 0;
+            if ($detil_pekerjaan['pakai_biaya'] == '1' && $detil_pekerjaan['sasaran_biaya'] > 0) {
+                $persen_biaya = 100 - (100 * $detil_pekerjaan['realisasi_biaya'] / $detil_pekerjaan['sasaran_biaya']);
+            }
+            $kuantitas = 0;
+            if ($detil_pekerjaan['sasaran_kuantitas_output'] > 0) {
+                $kuantitas = 100 * $detil_pekerjaan['realisasi_kuantitas_output'] / $detil_pekerjaan['sasaran_kuantitas_output'];
+            }
+            $kualitas = 0;
+            if ($detil_pekerjaan['sasaran_kualitas_mutu'] > 0) {
+                $kualitas = 100 * $detil_pekerjaan['realisasi_kualitas_mutu'] / $detil_pekerjaan['sasaran_kualitas_mutu'];
+            }
+            $waktu = 0;
+            if ($persen_waktu > 24) {
+                if ($detil_pekerjaan['sasaran_waktu'] > 0) {
+                    $waktu = 76 - ((((1.76 * $detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) / $detil_pekerjaan['sasaran_waktu']) * 100) - 100);
+                }
+            } else {
+                if ($detil_pekerjaan['sasaran_waktu'] > 0) {
+                    $waktu = ((1.76 * $detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) / $detil_pekerjaan['sasaran_waktu']) * 100;
                 }
             }
-            $penghitungan = $aspek_kuantitas + $aspek_kualitas + $aspek_biaya;
+            $biaya = 0;
+            if ($persen_biaya > 24) {
+                if ($detil_pekerjaan['pakai_biaya'] == '1' && $detil_pekerjaan['sasaran_biaya'] > 0) {
+                    $waktu = 76 - ((((1.76 * $detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) / $detil_pekerjaan['sasaran_biaya']) * 100) - 100);
+                }
+            } else {
+                if ($detil_pekerjaan['pakai_biaya'] == '1' && $detil_pekerjaan['sasaran_biaya'] > 0) {
+                    $waktu = ((1.76 * $detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) / $detil_pekerjaan['sasaran_biaya']) * 100;
+                }
+            }
+            $penghitungan = $waktu + $kuantitas + $kualitas;
             $skor = $penghitungan / 3;
-            if ($detil_pekerjaan['pakai_biaya']) {
-                $penghitungan+=$aspek_biaya;
+            if ($detil_pekerjaan['pakai_biaya'] == '1') {
+                $penghitungan+=$biaya;
                 $skor = $penghitungan / 4;
             }
             $this->db->query("update detil_pekerjaan set progress='$penghitungan', skor='$skor' where id_detil_pekerjaan='$id_detil_pekerjaan'");
