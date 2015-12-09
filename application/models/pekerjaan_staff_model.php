@@ -90,7 +90,7 @@ class pekerjaan_staff_model extends dtpg {
 //             order by p.periode, p.tgl_mulai";
         $sql = "select 
             case when dp.tgl_read is null then '1, Belum Dilihat'
-                 when p.kategori='skp' then
+                 when p.kategori='rutin' or p.kategori='project' then
                  (
                     case when dp.sasaran_kuantitas_output <= dp.realisasi_kuantitas_output then '4, Selesai'
                         when now()::date > p.tgl_selesai::date then '5, Terlambat'

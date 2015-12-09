@@ -16,7 +16,9 @@ require_once APPPATH . '/libraries/dtpg.php';
 class aktivitas_model extends dtpg {
 
     function get_list_aktivitas_pekerjaan_datatable($id_pekerjaan = 0, $id_detil_pekerjaan = 0, $request = array()) {
-        $sql = "select ap.* , berkas.nama_files, berkas.ids
+        $sql = "select ap.* , berkas.nama_files, berkas.ids,
+                to_char(ap.waktu_mulai, 'YYYY-MM-DD HH24:MI:SS') as waktu_mulai2, 
+                to_char(ap.waktu_selesai, 'YYYY-MM-DD HH24:MI:SS') as waktu_selesai2
                 from aktivitas_pekerjaan ap
                 left join (
                     select id_aktivitas, json_agg(nama_file) as nama_files, json_agg(id_file) as ids
@@ -35,15 +37,14 @@ class aktivitas_model extends dtpg {
             array('name' => 'ids'),
             array('name' => 'status_validasi'),
             array('name' => 'kuantitas_output'),
-            
-            
             array('name' => 'angka_kredit'),
             array('name' => 'kualitas_mutu'),
             array('name' => 'biaya'),
             array('name' => 'waktu_selesai'),
             array('name' => 'id_detil_pekerjaan'),
-            
-            array('name' => 'nama_files')
+            array('name' => 'nama_files'),
+            array('name' => 'waktu_mulai2'),
+            array('name' => 'waktu_selesai2')
         );
         return $this->get_datatable($sql, $columns, $request);
     }

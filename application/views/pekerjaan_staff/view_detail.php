@@ -109,7 +109,7 @@ foreach ($users as $u) {
                                                 }
                                                 ?>
                                                 <h4 style="color: #1FB5AD;">Periode</h4>
-                                                <p style="font-size: larger"><?=  explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
+                                                <p style="font-size: larger"><?= explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
                                             </section>
                                         </div>
                                         <div class="col-md-12">
@@ -182,12 +182,13 @@ foreach ($users as $u) {
                                                             <tr>
                                                                 <th>#</th>
                                                                 <th>Nama</th>
-                                                                <th>Nilai</th>
+                                                                <th><?= in_array($pekerjaan['kategori'], array('rutin', 'project')) ? 'Nilai' : 'Progress' ?></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <?php
                                                             $counter = 0;
+                                                            $pekerjaan_rutin = in_array($pekerjaan['kategori'], array('rutin', 'project'));
                                                             foreach ($detil_pekerjaan as $dp) {
                                                                 if (!isset($user[$dp['id_akun']]))
                                                                     continue;
@@ -195,7 +196,15 @@ foreach ($users as $u) {
                                                                 echo '<tr>';
                                                                 echo '<td><a  href="' . site_url() . '/pekerjaan_staff/detail_aktivitas?id_pekerjaan=' . $pekerjaan['id_pekerjaan'] . '&id_staff=' . $dp['id_akun'] . '" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye"> Lihat Aktivitas</i></a></td>';
                                                                 echo '<td>' . $user[$dp['id_akun']]->nama . '</td>';
-                                                                echo '<td>' . number_format(floatval($dp['skor']), 2) . '</td>';
+                                                                if ($pekerjaan_rutin == true) {
+                                                                    echo '<td>' . number_format(floatval($dp['skor']), 2) . '</td>';
+                                                                } else {
+                                                                    echo '<td><div class="progress progress-striped progress-xs">'
+                                                                    . '<div style="width: ' . $dp['progress'] . '%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="' . $dp['progress'] . '" role="progressbar" class="progress-bar progress-bar-warning" title="progress ' . $dp['progress'] . '%">'
+                                                                    . '<span class="sr-only">' . $dp['progress'] . '% Complete (success)</span>'
+                                                                    . '</div>'
+                                                                    . '</div></td>';
+                                                                }
                                                                 echo '</tr>';
                                                             }
                                                             ?>
@@ -353,7 +362,7 @@ foreach ($users as $u) {
                                         </div>
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                          ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                           ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>

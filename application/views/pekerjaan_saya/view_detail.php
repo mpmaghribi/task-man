@@ -80,7 +80,7 @@ $list_tingkat_manfaat = array(
                                                 }
                                                 ?>
                                                 <h4 style="color: #1FB5AD;">Periode</h4>
-                                                <p style="font-size: larger"><?= $pekerjaan['kategori'] == 'rutin' ? $pekerjaan['periode'] : explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
+                                                <p style="font-size: larger"><?= $pekerjaan['tanggal_mulai'] . ' - ' . $pekerjaan['tanggal_selesai'] ?></p>
                                             </section>
                                         </div>
                                         <div class="col-md-12">
@@ -349,11 +349,11 @@ $list_tingkat_manfaat = array(
                                                             </tr>
                                                             <tr>
                                                                 <th>Penghitungan</th>
-                                                                <td colspan="5"><?= $detil_pekerjaan['progress'] ?></td>
+                                                                <td colspan="5"><?= number_format($detil_pekerjaan['progress'],2) ?></td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Nilai SKP</th>
-                                                                <td colspan="5"><?= $detil_pekerjaan['skor'] ?></td>
+                                                                <td colspan="5"><?= number_format($detil_pekerjaan['skor'],2) ?></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

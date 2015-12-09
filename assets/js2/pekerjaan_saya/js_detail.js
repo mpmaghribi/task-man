@@ -31,9 +31,9 @@ $(document).ready(function () {
         init_tabel_aktivitas();
     } else {
         $('#tabel_aktivitas').hide();
-
         init_tabel_progress();
     }
+    init_tabel_file_progress();
     init_tampilan_form_tambah_aktivitas();
     if (detil_pekerjaan['status'] == 'locked') {
         $('#button_tampilkan_form_aktivitas').attr({onclick: ''}).html('Locked');
@@ -41,6 +41,37 @@ $(document).ready(function () {
 //    $('#jam_selesai_baru').timepicker();
 //$('#waktu_selesai_baru').datepicker();
 });
+var tabel_file_progress = null;
+function init_tabel_file_progress() {
+    if (tabel_file_progress != null) {
+        tabel_file_progress.fnDestroy();
+    }
+    tabel_file_progress = $('#table_file_progress').dataTable({
+        order: [[1, "asc"]],
+        "columnDefs": [{"targets": [2], "orderable": false}],
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            'method': 'post',
+            'data': {
+                id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
+            },
+            "url": site_url + "/aktivitas_pekerjaan/get_list_file_progress_pekerjaan_datatable",
+            "dataSrc": function (json) {
+                var jsonData = json.data;
+                return jsonData;
+            }
+        },
+        "createdRow": function (row, data, index) {
+            var id = data[0];
+
+            $('td', row).eq(0).html(index + 1);
+            $('td', row).eq(2).html('download');
+
+            $(row).attr('id', 'row_' + id)
+        }
+    });
+}
 function berkas_aktivitas_changed(elm) {
     var tabel = $('#tabel_berkas_aktivitas');
     tabel.html('');
@@ -128,7 +159,7 @@ function init_tabel_progress() {
     }
     tabel_aktivitas = $('#tabel_progress').dataTable({
         order: [[1, "asc"]],
-        "columnDefs": [{"targets": [0,6], "orderable": false}],
+        "columnDefs": [{"targets": [0, 6], "orderable": false}],
         "processing": true,
         "serverSide": true,
         "ajax": {

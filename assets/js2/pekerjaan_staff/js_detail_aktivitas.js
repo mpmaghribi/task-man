@@ -23,14 +23,15 @@ $(document).ready(function () {
         $('#tabel_aktivitas').hide();
     }
     sembunyikan_form_penilaian();
-    if (detil_pekerjaan['status'] == 'locked') {
+    if (detil_pekerjaan['locked'] == '1') {
         $('#button_lock_nilai').html('Locked');
         $('#button_lock_nilai_progress').html('Locked');
+        $('#button_validasi_semua').html('Locked');
         $('#button_tampilkan_form_penilaian').hide();
     }
 });
 function validasi_semua_aktivitas() {
-    if (detil_pekerjaan['status'] == 'locked') {
+    if (detil_pekerjaan['locked'] == '1') {
         return;
     }
     if (confirm('Anda akan memvalidasi semua aktivitas. Lanjutkan?') == false) {
@@ -42,7 +43,7 @@ function validasi_semua_aktivitas() {
     }
     $.ajax({
         type: "POST",
-        url: site_url + "/aktivitas_pekerjaan/"+fungsi_validasi,
+        url: site_url + "/aktivitas_pekerjaan/" + fungsi_validasi,
         data: {
             id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
         },
@@ -59,7 +60,7 @@ function validasi_semua_aktivitas() {
     });
 }
 function lock_nilai() {
-    if (detil_pekerjaan['status'] == 'locked') {
+    if (detil_pekerjaan['locked'] == '1') {
         return;
     }
     if (confirm('Anda akan mengunci penilaian. Lanjutkan?') == false) {
@@ -75,7 +76,7 @@ function lock_nilai() {
             if (data == 'ok') {
                 $('#button_lock_nilai').html('Locked');
                 $('#button_lock_nilai_progress').html('Locked');
-                detil_pekerjaan['status'] = 'locked';
+                detil_pekerjaan['locked'] = '1';
             } else {
                 alert(data);
             }
@@ -94,7 +95,7 @@ function sembunyikan_form_penilaian() {
 }
 var form_penilaian_showed = false;
 function tampilkan_form_penilaian() {
-    if (detil_pekerjaan['status'] == 'locked') {
+    if (detil_pekerjaan['locked'] == '1') {
         return;
     }
     $('#button_form_penilaian').html("Simpan Penilaian");
@@ -141,8 +142,8 @@ function simpan_penilaian() {
                 $('#td_real_out').html(json.realisasi_kuantitas_output + ' ' + json.satuan_kuantitas);
                 $('#td_real_mutu').html(json.realisasi_kualitas_mutu + '%');
                 $('#td_real_biaya').html(parseInt(json.pakai_biaya) == 1 ? json.realisasi_biaya : '-');
-                $('#nilai_penghitungan').html(json.progress);
-                $('#skor_skp').html(json.skor);
+                $('#nilai_penghitungan').html(parseFloat(json.progress).toFixed(2));
+                $('#skor_skp').html(parseFloat(json.skor).toFixed(2));
                 form_penilaian_showed = false;
                 $('#button_form_penilaian').html("Ubah Penilaian");
                 sembunyikan_form_penilaian();
@@ -268,7 +269,8 @@ function init_tabel_aktivitas() {
             $('td', row).eq(0).html(html);
             $('td', row).eq(1).html(index + 1);
 
-            $('td', row).eq(3).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+//            $('td', row).eq(3).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+            $('td', row).eq(3).html(data[13] + ' - ' + data[14]);
             $('td', row).eq(4).html(html_berkas);
 
             if (status_validasi == 1) {

@@ -49,7 +49,7 @@ class aktivitas_pekerjaan extends ceklogin {
         if ($detil_pekerjaan == null) {
             return 'Anda tidak termasuk dalam anggota staff yang mengerjakan pekerjaan ini';
         }
-        if ($detil_pekerjaan['status'] == 'locked') {
+        if ($detil_pekerjaan['locked'] == '1') {
             return 'Pekerjaan Anda telah di-lock. Anda tidak bisa menambahkan aktivitas';
         }
         $this->db->query("set datestyle to 'European'");
@@ -95,8 +95,8 @@ class aktivitas_pekerjaan extends ceklogin {
                 'deskripsi' => $keterangan,
                 'progress' => $nilai_progress,
                 'total_progress' => 100,
-                'waktu_mulai' => $waktu_mulai.' 08:00',
-                'waktu_selesai' => $waktu_selesai.' 16:00'
+                'waktu_mulai' => $waktu_mulai . ' 08:00',
+                'waktu_selesai' => $waktu_selesai . ' 16:00'
             );
             $this->db->insert('detil_progress', $aktivitas);
             $id_progress = $this->db->insert_id();
@@ -381,7 +381,7 @@ class aktivitas_pekerjaan extends ceklogin {
             return;
         }
         $detil_pekerjaan = $q[0];
-        if ($detil_pekerjaan['status'] == 'locked') {
+        if ($detil_pekerjaan['locked'] == '1') {
             echo 'Pekerjaan telah di-lock';
             return;
         }
@@ -397,8 +397,8 @@ class aktivitas_pekerjaan extends ceklogin {
         $this->hitung_nilai_aktivitas($id_detil_pekerjaan);
         echo 'ok';
     }
-    
-    function validasi_semua_progress(){
+
+    function validasi_semua_progress() {
         $id_detil_pekerjaan = intval($this->input->post('id_detil_pekerjaan'));
         $session = $this->session->userdata('logged_in');
         $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
@@ -412,7 +412,7 @@ class aktivitas_pekerjaan extends ceklogin {
             return;
         }
         $detil_pekerjaan = $q[0];
-        if ($detil_pekerjaan['status'] == 'locked') {
+        if ($detil_pekerjaan['locked'] == '1') {
             echo 'Pekerjaan telah di-lock';
             return;
         }
@@ -424,7 +424,7 @@ class aktivitas_pekerjaan extends ceklogin {
             return;
         }
         $pekerjaan = $q[0];
-        $my_id=$session['user_id'];
+        $my_id = $session['user_id'];
         $this->db->query("update detil_progress set validated=1, validated_by='$my_id' where id_detil_pekerjaan='$id_detil_pekerjaan'");
         $this->hitung_nilai_progress($id_detil_pekerjaan);
         echo 'ok';
@@ -484,6 +484,29 @@ class aktivitas_pekerjaan extends ceklogin {
         $id_pekerjaan = (int) $this->input->post('id_pekerjaan');
         $id_detil_pekerjaan = (int) $this->input->post('id_detil_pekerjaan');
         echo json_encode($this->aktivitas_model->get_list_progress_pekerjaan_datatable($id_pekerjaan, $id_detil_pekerjaan, $_POST));
+    }
+
+    function get_list_file_progress_pekerjaan_datatable() {
+        $id_detil_pekerjaan = intval($this->input->post('id_detil_pekerjaan'));
+        $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'detil pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $detil_pekerjaan = $q[0];
+        $id_pekerjaan = $detil_pekerjaan['id_pekerjaan'];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $pekerjaan = $q[0];
+        $this->load->model(array('berkas_model'));
+        if (in_array($pekerjaan['kategori'], array('rutin', 'project'))) {
+            echo json_encode($this->berkas_model->get_list_file_aktivitas_datatable($id_detil_pekerjaan));
+        } else {
+            echo json_encode($this->berkas_model->get_list_file_progress_datatable($id_detil_pekerjaan));
+        }
     }
 
 }

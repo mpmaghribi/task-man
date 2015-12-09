@@ -409,6 +409,9 @@ class pekerjaan_staff extends ceklogin {
         $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
         $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
         $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
+        if($kualitas_mutu>100){
+            $kualitas_mutu=100;
+        }
         $biaya = abs(floatval($this->input->post('biaya')));
         $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
         $satuan_kuantitas = $this->input->post('satuan_kuantitas');
@@ -661,7 +664,7 @@ class pekerjaan_staff extends ceklogin {
 //            echo 'Anda tidak bertanggung jawab kepada pekerjaan ini';
 //            return;
 //        }
-        $update = array('status' => 'locked');
+        $update = array('locked' => '1');
         $this->db->update('detil_pekerjaan', $update, array('id_detil_pekerjaan' => $id_detil_pekerjaan));
         echo 'ok';
     }
@@ -766,6 +769,9 @@ class pekerjaan_staff extends ceklogin {
         $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
         $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
         $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
+        if($kualitas_mutu>100){
+            $kualitas_mutu=100;
+        }
         $biaya = $this->input->post('biaya');
         $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
         $satuan_kuantitas = $this->input->post('satuan_kuantitas');
@@ -877,9 +883,9 @@ class pekerjaan_staff extends ceklogin {
             $pekerjaan_project = $kategori_pakerjaan == 'project';
             foreach ($list_id_staff_enroll as $id_staff) {
                 $detil_pekerjaan = array(
-                    'id_pekerjaan' => $id_pekerjaan,
-                    'id_akun' => $id_staff
-                );
+                        'id_pekerjaan' => $id_pekerjaan,
+                        'id_akun' => $id_staff
+                    );
                 if ($pekerjaan_rutin || $pekerjaan_project) {
                     $detil_pekerjaan['sasaran_angka_kredit'] = $angka_kredit;
                     $detil_pekerjaan['sasaran_kuantitas_output'] = $kuantitas_output;
@@ -896,10 +902,15 @@ class pekerjaan_staff extends ceklogin {
                     
                 }
                 if (in_array($id_staff, $list_id_detil_pekerjaan_update)) {
-                    $this->db->update('detil_pekerjaan', $detil_pekerjaan, array('id_pekerjaan' => $id_pekerjaan, 'id_akun' => $id_staff));
+//                    $this->db->where("locked", 0);
+//                    $this->db->where("id_pekerjaan", $id_pekerjaan);
+//                    $this->db->where('id_akun', $id_staff);
+                    $this->db->update('detil_pekerjaan', $detil_pekerjaan,array('locked'=>0,'id_pekerjaan'=>$id_pekerjaan,'id_akun'=>$id_staff));
                 } else {
+//                    $detil_pekerjaan = array_merge($detil_pekerjaan, );
                     $this->db->insert('detil_pekerjaan', $detil_pekerjaan);
                 }
+                echo $this->db->last_query();
             }
             foreach ($list_id_detil_pekerjaan_hapus as $id_akun) {
                 $this->db->delete('detil_pekerjaan', array('id_pekerjaan' => $id_pekerjaan, 'id_akun' => $id_akun));

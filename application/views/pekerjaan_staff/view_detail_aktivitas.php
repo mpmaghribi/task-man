@@ -146,11 +146,11 @@ $list_tingkat_manfaat = array(
                                                     </tr>
                                                     <tr>
                                                         <th>Penghitungan</th>
-                                                        <td colspan="5" id="nilai_penghitungan"><?= $detil_pekerjaan['progress'] ?></td>
+                                                        <td colspan="5" id="nilai_penghitungan"><?= number_format($detil_pekerjaan['progress'],2) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Nilai SKP</th>
-                                                        <td colspan="5" id="skor_skp"><?= $detil_pekerjaan['skor'] ?></td>
+                                                        <td colspan="5" id="skor_skp"><?= number_format($detil_pekerjaan['skor'],2) ?></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
