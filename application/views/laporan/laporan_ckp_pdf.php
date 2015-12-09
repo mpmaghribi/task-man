@@ -1,3 +1,25 @@
+<?php 
+$nama_periode=array(
+    'januari'=>'Januari',
+    'februari'=>'Februari',
+    'maret'=>'Maret',
+    'april'=>'April',
+    'mei'=>'Mei',
+    'juni'=>'Juni',
+    'juli'=>'Juli',
+    'agustus'=>'Agustus',
+    'september'=>'September',
+    'oktober'=>'Oktober',
+    'november'=>'November',
+    'desember'=>'Desember',
+    'tri_1'=>'Trisemester I',
+    'tri_2'=>'Trisemester II',
+    'tri_3'=>'Trisemester III',
+    'tri_4'=>'Trisemester IV',
+    'sms_1'=>'Semester I',
+    'sms_2'=>'Semester II'
+);
+?>
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -44,7 +66,7 @@ and open the template in the editor.
                         <div class="col-md-6">
                             <section class="panel">
                                 <div class="form">
-                                    <h2 align="center">Formulir Capaian Kerja Pegawai Negeri Sipil <?php if (isset($periode)) echo "Selama " . $periode . " Bulan" ?></h2>
+                                    <h2 align="center">Formulir Capaian Kerja Pegawai Negeri Sipil <?php if (isset($periode)) echo "Selama " . $nama_periode[$periode] . " Tahun ".$tahun ?></h2>
                                 </div>
 
                             </section>
@@ -186,6 +208,7 @@ and open the template in the editor.
                                         </thead>
                                         <tbody>
                                             <?php
+                                            $total_skor = 0;
                                             if (isset($nilai_skp)) {
                                                 $i = 1;
                                                 foreach ($nilai_skp as $value) {
@@ -193,6 +216,50 @@ and open the template in the editor.
                                                         continue;
                                                     }
 //                                                    print_r($value);
+                                                    $detil_pekerjaan = $value;
+                                                    $persen_waktu = 0;
+                                                    if ($detil_pekerjaan['sasaran_waktu'] > 0) {
+                                                        $persen_waktu = 100 - (100 * $detil_pekerjaan['realisasi_waktu'] / $detil_pekerjaan['sasaran_waktu']);
+                                                    }
+                                                    $persen_biaya = 0;
+                                                    if ($detil_pekerjaan['pakai_biaya'] == '1' && $detil_pekerjaan['sasaran_biaya'] > 0) {
+                                                        $persen_biaya = 100 - (100 * $detil_pekerjaan['realisasi_biaya'] / $detil_pekerjaan['sasaran_biaya']);
+                                                    }
+                                                    $kuantitas = 0;
+                                                    if ($detil_pekerjaan['sasaran_kuantitas_output'] > 0) {
+                                                        $kuantitas = 100 * $detil_pekerjaan['realisasi_kuantitas_output'] / $detil_pekerjaan['sasaran_kuantitas_output'];
+                                                    }
+                                                    $kualitas = 0;
+                                                    if ($detil_pekerjaan['sasaran_kualitas_mutu'] > 0) {
+                                                        $kualitas = 100 * $detil_pekerjaan['realisasi_kualitas_mutu'] / $detil_pekerjaan['sasaran_kualitas_mutu'];
+                                                    }
+                                                    $waktu = 0;
+                                                    if ($persen_waktu > 24) {
+                                                        if ($detil_pekerjaan['sasaran_waktu'] > 0) {
+                                                            $waktu = 76 - ((((1.76 * $detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) / $detil_pekerjaan['sasaran_waktu']) * 100) - 100);
+                                                        }
+                                                    } else {
+                                                        if ($detil_pekerjaan['sasaran_waktu'] > 0) {
+                                                            $waktu = ((1.76 * $detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) / $detil_pekerjaan['sasaran_waktu']) * 100;
+                                                        }
+                                                    }
+                                                    $biaya = 0;
+                                                    if ($persen_biaya > 24) {
+                                                        if ($detil_pekerjaan['pakai_biaya'] == '1' && $detil_pekerjaan['sasaran_biaya'] > 0) {
+                                                            $waktu = 76 - ((((1.76 * $detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) / $detil_pekerjaan['sasaran_biaya']) * 100) - 100);
+                                                        }
+                                                    } else {
+                                                        if ($detil_pekerjaan['pakai_biaya'] == '1' && $detil_pekerjaan['sasaran_biaya'] > 0) {
+                                                            $waktu = ((1.76 * $detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) / $detil_pekerjaan['sasaran_biaya']) * 100;
+                                                        }
+                                                    }
+                                                    $penghitungan = $waktu + $kuantitas + $kualitas;
+                                                    $skor = $penghitungan / 3;
+                                                    if ($detil_pekerjaan['pakai_biaya'] == '1') {
+                                                        $penghitungan+=$biaya;
+                                                        $skor = $penghitungan / 4;
+                                                    }
+                                                    $total_skor+=$skor;
                                                     ?>
                                                     <tr>
                                                         <td align="center"><?php echo $i; ?></td>
@@ -207,15 +274,21 @@ and open the template in the editor.
                                                         <td  align="center" style="vertical-align: middle"><?php echo $value['realisasi_kualitas_mutu'] ?>%</td>
                                                         <td  align="center" style="vertical-align: middle"><?php echo intval($value['realisasi_waktu']) . ' Bulan'; ?></td>
                                                         <td  align="center" style="vertical-align: middle"><?php echo ($value['pakai_biaya'] == '1' ? 'Rp. ' . number_format($value['realisasi_biaya'], 2, ',', '.') : '-') ?></td>
-                                                        <td  align="center" style="vertical-align: middle"><?php echo $value['progress'] ?></td>
-                                                        <td  align="center" style="vertical-align: middle"><?php echo $value['skor'] ?></td>
+                                                        <td  align="center" style="vertical-align: middle"><?php echo number_format($penghitungan, 2) ?></td>
+                                                        <td  align="center" style="vertical-align: middle"><?php echo number_format($skor, 2) ?></td>
                                                     </tr>
                                                     <?php
                                                     $i++;
                                                 }
                                             }
                                             ?>
-
+                                            <tr>
+                                                <td align="center" style="vertical-align: middle" rowspan="2" colspan="13">Nilai Capaian SKP</td>
+                                                <td align="center" style="vertical-align: middle"><?= number_format($total_skor, 2) ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center" style="vertical-align: middle"><?= $total_skor<=50?'Buruk':($total_skor<=60?'Sedang':($total_skor<=75?'Cukup':($total_skor<=90.99?'Baik':'Sangat Baik'))) ?></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -335,7 +408,7 @@ and open the template in the editor.
 
         <script>
                         function req_notifikasi() {
-
+                            
                         }
                         function req_pending_task() {
                             $.ajax({// create an AJAX call...

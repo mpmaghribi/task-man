@@ -1,3 +1,25 @@
+<?php 
+$nama_periode=array(
+    'januari'=>'Januari',
+    'februari'=>'Februari',
+    'maret'=>'Maret',
+    'april'=>'April',
+    'mei'=>'Mei',
+    'juni'=>'Juni',
+    'juli'=>'Juli',
+    'agustus'=>'Agustus',
+    'september'=>'September',
+    'oktober'=>'Oktober',
+    'november'=>'November',
+    'desember'=>'Desember',
+    'tri_1'=>'Trisemester I',
+    'tri_2'=>'Trisemester II',
+    'tri_3'=>'Trisemester III',
+    'tri_4'=>'Trisemester IV',
+    'sms_1'=>'Semester I',
+    'sms_2'=>'Semester II'
+);
+?>
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -19,6 +41,7 @@ and open the template in the editor.
             .tabel_pdf_staff{
                 //border: #000 thin thin;
                 width: 100%;
+                border-collapse: collapse;
             }
             thead th{
                 border: #000 solid thin;
@@ -39,7 +62,7 @@ and open the template in the editor.
                         <div class="col-md-6">
                             <section class="panel">
                                 <div class="form">
-                                    <h2 align="center">Formulir Sasaran Kerja Pegawai Negeri Sipil <?php if (isset($periode)) echo "Selama " . $periode . " Bulan" ?></h2>
+                                    <h2 align="center">Formulir Sasaran Kerja Pegawai Negeri Sipil <?php if (isset($periode)) echo "Selama " . $nama_periode[$periode] . " Tahun ".$tahun ?></h2>
                                 </div>
 
                             </section>

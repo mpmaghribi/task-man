@@ -378,6 +378,7 @@ class laporan extends CI_Controller {
         $data["departemen"] = $this->input->get("nama_departemen2");
         $data["nama"] = $this->input->get("nama2");
         $data["nip"] = $this->input->get("nip2");
+        $data['tahun']=$tahun;
         $this->load->helper(array('pdf', 'date'));
         $filename = 'Laporan CKP Per Periode.pdf';
         $data['state'] = 'Report';
@@ -386,12 +387,13 @@ class laporan extends CI_Controller {
         $data['temp'] = $temp;
         $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
         $data['pkj_karyawan'] = $result;
-        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, false);
-        //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
-//        header("Content-type:application/pdf");
+//        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, false);
+        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, true);
+        header("Content-type:application/pdf");
+        echo generate_pdf($html, $filename, false);
+//$pdf->WriteHTML($html, isset($_GET['vuehtml']));
         // It will be called downloaded.pdf
-        //header("Content-Disposition:attachment;filename=" . $filename);
-//        echo generate_pdf($html, $filename, false);
+//        header("Content-Disposition:attachment;filename=" . $filename);
     }
 
     function laporan_per_periode() {
@@ -479,6 +481,7 @@ class laporan extends CI_Controller {
 //        echo $this->db->last_query();
         $data['tanggal_min'] = $tanggal_min;
         $data['tanggal_max'] = $tanggal_max;
+        $data['tahun']=$tahun;
         $data["jabatan"] = $this->input->get("nama_jabatan");
         $data["departemen"] = $this->input->get("nama_departemen");
         $data["nama"] = $this->input->get("nama");
@@ -491,12 +494,12 @@ class laporan extends CI_Controller {
         $data['temp'] = $temp;
         $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
         $data['pkj_karyawan'] = $result;
-        $html = $this->load->view('laporan/laporan_pekerjaan_pdf', $data, false);
+        $html = $this->load->view('laporan/laporan_pekerjaan_pdf', $data, true);
         //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
-//        header("Content-type:application/pdf");
+        header("Content-type:application/pdf");
         // It will be called downloaded.pdf
         //header("Content-Disposition:attachment;filename=" . $filename);
-//        echo generate_pdf($html, $filename, false);
+        echo generate_pdf($html, $filename, false);
     }
 
     function exportToExcel() {

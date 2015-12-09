@@ -149,6 +149,7 @@
                                                     <option value="tri_1">Triwulan I</option>
                                                     <option value="tri_2">Triwulan II</option>
                                                     <option value="tri_3">Triwulan III</option>
+                                                    <option value="tri_4">Triwulan IV</option>
                                                     <option value="sms_1">Semester I</option>
                                                     <option value="sms_2">Semester II</option>
                                                 </select>
@@ -213,6 +214,7 @@
                                                     <option value="tri_1">Triwulan I</option>
                                                     <option value="tri_2">Triwulan II</option>
                                                     <option value="tri_3">Triwulan III</option>
+                                                    <option value="tri_4">Triwulan IV</option>
                                                     <option value="sms_1">Semester I</option>
                                                     <option value="sms_2">Semester II</option>
                                                 </select>
