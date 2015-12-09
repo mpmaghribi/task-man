@@ -112,7 +112,7 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h4 class="modal-title">Pilih Periode Yang Anda Ingin Eksport</h4>
                             </div>
-                            <form action="<?php echo site_url() ?>/laporan/laporan_per_periode" method="GET">
+                            <form action="<?php echo site_url() ?>/laporan/laporan_per_periode" method="GET" target="_blank">
                                 <div class="modal-body">
 
                                     <input type="hidden" id="id_akun" name="id_akun" value="" />
@@ -134,6 +134,18 @@
                                             <label class="control-label col-lg-3">Periode</label>
                                             <div class="col-lg-8">
                                                 <select name="periode" class="form-control m-bot15">
+                                                    <option value="januari">Januari</option>
+                                                    <option value="februari">Februari</option>
+                                                    <option value="maret">Maret</option>
+                                                    <option value="april">April</option>
+                                                    <option value="mei">Mei</option>
+                                                    <option value="juni">Juni</option>
+                                                    <option value="juli">Juli</option>
+                                                    <option value="agustus">Agustus</option>
+                                                    <option value="september">September</option>
+                                                    <option value="oktober">Oktober</option>
+                                                    <option value="november">November</option>
+                                                    <option value="desember">Desember</option>
                                                     <option value="tri_1">Triwulan I</option>
                                                     <option value="tri_2">Triwulan II</option>
                                                     <option value="tri_3">Triwulan III</option>
@@ -164,7 +176,7 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h4 class="modal-title">Pilih Periode Yang Anda Ingin Eksport</h4>
                             </div>
-                            <form action="<?php echo site_url() ?>/laporan/laporan_ckp_per_periode" method="GET">
+                            <form action="<?php echo site_url() ?>/laporan/laporan_ckp_per_periode" method="GET" target="_blank">
                                 <div class="modal-body">
 
                                     <input type="hidden" id="id_akun2" name="id_akun2" value="" />
@@ -186,6 +198,18 @@
                                             <label class="control-label col-lg-3">Periode</label>
                                             <div class="col-lg-8">
                                                 <select name="periode2" class="form-control m-bot15">
+                                                    <option value="januari">Januari</option>
+                                                    <option value="februari">Februari</option>
+                                                    <option value="maret">Maret</option>
+                                                    <option value="april">April</option>
+                                                    <option value="mei">Mei</option>
+                                                    <option value="juni">Juni</option>
+                                                    <option value="juli">Juli</option>
+                                                    <option value="agustus">Agustus</option>
+                                                    <option value="september">September</option>
+                                                    <option value="oktober">Oktober</option>
+                                                    <option value="november">November</option>
+                                                    <option value="desember">Desember</option>
                                                     <option value="tri_1">Triwulan I</option>
                                                     <option value="tri_2">Triwulan II</option>
                                                     <option value="tri_3">Triwulan III</option>

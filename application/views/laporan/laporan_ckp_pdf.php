@@ -189,20 +189,24 @@ and open the template in the editor.
                                             if (isset($nilai_skp)) {
                                                 $i = 1;
                                                 foreach ($nilai_skp as $value) {
+                                                    if (!in_array($value['kategori'], array('rutin', 'project'))) {
+                                                        continue;
+                                                    }
+//                                                    print_r($value);
                                                     ?>
                                                     <tr>
                                                         <td align="center"><?php echo $i; ?></td>
                                                         <td  align="justify"><?php echo $value['nama_pekerjaan'] ?></td>
                                                         <td  align="center" style="vertical-align: middle"><?php echo $value['sasaran_angka_kredit'] ?></td>
                                                         <td  align="center" style="vertical-align: middle"><?php echo $value['sasaran_kuantitas_output'] . ' ' . $value['satuan_kuantitas'] ?></td>
-                                                        <td  align="center" style="vertical-align: middle"><?php echo $value['sasaran_kualitas_mutu'] ?></td>
+                                                        <td  align="center" style="vertical-align: middle"><?php echo $value['sasaran_kualitas_mutu'] ?>%</td>
                                                         <td  align="center" style="vertical-align: middle"><?php echo $value['sasaran_waktu'] . ' Bulan'; ?></td>
-                                                        <td  align="center" style="vertical-align: middle"><?php echo ($value['pakai_biaya']=='1'?'Rp. '.  number_format($value['sasaran_biaya'],2,',','.'):'-')?></td>
+                                                        <td  align="center" style="vertical-align: middle"><?php echo ($value['pakai_biaya'] == '1' ? 'Rp. ' . number_format($value['sasaran_biaya'], 2, ',', '.') : '-') ?></td>
                                                         <td  align="center" style="vertical-align: middle"><?php echo $value['realisasi_angka_kredit'] ?></td>
-                                                        <td  align="center" style="vertical-align: middle"><?php echo $value['realisasi_kuantitas_output'] . ' ' . $value['satuan_kuantitas'] ?></td>
-                                                        <td  align="center" style="vertical-align: middle"><?php echo $value['realisasi_kualitas_mutu'] ?></td>
-                                                        <td  align="center" style="vertical-align: middle"><?php echo $value['realisasi_waktu'] . ' Bulan'; ?></td>
-                                                        <td  align="center" style="vertical-align: middle"><?php echo ($value['pakai_biaya']=='1'?'Rp. '.  number_format($value['realisasi_biaya'],2,',','.'):'-')?></td>
+                                                        <td  align="center" style="vertical-align: middle"><?php echo intval($value['realisasi_kuantitas_output']) . ' ' . $value['satuan_kuantitas'] ?></td>
+                                                        <td  align="center" style="vertical-align: middle"><?php echo $value['realisasi_kualitas_mutu'] ?>%</td>
+                                                        <td  align="center" style="vertical-align: middle"><?php echo intval($value['realisasi_waktu']) . ' Bulan'; ?></td>
+                                                        <td  align="center" style="vertical-align: middle"><?php echo ($value['pakai_biaya'] == '1' ? 'Rp. ' . number_format($value['realisasi_biaya'], 2, ',', '.') : '-') ?></td>
                                                         <td  align="center" style="vertical-align: middle"><?php echo $value['progress'] ?></td>
                                                         <td  align="center" style="vertical-align: middle"><?php echo $value['skor'] ?></td>
                                                     </tr>

@@ -178,6 +178,9 @@ and open the template in the editor.
 //                                                print_r($nilai_skp);
                                                 $i = 1;
                                                 foreach ($nilai_skp as $value) {
+                                                    if(!in_array($value['kategori'], array('rutin','project'))){
+                                                        continue;
+                                                    }
                                                     ?>
 
                                                     <tr>

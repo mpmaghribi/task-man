@@ -281,6 +281,7 @@ class laporan extends CI_Controller {
     function laporan_ckp_per_periode() {
         $temp = $this->session->userdata("logged_in");
         $periode = $this->input->get("periode2");
+        $tahun = intval($this->input->get('tahun2'));
         $data["periode"] = $periode;
         $data["data_akun"] = $this->session->userdata("logged_in");
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat laporan pekerjaan per periode dari para staffnya.");
@@ -294,7 +295,85 @@ class laporan extends CI_Controller {
         $data["nama_penilai"] = $jabatan[0]->nama;
         $data["nip_penilai"] = $jabatan[0]->nip;
         $id = $this->input->get("id_akun2");
-        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
+//        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
+        $tanggal_min = $tahun . '-01-01';
+        $tanggal_max = $tahun . '-12-31';
+        if ($periode == 'januari') {
+            $tanggal_min = $tahun . '-01-01';
+            $tanggal_max = $tahun . '-02-01';
+        } else if ($periode == 'februari') {
+            $tanggal_min = $tahun . '-02-01';
+            $tanggal_max = $tahun . '-03-01';
+        } else if ($periode == 'maret') {
+            $tanggal_min = $tahun . '-03-01';
+            $tanggal_max = $tahun . '-04-01';
+        } else if ($periode == 'april') {
+            $tanggal_min = $tahun . '-04-01';
+            $tanggal_max = $tahun . '-05-01';
+        } else if ($periode == 'mei') {
+            $tanggal_min = $tahun . '-05-01';
+            $tanggal_max = $tahun . '-06-01';
+        } else if ($periode == 'juni') {
+            $tanggal_min = $tahun . '-06-01';
+            $tanggal_max = $tahun . '-07-01';
+        } else if ($periode == 'juli') {
+            $tanggal_min = $tahun . '-07-01';
+            $tanggal_max = $tahun . '-08-01';
+        } else if ($periode == 'agustus') {
+            $tanggal_min = $tahun . '-08-01';
+            $tanggal_max = $tahun . '-09-01';
+        } else if ($periode == 'september') {
+            $tanggal_min = $tahun . '-09-01';
+            $tanggal_max = $tahun . '-10-01';
+        } else if ($periode == 'oktober') {
+            $tanggal_min = $tahun . '-10-01';
+            $tanggal_max = $tahun . '-11-01';
+        } else if ($periode == 'november') {
+            $tanggal_min = $tahun . '-11-01';
+            $tanggal_max = $tahun . '-12-01';
+        } else if ($periode == 'desember') {
+            $tanggal_min = $tahun . '-12-01';
+            $tanggal_max = ($tahun + 1) . '-01-01';
+        } else if ($periode == 'tri_1') {
+            $tanggal_min = $tahun . '-01-01';
+            $tanggal_max = $tahun . '-04-01';
+        } else if ($periode == 'tri_2') {
+            $tanggal_min = $tahun . '-04-01';
+            $tanggal_max = $tahun . '-07-01';
+        } else if ($periode == 'tri_3') {
+            $tanggal_min = $tahun . '-07-01';
+            $tanggal_max = $tahun . '-10-01';
+        } else if ($periode == 'tri_4') {
+            $tanggal_min = $tahun . '-10-01';
+            $tanggal_max = ($tahun + 1) . '-01-01';
+        } else if ($periode == 'sms_1') {
+            $tanggal_min = $tahun . '-01-01';
+            $tanggal_max = $tahun . '-07-01';
+        } else if ($periode == 'sms_2') {
+            $tanggal_min = $tahun . '-07-01';
+            $tanggal_max = ($tahun + 1) . '-01-01';
+        }
+        $data["nilai_skp"] = $this->db->query("select p.*, "
+                        . "dp.sasaran_angka_kredit, dp.sasaran_kuantitas_output, dp.sasaran_kualitas_mutu,"
+                        . "dp.sasaran_waktu, dp.sasaran_biaya, dp.pakai_biaya, dp.satuan_kuantitas,"
+                        . "dp.realisasi_angka_kredit, dp.realisasi_kualitas_mutu, dp.realisasi_biaya,"
+                        . "ak.*, ((date_part('year',waktu_max) - date_part('year',waktu_min))*12) + (date_part('month',waktu_max) - date_part('month',waktu_min) + case when date_part('day',waktu_max)-date_part('day',waktu_min) > 0 then 1 else 0 end) as realisasi_waktu, "
+                        . "case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori "
+                        . "from pekerjaan p "
+                        . "inner join detil_pekerjaan dp on dp.id_pekerjaan=p.id_pekerjaan "
+                        . "left join ("
+                        . "select ak.id_detil_pekerjaan, coalesce(sum(ak.kuantitas_output),0) as realisasi_kuantitas_output, min(ak.waktu_mulai) as waktu_min, max(ak.waktu_selesai) as waktu_max  "
+                        . "from aktivitas_pekerjaan ak "
+                        . "where to_date('$tanggal_min','YYYY-MM-DD') <= ak.waktu_mulai and ak.waktu_selesai < to_date('$tanggal_max','YYYY-MM-DD') "
+                        . "group by ak.id_detil_pekerjaan "
+                        . ") as ak on ak.id_detil_pekerjaan=dp.id_detil_pekerjaan "
+                        . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
+//                        . "and  to_date('$tanggal_min','YYYY-MM-DD') <= p.tgl_mulai  and p.tgl_selesai <= to_date('$tanggal_max','YYYY-MM-DD') "
+                        . "and (date_part('year',tgl_mulai)='$tahun' or date_part('year',tgl_selesai)='$tahun') "
+                        . "order by urutan_kategori")->result_array();
+//        echo $this->db->last_query();
+        $data['tanggal_min'] = $tanggal_min;
+        $data['tanggal_max'] = $tanggal_max;
         $data["jabatan"] = $this->input->get("nama_jabatan2");
         $data["departemen"] = $this->input->get("nama_departemen2");
         $data["nama"] = $this->input->get("nama2");
@@ -307,18 +386,18 @@ class laporan extends CI_Controller {
         $data['temp'] = $temp;
         $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
         $data['pkj_karyawan'] = $result;
-        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, true);
+        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, false);
         //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
-        header("Content-type:application/pdf");
-
+//        header("Content-type:application/pdf");
         // It will be called downloaded.pdf
         //header("Content-Disposition:attachment;filename=" . $filename);
-        echo generate_pdf($html, $filename, false);
+//        echo generate_pdf($html, $filename, false);
     }
 
     function laporan_per_periode() {
         $temp = $this->session->userdata("logged_in");
         $periode = $this->input->get("periode");
+        $tahun = intval($this->input->get('tahun'));
         $data["periode"] = $periode;
         $data["data_akun"] = $this->session->userdata("logged_in");
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat laporan pekerjaan per periode dari para staffnya.");
@@ -332,7 +411,74 @@ class laporan extends CI_Controller {
         $data["nama_penilai"] = $jabatan[0]->nama;
         $data["nip_penilai"] = $jabatan[0]->nip;
         $id = $this->input->get("id_akun");
-        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
+//        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
+        $tanggal_min = $tahun . '-01-01';
+        $tanggal_max = $tahun . '-12-31';
+        if ($periode == 'januari') {
+            $tanggal_min = $tahun . '-01-01';
+            $tanggal_max = $tahun . '-02-01';
+        } else if ($periode == 'februari') {
+            $tanggal_min = $tahun . '-02-01';
+            $tanggal_max = $tahun . '-03-01';
+        } else if ($periode == 'maret') {
+            $tanggal_min = $tahun . '-03-01';
+            $tanggal_max = $tahun . '-04-01';
+        } else if ($periode == 'april') {
+            $tanggal_min = $tahun . '-04-01';
+            $tanggal_max = $tahun . '-05-01';
+        } else if ($periode == 'mei') {
+            $tanggal_min = $tahun . '-05-01';
+            $tanggal_max = $tahun . '-06-01';
+        } else if ($periode == 'juni') {
+            $tanggal_min = $tahun . '-06-01';
+            $tanggal_max = $tahun . '-07-01';
+        } else if ($periode == 'juli') {
+            $tanggal_min = $tahun . '-07-01';
+            $tanggal_max = $tahun . '-08-01';
+        } else if ($periode == 'agustus') {
+            $tanggal_min = $tahun . '-08-01';
+            $tanggal_max = $tahun . '-09-01';
+        } else if ($periode == 'september') {
+            $tanggal_min = $tahun . '-09-01';
+            $tanggal_max = $tahun . '-10-01';
+        } else if ($periode == 'oktober') {
+            $tanggal_min = $tahun . '-10-01';
+            $tanggal_max = $tahun . '-11-01';
+        } else if ($periode == 'november') {
+            $tanggal_min = $tahun . '-11-01';
+            $tanggal_max = $tahun . '-12-01';
+        } else if ($periode == 'desember') {
+            $tanggal_min = $tahun . '-12-01';
+            $tanggal_max = ($tahun + 1) . '-01-01';
+        } else if ($periode == 'tri_1') {
+            $tanggal_min = $tahun . '-01-01';
+            $tanggal_max = $tahun . '-04-01';
+        } else if ($periode == 'tri_2') {
+            $tanggal_min = $tahun . '-04-01';
+            $tanggal_max = $tahun . '-07-01';
+        } else if ($periode == 'tri_3') {
+            $tanggal_min = $tahun . '-07-01';
+            $tanggal_max = $tahun . '-10-01';
+        } else if ($periode == 'tri_4') {
+            $tanggal_min = $tahun . '-10-01';
+            $tanggal_max = ($tahun + 1) . '-01-01';
+        } else if ($periode == 'sms_1') {
+            $tanggal_min = $tahun . '-01-01';
+            $tanggal_max = $tahun . '-07-01';
+        } else if ($periode == 'sms_2') {
+            $tanggal_min = $tahun . '-07-01';
+            $tanggal_max = ($tahun + 1) . '-01-01';
+        }
+        $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori "
+                        . "from pekerjaan p "
+                        . "inner join detil_pekerjaan dp on dp.id_pekerjaan=p.id_pekerjaan "
+                        . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
+//                        . "and  to_date('$tanggal_min','YYYY-MM-DD') <= p.tgl_mulai  and p.tgl_selesai <= to_date('$tanggal_max','YYYY-MM-DD') "
+                        . "and (date_part('year',tgl_mulai)='$tahun' or date_part('year',tgl_selesai)='$tahun') "
+                        . "order by urutan_kategori")->result_array();
+//        echo $this->db->last_query();
+        $data['tanggal_min'] = $tanggal_min;
+        $data['tanggal_max'] = $tanggal_max;
         $data["jabatan"] = $this->input->get("nama_jabatan");
         $data["departemen"] = $this->input->get("nama_departemen");
         $data["nama"] = $this->input->get("nama");
@@ -345,13 +491,12 @@ class laporan extends CI_Controller {
         $data['temp'] = $temp;
         $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
         $data['pkj_karyawan'] = $result;
-        $html = $this->load->view('laporan/laporan_pekerjaan_pdf', $data, true);
+        $html = $this->load->view('laporan/laporan_pekerjaan_pdf', $data, false);
         //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
-        header("Content-type:application/pdf");
-
+//        header("Content-type:application/pdf");
         // It will be called downloaded.pdf
         //header("Content-Disposition:attachment;filename=" . $filename);
-        echo generate_pdf($html, $filename, false);
+//        echo generate_pdf($html, $filename, false);
     }
 
     function exportToExcel() {
