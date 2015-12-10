@@ -21,10 +21,10 @@ $(document).ready(function () {
     var waktu_selesai_baru = $('#waktu_selesai_baru').datepicker({
         format: 'dd-mm-yyyy',
         onRender: function (date) {
-//            console.log(waktu_mulai_baru.date);
             return date < date_min || date > date_max || waktu_mulai_baru.date > date ? 'disabled' : '';
         }
     }).data('datepicker');
+    
     if (pekerjaan['kategori'] == 'rutin' || pekerjaan['kategori'] == 'project') {
         $('#tabel_progress').hide();
         $('#div_penilaian_skp').show();

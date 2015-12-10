@@ -224,7 +224,7 @@
                                                 <div class="form-group " >
                                                     <label for="prioritas" class="control-label col-lg-3">Pekerjaan</label>
                                                     <div class="col-lg-6" id="">
-                                                        <select class="form-control" id="tugas_select_pekerjaan" name="periode">
+                                                        <select class="form-control" id="tugas_select_pekerjaan" name="id_pekerjaan">
                                                         </select>
                                                     </div>
                                                 </div>
@@ -249,9 +249,9 @@
                                                     <label for="prioritas" class="control-label col-lg-3">Deadline</label>
                                                     <div class="col-lg-6" id="div_periode_tanggal">
                                                         <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                                                            <input readonly type="text" class="form-control" value="" name="tgl_mulai">
+                                                            <input readonly type="text" class="form-control" value="" name="tgl_mulai" id="tugas_tanggal_mulai">
                                                             <span class="input-group-addon">Sampai</span>
-                                                            <input readonly type="text" class="form-control" value="" name="tgl_selesai">
+                                                            <input readonly type="text" class="form-control" value="" name="tgl_selesai" id="tugas_tanggal_selesai">
                                                         </div>
                                                     </div>
                                                 </div>

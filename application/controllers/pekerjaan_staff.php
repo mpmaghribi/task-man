@@ -95,6 +95,43 @@ class pekerjaan_staff extends ceklogin {
 ////        $this->mark_read($my_id, $id_pekerjaan);
 //        $this->load->view('pekerjaan_staff/view_detail_kreativitas', $data);
 //    }
+    function detail_tugas() {
+        $session = $this->session->userdata('logged_in');
+        $id_tugas = intval($this->input->get('id_tugas'));
+        $q = $this->db->query("select * from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
+        if (count($q) <= 0) {
+            redirect(site_url() . '/pekerjaan_staff');
+            return;
+        }
+        $tugas = $q[0];
+        $id_pekerjaan = $tugas['id_pekerjaan'];
+        $q = $this->db->query("select *, to_char(tgl_mulai, 'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai from pekerjaan inner join sifat_pekerjaan on sifat_pekerjaan.id_sifat_pekerjaan=pekerjaan.id_sifat_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            redirect(site_url() . '/pekerjaan_staff');
+            return;
+        }
+        $list_id_staff_tugas = explode(',', str_replace('{', '', str_replace('}', '', $tugas['id_akun'])));
+        $pekerjaan = $q[0];
+        $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $list_id_staff = array();
+        foreach ($detil_pekerjaan as $dp) {
+            $list_id_staff[] = $dp['id_akun'];
+        }
+        foreach ($list_id_staff_tugas as $key => $val) {
+            if (!in_array($val, $list_id_staff)) {
+                unset($list_id_staff_tugas[$key]);
+            }
+        }
+        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $list_user = json_decode(file_get_contents($url));
+        $data = array(
+            'list_id_staff' => $list_id_staff_tugas,
+            'pekerjaan' => $pekerjaan,
+            'users'=>$list_user,
+            'data_akun'=>$session
+        );
+        $this->load->view('pekerjaan_staff/view_detail_tugas', $data);
+    }
 
     function detail() {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
@@ -404,6 +441,48 @@ class pekerjaan_staff extends ceklogin {
 //            redirect(site_url() . '/pekerjaan_staff');
 //        }
 //    }
+    function add_tugas() {
+        $session = $this->session->userdata('logged_in');
+        $id_pekerjaan = intval($this->input->post('id_pekerjaan'));
+        $list_id_enroll = $this->input->post('staff_enroll');
+        $deskripsi = $this->input->post('deskripsi_pkj');
+        $tgl_mulai = $this->input->post('tgl_mulai');
+        $tgl_selesai = $this->input->post('tgl_selesai');
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo '';
+            redirect(site_url() . '/pekerjaan_staff');
+            return;
+        }
+        $pekerjaan = $q[0];
+        if ($pekerjaan['id_penanggung_jawab'] != $session['user_id']) {
+            redirect(site_url() . '/pekerjaan_staff');
+            return;
+        }
+        $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $list_id_anggota = array();
+        foreach ($detil_pekerjaan as $dp) {
+            if (in_array($dp['id_akun'], $list_id_anggota)) {
+                continue;
+            }
+            $list_id_anggota[] = $dp['id_akun'];
+        }
+        foreach ($list_id_enroll as $key => $id_enroll) {
+            if (!in_array($id_enroll, $list_id_anggota)) {
+                unset($list_id_anggota[$key]);
+            }
+        }
+        if (count($list_id_enroll) <= 0) {
+            redirect(site_url() . '/pekerjaan_staff');
+            return;
+        }
+        $id_akun = '{' . implode(',', $list_id_enroll) . '}';
+        $this->db->query("set datestyle to 'ISO, DMY'");
+        $this->db->query("insert into assign_tugas (id_akun,deskripsi,tanggal_mulai,tanggal_selesai,id_pekerjaan) values('$id_akun','$deskripsi','$tgl_mulai','$tgl_selesai',$id_pekerjaan)");
+        $id_assign = $this->db->insert_id();
+        echo "id assign $id_assign";
+        redirect(site_url() . '/pekerjaan_staff/detail_tugas?id_tugas=' . $id_assign);
+    }
 
     function add() {
         $session = $this->session->userdata('logged_in');
@@ -424,8 +503,8 @@ class pekerjaan_staff extends ceklogin {
         $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
         $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
         $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
-        if($kualitas_mutu>100){
-            $kualitas_mutu=100;
+        if ($kualitas_mutu > 100) {
+            $kualitas_mutu = 100;
         }
         $biaya = abs(floatval($this->input->post('biaya')));
         $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
@@ -799,8 +878,8 @@ class pekerjaan_staff extends ceklogin {
         $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
         $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
         $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
-        if($kualitas_mutu>100){
-            $kualitas_mutu=100;
+        if ($kualitas_mutu > 100) {
+            $kualitas_mutu = 100;
         }
         $biaya = $this->input->post('biaya');
         $pakai_biaya = abs(intval($this->input->post('pakai_biaya')));
@@ -913,9 +992,9 @@ class pekerjaan_staff extends ceklogin {
             $pekerjaan_project = $kategori_pakerjaan == 'project';
             foreach ($list_id_staff_enroll as $id_staff) {
                 $detil_pekerjaan = array(
-                        'id_pekerjaan' => $id_pekerjaan,
-                        'id_akun' => $id_staff
-                    );
+                    'id_pekerjaan' => $id_pekerjaan,
+                    'id_akun' => $id_staff
+                );
                 if ($pekerjaan_rutin || $pekerjaan_project) {
                     $detil_pekerjaan['sasaran_angka_kredit'] = $angka_kredit;
                     $detil_pekerjaan['sasaran_kuantitas_output'] = $kuantitas_output;
@@ -935,7 +1014,7 @@ class pekerjaan_staff extends ceklogin {
 //                    $this->db->where("locked", 0);
 //                    $this->db->where("id_pekerjaan", $id_pekerjaan);
 //                    $this->db->where('id_akun', $id_staff);
-                    $this->db->update('detil_pekerjaan', $detil_pekerjaan,array('locked'=>0,'id_pekerjaan'=>$id_pekerjaan,'id_akun'=>$id_staff));
+                    $this->db->update('detil_pekerjaan', $detil_pekerjaan, array('locked' => 0, 'id_pekerjaan' => $id_pekerjaan, 'id_akun' => $id_staff));
                 } else {
 //                    $detil_pekerjaan = array_merge($detil_pekerjaan, );
                     $this->db->insert('detil_pekerjaan', $detil_pekerjaan);
@@ -1059,15 +1138,16 @@ class pekerjaan_staff extends ceklogin {
         $result = $this->pekerjaan_staff_model->get_list_skp_staff($my_id, $id_staff, $periode);
         echo json_encode($result);
     }
-    function get_list_skp2(){
+
+    function get_list_skp2() {
         $session = $this->session->userdata('logged_in');
         $periode = abs(intval($this->input->get('periode')));
         $my_id = $session['user_id'];
-        $result = $this->db->query("select * from pekerjaan where id_penanggung_jawab='$my_id' and (date_part('year',tgl_mulai)='$periode') and kategori='rutin'")->result_array();
+        $result = $this->db->query("select *, to_char(tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai from pekerjaan where id_penanggung_jawab='$my_id' and (date_part('year',tgl_mulai)='$periode') and kategori='rutin'")->result_array();
         echo json_encode($result);
     }
-    
-    function get_list_detil_pekerjaan(){
+
+    function get_list_detil_pekerjaan() {
         $id_pekerjaan = intval($this->input->get('id_pekerjaan'));
         $r = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         echo json_encode($r);

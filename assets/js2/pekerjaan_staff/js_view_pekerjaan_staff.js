@@ -12,9 +12,41 @@ $(document).ready(function () {
     });
     $('#tugas_select_pekerjaan').on('change', function () {
         get_list_detil_pekerjaan();
+        change_deadline_tugas();
     });
     init_list_pekerjaan_untuk_pekerjaan();
 });
+function change_deadline_tugas() {
+    var id_pekerjaan = $('#tugas_select_pekerjaan').val();
+    var p = list_pekerjaan[id_pekerjaan];
+    var tanggal_bawah_arr = p['tanggal_mulai'].split('-');
+    var tanggal_atas_arr = p['tanggal_selesai'].split('-');
+    var tanggal_bawah = new Date(parseInt(tanggal_bawah_arr[0]), parseInt(tanggal_bawah_arr[1]) - 1, parseInt(tanggal_bawah_arr[2]));
+    console.log('tanggal bawah = ' + tanggal_bawah);
+    var tanggal_atas = new Date(parseInt(tanggal_atas_arr[0]), parseInt(tanggal_atas_arr[1]) - 1, parseInt(tanggal_atas_arr[2]));
+    console.log('tanggal atas = ' + tanggal_atas);
+    $('#tugas_tanggal_mulai').val(tanggal_bawah_arr[2] + '-' + tanggal_bawah_arr[1] + '-' + tanggal_bawah_arr[0]);
+    $('#tugas_tanggal_selesai').val(tanggal_atas_arr[2] + '-' + tanggal_atas_arr[1] + '-' + tanggal_atas_arr[0]);
+    var tanggal_mulai = $('#tugas_tanggal_mulai').datepicker({
+        format: 'dd-mm-yyyy',
+        onRender: function (date) {
+            return  tanggal_bawah > date || date > tanggal_atas ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+        tanggal_selesai.setValue(new Date(ev.date));
+        tanggal_selesai.focus();
+        tanggal_mulai.hide();
+    }).data('datepicker');
+
+    var tanggal_selesai = $('#tugas_tanggal_selesai').datepicker({
+        format: 'dd-mm-yyyy',
+        onRender: function (date) {
+            return tanggal_bawah > date || date > tanggal_atas || tanggal_mulai.date > date ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+        tanggal_selesai.hide();
+    }).data('datepicker');
+}
 var list_detil_pekerjaan = [];
 function get_list_detil_pekerjaan() {
     var id_pekerjaan = $('#tugas_select_pekerjaan').val();
@@ -37,9 +69,10 @@ function get_list_detil_pekerjaan() {
         }
     });
 }
+var list_pekerjaan = [];
 function init_list_pekerjaan_untuk_pekerjaan() {
-    var list_pekerjaan = $('#tugas_select_pekerjaan');
-    list_pekerjaan.html('<option disabled>Pilih Pekerjaan</option>');
+    var select_pekerjaan = $('#tugas_select_pekerjaan');
+    select_pekerjaan.html('<option disabled>Pilih Pekerjaan</option>');
     $.ajax({
         type: "get",
         url: site_url + "/pekerjaan_staff/get_list_skp2",
@@ -50,7 +83,8 @@ function init_list_pekerjaan_untuk_pekerjaan() {
             var json = JSON.parse(data);
             for (var i = 0, n = json.length; i < n; i++) {
                 var p = json[i];
-                list_pekerjaan.append('<option value="' + p['id_pekerjaan'] + '">' + p['nama_pekerjaan'] + '</option>');
+                list_pekerjaan[p['id_pekerjaan']] = p;
+                select_pekerjaan.append('<option value="' + p['id_pekerjaan'] + '">' + p['nama_pekerjaan'] + '</option>');
             }
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -134,20 +168,20 @@ function tampilkan_staff() {
     }
     tubuh.html("");
     var crow = 0;
-    var id_pekerjaan=$('#tugas_select_pekerjaan').val();
+    var id_pekerjaan = $('#tugas_select_pekerjaan').val();
     for (var i = 0; i < jumlah_staff; i++) {
         if ($('#staff_' + tab_aktif + '_' + list_id[i]).length > 0)
             continue;
-        if(tab_aktif=='tugas'){
-            var terlibat=false;
-            for(var j=0,j2=list_detil_pekerjaan[id_pekerjaan].length;j<j2;j++){
+        if (tab_aktif == 'tugas') {
+            var terlibat = false;
+            for (var j = 0, j2 = list_detil_pekerjaan[id_pekerjaan].length; j < j2; j++) {
                 var dp = list_detil_pekerjaan[id_pekerjaan][j];
-                if(list_id[i]==dp['id_akun']){
-                    terlibat=true;
+                if (list_id[i] == dp['id_akun']) {
+                    terlibat = true;
                     break;
                 }
             }
-            if(terlibat==false){
+            if (terlibat == false) {
                 continue;
             }
         }
