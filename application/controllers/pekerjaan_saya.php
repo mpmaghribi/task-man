@@ -18,6 +18,7 @@ class pekerjaan_saya extends ceklogin {
     public function __construct() {
         parent::__construct();
         //$this->load->model("pengaduan_model");
+        $this->load->model('pekerjaan_model');
     }
 
     public function index() {
@@ -50,12 +51,24 @@ class pekerjaan_saya extends ceklogin {
             }
             $data['tahun_max'] = $tahun_max;
             $data['tahun_min'] = $tahun_min;
+            $id_akun= $this->session->userdata['logged_in']["user_id"];
+            $data['aktivitas'] = $this->pekerjaan_model->activityjobthismonth($id_akun);
             $this->load->view('pekerjaan_saya/view_pekerjaan_saya', $data);
         } else {
             $data['judul_kesalahan'] = 'Tidak berhak';
             $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengakses pekerjaan';
             $this->load->view('pekerjaan/kesalahan', $data);
         }
+    }
+    
+    public function vardata() {
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Access-Control-Allow-Origin: *');
+        header('Content-type: application/json');
+        
+        $id_akun= $this->session->userdata['logged_in']["user_id"];
+        $query = $this->pekerjaan_model->activityjobthismonth($id_akun);
+        echo  json_encode($query);
     }
 
 //    function detail_tambahan() {

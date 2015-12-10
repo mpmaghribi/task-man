@@ -13,7 +13,49 @@
         <section id="main-content">
             <section class="wrapper">
                 <!-- page start-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <section class="panel">
+                            <header class="panel-heading">
+                                Chart Aktifitas Pekerjaan Bulan <?php echo date('F Y'); ?>
+                            </header>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <?php $jml = count($aktivitas); $tengah = ceil($jml/2); if($jml>6) { ?>
+                                    <div class="col-lg-6">
+                                        <?php  for($a=0;$a<$tengah;$a++){
+                                            echo '<li>P'.($a+1).' : '.$aktivitas[$a]['nama_pekerjaan'].'</li>';
+                                        }?>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <?php  for($a=$tengah;$a<$jml;$a++){
+                                            echo '<li>P'.($a).' : '.$aktivitas[$a]['nama_pekerjaan'].'</li>';
+                                        }?>
+                                    </div>
+                                    <?php } else { ?>
+                                        <div class="col-lg-12">
+                                            <ol>
+                                                <?php $r=1; foreach ($aktivitas as $v) {
+                                                    echo '<li>P'.$r.' : '.$v->nama_pekerjaan.'</li>'; $r++;
 
+                                                } ?>
+                                            </ol>
+                                        </div>
+                                    <?php } ?>
+                                    <div class="col-lg-12">
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div id="graph-line"></div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </section>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <section class="panel">
