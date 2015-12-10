@@ -25,6 +25,7 @@
 <script src="<?php echo base_url() ?>assets/js/jvector-map/jquery-jvectormap-us-lcc-en.js"></script>
 <script src="<?php echo base_url() ?>assets/js/gauge/gauge.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.timepicker.min.js"></script>
 
 
 <!--clock init-->

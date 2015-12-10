@@ -83,11 +83,11 @@ class pekerjaan_saya_model extends dtpg {
 //             and dp.id_akun='$my_id' order by p.periode, p.tgl_mulai";
         $sql="select 
             case when dp.tgl_read is null then '1, Belum Dilihat'
-                 when p.kategori='skp' then
+                 when p.kategori='rutin' or p.kategori='project' then
                  (
                     case when dp.sasaran_kuantitas_output <= dp.realisasi_kuantitas_output then '4, Selesai'
                         when now()::date > p.tgl_selesai::date then '5, Terlambat'
-                        when now()::date <= p.tgl_selesai::date then '3, Dikerjakan'
+                        when now()::date <= p.tgl_selesai::date and dp.realisasi_kuantitas_output > 0 then '3, Dikerjakan'
                         else '2, Sudah Dibaca'
                     end
                  )

@@ -17,29 +17,40 @@ $(document).ready(function () {
         init_tabel_aktivitas();
         $('#tabel_progress').hide();
         $('#div_penilaian_skp').show();
+        $('#button_lock_nilai_progress').hide();
     } else {
         init_tabel_progress();
         $('#tabel_aktivitas').hide();
     }
     sembunyikan_form_penilaian();
-    if (detil_pekerjaan['status'] == 'locked') {
+    if (detil_pekerjaan['locked'] == '1') {
         $('#button_lock_nilai').html('Locked');
+        $('#button_lock_nilai_progress').html('Locked');
+        $('#button_validasi_semua').html('Locked');
+        $('#button_tampilkan_form_penilaian').hide();
     }
 });
-function validasi_semua_aktivitas (){
-    if(confirm('Anda akan memvalidasi semua aktivitas. Lanjutkan?')==false){
+function validasi_semua_aktivitas() {
+    if (detil_pekerjaan['locked'] == '1') {
         return;
+    }
+    if (confirm('Anda akan memvalidasi semua aktivitas. Lanjutkan?') == false) {
+        return;
+    }
+    var fungsi_validasi = 'validasi_semua_aktivitas';
+    if (pekerjaan['kategori'] == 'tambahan' || pekerjaan['kategori'] == 'kreativitas') {
+        fungsi_validasi = 'validasi_semua_progress';
     }
     $.ajax({
         type: "POST",
-        url: site_url + "/aktivitas_pekerjaan/validasi_semua_aktivitas",
+        url: site_url + "/aktivitas_pekerjaan/" + fungsi_validasi,
         data: {
             id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
         },
         success: function (data) {
-            if(data=='ok'){
+            if (data == 'ok') {
                 tabel_aktivitas.fnDraw();
-            }else{
+            } else {
                 alert(data);
             }
         },
@@ -48,11 +59,11 @@ function validasi_semua_aktivitas (){
         }
     });
 }
-function lock_nilai(){
-    if(detil_pekerjaan['status']=='locked'){
+function lock_nilai() {
+    if (detil_pekerjaan['locked'] == '1') {
         return;
     }
-    if(confirm('Anda akan mengunci penilaian. Lanjutkan?')==false){
+    if (confirm('Anda akan mengunci penilaian. Lanjutkan?') == false) {
         return;
     }
     $.ajax({
@@ -62,10 +73,11 @@ function lock_nilai(){
             id_detil_pekerjaan: detil_pekerjaan['id_detil_pekerjaan'],
         },
         success: function (data) {
-            if(data=='ok'){
+            if (data == 'ok') {
                 $('#button_lock_nilai').html('Locked');
-                detil_pekerjaan['status']='locked';
-            }else{
+                $('#button_lock_nilai_progress').html('Locked');
+                detil_pekerjaan['locked'] = '1';
+            } else {
                 alert(data);
             }
         },
@@ -83,7 +95,7 @@ function sembunyikan_form_penilaian() {
 }
 var form_penilaian_showed = false;
 function tampilkan_form_penilaian() {
-    if(detil_pekerjaan['status']=='locked'){
+    if (detil_pekerjaan['locked'] == '1') {
         return;
     }
     $('#button_form_penilaian').html("Simpan Penilaian");
@@ -130,8 +142,8 @@ function simpan_penilaian() {
                 $('#td_real_out').html(json.realisasi_kuantitas_output + ' ' + json.satuan_kuantitas);
                 $('#td_real_mutu').html(json.realisasi_kualitas_mutu + '%');
                 $('#td_real_biaya').html(parseInt(json.pakai_biaya) == 1 ? json.realisasi_biaya : '-');
-                $('#nilai_penghitungan').html(json.progress);
-                $('#skor_skp').html(json.skor);
+                $('#nilai_penghitungan').html(parseFloat(json.progress).toFixed(2));
+                $('#skor_skp').html(parseFloat(json.skor).toFixed(2));
                 form_penilaian_showed = false;
                 $('#button_form_penilaian').html("Ubah Penilaian");
                 sembunyikan_form_penilaian();
@@ -214,7 +226,7 @@ function init_tabel_aktivitas() {
     }
     tabel_aktivitas = $('#tabel_aktivitas').dataTable({
         order: [[1, "asc"]],
-        "columnDefs": [{"targets": [0], "orderable": false}],
+        "columnDefs": [{"targets": [0, 5], "orderable": false}],
         "processing": true,
         "serverSide": true,
         "ajax": {
@@ -246,18 +258,19 @@ function init_tabel_aktivitas() {
             }
             html += '<li><a href="javascript:viewHapusAktivitas(' + id + ');"><i class="fa fa-times fa-fw"></i> Hapus</a></li>';
             html += '</ul></div>';
-            var list_id_berkas_json=JSON.parse(data[4]);
-            var list_berkas=JSON.parse(data[12]);
-            var html_berkas='';
-            if(list_id_berkas_json!=null){
+            var list_id_berkas_json = JSON.parse(data[4]);
+            var list_berkas = JSON.parse(data[12]);
+            var html_berkas = '';
+            if (list_id_berkas_json != null) {
                 for (var i = 0, n = list_id_berkas_json.length; i < n; i++) {
                     html_berkas += '<a href="' + site_url + '/download?id_file=' + list_id_berkas_json[i] + '" target="_blank" title="' + list_berkas[i] + '"><i class="fa fa-paperclip fa-fw"></i></a> ';
                 }
             }
             $('td', row).eq(0).html(html);
             $('td', row).eq(1).html(index + 1);
-            
-            $('td', row).eq(3).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+
+//            $('td', row).eq(3).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
+            $('td', row).eq(3).html(data[13] + ' - ' + data[14]);
             $('td', row).eq(4).html(html_berkas);
 
             if (status_validasi == 1) {

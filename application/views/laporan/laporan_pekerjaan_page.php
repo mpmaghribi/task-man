@@ -112,7 +112,7 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h4 class="modal-title">Pilih Periode Yang Anda Ingin Eksport</h4>
                             </div>
-                            <form action="<?php echo site_url() ?>/laporan/laporan_per_periode" method="GET">
+                            <form action="<?php echo site_url() ?>/laporan/laporan_per_periode" method="GET" target="_blank">
                                 <div class="modal-body">
 
                                     <input type="hidden" id="id_akun" name="id_akun" value="" />
@@ -134,9 +134,22 @@
                                             <label class="control-label col-lg-3">Periode</label>
                                             <div class="col-lg-8">
                                                 <select name="periode" class="form-control m-bot15">
+                                                    <option value="januari">Januari</option>
+                                                    <option value="februari">Februari</option>
+                                                    <option value="maret">Maret</option>
+                                                    <option value="april">April</option>
+                                                    <option value="mei">Mei</option>
+                                                    <option value="juni">Juni</option>
+                                                    <option value="juli">Juli</option>
+                                                    <option value="agustus">Agustus</option>
+                                                    <option value="september">September</option>
+                                                    <option value="oktober">Oktober</option>
+                                                    <option value="november">November</option>
+                                                    <option value="desember">Desember</option>
                                                     <option value="tri_1">Triwulan I</option>
                                                     <option value="tri_2">Triwulan II</option>
                                                     <option value="tri_3">Triwulan III</option>
+                                                    <option value="tri_4">Triwulan IV</option>
                                                     <option value="sms_1">Semester I</option>
                                                     <option value="sms_2">Semester II</option>
                                                 </select>
@@ -164,7 +177,7 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 <h4 class="modal-title">Pilih Periode Yang Anda Ingin Eksport</h4>
                             </div>
-                            <form action="<?php echo site_url() ?>/laporan/laporan_ckp_per_periode" method="GET">
+                            <form action="<?php echo site_url() ?>/laporan/laporan_ckp_per_periode" method="GET" target="_blank">
                                 <div class="modal-body">
 
                                     <input type="hidden" id="id_akun2" name="id_akun2" value="" />
@@ -186,9 +199,22 @@
                                             <label class="control-label col-lg-3">Periode</label>
                                             <div class="col-lg-8">
                                                 <select name="periode2" class="form-control m-bot15">
+                                                    <option value="januari">Januari</option>
+                                                    <option value="februari">Februari</option>
+                                                    <option value="maret">Maret</option>
+                                                    <option value="april">April</option>
+                                                    <option value="mei">Mei</option>
+                                                    <option value="juni">Juni</option>
+                                                    <option value="juli">Juli</option>
+                                                    <option value="agustus">Agustus</option>
+                                                    <option value="september">September</option>
+                                                    <option value="oktober">Oktober</option>
+                                                    <option value="november">November</option>
+                                                    <option value="desember">Desember</option>
                                                     <option value="tri_1">Triwulan I</option>
                                                     <option value="tri_2">Triwulan II</option>
                                                     <option value="tri_3">Triwulan III</option>
+                                                    <option value="tri_4">Triwulan IV</option>
                                                     <option value="sms_1">Semester I</option>
                                                     <option value="sms_2">Semester II</option>
                                                 </select>
@@ -227,42 +253,44 @@
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script>
-                                                                jQuery(document).ready(function () {
-                                                                    EditableTableProgress.init();
-                                                                    document.title = "Daftar Staff - Laporan Task Management";
-                                                                    var tab = $($('.sidebar-menu').children()[3]).children();
-                                                                    console.log(tab);
-                                                                    $(tab[0]).attr('class', 'dcjq-parent active');
-                                                                    $(tab[1]).show();
-                                                                });
-                                                                function exportPeriode(id_akun, nama, jabatan, departemen, nip)
-                                                                {
-                                                                    $("#id_akun").val(id_akun);
-                                                                    $("#nama").val(nama);
-                                                                    $("#nama_jabatan").val(jabatan);
-                                                                    $("#nama_departemen").val(departemen);
-                                                                    $("#nip").val(nip);
-                                                                }
-                                                                function exportPeriode2(id_akun, nama, jabatan, departemen, nip)
-                                                                {
-                                                                    $("#id_akun2").val(id_akun);
-                                                                    $("#nama2").val(nama);
-                                                                    $("#nama_jabatan2").val(jabatan);
-                                                                    $("#nama_departemen2").val(departemen);
-                                                                    $("#nip2").val(nip);
-                                                                }
-                                                                var site_url = '<?= site_url() ?>';
-                                                                function print_form(data) {
-                                                                    var form = $('#form_submit');
-                                                                    console.log('function print_form_skp(data)');
-                                                                    console.log(data);
-                                                                    form.attr({action: data.url, method: 'get', target: '_blank'});
-                                                                    form.html($('<input></input>').attr({type: 'hidden', name: 'periode', value: $('#select_periode').val()}));
-                                                                    form.append($('<input></input>').attr({type: 'hidden', name: 'departemen', value: data.departemen}));
-                                                                    form.append($('<input></input>').attr({type: 'hidden', name: 'id_akun', value: data.id_akun}));
-                                                                    form.append($('<input></input>').attr({type: 'hidden', name: 'jabatan', value: data.jabatan}));
-                                                                    form.append($('<input></input>').attr({type: 'hidden', name: 'nama', value: data.nama}));
-                                                                    form.append($('<input></input>').attr({type: 'hidden', name: 'nip', value: data.nip}));
-                                                                    form.submit();
-                                                                }
+                                                        jQuery(document).ready(function () {
+//                                                                    EditableTableProgress.init();
+//                                                                    document.title = "Daftar Staff - Laporan Task Management";
+                                                            $('#tabel_pekerjaan_staff').dataTable();
+                                                            var tab = $($('.sidebar-menu').children()[3]).children();
+                                                            console.log(tab);
+                                                            $(tab[0]).attr('class', 'dcjq-parent active');
+                                                            $(tab[1]).show();
+                                                            document.title = 'Laporan SKP - Taskmanagement';
+                                                        });
+                                                        function exportPeriode(id_akun, nama, jabatan, departemen, nip)
+                                                        {
+                                                            $("#id_akun").val(id_akun);
+                                                            $("#nama").val(nama);
+                                                            $("#nama_jabatan").val(jabatan);
+                                                            $("#nama_departemen").val(departemen);
+                                                            $("#nip").val(nip);
+                                                        }
+                                                        function exportPeriode2(id_akun, nama, jabatan, departemen, nip)
+                                                        {
+                                                            $("#id_akun2").val(id_akun);
+                                                            $("#nama2").val(nama);
+                                                            $("#nama_jabatan2").val(jabatan);
+                                                            $("#nama_departemen2").val(departemen);
+                                                            $("#nip2").val(nip);
+                                                        }
+                                                        var site_url = '<?= site_url() ?>';
+                                                        function print_form(data) {
+                                                            var form = $('#form_submit');
+                                                            console.log('function print_form_skp(data)');
+                                                            console.log(data);
+                                                            form.attr({action: data.url, method: 'get', target: '_blank'});
+                                                            form.html($('<input></input>').attr({type: 'hidden', name: 'periode', value: $('#select_periode').val()}));
+                                                            form.append($('<input></input>').attr({type: 'hidden', name: 'departemen', value: data.departemen}));
+                                                            form.append($('<input></input>').attr({type: 'hidden', name: 'id_akun', value: data.id_akun}));
+                                                            form.append($('<input></input>').attr({type: 'hidden', name: 'jabatan', value: data.jabatan}));
+                                                            form.append($('<input></input>').attr({type: 'hidden', name: 'nama', value: data.nama}));
+                                                            form.append($('<input></input>').attr({type: 'hidden', name: 'nip', value: data.nip}));
+                                                            form.submit();
+                                                        }
     </script>

@@ -100,6 +100,7 @@ $list_tingkat_manfaat = array(
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                                <button class="btn btn-danger" id="button_lock_nilai_progress" onclick="lock_nilai()" type="button">Lock</button>
                                             </section>                                            
                                         </div>
                                         <div class="panel-body" id="div_penilaian_skp" style="display:none">
@@ -145,11 +146,11 @@ $list_tingkat_manfaat = array(
                                                     </tr>
                                                     <tr>
                                                         <th>Penghitungan</th>
-                                                        <td colspan="5" id="nilai_penghitungan"><?= $detil_pekerjaan['progress'] ?></td>
+                                                        <td colspan="5" id="nilai_penghitungan"><?= number_format($detil_pekerjaan['progress'],2) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th>Nilai SKP</th>
-                                                        <td colspan="5" id="skor_skp"><?= $detil_pekerjaan['skor'] ?></td>
+                                                        <td colspan="5" id="skor_skp"><?= number_format($detil_pekerjaan['skor'],2) ?></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -175,7 +176,7 @@ $list_tingkat_manfaat = array(
                                                             foreach ($detil_pekerjaans as $dp) {
                                                                 if (!isset($user[$dp['id_akun']]))
                                                                     continue;
-                                                                if ($dp['id_akun'] == $detil_pekerjaan['id_akun']) {
+                                                                if ($dp['id_akun'] == $detil_pekerjaan['id_akun'] && in_array($pekerjaan['kategori'],array('rutin','project'))) {
                                                                     continue;
                                                                 }
                                                                 $counter++;

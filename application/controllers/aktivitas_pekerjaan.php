@@ -26,6 +26,7 @@ class aktivitas_pekerjaan extends ceklogin {
         $id_akun = (int) $this->input->post('id_akun');
         $keterangan = $this->input->post('keterangan');
         $kuantitas_output = abs((double) $this->input->post('kuantitas_output'));
+        $kuantitas_output = 1;
         $kualitas_mutu = abs((double) $this->input->post('kualitas_mutu'));
         $waktu_mulai = $this->input->post('waktu_mulai');
         $waktu_selesai = $this->input->post('waktu_selesai');
@@ -48,6 +49,9 @@ class aktivitas_pekerjaan extends ceklogin {
         if ($detil_pekerjaan == null) {
             return 'Anda tidak termasuk dalam anggota staff yang mengerjakan pekerjaan ini';
         }
+        if ($detil_pekerjaan['locked'] == '1') {
+            return 'Pekerjaan Anda telah di-lock. Anda tidak bisa menambahkan aktivitas';
+        }
         $this->db->query("set datestyle to 'European'");
         $this->db->trans_begin();
 //        $sql = "insert into aktivitas_pekerjaan (id_pekerjaan, id_akun, keterangan, angka_kredit, kuantitas_output, kualitas_mutu,"
@@ -59,10 +63,10 @@ class aktivitas_pekerjaan extends ceklogin {
             $aktivitas = array(
                 'id_pekerjaan' => $id_pekerjaan,
                 'id_detil_pekerjaan' => $detil_pekerjaan['id_detil_pekerjaan'],
-                'waktu_mulai' => $waktu_mulai,
-                'waktu_selesai' => $waktu_selesai,
-                //'kuantitas_output' => $kuantitas_output,
-                'kuantitas_output' => 1,
+                'waktu_mulai' => $waktu_mulai . ' 08:00',
+                'waktu_selesai' => $waktu_selesai . ' 16:00',
+                'kuantitas_output' => $kuantitas_output,
+//                'kuantitas_output' => 1,
                 'kualitas_mutu' => $kualitas_mutu,
                 'angka_kredit' => $ak,
                 'keterangan' => $keterangan
@@ -91,8 +95,8 @@ class aktivitas_pekerjaan extends ceklogin {
                 'deskripsi' => $keterangan,
                 'progress' => $nilai_progress,
                 'total_progress' => 100,
-                'waktu_mulai' => $waktu_mulai,
-                'waktu_selesai' => $waktu_selesai
+                'waktu_mulai' => $waktu_mulai . ' 08:00',
+                'waktu_selesai' => $waktu_selesai . ' 16:00'
             );
             $this->db->insert('detil_progress', $aktivitas);
             $id_progress = $this->db->insert_id();
@@ -226,29 +230,46 @@ class aktivitas_pekerjaan extends ceklogin {
         $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
         if (count($q) > 0) {
             $detil_pekerjaan = $q[0];
-            $aspek_kuantitas = 0;
-            if ($detil_pekerjaan['sasaran_kuantitas_output'] > 0)
-                $aspek_kuantitas = $detil_pekerjaan['realisasi_kuantitas_output'] * 100 / $detil_pekerjaan['sasaran_kuantitas_output'];
-            $aspek_kualitas = 0;
-            if ($detil_pekerjaan['sasaran_kualitas_mutu'] > 0)
-                $aspek_kualitas = $detil_pekerjaan['realisasi_kualitas_mutu'] * 100 / $detil_pekerjaan['sasaran_kualitas_mutu'];
-            $efisiensi_waktu = 100 - ($detil_pekerjaan['realisasi_waktu'] * 100 / $detil_pekerjaan['sasaran_waktu']);
-            $aspek_waktu = 1.76 * ($detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) * 100 / $detil_pekerjaan['sasaran_waktu'];
-            if ($efisiensi_waktu > 24) {
-                $aspek_waktu-=24;
+            $persen_waktu = 0;
+            if ($detil_pekerjaan['sasaran_waktu'] > 0) {
+                $persen_waktu = 100 - (100 * $detil_pekerjaan['realisasi_waktu'] / $detil_pekerjaan['sasaran_waktu']);
             }
-            $aspek_biaya = 0;
-            if ($detil_pekerjaan['pakai_biaya'] && $detil_pekerjaan['realisasi_biaya'] > 0) {
-                $efisiensi_biaya = 100 - ($detil_pekerjaan['realisasi_biaya'] * 100 / $detil_pekerjaan['sasaran_biaya']);
-                $aspek_biaya = 1.76 * ($detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) * 100 / $detil_pekerjaan['sasaran_biaya'];
-                if ($efisiensi_biaya > 24) {
-                    $aspek_biaya-=24;
+            $persen_biaya = 0;
+            if ($detil_pekerjaan['pakai_biaya'] == '1' && $detil_pekerjaan['sasaran_biaya'] > 0) {
+                $persen_biaya = 100 - (100 * $detil_pekerjaan['realisasi_biaya'] / $detil_pekerjaan['sasaran_biaya']);
+            }
+            $kuantitas = 0;
+            if ($detil_pekerjaan['sasaran_kuantitas_output'] > 0) {
+                $kuantitas = 100 * $detil_pekerjaan['realisasi_kuantitas_output'] / $detil_pekerjaan['sasaran_kuantitas_output'];
+            }
+            $kualitas = 0;
+            if ($detil_pekerjaan['sasaran_kualitas_mutu'] > 0) {
+                $kualitas = 100 * $detil_pekerjaan['realisasi_kualitas_mutu'] / $detil_pekerjaan['sasaran_kualitas_mutu'];
+            }
+            $waktu = 0;
+            if ($persen_waktu > 24) {
+                if ($detil_pekerjaan['sasaran_waktu'] > 0) {
+                    $waktu = 76 - ((((1.76 * $detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) / $detil_pekerjaan['sasaran_waktu']) * 100) - 100);
+                }
+            } else {
+                if ($detil_pekerjaan['sasaran_waktu'] > 0) {
+                    $waktu = ((1.76 * $detil_pekerjaan['sasaran_waktu'] - $detil_pekerjaan['realisasi_waktu']) / $detil_pekerjaan['sasaran_waktu']) * 100;
                 }
             }
-            $penghitungan = $aspek_kuantitas + $aspek_kualitas + $aspek_biaya;
+            $biaya = 0;
+            if ($persen_biaya > 24) {
+                if ($detil_pekerjaan['pakai_biaya'] == '1' && $detil_pekerjaan['sasaran_biaya'] > 0) {
+                    $waktu = 76 - ((((1.76 * $detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) / $detil_pekerjaan['sasaran_biaya']) * 100) - 100);
+                }
+            } else {
+                if ($detil_pekerjaan['pakai_biaya'] == '1' && $detil_pekerjaan['sasaran_biaya'] > 0) {
+                    $waktu = ((1.76 * $detil_pekerjaan['sasaran_biaya'] - $detil_pekerjaan['realisasi_biaya']) / $detil_pekerjaan['sasaran_biaya']) * 100;
+                }
+            }
+            $penghitungan = $waktu + $kuantitas + $kualitas;
             $skor = $penghitungan / 3;
-            if ($detil_pekerjaan['pakai_biaya']) {
-                $penghitungan+=$aspek_biaya;
+            if ($detil_pekerjaan['pakai_biaya'] == '1') {
+                $penghitungan+=$biaya;
                 $skor = $penghitungan / 4;
             }
             $this->db->query("update detil_pekerjaan set progress='$penghitungan', skor='$skor' where id_detil_pekerjaan='$id_detil_pekerjaan'");
@@ -373,6 +394,10 @@ class aktivitas_pekerjaan extends ceklogin {
             return;
         }
         $detil_pekerjaan = $q[0];
+        if ($detil_pekerjaan['locked'] == '1') {
+            echo 'Pekerjaan telah di-lock';
+            return;
+        }
         $id_pekerjaan = $detil_pekerjaan['id_pekerjaan'];
         $id_akun = $detil_pekerjaan['id_akun'];
         $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
@@ -383,6 +408,38 @@ class aktivitas_pekerjaan extends ceklogin {
         $pekerjaan = $q[0];
         $this->db->query("update aktivitas_pekerjaan set status_validasi=1 where id_detil_pekerjaan='$id_detil_pekerjaan'");
         $this->hitung_nilai_aktivitas($id_detil_pekerjaan);
+        echo 'ok';
+    }
+
+    function validasi_semua_progress() {
+        $id_detil_pekerjaan = intval($this->input->post('id_detil_pekerjaan'));
+        $session = $this->session->userdata('logged_in');
+        $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+//        var_dump($session);
+        if (!in_array(12 || 6, $session['idmodul'])) {
+            echo 'Anda tidak berhak mengakses fungsionalitas ini';
+            return;
+        }
+        if (count($q) <= 0) {
+            echo 'Detil Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $detil_pekerjaan = $q[0];
+        if ($detil_pekerjaan['locked'] == '1') {
+            echo 'Pekerjaan telah di-lock';
+            return;
+        }
+        $id_pekerjaan = $detil_pekerjaan['id_pekerjaan'];
+        $id_akun = $detil_pekerjaan['id_akun'];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $pekerjaan = $q[0];
+        $my_id = $session['user_id'];
+        $this->db->query("update detil_progress set validated=1, validated_by='$my_id' where id_detil_pekerjaan='$id_detil_pekerjaan'");
+        $this->hitung_nilai_progress($id_detil_pekerjaan);
         echo 'ok';
     }
 
@@ -440,6 +497,29 @@ class aktivitas_pekerjaan extends ceklogin {
         $id_pekerjaan = (int) $this->input->post('id_pekerjaan');
         $id_detil_pekerjaan = (int) $this->input->post('id_detil_pekerjaan');
         echo json_encode($this->aktivitas_model->get_list_progress_pekerjaan_datatable($id_pekerjaan, $id_detil_pekerjaan, $_POST));
+    }
+
+    function get_list_file_progress_pekerjaan_datatable() {
+        $id_detil_pekerjaan = intval($this->input->post('id_detil_pekerjaan'));
+        $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'detil pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $detil_pekerjaan = $q[0];
+        $id_pekerjaan = $detil_pekerjaan['id_pekerjaan'];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $pekerjaan = $q[0];
+        $this->load->model(array('berkas_model'));
+        if (in_array($pekerjaan['kategori'], array('rutin', 'project'))) {
+            echo json_encode($this->berkas_model->get_list_file_aktivitas_datatable($id_detil_pekerjaan));
+        } else {
+            echo json_encode($this->berkas_model->get_list_file_progress_datatable($id_detil_pekerjaan));
+        }
     }
 
 }
