@@ -98,7 +98,7 @@ class pekerjaan_staff extends ceklogin {
     function detail_tugas() {
         $session = $this->session->userdata('logged_in');
         $id_tugas = intval($this->input->get('id_tugas'));
-        $q = $this->db->query("select * from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
+        $q = $this->db->query("select *, to_char(tanggal_mulai,'YYYY-MM-DD') as tanggal_mulai2, to_char(tanggal_selesai,'YYYY-MM-DD') as tanggal_selesai2 from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
         if (count($q) <= 0) {
             redirect(site_url() . '/pekerjaan_staff');
             return;
@@ -124,11 +124,15 @@ class pekerjaan_staff extends ceklogin {
         }
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $list_user = json_decode(file_get_contents($url));
+        $list_aktivitas_tugas = $this->db->query("select * from aktivitas_pekerjaan where id_tugas='$id_tugas'")->result_array();
         $data = array(
             'list_id_staff' => $list_id_staff_tugas,
             'pekerjaan' => $pekerjaan,
-            'users'=>$list_user,
-            'data_akun'=>$session
+            'users' => $list_user,
+            'data_akun' => $session,
+            'tugas' => $tugas,
+            'list_aktivitas' => $list_aktivitas_tugas,
+            'detil_pekerjaan' => $detil_pekerjaan
         );
         $this->load->view('pekerjaan_staff/view_detail_tugas', $data);
     }
@@ -448,6 +452,10 @@ class pekerjaan_staff extends ceklogin {
         $deskripsi = $this->input->post('deskripsi_pkj');
         $tgl_mulai = $this->input->post('tgl_mulai');
         $tgl_selesai = $this->input->post('tgl_selesai');
+        if(is_array($list_id_enroll)==false){
+            redirect(site_url().'/pekerjaan_staff');
+            return;
+        }
         $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         if (count($q) <= 0) {
             echo '';
