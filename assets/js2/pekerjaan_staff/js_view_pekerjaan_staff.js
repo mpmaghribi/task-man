@@ -3,16 +3,65 @@ $(document).ready(function () {
     $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     $('#submenu_pekerjaan_ul').show();
     document.title = "Daftar Pekerjaan Staff - Task Management";
-
     $('#select_kategori_pekerjaan').on('change', function () {
         ubah_view_input(this.value);
     });
     ubah_view_input('rutin');
+    $('#tugas_select_periode').on('change', function () {
+        init_list_pekerjaan_untuk_pekerjaan();
+    });
+    $('#tugas_select_pekerjaan').on('change', function () {
+        get_list_detil_pekerjaan();
+    });
+    init_list_pekerjaan_untuk_pekerjaan();
 });
+var list_detil_pekerjaan = [];
+function get_list_detil_pekerjaan() {
+    var id_pekerjaan = $('#tugas_select_pekerjaan').val();
+    list_detil_pekerjaan[id_pekerjaan] = [];
+    $.ajax({
+        type: "get",
+        url: site_url + "/pekerjaan_staff/get_list_detil_pekerjaan",
+        data: {
+            id_pekerjaan: id_pekerjaan
+        },
+        success: function (data) {
+            var json = JSON.parse(data);
+            for (var i = 0, n = json.length; i < n; i++) {
+                var dp = json[i];
+                list_detil_pekerjaan[id_pekerjaan].push(dp);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+
+        }
+    });
+}
+function init_list_pekerjaan_untuk_pekerjaan() {
+    var list_pekerjaan = $('#tugas_select_pekerjaan');
+    list_pekerjaan.html('<option disabled>Pilih Pekerjaan</option>');
+    $.ajax({
+        type: "get",
+        url: site_url + "/pekerjaan_staff/get_list_skp2",
+        data: {
+            periode: $('#tugas_select_periode').val()
+        },
+        success: function (data) {
+            var json = JSON.parse(data);
+            for (var i = 0, n = json.length; i < n; i++) {
+                var p = json[i];
+                list_pekerjaan.append('<option value="' + p['id_pekerjaan'] + '">' + p['nama_pekerjaan'] + '</option>');
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+
+        }
+    });
+}
 function ubah_view_input(kategori) {
     if (kategori == 'rutin' || kategori == 'project') {
         display_element(true, ['div_angka_kredit', 'div_kuantitas', 'div_kualitas', 'div_biaya']);
-        display_element(false, ['div_manfaat','div_pakai_biaya']);
+        display_element(false, ['div_manfaat', 'div_pakai_biaya']);
         if (kategori == 'project') {
             display_element(true, ['div_periode_tanggal']);
             display_element(false, ['div_periode_tahun']);
@@ -62,6 +111,10 @@ function tampilkan_staff_skp() {
     tab_aktif = 'skp';
     tampilkan_staff();
 }
+function tampilkan_staff_tugas() {
+    tab_aktif = 'tugas';
+    tampilkan_staff();
+}
 function tampilkan_staff_tugas_tambahan() {
     tab_aktif = 'tambahan';
     tampilkan_staff();
@@ -81,9 +134,23 @@ function tampilkan_staff() {
     }
     tubuh.html("");
     var crow = 0;
+    var id_pekerjaan=$('#tugas_select_pekerjaan').val();
     for (var i = 0; i < jumlah_staff; i++) {
         if ($('#staff_' + tab_aktif + '_' + list_id[i]).length > 0)
             continue;
+        if(tab_aktif=='tugas'){
+            var terlibat=false;
+            for(var j=0,j2=list_detil_pekerjaan[id_pekerjaan].length;j<j2;j++){
+                var dp = list_detil_pekerjaan[id_pekerjaan][j];
+                if(list_id[i]==dp['id_akun']){
+                    terlibat=true;
+                    break;
+                }
+            }
+            if(terlibat==false){
+                continue;
+            }
+        }
         var row_id = 'tabel_list_enroll_staff_row_' + list_id[i];
         var new_row = true;
         if ($('#' + row_id).length == 0) {
@@ -112,15 +179,15 @@ function pilih_staff_ok() {
     for (var i = 0; i < jumlah_data; i++) {
         var id_checkbox = 'enroll_' + list_id[i];
         if ($('#' + id_checkbox).is(':checked')) {
-            console.log(id_checkbox+' is checked');
+            console.log(id_checkbox + ' is checked');
             var enrolled_staff = $('<input></input>').attr({id: 'staff_enroll_' + tab_aktif + '_' + list_id[i], name: 'staff_enroll[]', value: list_id[i], type: 'hidden'});
             $('#tabel_assign_staff_' + tab_aktif).append('<tr id="staff_' + tab_aktif + '_' + list_id[i] + '">' +
                     '<td id="nama_staff_' + tab_aktif + '_' + list_id[i] + '">' + list_nama[i] + '</td>' +
                     '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="delete_enrolled_staff(' + list_id[i] + ',\'' + tab_aktif + '\')">Hapus</a></td>' +
                     '</tr>');
             $('#nama_staff_' + tab_aktif + '_' + list_id[i]).append(enrolled_staff);
-        }else{
-            console.log(id_checkbox+' is not checked');
+        } else {
+            console.log(id_checkbox + ' is not checked');
         }
     }
     $('#tombol_tutup').click();

@@ -224,4 +224,5 @@ if (count($detil_pekerjaan) > 0) {
                                                             var list_staff = <?php echo json_encode($list_staff); ?>;
                                                             var pekerjaan =<?= json_encode($pekerjaan) ?>;
                                                             var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
+                                                            var site_url='<?=site_url()?>';
     </script>

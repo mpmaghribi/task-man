@@ -27,6 +27,21 @@ class pekerjaan_staff extends ceklogin {
         $result = $this->taskman_repository->sp_insert_activity($session['user_id'], 0, "Aktivitas Pekerjaan", $session['user_nama'] . " sedang melihat progress pekerjaan dari para staffnya.");
 
         $data["my_staff"] = $this->akun->my_staff($session["user_id"]);
+        $tahun_max = date('Y');
+        $q = $this->db->query("select max(coalesce(date_part('year',tgl_selesai),periode,date_part('year',now()))) as tahun_max from pekerjaan")->result_array();
+        if (count($q) > 0) {
+            $tahun = (int) $q[0]['tahun_max'];
+            if ($tahun_max < $tahun) {
+                $tahun_max = $tahun;
+            }
+        }
+        $tahun_min = $tahun_max - 10;
+        $q = $this->db->query("select min(coalesce(date_part('year',tgl_mulai),periode,date_part('year',now()))) as tahun_min from pekerjaan")->result_array();
+        if (count($q) > 0) {
+            $tahun_min = (int) $q[0]['tahun_min'];
+        }
+        $data['tahun_max'] = $tahun_max;
+        $data['tahun_min'] = $tahun_min;
         $this->load->view("pekerjaan_staff/view_pekerjaan_staff", $data);
     }
 
@@ -1043,6 +1058,19 @@ class pekerjaan_staff extends ceklogin {
         $this->load->model(array('pekerjaan_staff_model'));
         $result = $this->pekerjaan_staff_model->get_list_skp_staff($my_id, $id_staff, $periode);
         echo json_encode($result);
+    }
+    function get_list_skp2(){
+        $session = $this->session->userdata('logged_in');
+        $periode = abs(intval($this->input->get('periode')));
+        $my_id = $session['user_id'];
+        $result = $this->db->query("select * from pekerjaan where id_penanggung_jawab='$my_id' and (date_part('year',tgl_mulai)='$periode') and kategori='rutin'")->result_array();
+        echo json_encode($result);
+    }
+    
+    function get_list_detil_pekerjaan(){
+        $id_pekerjaan = intval($this->input->get('id_pekerjaan'));
+        $r = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        echo json_encode($r);
     }
 
 }
