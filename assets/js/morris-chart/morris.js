@@ -644,6 +644,7 @@
 
       this.onGridClick = __bind(this.onGridClick, this);
       if (!(this instanceof Morris.Line)) {
+          
         return new Morris.Line(options);
       }
       Line.__super__.constructor.call(this, options);

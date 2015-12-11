@@ -28,8 +28,8 @@ class home extends ceklogin {
             $data['detil_pekerjaan_saya'] = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan_saya);
             $data['data_akun'] = $this->session->userdata('logged_in');
             
-            //$result1 = $this->pekerjaan_model->alltask($temp['user_id']);
-            $result1 = $this->pekerjaan_model->jobthisyear($temp['user_id']);
+            $result1 = $this->pekerjaan_model->alltask($temp['user_id']);
+            //$result1 = $this->pekerjaan_model->jobthisyear($temp['user_id']);
             $result2 = $this->pekerjaan_model->ongoingtask($temp['user_id']);
             $result3 = $this->pekerjaan_model->finishtask($temp['user_id']);
             $result4 = $this->pekerjaan_model->notworkingtask($temp['user_id']);
@@ -81,6 +81,22 @@ class home extends ceklogin {
             $data['deskripsi_kesalahan'] = 'Anda tidak berhak melihat dashboard';
             $this->load->view('pekerjaan/kesalahan', $data);
         }
+    }
+    
+    public function listactivity() {
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Access-Control-Allow-Origin: *');
+        header('Content-type: application/json');
+        
+        $id_akun= $this->session->userdata['logged_in']["user_id"];
+        $query = $this->pekerjaan_model->listactivitythismonth($id_akun);
+        $jml = count($query);
+        foreach ($query as $v) {
+            $v->waktu_mulai = str_replace("-",",",$v->waktu_mulai);
+            $v->waktu_selesai = str_replace("-",",",$v->waktu_selesai);
+        }
+        //print_r($query);
+        echo  json_encode($query);
     }
 
     public function recent_activity_staff() {
