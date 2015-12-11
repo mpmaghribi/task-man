@@ -13,6 +13,7 @@ $(document).ready(function () {
     $('#tugas_select_pekerjaan').on('change', function () {
         get_list_detil_pekerjaan();
         change_deadline_tugas();
+        $('#tabel_assign_staff_tugas').html('');
     });
     init_list_pekerjaan_untuk_pekerjaan();
 });

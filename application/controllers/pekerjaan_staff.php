@@ -452,8 +452,8 @@ class pekerjaan_staff extends ceklogin {
         $deskripsi = $this->input->post('deskripsi_pkj');
         $tgl_mulai = $this->input->post('tgl_mulai');
         $tgl_selesai = $this->input->post('tgl_selesai');
-        if(is_array($list_id_enroll)==false){
-            redirect(site_url().'/pekerjaan_staff');
+        if (is_array($list_id_enroll) == false) {
+            redirect(site_url() . '/pekerjaan_staff');
             return;
         }
         $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
@@ -486,7 +486,15 @@ class pekerjaan_staff extends ceklogin {
         }
         $id_akun = '{' . implode(',', $list_id_enroll) . '}';
         $this->db->query("set datestyle to 'ISO, DMY'");
-        $this->db->query("insert into assign_tugas (id_akun,deskripsi,tanggal_mulai,tanggal_selesai,id_pekerjaan) values('$id_akun','$deskripsi','$tgl_mulai','$tgl_selesai',$id_pekerjaan)");
+//        $this->db->query("insert into assign_tugas (id_akun,deskripsi,tanggal_mulai,tanggal_selesai,id_pekerjaan) values('$id_akun','$deskripsi','$tgl_mulai','$tgl_selesai',$id_pekerjaan)");
+        $tugas_baru = array(
+            'id_akun' => $id_akun,
+            'deskripsi' => $deskripsi,
+            'tanggal_mulai' => $tgl_mulai,
+            'tanggal_selesai' => $tgl_selesai,
+            'id_pekerjaan' => $id_pekerjaan
+        );
+        $this->db->insert('assign_tugas', $tugas_baru);
         $id_assign = $this->db->insert_id();
         echo "id assign $id_assign";
         redirect(site_url() . '/pekerjaan_staff/detail_tugas?id_tugas=' . $id_assign);
@@ -701,8 +709,42 @@ class pekerjaan_staff extends ceklogin {
 //    }
 
     function batalkan() {
-        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
+        $result = $this->hapus_pekerjaan();
         $id_staff_c = abs(intval($this->input->get('id_staff')));
+        if ($result == 'ok') {
+            redirect(site_url() . '/pekerjaan_staff/staff?id_staff=' . $id_staff_c);
+        } else {
+            redirect(site_url() . '/pekerjaan_staff');
+        }
+    }
+
+    function batalkan_v2() {
+        $result = $this->hapus_pekerjaan();
+        echo $result;
+    }
+
+    function hapus_tugas() {
+        $id_tugas = intval($this->input->get('id_tugas'));
+        $session = $this->session->userdata('logged_in');
+        $q = $this->db->query("select * from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
+        if (count($q) <= 0) {
+            echo 'tugas tidak dapat ditemukan';
+            return;
+        }
+        $tugas = $q[0];
+        $id_pekerjaan = $tugas['id_pekerjaan'];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            echo 'Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $pekerjaan = $q[0];
+        $this->db->query("delete from assign_tugas where id_assign_tugas='$id_tugas'");
+        echo 'ok';
+    }
+
+    private function hapus_pekerjaan() {
+        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
         $session = $this->session->userdata('logged_in');
         $this->db->trans_begin();
         $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
@@ -711,12 +753,12 @@ class pekerjaan_staff extends ceklogin {
             $pekerjaan = $q[0];
         }
         if ($pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_staff');
-            return;
+//            redirect(site_url() . '/pekerjaan_staff');
+            return 'Pekerjaan tidak dapat ditemukan';
         }
         if ($pekerjaan['id_penanggung_jawab'] != $session['user_id']) {
-            redirect(site_url() . '/pekerjaan_staff');
-            return;
+//            redirect(site_url() . '/pekerjaan_staff');
+            return 'Pekerjaan tidak dapat ditemukan';
         }
         $list_id_staff = array();
         $q = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
@@ -738,7 +780,7 @@ class pekerjaan_staff extends ceklogin {
         $this->db->query("delete from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->query("delete from pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->trans_complete();
-        redirect(site_url() . '/pekerjaan_staff/staff?id_staff=' . $id_staff_c);
+        return 'ok';
     }
 
     function lock_nilai() {
@@ -1153,6 +1195,21 @@ class pekerjaan_staff extends ceklogin {
         $my_id = $session['user_id'];
         $result = $this->db->query("select *, to_char(tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai from pekerjaan where id_penanggung_jawab='$my_id' and (date_part('year',tgl_mulai)='$periode') and kategori='rutin'")->result_array();
         echo json_encode($result);
+    }
+
+    function get_list_tugas() {
+        $id_staff = intval($this->input->post('id_staff'));
+        $periode = abs(intval($this->input->post('periode')));
+        $list_tugas = $this->db->query("select assign_tugas.*, pekerjaan.nama_pekerjaan, aktivitas_pekerjaan.*, "
+                        . "to_char(assign_tugas.tanggal_mulai,'YYYY-MM-DD') as tanggal_mulai2,"
+                        . "to_char(assign_tugas.tanggal_selesai,'YYYY-MM-DD') as tanggal_selesai2 "
+                        . "from assign_tugas "
+                        . "inner join pekerjaan on pekerjaan.id_pekerjaan=assign_tugas.id_pekerjaan "
+                        . "inner join detil_pekerjaan on detil_pekerjaan.id_pekerjaan=pekerjaan.id_pekerjaan and detil_pekerjaan.id_akun='$id_staff' "
+                        . "left join aktivitas_pekerjaan on aktivitas_pekerjaan.id_detil_pekerjaan=detil_pekerjaan.id_detil_pekerjaan and aktivitas_pekerjaan.id_tugas=assign_tugas.id_assign_tugas "
+                        . "where '$id_staff' = any(assign_tugas.id_akun) and date_part('year',tanggal_mulai)='$periode'")->result_array();
+        $sql1 = $this->db->last_query();
+        echo json_encode(array('tugas' => $list_tugas, 'sql' => $sql1));
     }
 
     function get_list_detil_pekerjaan() {
