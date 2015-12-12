@@ -64,7 +64,7 @@
                                         <div class="col-md-12">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
-                                                    List File Progress
+                                                    File Pendukung Tugas
                                                 </h4>
                                                 <div class="panel-body">
                                                     <table class="table table-striped table-hover table-condensed" id="tabel_file_tugas">
@@ -84,8 +84,27 @@
                                         <div class="col-md-12" id="div_aktivitas">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
-                                                    Aktivitas Pekerjaan
+                                                    Realisasi Tugas
                                                 </h4>
+                                                <div class="panel-body">
+                                                    <div class="form-horizontal">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-lg-2">Keterangan</label>
+                                                            <div class="col-lg-6">
+                                                                <input type="text" name="deskripsi" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-lg-2">Waktu</label>
+                                                            <div class="col-lg-3">
+                                                                <input type="text" name="waktu_mulai" class="form-control"/>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <input type="text" name="waktu_selesai" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </section>
                                         </div>
                                         <div class="col-md-12" id="anggota_tim">
@@ -155,10 +174,46 @@
                                                             var detil_pekerjaan = <?= json_encode($detil_pekerjaan) ?>;
                                                             var pekerjaan = <?= json_encode($pekerjaan) ?>;
                                                             var tugas = <?= json_encode($tugas) ?>;
+                                                            var aktivitas = <?= json_encode($aktivitas) ?>;
+                                                            var file_pendukung_pekerjaan = <?= json_encode($file_pendukung_pekerjaan) ?>;
+                                                            var file_pendukung_tugas = <?= json_encode($file_pendukung_tugas) ?>;
                                                             $(document).ready(function () {
                                                                 document.title = 'Deskripsi Tugas: ' + tugas['deskripsi'] + ' - Task Management';
                                                                 init_anggota();
+                                                                init_file_pekerjaan();
+                                                                init_file_tugas();
                                                             });
+                                                            function init_file_tugas() {
+                                                                var tabel = $('#tabel_file_tugas_body');
+                                                                tabel.html('');
+                                                                var counter = 0;
+                                                                for (var i = 0, i2 = file_pendukung_tugas.length; i < i2; i++) {
+                                                                    var berkas = file_pendukung_tugas[i];
+                                                                    counter++;
+                                                                    var html = '<tr>'
+                                                                            + '<td>' + counter + '</td>'
+                                                                            + '<td>' + berkas['nama_file'] + '</td>'
+                                                                            + '<td><a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + berkas['id_file'] + '" id="" style="font-size: 10px" target="_blank">Download</a></td>'
+                                                                            + '</tr>';
+                                                                    tabel.append(html);
+                                                                }
+                                                                $('#tabel_file_tugas').dataTable();
+                                                            }
+                                                            function init_file_pekerjaan() {
+                                                                var tabel = $('#tabel_file_pekerjaan_body');
+                                                                var counter = 0;
+                                                                for (var i = 0, i2 = file_pendukung_pekerjaan.length; i < i2; i++) {
+                                                                    var berkas = file_pendukung_pekerjaan[i];
+                                                                    counter++;
+                                                                    var html = '<tr>'
+                                                                            + '<td>' + counter + '</td>'
+                                                                            + '<td>' + berkas['nama_file'] + '</td>'
+                                                                            + '<td><a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + berkas['id_file'] + '" id="" style="font-size: 10px" target="_blank">Download</a></td>'
+                                                                            + '</tr>';
+                                                                    tabel.append(html);
+                                                                }
+                                                                $('#tabel_file_pekerjaan').dataTable();
+                                                            }
                                                             function init_anggota() {
                                                                 var list_id_anggota = JSON.parse(tugas['id_akun'].replace('{', '[').replace('}', ']'));
                                                                 var tabel = $('#staff_pekerjaan_body');
@@ -192,10 +247,20 @@
                                                                         continue;
                                                                     }
                                                                     counter++;
+                                                                    var status = 'Belum Dikerjakan';
+                                                                    for (var j = 0, j2 = aktivitas.length; j < j2; j++) {
+                                                                        var akt = aktivitas[j];
+                                                                        if (akt['id_detil_pekerjaan'] == detil_pekerjaan_anggota['id_detil_pekerjaan']) {
+                                                                            status = 'Sudah Dikerjakan, Belum Divalidasi';
+                                                                            if (akt['status_validasi'] == '1') {
+                                                                                status = 'Sudah Dikerjakan, Sudah Divalidasi';
+                                                                            }
+                                                                        }
+                                                                    }
                                                                     var html = '<tr>'
                                                                             + '<td>' + counter + '</td>'
                                                                             + '<td>' + detil_anggota['nama'] + '</td>'
-                                                                            + '<td>' + counter + '</td>'
+                                                                            + '<td>' + status + '</td>'
                                                                             + '</tr>';
                                                                     tabel.append(html);
                                                                 }

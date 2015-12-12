@@ -47,7 +47,7 @@ function init_tabel_tugas() {
                         }
                     }
                 }
-                var status = 'Belum Dibaca';
+                var status = 'Belum Dikerjakan';
                 if(tugas['id_aktivitas']!=null){
                     status='Telah dikerjakan, menunggu validasi';
                     if(tugas['status_validasi_aktivitas']!=null){

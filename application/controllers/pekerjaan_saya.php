@@ -181,7 +181,9 @@ class pekerjaan_saya extends ceklogin {
         );
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["users"] = json_decode(file_get_contents($url));
-//        $this->db->query("update assign_tugas set tanggal_dilihat=now() where id_assign_tugas='$id_tugas' and tanggal_dilihat is null");
+        $data['aktivitas']=$this->db->query("select * from aktivitas_pekerjaan where id_tugas='$id_tugas'")->result_array();
+        $data['file_pendukung_pekerjaan']=$this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_detil_pekerjaan is null and id_progress is null and id_tugas is null and id_aktivitas is null")->result_array();
+        $data['file_pendukung_tugas']=$this->db->query("select * from file where id_tugas = '$id_tugas'")->result_array();
         $this->load->view('pekerjaan_saya/view_detail_tugas', $data);
     }
 
