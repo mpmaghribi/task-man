@@ -230,6 +230,35 @@ class pekerjaan_staff extends ceklogin {
         $this->load->view('pekerjaan_staff/view_detail_aktivitas', $data);
     }
 
+    function edit_tugas() {
+        $id_tugas = intval($this->input->get('id_tugas'));
+        $q = $this->db->query("select * from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
+        if (count($q) <= 0) {
+            redirect(site_url() . '/pekerjaan_staff');
+            return;
+        }
+        $tugas = $q[0];
+        $id_pekerjaan = $tugas['id_pekerjaan'];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            redirect(site_url() . '/pekerjaan_staff');
+            return;
+        }
+        $pekerjaan = $q[0];
+        $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+        $list_user = json_decode(file_get_contents($url));
+        $session=$this->session->userdata('logged_in');
+        $data = array(
+            'tugas' => $tugas,
+            'pekerjaan' => $pekerjaan,
+            'detil_pekerjaan' => $detil_pekerjaan,
+            'users' => $list_user,
+            'data_akun'=>$session
+        );
+        $this->load->view('pekerjaan_staff/view_edit_tugas', $data);
+    }
+
     function edit() {
         $id_pekerjaan = abs(intval($this->input->get('id_pekerjaan')));
         $this->load->model(array('akun'));

@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\PostgreSQL\9.3\bin\pg_ctl.exe" runservice -N "postgresql-9.3" -D "C:/Program Files (x86)/PostgreSQL/9.3/data" -w
