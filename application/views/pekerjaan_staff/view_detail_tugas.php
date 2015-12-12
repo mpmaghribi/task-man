@@ -223,6 +223,7 @@ foreach ($users as $u) {
                     continue;
                 }
                 var status_tugas = 'Belum Dilihat';
+                
                 for (var j = 0, j2 = aktivitas.length; j < j2; j++) {
 
                 }

@@ -34,9 +34,9 @@
                                 </div>
                             </div>
                             <div class="panel-body">
-<!--                                <header class="panel-heading" id="">
-                                    Pekerjaan SKP
-                                </header>-->
+                                <!--                                <header class="panel-heading" id="">
+                                                                    Pekerjaan SKP
+                                                                </header>-->
                                 <div class="form">
                                     <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_staff">
                                         <thead>
@@ -55,48 +55,28 @@
                                     </table>
                                 </div>
                             </div>
-                            <!--                            <div class="panel-body">
-                                                            <header class="panel-heading" id="">
-                                                                Pekerjaan Tambahan
-                                                            </header>
-                                                            <div class="form">
-                                                                <table class="table table-striped table-hover table-condensed" id="tabel_tugas_tambahan">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th style="width: 10px" id="kolom_nomor">No</th>
-                                                                            <th style="width: 240px">Nama Pekerjaan</th>
-                                                                            <th>Deadline</th>
-                                                                            <th>Assign To</th>
-                                                                            <th style="width: 170px">Status</th>
-                                                                            <th style="width: 50px"></th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="tabel_tugas_tambahan_body">
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="panel-body">
-                                                            <header class="panel-heading" id="">
-                                                                Pekerjaan Kreativitas
-                                                            </header>
-                                                            <div class="form">
-                                                                <table class="table table-striped table-hover table-condensed" id="tabel_tugas_kreativitas">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th style="width: 10px" id="kolom_nomor">No</th>
-                                                                            <th style="width: 240px">Nama Pekerjaan</th>
-                                                                            <th>Deadline</th>
-                                                                            <th>Assign To</th>
-                                                                            <th style="width: 170px">Status</th>
-                                                                            <th style="width: 50px"></th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody id="tabel_tugas_kreativitas_body">
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>-->
+                            <div class="panel-body">
+                                <header class="panel-heading" id="">
+                                    Tugas
+                                </header>
+                                <div class="form">
+                                    <table class="table table-striped table-hover table-condensed" id="tabel_tugas">
+                                        <thead>
+                                            <tr>
+                                                <th style="" id="kolom_nomor">No</th>
+                                                <th style="">Deskripsi Tugas</th>
+                                                <th>Pekerjaan</th>
+                                                <th>Deadline</th>
+                                                <th>Assign To</th>
+                                                <th style="">Status</th>
+                                                <th style="">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabel_tugas_body">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </section>
                     </div>
                     <div class="modal fade" id="modalFilterPekerjaan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -153,4 +133,5 @@
                                         var site_url = '<?= site_url() ?>';
                                         var id_staff = '<?= $id_staff ?>';
                                         var list_staff =<?= json_encode($my_staff) ?>;
+                                        var users =<?= json_encode($my_staff) ?>;
     </script>

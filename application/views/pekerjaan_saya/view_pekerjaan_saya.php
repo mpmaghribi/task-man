@@ -22,9 +22,13 @@
                             <div class="panel-body">
 
                                 <div class="row">
-                                    <?php $jml = count($aktivitas);
+
+                                    <?php
+                                    $jml = count($aktivitas);
                                     $tengah = ceil($jml / 2);
-                                    if ($jml > 6) { ?>
+                                    if ($jml > 6) {
+                                        ?>
+
                                         <div class="col-lg-6">
                                             <?php
                                             for ($a = 0; $a < $tengah; $a++) {
@@ -33,22 +37,24 @@
                                             ?>
                                         </div>
                                         <div class="col-lg-6">
-                                        <?php
-                                        for ($a = $tengah; $a < $jml; $a++) {
-                                            echo '<li>P' . ($a) . ' : ' . $aktivitas[$a]['nama_pekerjaan'] . '</li>';
-                                        }
-                                        ?>
+
+                                            <?php
+                                            for ($a = $tengah; $a < $jml; $a++) {
+                                                echo '<li>P' . ($a) . ' : ' . $aktivitas[$a]['nama_pekerjaan'] . '</li>';
+                                            }
+                                            ?>
                                         </div>
-                                            <?php } else { ?>
+                                    <?php } else { ?>
                                         <div class="col-lg-12">
                                             <ol>
-                                        <?php
-                                        $r = 1;
-                                        foreach ($aktivitas as $v) {
-                                            echo '<li>P' . $r . ' : ' . $v->nama_pekerjaan . '</li>';
-                                            $r++;
-                                        }
-                                        ?>
+                                                <?php
+                                                $r = 1;
+                                                foreach ($aktivitas as $v) {
+                                                    echo '<li>P' . $r . ' : ' . $v->nama_pekerjaan . '</li>';
+                                                    $r++;
+                                                }
+                                                ?>
+
                                             </ol>
                                         </div>
 <?php } ?>
@@ -61,6 +67,7 @@
                                         <div id="graph-line"></div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <a href="#myModal" data-toggle="modal" class="btn btn-success">
@@ -68,7 +75,6 @@
                                         </a>
                                     </div>
                                 </div>
-
                             </div>
                         </section>
                     </div>
@@ -100,12 +106,14 @@
                                                     <div class="form-group">
                                                         <label class="control-label col-lg-1">Periode</label>
                                                         <div class="col-lg-3">
-                                                            <select class="form-control" id="select_periode" onchange="init_tabel_skp()">
-<?php
-for ($i = $tahun_max; $i >= $tahun_min; $i--) {
-    echo '<option value="' . $i . '">' . $i . '</option>';
-}
-?>
+
+                                                            <select class="form-control" id="select_periode" onchange="">
+                                                                <?php
+                                                                for ($i = $tahun_max; $i >= $tahun_min; $i--) {
+                                                                    echo '<option value="' . $i . '">' . $i . '</option>';
+                                                                }
+                                                                ?>
+
                                                             </select>
                                                         </div>
                                                     </div>
@@ -131,124 +139,152 @@ for ($i = $tahun_max; $i >= $tahun_min; $i--) {
                                                 </div>
                                             </div>
                                         </section>
-<?php if (in_array(2, $data_akun['idmodul'])) { ?>
-                                            <section class="panel">
+
+
+                                        <section class="panel">
+                                            <div class="panel-body">
+
                                                 <header class="panel-heading">
                                                     Daftar Usulan Pekerjaan Saya
                                                 </header>
-                                                <div class="panel-body">
-                                                    <div class="form">
-                                                        <table class="table table-striped table-hover table-condensed" id="tableUsulanPekerjaan">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th> No</th>
-                                                                    <th class="hidden-phone">Pekerjaan</th>
-                                                                    <th>Deadline</th>
-                                                                    <th>Assign To</th>
-                                                                    <th>Kategori</th>
-                                                                    <th style="min-width: 150px">Status</th>
-                                                                    <th></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                        </table>
+                                                <div class="form">
+                                                    <table class="table table-striped table-hover table-condensed" id="tableUsulanPekerjaan">
+                                                        <thead>
+                                                            <tr>
+                                                                <th> No</th>
+                                                                <th class="hidden-phone">Pekerjaan</th>
+                                                                <th>Deadline</th>
+                                                                <th>Assign To</th>
+                                                                <th>Kategori</th>
+                                                                <th style="min-width: 150px">Status</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                            <div class="panel-body">
+                                                <header class="panel-heading" id="">
+                                                    Tugas
+                                                </header>
+                                                <div class="form">
+                                                    <table class="table table-striped table-hover table-condensed" id="tabel_tugas">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="" id="kolom_nomor">No</th>
+                                                                <th style="">Deskripsi Tugas</th>
+                                                                <th>Pekerjaan</th>
+                                                                <th>Deadline</th>
+                                                                <th>Assign To</th>
+                                                                <th style="">Status</th>
+                                                                <th style="">Aksi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tabel_tugas_body">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                    </div>
+
+                                    <div id="TambahPekerjaan" class="tab-pane">
+                                        <div class="form">
+                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan" enctype="multipart/form-data">
+                                                <?php if ($atasan != null || isset($atasan)) { ?>
+
+                                                    <div class="form-group ">
+                                                        <label for="atasan" class="control-label col-lg-3">Atasan</label>
+                                                        <div class="col-lg-6">
+
+                                                            <select name="atasan" class="form-control m-bot15">
+
+                                                                <?php foreach ($atasan as $value) { ?>              
+                                                                    <option value="<?php echo $value->id_akun ?>"><?php echo $value->nama ?> - <?php echo $value->nama_jabatan ?></option>  
+                                                                <?php } ?>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                                <div class="form-group ">
+                                                    <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="sifat_pkj2" class="form-control m-bot15">
+                                                            <option value="1">Personal</option>
+                                                            <option value="2">Umum</option>
+                                                        </select>
                                                     </div>
                                                 </div>
-                                            </section>
-<?php } ?>
-                                    </div>
-<?php if (in_array(2, $data_akun['idmodul'])) { ?>
-                                        <div id="TambahPekerjaan" class="tab-pane">
-                                            <div class="form">
-                                                <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan" enctype="multipart/form-data">
-                                                                <?php if ($atasan != null || isset($atasan)) { ?>
-                                                        <div class="form-group ">
-                                                            <label for="atasan" class="control-label col-lg-3">Atasan</label>
-                                                            <div class="col-lg-6">
-
-                                                                <select name="atasan" class="form-control m-bot15">
-
-        <?php foreach ($atasan as $value) { ?>              
-                                                                        <option value="<?php echo $value->id_akun ?>"><?php echo $value->nama ?> - <?php echo $value->nama_jabatan ?></option>  
-        <?php } ?>
-
-                                                                </select>
-                                                            </div>
-                                                        </div>
-    <?php } ?>
-                                                    <div class="form-group ">
-                                                        <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
-                                                        <div class="col-lg-6">
-                                                            <select name="sifat_pkj2" class="form-control m-bot15">
-                                                                <option value="1">Personal</option>
-                                                                <option value="2">Umum</option>
-                                                            </select>
+                                                <div class="form-group ">
+                                                    <label for="kategori" class="control-label col-lg-3">Kategori Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="kategori" class="form-control m-bot15">
+                                                            <option value="project">Project</option>
+                                                            <option value="rutin">Rutin</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <input class=" form-control" id="nama_pkj2" name="nama_pkj2" type="text" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
+                                                    <div class="col-lg-6">
+                                                        <textarea class="form-control" name="deskripsi_pkj2" rows="12"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="deadline" class="control-label col-lg-3">Deadline</label>
+                                                    <div class="col-lg-6 ">
+                                                        <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
+                                                            <input id="dd" readonly type="text" class="form-control dpd3" value="" name="tgl_mulai_pkj2">
+                                                            <span class="input-group-addon">Sampai</span>
+                                                            <input readonly type="text" class="form-control dpd4" value="" name="tgl_selesai_pkj2">
                                                         </div>
                                                     </div>
-                                                    <div class="form-group ">
-                                                        <label for="kategori" class="control-label col-lg-3">Kategori Pekerjaan</label>
-                                                        <div class="col-lg-6">
-                                                            <select name="kategori" class="form-control m-bot15">
-                                                                <option value="project">Project</option>
-                                                                <option value="rutin">Rutin</option>
-                                                            </select>
-                                                        </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="prioritas2" class="form-control m-bot15">
+                                                            <option value="1">Urgent</option>
+                                                            <option value="2">Tinggi</option>
+                                                            <option value="3">Sedang</option>
+                                                            <option value="4">Rendah</option>
+                                                        </select>
                                                     </div>
-                                                    <div class="form-group ">
-                                                        <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
-                                                        <div class="col-lg-6">
-                                                            <input class=" form-control" id="nama_pkj2" name="nama_pkj2" type="text" />
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">File</label>
+                                                    <div class="col-lg-6">
+                                                        <div id="file_baru">
+                                                            <table  class="table table-hover general-table" id="berkas_baru"></table>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group ">
-                                                        <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
-                                                        <div class="col-lg-6">
-                                                            <textarea class="form-control" name="deskripsi_pkj2" rows="12"></textarea>
+                                                        <div style="display:none">
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
                                                         </div>
+                                                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
                                                     </div>
-                                                    <div class="form-group ">
-                                                        <label for="deadline" class="control-label col-lg-3">Deadline</label>
-                                                        <div class="col-lg-6 ">
-                                                            <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                                                                <input id="dd" readonly type="text" class="form-control dpd3" value="" name="tgl_mulai_pkj2">
-                                                                <span class="input-group-addon">Sampai</span>
-                                                                <input readonly type="text" class="form-control dpd4" value="" name="tgl_selesai_pkj2">
-                                                            </div>
-                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-lg-offset-3 col-lg-6">
+                                                        <button class="btn btn-primary" type="submit">Save</button>
                                                     </div>
-                                                    <div class="form-group ">
-                                                        <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
-                                                        <div class="col-lg-6">
-                                                            <select name="prioritas2" class="form-control m-bot15">
-                                                                <option value="1">Urgent</option>
-                                                                <option value="2">Tinggi</option>
-                                                                <option value="3">Sedang</option>
-                                                                <option value="4">Rendah</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group ">
-                                                        <label for="prioritas" class="control-label col-lg-3">File</label>
-                                                        <div class="col-lg-6">
-                                                            <div id="file_baru">
-                                                                <table  class="table table-hover general-table" id="berkas_baru"></table>
-                                                            </div>
-                                                            <div style="display:none">
-                                                                <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
-                                                            </div>
-                                                            <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-lg-offset-3 col-lg-6">
-                                                            <button class="btn btn-primary" type="submit">Save</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                                </div>
+                                            </form>
                                         </div>
-<?php } ?>
+
+                                    </div>
+
+
 
                                 </div>
                             </div>
@@ -260,15 +296,7 @@ for ($i = $tahun_max; $i >= $tahun_min; $i--) {
 
 
 
-                <script>
-                    $(function () {
-                        $('#nama_pkj').click(function (e) {
-                            e.preventDefault();
-                            $('#deskripsi_pkj').show();
-                            $('#deskripsi_pkj2').load('<?php echo site_url() ?>pekerjaan/deskripsi_pekerjaan');
-                        });
-                    });
-                </script>
+
                 <!-- page end-->
             </section>
         </section>
@@ -330,159 +358,10 @@ for ($i = $tahun_max; $i >= $tahun_min; $i--) {
 <?php $this->load->view("taskman_footer_page") ?>
 
     <script>
-                    var site_url = '<?= site_url() ?>';
-                    var list_user = <?= json_encode($users) ?>;
-                    var base_url = '<?= base_url() ?>';
-<?php if (true /* count($my_staff) > 0 */) { ?>
 
-                        var list_nip = [];
-                        var list_nama = [];
-                        var list_departemen = [];
-                        var list_id = [];
-                        var sudah_diproses = false;
-                        function query_staff() {
-                            //var tubuh = $("#tabel_list_enroll_staff_body");
-
-                            if (list_id.length === 0) {
-                                $.ajax({// create an AJAX call...
-                                    data: "", // get the form data
-                                    type: "GET", // GET or POST
-                                    url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
-                                    success: function (response) { // on success..
-                                        var json = jQuery.parseJSON(response);
-                                        //alert(response);
-                                        if (json.status === "OK") {
-                                            var jumlah_data = json.data.length;
-                                            for (var i = 0; i < jumlah_data; i++) {
-                                                //var id = json.data[i]["id_akun"];
-                                                list_nip[i] = json.data[i]['nip'];
-                                                list_nama[i] = json.data[i]['nama'];
-                                                list_departemen[i] = json.data[i]['nama_departemen'];
-                                                list_id[i] = json.data[i]["id_akun"];
-                                                var id = list_id[i];
-                                                sudah_diproses = true;
-                                                var cell = $('#nama_staff_' + id);
-                                                if (cell.length > 0) {
-                                                    cell.html(list_nama[i]);
-                                                }
-                                            }
-                                        } else {
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                        query_staff();
-                        var tubuh = $("#tabel_list_enroll_staff_body");
-                        function tampilkan_staff() {
-                            if (sudah_diproses === false)
-                                query_staff();
-                            var jumlah_staff = list_id.length;
-                            //alert("jumlah data" + jumlah_staff)
-                            tubuh.html("");
-                            var assigned = $('#staff').val();
-                            var crow = 0;
-                            for (var i = 0; i < jumlah_staff; i++) {
-                                if (assigned.indexOf('::' + list_id[i] + '::') >= 0)
-                                    continue;
-                                crow++;
-                                tubuh.append('<tr id="tabel_list_enroll_staff_row_' + list_id[i] + '"></tr>');
-                                var row = $('#tabel_list_enroll_staff_row_' + list_id[i]);
-                                row.append('<td>' + crow + '</td>');
-                                row.append('<td>' + list_nip[i] + '</td>');
-                                row.append('<td>' + list_departemen[i] + '</td>');
-                                row.append('<td>' + list_nama[i] + '</td>');
-                                //row.append('<td>0</td>');
-                                row.append('<td><input type="checkbox" id="enroll_' + list_id[i] + '" name="enroll_' + list_id[i] + '"/></td>');
-                                //row.append('<td><div class="minimal-green single-row"><div class="checkbox"><div class="icheckbox_minimal-green checked" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></input><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;"></ins></div><label>Green</label></div></div></td>')
-                                $('#enroll_' + list_id[i]).attr('checked', false);
-                            }
-                            var assigned = $('#staff').val().split('::');
-                        }
-                        function pilih_staff_ok() {
-                            var jumlah_data = list_id.length;
-                            var staf = $('#staff');
-                            //staf.val('::');
-                            //$('#span_list_assign_staff').html('');
-                            for (var i = 0; i < jumlah_data; i++) {
-                                if ($('#enroll_' + list_id[i]).attr('checked')) {
-                                    staf.val(staf.val() + list_id[i] + '::');
-                                    $('#span_list_assign_staff').append('<div id="div_staff_' + list_id[i] + '"><span><a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="hapus_staff(' + list_id[i] + ');">Hapus</a></span><span style="margin-left: 5px">' + list_nama[i] + '</span></div>');
-                                }
-                            }
-                            $('#tombol_tutup').click();
-                        }
-                        function hapus_staff(id_staff) {
-                            $('#div_staff_' + id_staff).remove();
-                            $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
-                        }
-
-
-
-                        document.title = "Task Management - Edit Pekerjaan";
-
-        </script>
-<?php } ?>
-    <script>
-        function pekerjaan_saya_set_nama(id, isi) {
-            var sep = '';
-            var element = $('#' + id);
-            if (element.length > 0) {
-                if (element.html().length > 0)
-                    sep = "<br/>";
-                element.html(element.html() + sep + isi);
-            }
-        }
-<?php
-if (isset($users)) {
-    $id_nama_user = array();
-    foreach ($users as $user) {
-        $id_nama_user[$user->id_akun] = $user->nama;
-    }
-    if (isset($detil_pekerjaan)) {
-        foreach ($detil_pekerjaan as $detil) {
-            ?>pekerjaan_saya_set_nama("pekerjaan_nama_staff_<?php echo $detil->id_pekerjaan; ?>", '<?php if (isset($id_nama_user[$detil->id_akun])) echo $id_nama_user[$detil->id_akun]; ?>');
-            <?php
-        }
-    }
-}
-?>
-        $('#button_trigger_file').click(function () {
-            console.log('button trigger file click');
-            $('#pilih_berkas_assign').click();
-        });
-        $('#pilih_berkas_assign').change(function () {
-            console.log('pilih berkas assign click');
-            var pilih_berkas = document.getElementById('pilih_berkas_assign');
-            var files = pilih_berkas.files;
-            populate_file('berkas_baru', files);
-        });
-        function populate_file(id_tabel, files) {
-            console.log('populating files');
-            $('#' + id_tabel).html('');
-            var jumlah_file = files.length;
-            for (var i = 0; i < jumlah_file; i++) {
-                $('#' + id_tabel).append('<tr id="berkas_baru_' + i + '">' +
-                        '<td id="nama_berkas_baru_' + i + '">' + files[i].name + ' ' + format_ukuran_file(files[i].size) + '</td>' +
-                        '<td id="keterangan_' + i + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px">Baru</a></td>' +
-                        '</tr>');
-            }
-        }
-        function format_ukuran_file(s) {
-            var KB = 1024;
-            var spasi = ' ';
-            var satuan = 'bytes';
-            if (s > KB) {
-                s = s / KB;
-                satuan = 'KB';
-            }
-            if (s > KB) {
-                s = s / KB;
-                satuan = 'MB';
-            }
-            return '   [' + Math.round(s) + spasi + satuan + ']';
-        }
-
+        var site_url = '<?= site_url() ?>';
+        var list_user = <?= json_encode($users) ?>;
+        var base_url = '<?= base_url() ?>';
 
         document.title = "Pekerjaan Saya - Task Management";
         //$('#submenu_pekerjaan_li').click();
