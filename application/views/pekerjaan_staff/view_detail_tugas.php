@@ -136,7 +136,7 @@ foreach ($users as $u) {
                                             </section>
                                         </div>
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                                           ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                                            ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -179,14 +179,41 @@ foreach ($users as $u) {
         var base_url = '<?= base_url() ?>';
         var site_url = '<?= site_url() ?>';
         var list_id_staff = <?= json_encode($list_id_staff) ?>;
-        var file_pekerjaan= <?=  json_encode($file_pekerjaan)?>;
+        var file_pekerjaan = <?= json_encode($file_pekerjaan) ?>;
+        var file_tugas = <?= json_encode($file_tugas) ?>;
         $(document).ready(function () {
-            document.title = 'Deskripsi Pekerjaan: '+pekerjaan['nama_pekerjaan']+' - Task Management';
+            document.title = 'Deskripsi Pekerjaan: ' + pekerjaan['nama_pekerjaan'] + ' - Task Management';
             var tab = $($('.sidebar-menu').children()[2]).children();
             $(tab[0]).attr('class', 'dcjq-parent active');
             $(tab[1]).show();
             init_anggota_tugas();
+            init_file_pekerjaan();
+            init_file_tugas();
         });
+        function init_file_pekerjaan() {
+            var tabel=$('#tabel_file_pekerjaan ');
+            for (var i = 0, i2 = file_pekerjaan.length; i < i2; i++) {
+                var html = '<tr>'
+                        + '<td>' + (i + 1) + '</td>'
+                        + '<td>' + file_pekerjaan[i]['nama_file'] + '</td>'
+                        + '<td><a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + file_pekerjaan[i]['id_file'] + '" id="" style="font-size: 10px" target="_blank">Download</a><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file('+file_pekerjaan[i]['id_file']+', \''+file_pekerjaan[i]['nama_file']+'\');">Hapus</a></td>'
+                        + '</tr>';
+                tabel.append(html);
+            }
+            $('#tabel_file_pekerjaan').dataTable();
+        }
+        function init_file_tugas() {
+            var tabel=$('#tabel_file_tugas ');
+            for (var i = 0, i2 = file_tugas.length; i < i2; i++) {
+                var html = '<tr>'
+                        + '<td>' + (i + 1) + '</td>'
+                        + '<td>' + file_tugas[i]['nama_file'] + '</td>'
+                        + '<td><a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + file_tugas[i]['id_file'] + '" id="" style="font-size: 10px" target="_blank">Download</a><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file('+file_tugas[i]['id_file']+', \''+file_tugas[i]['nama_file']+'\');">Hapus</a></td>'
+                        + '</tr>';
+                tabel.append(html);
+            }
+            $('#tabel_file_tugas').dataTable();
+        }
         function init_anggota_tugas() {
             var tabel = $('#staff_pekerjaan');
 //            var arr_id_akun = tugas['id_akun'];

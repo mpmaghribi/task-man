@@ -134,7 +134,8 @@ class pekerjaan_staff extends ceklogin {
             'list_aktivitas' => $list_aktivitas_tugas,
             'detil_pekerjaan' => $detil_pekerjaan
         );
-        $data['file_pekerjaan']=$this->db->query("select * from file where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $data['file_pekerjaan']=$this->db->query("select id_file,nama_file from file where id_pekerjaan='$id_pekerjaan' and id_progress is null and id_detil_pekerjaan is null and id_aktivitas is null and id_tugas is null")->result_array();
+        $data['file_tugas']=$this->db->query("select id_file,nama_file from file where id_pekerjaan='$id_pekerjaan' and id_progress is null and id_detil_pekerjaan is null and id_aktivitas is null and id_tugas='$id_tugas'")->result_array();
         $this->load->view('pekerjaan_staff/view_detail_tugas', $data);
     }
 
