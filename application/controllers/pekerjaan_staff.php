@@ -232,14 +232,14 @@ class pekerjaan_staff extends ceklogin {
 
     function edit_tugas() {
         $id_tugas = intval($this->input->get('id_tugas'));
-        $q = $this->db->query("select * from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
+        $q = $this->db->query("select *, date_part('year', tanggal_mulai) as periode, to_char(tanggal_mulai,'DD-MM-YYYY') as tanggal_mulai2, to_char(tanggal_selesai,'DD-MM-YYYY') as tanggal_selesai2 from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
         if (count($q) <= 0) {
             redirect(site_url() . '/pekerjaan_staff');
             return;
         }
         $tugas = $q[0];
         $id_pekerjaan = $tugas['id_pekerjaan'];
-        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $q = $this->db->query("select *, to_char(tgl_mulai, 'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         if (count($q) <= 0) {
             redirect(site_url() . '/pekerjaan_staff');
             return;
@@ -248,14 +248,29 @@ class pekerjaan_staff extends ceklogin {
         $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $list_user = json_decode(file_get_contents($url));
-        $session=$this->session->userdata('logged_in');
+        $session = $this->session->userdata('logged_in');
         $data = array(
             'tugas' => $tugas,
             'pekerjaan' => $pekerjaan,
             'detil_pekerjaan' => $detil_pekerjaan,
             'users' => $list_user,
-            'data_akun'=>$session
+            'data_akun' => $session
         );
+        $tahun_max = date('Y');
+        $q = $this->db->query("select max(coalesce(date_part('year',tanggal_selesai),date_part('year',now()))) as tahun_max from assign_tugas")->result_array();
+        if (count($q) > 0) {
+            $tahun = (int) $q[0]['tahun_max'];
+            if ($tahun_max < $tahun) {
+                $tahun_max = $tahun;
+            }
+        }
+        $tahun_min = $tahun_max - 10;
+        $q = $this->db->query("select min(coalesce(date_part('year',tanggal_mulai),date_part('year',now()))) as tahun_min from assign_tugas")->result_array();
+        if (count($q) > 0) {
+            $tahun_min = (int) $q[0]['tahun_min'];
+        }
+        $data['tahun_max'] = $tahun_max;
+        $data['tahun_min'] = $tahun_min;
         $this->load->view('pekerjaan_staff/view_edit_tugas', $data);
     }
 

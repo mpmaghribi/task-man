@@ -1,6 +1,5 @@
 <?php
 $this->load->view("taskman_header_page");
-
 ?> 
 <body>
     <section id="container" >
@@ -52,127 +51,57 @@ $this->load->view("taskman_header_page");
                                         </div>
                                     </div>
                                     <div id="div_skp" class="tab-pane active">
-                                        <?php 
+                                        <?php
                                         //print_r($pekerjaan); 
                                         ?>
                                         <div class="form">
-                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan_staff/update" enctype="multipart/form-data">
-                                                <input type="hidden" name="jenis_usulan" value="usulan"/>
-                                                <input type="hidden" name="id_pekerjaan" value="<?=$pekerjaan['id_pekerjaan']?>"/>
+                                            <form class="cmxform form-horizontal " id="form_edit_tugas" method="POST" action="<?php echo site_url() ?>/pekerjaan_staff/update_tugas" enctype="multipart/form-data">
+
+                                                <div class="form-group " >
+                                                    <label for="prioritas" class="control-label col-lg-3">Periode</label>
+                                                    <div class="col-lg-6" id="">
+                                                        <select class="form-control" id="tugas_select_periode" name="periode">
+                                                            <?php
+                                                            $tahun_max = max(array($tahun_max, $tugas['periode']));
+                                                            $tahun_min = min(array($tahun_min, $tugas['periode']));
+                                                            for ($i = $tahun_max; $i >= $tahun_min; $i--) {
+                                                                echo '<option value="' . $i . '"' . ($i == $tugas['periode'] ? ' selected="" ' : '') . '>' . $i . '</option>';
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group " >
+                                                    <label for="prioritas" class="control-label col-lg-3">Pekerjaan</label>
+                                                    <div class="col-lg-6" id="">
+                                                        <select class="form-control" id="tugas_select_pekerjaan" name="id_pekerjaan">
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 <div class="form-group ">
                                                     <label for="staff" class="control-label col-lg-3">Staff</label>
                                                     <div class="col-lg-6">
                                                         <div id="span_list_assign_staff">
-                                                            <table id="tabel_assign_staff_skp" class="table table-hover general-table">
+                                                            <table id="tabel_assign_staff_tugas" class="table table-hover general-table">
                                                             </table>
                                                         </div>
-                                                        <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff_skp();">Tambah Staff</a>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
-                                                    <div class="col-lg-6">
-                                                        <select name="sifat_pkj" class="form-control m-bot15">
-                                                            <option value="1">Personal</option>
-                                                            <option value="2" <?= $pekerjaan['id_sifat_pekerjaan'] == '2' ? 'selected=""' : '' ?>>Umum</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="sifat_pkj" class="control-label col-lg-3">Ketegroi Pekerjaan</label>
-                                                    <div class="col-lg-6">
-                                                        <select name="kategori_pekerjaan" class="form-control m-bot15" id="select_kategori_pekerjaan">
-                                                            <option value="rutin" >Rutin</option>
-                                                            <option value="project" <?= $pekerjaan['kategori'] == 'project' ? 'selected=""' : '' ?>>Project</option>
-                                                            <option value="tambahan" <?= $pekerjaan['kategori'] == 'tambahan' ? 'selected=""' : '' ?>>Tambahan</option>
-                                                            <option value="kreativitas" <?= $pekerjaan['kategori'] == 'kreativitas' ? 'selected=""' : '' ?>>Kreativitas</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
-                                                    <div class="col-lg-6">
-                                                        <input class=" form-control" id="firstname" name="nama_pkj" type="text" value="<?= $pekerjaan['nama_pekerjaan'] ?>"/>
+                                                        <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff_tugas();">Tambah Staff</a>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
                                                     <div class="col-lg-6">
-                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"><?= $pekerjaan['deskripsi_pekerjaan'] ?></textarea>
+                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12"><?= $tugas['deskripsi'] ?></textarea>
                                                     </div>
-                                                </div>
-                                                <div class="form-group " id="div_angka_kredit">
-                                                    <label for="prioritas" class="control-label col-lg-3">Angka Kredit</label>
-                                                    <div class="col-lg-6">
-                                                        <input type="text" class="form-control" id="angka_kredit" name="angka_kredit" value="<?= $dp['sasaran_angka_kredit'] ?>"/>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group " id="div_kuantitas">
-                                                    <label for="prioritas" class="control-label col-lg-3">Kuantitas Output</label>
-                                                    <div class="col-lg-4">
-                                                        <input type="text" class="form-control" id="kuantitas_output" name="kuantitas_output" value="<?= $dp['sasaran_kuantitas_output'] ?>"/>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <input type="text" class="form-control" id="satuan_kuantitas" name="satuan_kuantitas" value="item" placeholder="satuan kuanttias" value="<?= $dp['satuan_kuantitas'] ?>"/>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group" id="div_kualitas">
-                                                    <label for="prioritas" class="control-label col-lg-3">Kualitas Mutu</label>
-                                                    <div class="col-lg-6">
-                                                        <input type="text" class="form-control" id="kualitas_mutu" name="kualitas_mutu" value="<?= $dp['sasaran_kualitas_mutu'] ?>"/>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group " >
-                                                    <label for="prioritas" class="control-label col-lg-3">Periode</label>
-                                                    <div class="col-lg-6" id="">
-                                                        <input type="text" class="form-control" id="periode" name="periode" value="<?= intval($pekerjaan['periode']) > 0 ? $pekerjaan['periode'] : date('Y') ?>"/>
-                                                    </div>
-                                                    
                                                 </div>
                                                 <div class="form-group " >
                                                     <label for="prioritas" class="control-label col-lg-3">Deadline</label>
                                                     <div class="col-lg-6" id="div_periode_tanggal">
                                                         <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                                                            <input readonly type="text" class="form-control dpd1" value="<?= $pekerjaan['tanggal_mulai'] ?>" name="tgl_mulai">
+                                                            <input readonly type="text" class="form-control" value="<?= $tugas['tanggal_mulai2'] ?>" name="tgl_mulai" id="tugas_tanggal_mulai">
                                                             <span class="input-group-addon">Sampai</span>
-                                                            <input readonly type="text" class="form-control dpd2" value="<?= $pekerjaan['tanggal_selesai'] ?>" name="tgl_selesai">
+                                                            <input readonly type="text" class="form-control" value="<?= $tugas['tanggal_selesai2'] ?>" name="tgl_selesai" id="tugas_tanggal_selesai">
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group " id="div_pakai_biaya">
-                                                    <label for="prioritas" class="control-label col-lg-3">Pakai Biaya</label>
-                                                    <div class="col-lg-6">
-                                                        <select name="pakai_biaya" id="pakai_biaya" class="form-control">
-                                                            <option value="0">Tanpa Biaya</option>
-                                                            <option value="1" <?= $dp['pakai_biaya'] == '1' ? 'selected=""' : '' ?>>Biaya</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group " id="div_biaya">
-                                                    <label for="prioritas" class="control-label col-lg-3">Biaya</label>
-                                                    <div class="col-lg-6">
-                                                        <input type="text" class="form-control" id="biaya" name="biaya" value="<?= $dp['sasaran_biaya'] ?>"/>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group " id="div_manfaat">
-                                                    <label for="prioritas" class="control-label col-lg-3">Tingkat Kemanfaatan</label>
-                                                    <div class="col-lg-6">
-                                                        <select name="select_kemanfaatan" class="form-control">
-                                                            <option value="1">Bermanfaat bagi unit kerjanya</option>
-                                                            <option value="2" <?= $pekerjaan['level_manfaat'] == '2' ? 'selected=""' : '' ?>>Bermanfaat bagi oragnisasinya</option>
-                                                            <option value="3" <?= $pekerjaan['level_manfaat'] == '3' ? 'selected=""' : '' ?>>Bermanfaat bagi negara</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group ">
-                                                    <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
-                                                    <div class="col-lg-6">
-                                                        <select name="prioritas" class="form-control m-bot15">
-                                                            <option value="1" >Urgent</option>
-                                                            <option value="2" <?= $pekerjaan['level_prioritas'] == '2' ? 'selected=""' : '' ?>>Tinggi</option>
-                                                            <option value="3" <?= $pekerjaan['level_prioritas'] == '3' ? 'selected=""' : '' ?>>Sedang</option>
-                                                            <option value="4" <?= $pekerjaan['level_prioritas'] == '4' ? 'selected=""' : '' ?>>Rendah</option>
-                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
@@ -216,10 +145,61 @@ $this->load->view("taskman_header_page");
     <?php $this->load->view("taskman_footer_page"); ?>
     <script type="text/javascript" src="<?= base_url() ?>assets/js2/date_picker_init.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>assets/js2/pekerjaan_staff/js_view_pekerjaan_staff.js"></script>
-    <script type="text/javascript" src="<?= base_url() ?>assets/js2/pekerjaan_staff/js_edit.js"></script>
+
     <script >
-                                                            var list_staff = <?php echo json_encode($list_staff); ?>;
+                                                            var list_staff = <?php echo json_encode($users) ?>;
                                                             var pekerjaan =<?= json_encode($pekerjaan) ?>;
                                                             var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
-                                                            var site_url='<?=site_url()?>';
+                                                            var site_url = '<?= site_url() ?>';
+                                                            var tugas=<?=  json_encode($tugas)?>;
+                                                            $(document).ready(function () {
+                                                                var p = pekerjaan;
+                                                                var tanggal_bawah_arr = p['tanggal_mulai'].split('-');
+                                                                var tanggal_atas_arr = p['tanggal_selesai'].split('-');
+                                                                var tanggal_bawah = new Date(parseInt(tanggal_bawah_arr[0]), parseInt(tanggal_bawah_arr[1]) - 1, parseInt(tanggal_bawah_arr[2]));
+//                                                                console.log('tanggal bawah = ' + tanggal_bawah);
+                                                                var tanggal_atas = new Date(parseInt(tanggal_atas_arr[0]), parseInt(tanggal_atas_arr[1]) - 1, parseInt(tanggal_atas_arr[2]));
+                                                                console.log('tanggal atas = ' + tanggal_atas);
+//                                                                $('#tugas_tanggal_mulai').val(tanggal_bawah_arr[2] + '-' + tanggal_bawah_arr[1] + '-' + tanggal_bawah_arr[0]);
+//                                                                $('#tugas_tanggal_selesai').val(tanggal_atas_arr[2] + '-' + tanggal_atas_arr[1] + '-' + tanggal_atas_arr[0]);
+                                                                var tanggal_mulai = $('#tugas_tanggal_mulai').datepicker({
+                                                                    format: 'dd-mm-yyyy',
+                                                                    onRender: function (date) {
+                                                                        return  tanggal_bawah > date || date > tanggal_atas ? 'disabled' : '';
+                                                                    }
+                                                                }).on('changeDate', function (ev) {
+                                                                    tanggal_selesai.setValue(new Date(ev.date));
+                                                                    tanggal_mulai.hide();
+//        tanggal_selesai.click();
+                                                                    $('#tugas_tanggal_selesai').focus();
+                                                                }).data('datepicker');
+
+                                                                var tanggal_selesai = $('#tugas_tanggal_selesai').datepicker({
+                                                                    format: 'dd-mm-yyyy',
+                                                                    onRender: function (date) {
+                                                                        return tanggal_bawah > date || date > tanggal_atas || tanggal_mulai.date > date ? 'disabled' : '';
+                                                                    }
+                                                                }).on('changeDate', function (ev) {
+                                                                    tanggal_selesai.hide();
+                                                                }).data('datepicker');
+                                                            });
+                                                            list_detil_pekerjaan[pekerjaan['id_pekerjaan']] = [];
+                                                            for (var i = 0, i2 = detil_pekerjaan.length; i < i2; i++) {
+                                                                var dp = detil_pekerjaan[i];
+                                                                list_detil_pekerjaan[pekerjaan['id_pekerjaan']].push(dp);
+                                                            }
+                                                            var list_id_terlibat2 = JSON.parse(tugas['id_akun'].replace('{', '[').replace('}', ']'));
+                                                            query_staff();
+                                                            for (var i = 0, i2 = list_id_terlibat2.length; i < i2; i++) {
+                                                                var id_terlibat2 = list_id_terlibat2[i];
+                                                                var nama='';
+                                                                for (var j = 0, j2 = list_id.length; j < j2; j++) {
+                                                                    if(id_terlibat2==list_id[j]){
+                                                                        nama=list_nama[j];
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                enroll_staff(id_terlibat2,nama,'tugas');
+                                                            }
+
     </script>
