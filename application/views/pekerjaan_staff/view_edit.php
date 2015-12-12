@@ -154,7 +154,7 @@ if (count($detil_pekerjaan) > 0) {
                                                 <div class="form-group " id="div_biaya">
                                                     <label for="prioritas" class="control-label col-lg-3">Biaya</label>
                                                     <div class="col-lg-6">
-                                                        <input type="text" class="form-control" id="biaya" name="biaya" value="<?= $dp['sasaran_biaya'] ?>"/>
+                                                        <input type="text" class="form-control" id="biaya" name="biaya" value="<?= $dp['pakai_biaya']=='1'?$dp['sasaran_biaya']:'-' ?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group " id="div_manfaat">

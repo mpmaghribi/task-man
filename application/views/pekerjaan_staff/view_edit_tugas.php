@@ -51,12 +51,10 @@ $this->load->view("taskman_header_page");
                                         </div>
                                     </div>
                                     <div id="div_skp" class="tab-pane active">
-                                        <?php
-                                        //print_r($pekerjaan); 
-                                        ?>
+                                        
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_edit_tugas" method="POST" action="<?php echo site_url() ?>/pekerjaan_staff/update_tugas" enctype="multipart/form-data">
-
+                                                <input type="hidden" name="id_tugas" value="<?=$tugas['id_assign_tugas']?>"/>
                                                 <div class="form-group " >
                                                     <label for="prioritas" class="control-label col-lg-3">Periode</label>
                                                     <div class="col-lg-6" id="">

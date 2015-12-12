@@ -958,6 +958,11 @@ class pekerjaan_staff extends ceklogin {
         echo json_encode(array_merge($result, $q[0]));
     }
 
+    function update_tugas() {
+        $id_tugas=  intval($this->input->post('id_tugas'));
+        $id_pekerjaan=intval($this->input->post('id_pekerjaan'));
+    }
+
     function update() {
         $id_pekerjaan = intval($this->input->post('id_pekerjaan'));
         $session = $this->session->userdata('logged_in');
