@@ -54,7 +54,12 @@ function init_tabel_tugas() {
                         status='Telah dikerjakan';
                     }
                 }
-                var aksi = '';
+                var aksi = '<div class="btn-group">';
+                aksi += '<button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button">Aksi <span class="caret"></span></button>';
+                aksi += '<ul class="dropdown-menu">';
+                aksi += '<li><a href="' + site_url + '/pekerjaan_saya/detail_tugas?id_tugas=' + tugas['id_assign_tugas'] + '" target="">Detail Tugas</a></li>';
+                aksi += '</ul>';
+                aksi += '</div>'
 
                 counter++;
 
@@ -62,7 +67,7 @@ function init_tabel_tugas() {
                         + '<td>' + counter + '</td>'
                         + '<td>' + tugas['deskripsi'] + '</td>'
                         + '<td>' + tugas['nama_pekerjaan'] + '</td>'
-                        + '<td>' + tugas['tanggal_mulai2'] + '</td>'
+                        + '<td>' + tugas['tanggal_mulai2'] +' - '+tugas['tanggal_selesai2']+ '</td>'
                         + '<td>' + anggota + '</td>'
                         + '<td>' + status + '</td>'
                         + '<td>' + aksi + '</td>'

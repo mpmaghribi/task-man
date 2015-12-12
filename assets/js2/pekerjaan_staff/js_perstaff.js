@@ -61,6 +61,9 @@ function init_tabel_tugas() {
                     }
                 }
                 var status = 'Belum Dibaca';
+//                if(tugas['tanggal_dilihat']!=null){
+//                    status='Sudah Dibaca';
+//                }
                 var aksi = '<div class="btn-group">';
                 aksi += '<button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button">Aksi <span class="caret"></span></button>';
                 aksi += '<ul class="dropdown-menu">';
