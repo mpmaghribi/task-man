@@ -200,6 +200,24 @@ class pekerjaan_saya extends ceklogin {
         $periode = abs(intval($this->input->post('periode')));
         echo json_encode($this->pekerjaan_saya_model->get_list_skp_saya($session['user_id'], $periode));
     }
+    
+    function get_list_tugas(){
+        $periode=abs(intval($this->input->get('periode')));
+        $session=$this->session->userdata('logged_in');
+        $my_id=$session['user_id'];
+        $q=$this->db->query("select assign_tugas.*, "
+                . "pekerjaan.nama_pekerjaan, "
+                . "aktivitas_pekerjaan.id_aktivitas, aktivitas_pekerjaan.status_validasi as status_validasi_aktivitas, "
+                . "to_char(assign_tugas.tanggal_mulai,'YYYY-MM-DD') as tanggal_mulai2,"
+                . "to_char(assign_tugas.tanggal_selesai,'YYYY-MM-DD') as tanggal_selesai2 "
+                . "from assign_tugas "
+                . "inner join pekerjaan on pekerjaan.id_pekerjaan=assign_tugas.id_pekerjaan "
+                . "inner join detil_pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan and detil_pekerjaan.id_akun='$my_id' "
+                . "left join aktivitas_pekerjaan on aktivitas_pekerjaan.id_detil_pekerjaan=detil_pekerjaan.id_detil_pekerjaan and assign_tugas.id_assign_tugas=aktivitas_pekerjaan.id_tugas "
+                . "where '$my_id'=any(assign_tugas.id_akun) "
+                . "and date_part('year',assign_tugas.tanggal_mulai)='$periode'")->result_array();
+        echo json_encode($q);
+    }
 
     private function mark_read($id_akun, $id_pekerjaan) {
         $this->db->query("update detil_pekerjaan set tgl_read=now() where id_akun='$id_akun' and id_pekerjaan='$id_pekerjaan' and tgl_read is null");

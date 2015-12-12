@@ -106,18 +106,20 @@ class pekerjaan_saya_model extends dtpg {
             dp.realisasi_waktu,
             dp.id_akun,
             dp2.id_akuns,
-            now() as sekarang
-             from pekerjaan p 
-             inner join detil_pekerjaan dp
-             on p.id_pekerjaan=dp.id_pekerjaan
-             inner join (
-		select array_agg(dp2.id_akun)as id_akuns, dp2.id_pekerjaan 
-                from detil_pekerjaan dp2 
-                group by dp2.id_pekerjaan
-	     ) as dp2
-             on dp2.id_pekerjaan=p.id_pekerjaan
-             where (date_part('year',p.tgl_mulai)='$periode' or date_part('year',p.tgl_selesai)='$periode')
-             and dp.id_akun='$my_id' order by p.periode, p.tgl_mulai";
+            now() as sekarang,
+            to_char(p.tgl_mulai,'YYYY-MM-DD') as tanggal_mulai,
+            to_char(p.tgl_selesai, 'YYYY-MM-DD') as tanggal_selesai
+            from pekerjaan p 
+            inner join detil_pekerjaan dp
+            on p.id_pekerjaan=dp.id_pekerjaan
+            inner join (
+               select array_agg(dp2.id_akun)as id_akuns, dp2.id_pekerjaan 
+               from detil_pekerjaan dp2 
+               group by dp2.id_pekerjaan
+            ) as dp2
+            on dp2.id_pekerjaan=p.id_pekerjaan
+            where (date_part('year',p.tgl_mulai)='$periode' or date_part('year',p.tgl_selesai)='$periode')
+            and dp.id_akun='$my_id' order by p.periode, p.tgl_mulai";
 //        echo $sql;
         return $this->db->query($sql)->result_array();
     }

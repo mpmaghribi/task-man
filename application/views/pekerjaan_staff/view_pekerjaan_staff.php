@@ -516,4 +516,5 @@
     <script >
                                                             var list_staff = <?php echo json_encode($my_staff); ?>;
                                                             var site_url='<?=site_url()?>';
+                                                            var pekerjaan=null;
     </script>

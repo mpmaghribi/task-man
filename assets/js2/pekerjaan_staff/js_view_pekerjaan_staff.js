@@ -88,7 +88,7 @@ function init_list_pekerjaan_untuk_periode() {
                 var p = json[i];
                 list_pekerjaan[p['id_pekerjaan']] = p;
                 var selected = '';
-                if (pekerjaan != undefined) {
+                if (pekerjaan != null) {
                     if (pekerjaan['id_pekerjaan'] == p['id_pekerjaan']) {
                         selected = ' selected="" ';
                     }
