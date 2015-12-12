@@ -61,6 +61,7 @@ class pekerjaan_saya extends ceklogin {
         }
     }
     
+    //untuk data graph di controller pekerjaan saya, fungsi index
     public function vardata() {
         header('Cache-Control: no-cache, must-revalidate');
         header('Access-Control-Allow-Origin: *');

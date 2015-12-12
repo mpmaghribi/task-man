@@ -20,30 +20,40 @@
                                 Chart Aktifitas Pekerjaan Bulan <?php echo date('F Y'); ?>
                             </header>
                             <div class="panel-body">
+
                                 <div class="row">
-                                    <?php $jml = count($aktivitas); $tengah = ceil($jml/2); if($jml>6) { ?>
-                                    <div class="col-lg-6">
-                                        <?php  for($a=0;$a<$tengah;$a++){
-                                            echo '<li>P'.($a+1).' : '.$aktivitas[$a]['nama_pekerjaan'].'</li>';
-                                        }?>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <?php  for($a=$tengah;$a<$jml;$a++){
-                                            echo '<li>P'.($a).' : '.$aktivitas[$a]['nama_pekerjaan'].'</li>';
-                                        }?>
-                                    </div>
-                                    <?php } else { ?>
+                                    <?php $jml = count($aktivitas);
+                                    $tengah = ceil($jml / 2);
+                                    if ($jml > 6) { ?>
+                                        <div class="col-lg-6">
+                                            <?php
+                                            for ($a = 0; $a < $tengah; $a++) {
+                                                echo '<li>P' . ($a + 1) . ' : ' . $aktivitas[$a]['nama_pekerjaan'] . '</li>';
+                                            }
+                                            ?>
+                                        </div>
+                                        <div class="col-lg-6">
+                                        <?php
+                                        for ($a = $tengah; $a < $jml; $a++) {
+                                            echo '<li>P' . ($a) . ' : ' . $aktivitas[$a]['nama_pekerjaan'] . '</li>';
+                                        }
+                                        ?>
+                                        </div>
+                                            <?php } else { ?>
                                         <div class="col-lg-12">
                                             <ol>
-                                                <?php $r=1; foreach ($aktivitas as $v) {
-                                                    echo '<li>P'.$r.' : '.$v->nama_pekerjaan.'</li>'; $r++;
-
-                                                } ?>
+                                        <?php
+                                        $r = 1;
+                                        foreach ($aktivitas as $v) {
+                                            echo '<li>P' . $r . ' : ' . $v->nama_pekerjaan . '</li>';
+                                            $r++;
+                                        }
+                                        ?>
                                             </ol>
                                         </div>
-                                    <?php } ?>
+<?php } ?>
                                     <div class="col-lg-12">
-                                        
+
                                     </div>
                                 </div>
                                 <div class="row">
@@ -51,7 +61,14 @@
                                         <div id="graph-line"></div>
                                     </div>
                                 </div>
-                                
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <a href="#myModal" data-toggle="modal" class="btn btn-success">
+                                            Print Log Aktifitas
+                                        </a>
+                                    </div>
+                                </div>
+
                             </div>
                         </section>
                     </div>
@@ -64,11 +81,11 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#ListPekerjaan">List Pekerjaan</a>
                                     </li>
-                                    <?php if (in_array(2, $data_akun['idmodul'])) { ?>
+<?php if (in_array(2, $data_akun['idmodul'])) { ?>
                                         <li class="">
                                             <a data-toggle="tab" href="#TambahPekerjaan">Usulkan Pekerjaan</a>
                                         </li>
-                                    <?php } ?>
+<?php } ?>
                                 </ul>
                             </header>
                             <div class="panel-body">
@@ -84,11 +101,11 @@
                                                         <label class="control-label col-lg-1">Periode</label>
                                                         <div class="col-lg-3">
                                                             <select class="form-control" id="select_periode" onchange="init_tabel_skp()">
-                                                                <?php
-                                                                for ($i = $tahun_max; $i >= $tahun_min; $i--) {
-                                                                    echo '<option value="' . $i . '">' . $i . '</option>';
-                                                                }
-                                                                ?>
+<?php
+for ($i = $tahun_max; $i >= $tahun_min; $i--) {
+    echo '<option value="' . $i . '">' . $i . '</option>';
+}
+?>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -114,7 +131,7 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <?php if (in_array(2, $data_akun['idmodul'])) { ?>
+<?php if (in_array(2, $data_akun['idmodul'])) { ?>
                                             <section class="panel">
                                                 <header class="panel-heading">
                                                     Daftar Usulan Pekerjaan Saya
@@ -139,27 +156,27 @@
                                                     </div>
                                                 </div>
                                             </section>
-                                        <?php } ?>
+<?php } ?>
                                     </div>
-                                    <?php if (in_array(2, $data_akun['idmodul'])) { ?>
+<?php if (in_array(2, $data_akun['idmodul'])) { ?>
                                         <div id="TambahPekerjaan" class="tab-pane">
                                             <div class="form">
                                                 <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan" enctype="multipart/form-data">
-                                                    <?php if ($atasan != null || isset($atasan)) { ?>
+                                                                <?php if ($atasan != null || isset($atasan)) { ?>
                                                         <div class="form-group ">
                                                             <label for="atasan" class="control-label col-lg-3">Atasan</label>
                                                             <div class="col-lg-6">
 
                                                                 <select name="atasan" class="form-control m-bot15">
 
-                                                                    <?php foreach ($atasan as $value) { ?>              
+        <?php foreach ($atasan as $value) { ?>              
                                                                         <option value="<?php echo $value->id_akun ?>"><?php echo $value->nama ?> - <?php echo $value->nama_jabatan ?></option>  
-                                                                    <?php } ?>
+        <?php } ?>
 
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
+    <?php } ?>
                                                     <div class="form-group ">
                                                         <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                         <div class="col-lg-6">
@@ -231,7 +248,7 @@
                                                 </form>
                                             </div>
                                         </div>
-                                    <?php } ?>
+<?php } ?>
 
                                 </div>
                             </div>
@@ -239,6 +256,8 @@
                         </section>
                     </div>
                 </div>
+
+
 
 
                 <script>
@@ -255,15 +274,60 @@
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-        <?php $this->load->view('taskman_rightbar_page') ?>
+<?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
 
     </section>
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h4 class="modal-title">Form Tittle</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form role="form" method="post" action="<?php echo base_url().'index.php/laporan/cetak_logaktifitas'; ?>" target="_blank">
+                        <div class="form-group">
+                            <label for="tahun">Tahun</label>
+                            <select name="tahun" class="form-control m-bot15">
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bulan">Bulan</label>
+                            <select name="bulan" class="form-control m-bot15">
+                                <option value="1">Januari</option>
+                                <option value="2">Februari</option>
+                                <option value="3">Maret</option>
+                                <option value="4">April</option>
+                                <option value="5">Mei</option>
+                                <option value="6">Juni</option>
+                                <option value="7">Juli</option>
+                                <option value="8">Agustus</option>
+                                <option value="9">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-print"></i> Print</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
     <script src="<?= base_url() ?>assets/js2/date_picker_init.js" type="text/javascript"></script>
     <script src="<?= base_url() ?>assets/js2/pekerjaan_saya/js_view_pekerjaan_saya.js" type="text/javascript"></script>
 
-    <?php $this->load->view("taskman_footer_page") ?>
+<?php $this->load->view("taskman_footer_page") ?>
 
     <script>
                     var site_url = '<?= site_url() ?>';
@@ -358,7 +422,7 @@
                         document.title = "Task Management - Edit Pekerjaan";
 
         </script>
-    <?php } ?>
+<?php } ?>
     <script>
         function pekerjaan_saya_set_nama(id, isi) {
             var sep = '';

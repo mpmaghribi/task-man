@@ -13,82 +13,117 @@ class pekerjaan_model extends dtpg {
         $query = $this->db->query($query);
         return $query->result();
     }
-    
-    //countactivity
-    public function activityjobthismonth($id_akun)
-    {
-        $query="select pekerjaan.nama_pekerjaan, tbl1.jml, pekerjaan.tgl_mulai, pekerjaan.tgl_selesai from detil_pekerjaan 
-            inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan
-            left join ( select COUNT(aktivitas_pekerjaan.id_aktivitas) as jml, id_detil_pekerjaan from aktivitas_pekerjaan GROUP BY id_detil_pekerjaan ) as tbl1 on tbl1.id_detil_pekerjaan = detil_pekerjaan.id_detil_pekerjaan
-            where detil_pekerjaan.id_akun = $id_akun 
-            and
-            (pekerjaan.kategori = 'rutin' or pekerjaan.kategori = 'project')
-            and 
-			(
+
+    //log aktifitas, parameter bulan $ tahun
+    public function logaktifitas($bulan, $tahun) {
+        $query = "select pekerjaan.nama_pekerjaan, aktivitas_pekerjaan.id_detil_pekerjaan, aktivitas_pekerjaan.id_aktivitas, aktivitas_pekerjaan.keterangan,
+to_char(aktivitas_pekerjaan.waktu_mulai::timestamp::date, 'dd Month YYYY') as waktu_mulai, to_char(aktivitas_pekerjaan.waktu_selesai::timestamp::date, 'dd Month YYYY') as waktu_selesai
+from aktivitas_pekerjaan
+left join detil_pekerjaan dp on dp.id_detil_pekerjaan = aktivitas_pekerjaan.id_detil_pekerjaan
+left join pekerjaan on pekerjaan.id_pekerjaan = dp.id_pekerjaan
+where 
+dp.id_akun = 2
+and
+(
+extract( month from aktivitas_pekerjaan.waktu_mulai) = $bulan
+or
+extract( month from aktivitas_pekerjaan.waktu_selesai) = $bulan
+)
+and
+(
+extract( year from aktivitas_pekerjaan.waktu_mulai) = $tahun
+or
+extract( year from aktivitas_pekerjaan.waktu_selesai) = $tahun
+)
+			
+ORDER BY aktivitas_pekerjaan.waktu_mulai asc";
+        $result = $this->db->query($query);
+        return $result->result();
+    }
+
+    //untuk data graph di controller pekerjaan saya, fungsi index. 
+    public function activityjobthismonth($id_akun) {
+        $query = "select pekerjaan.nama_pekerjaan, pekerjaan.id_pekerjaan, pekerjaan.tgl_mulai, pekerjaan.tgl_selesai, tbl2.id_detil_pekerjaan, tbl2.jml 
+from pekerjaan
+inner join detil_pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan
+inner join
+(
+select count(aktivitas_pekerjaan.id_aktivitas) as jml, aktivitas_pekerjaan.id_detil_pekerjaan from aktivitas_pekerjaan
+left join detil_pekerjaan dp on dp.id_detil_pekerjaan = aktivitas_pekerjaan.id_detil_pekerjaan
+where 
+dp.id_akun = $id_akun
+and
+(
             (
-            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) <= 
-            pekerjaan.tgl_mulai
+            ( select cast(date_trunc('month', current_date  ) as date ) as firstdate ) <= 
+            aktivitas_pekerjaan.waktu_mulai
             and
             ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) >= 
-            pekerjaan.tgl_mulai
+            aktivitas_pekerjaan.waktu_mulai
             )
             or
             (
-            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) <= 
-            pekerjaan.tgl_selesai
+            ( select cast(date_trunc('month', current_date  ) as date ) as firstdate ) <= 
+            aktivitas_pekerjaan.waktu_selesai
             and
             ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) <= 
-            pekerjaan.tgl_selesai
+            aktivitas_pekerjaan.waktu_selesai
             )
             or
             (
-            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) >= 
-            pekerjaan.tgl_mulai
+            ( select cast(date_trunc('month', current_date  ) as date ) as firstdate ) >= 
+            aktivitas_pekerjaan.waktu_mulai
             and
             ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) <= 
-            pekerjaan.tgl_selesai
+            aktivitas_pekerjaan.waktu_selesai
             )
-			) ORDER BY pekerjaan.tgl_mulai asc";
+			)
+			GROUP BY aktivitas_pekerjaan.id_detil_pekerjaan
+) as tbl2 on tbl2.id_detil_pekerjaan = detil_pekerjaan.id_detil_pekerjaan 
+ORDER BY pekerjaan.tgl_mulai asc";
         $query = $this->db->query($query);
         return $query->result();
     }
-    
-    public function listactivitythismonth($id_akun) {
-        $query = "select pekerjaan.nama_pekerjaan, aktivitas_pekerjaan.waktu_mulai::timestamp::date, aktivitas_pekerjaan.waktu_selesai::timestamp::date 
-from detil_pekerjaan 
-            inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan
-            inner join aktivitas_pekerjaan on aktivitas_pekerjaan.id_detil_pekerjaan = detil_pekerjaan.id_detil_pekerjaan
-            where detil_pekerjaan.id_akun = $id_akun 
 
-            and 
-			(
+    //untuk query aktifitas bulan ini di kalender / home
+    public function listactivitythismonth($id_akun) {
+        $query = "
+select pekerjaan.nama_pekerjaan, aktivitas_pekerjaan.id_detil_pekerjaan, aktivitas_pekerjaan.id_aktivitas, aktivitas_pekerjaan.waktu_mulai::timestamp::date, aktivitas_pekerjaan.waktu_selesai::timestamp::date
+from aktivitas_pekerjaan
+left join detil_pekerjaan dp on dp.id_detil_pekerjaan = aktivitas_pekerjaan.id_detil_pekerjaan
+left join pekerjaan on pekerjaan.id_pekerjaan = dp.id_pekerjaan
+where 
+dp.id_akun = $id_akun
+and
+(
             (
-            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) <= 
-            pekerjaan.tgl_mulai
+            ( select cast(date_trunc('month', current_date  ) as date ) as firstdate ) <= 
+            aktivitas_pekerjaan.waktu_mulai
             and
             ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) >= 
-            pekerjaan.tgl_mulai
+            aktivitas_pekerjaan.waktu_mulai
             )
             or
             (
-            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) <= 
-            pekerjaan.tgl_selesai
+            ( select cast(date_trunc('month', current_date  ) as date ) as firstdate ) <= 
+            aktivitas_pekerjaan.waktu_selesai
             and
             ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) <= 
-            pekerjaan.tgl_selesai
+            aktivitas_pekerjaan.waktu_selesai
             )
             or
             (
-            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) >= 
-            pekerjaan.tgl_mulai
+            ( select cast(date_trunc('month', current_date  ) as date ) as firstdate ) >= 
+            aktivitas_pekerjaan.waktu_mulai
             and
             ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) <= 
-            pekerjaan.tgl_selesai
+            aktivitas_pekerjaan.waktu_selesai
             )
-			) ORDER BY aktivitas_pekerjaan.waktu_mulai asc";
+			)
+			
+ORDER BY aktivitas_pekerjaan.waktu_mulai asc";
         $result = $this->db->query($query);
         return $result->result();
-        
     }
 
     //already tested
@@ -99,7 +134,7 @@ from detil_pekerjaan
             and 
 			(
             (
-            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) <= 
+            ( select cast(date_trunc('month', current_date  ) as date ) as firstdate ) <= 
             pekerjaan.tgl_mulai
             and
             ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) >= 
@@ -107,7 +142,7 @@ from detil_pekerjaan
             )
             or
             (
-            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) <= 
+            ( select cast(date_trunc('month', current_date  ) as date ) as firstdate ) <= 
             pekerjaan.tgl_selesai
             and
             ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) <= 
@@ -115,46 +150,13 @@ from detil_pekerjaan
             )
             or
             (
-            ( select cast(date_trunc('month', current_date + interval '1 month') as date ) as firstdate ) >= 
+            ( select cast(date_trunc('month', current_date  ) as date ) as firstdate ) >= 
             pekerjaan.tgl_mulai
             and
             ( select cast(date_trunc('month', current_date)+ interval '1 month - 1 day' as date ) as lastdate) <= 
             pekerjaan.tgl_selesai
             )
 			)";
-        $query = $this->db->query($query);
-        return $query->result();
-    }
-    
-    //alljobthisyear - salah ini
-    public function jobthisyear($id_akun) {
-        $query = "select COUNT(*) from detil_pekerjaan 
-            inner join pekerjaan on pekerjaan.id_pekerjaan = detil_pekerjaan.id_pekerjaan 
-            where detil_pekerjaan.id_akun = $id_akun 
-            and 
-            (
-            ( select cast(date_trunc('year', current_date) as date ) as firstdate ) <= 
-            pekerjaan.tgl_mulai
-            and
-            ( select cast(date_trunc('year', current_date)+ interval '1 year - 1 day' as date ) as lastdate) >= 
-            pekerjaan.tgl_mulai
-            )
-            or
-            (
-            ( select cast(date_trunc('year', current_date + interval '1 year') as date ) as firstdate ) <= 
-            pekerjaan.tgl_selesai
-            and
-            ( select cast(date_trunc('year', current_date)+ interval '1 year - 1 day' as date ) as lastdate) <= 
-            pekerjaan.tgl_selesai
-            )
-            or
-            (
-            ( select cast(date_trunc('year', current_date + interval '1 year') as date ) as firstdate ) >= 
-            pekerjaan.tgl_mulai
-            and
-            ( select cast(date_trunc('year', current_date)+ interval '1 year - 1 day' as date ) as lastdate) <= 
-            pekerjaan.tgl_selesai
-            )";
         $query = $this->db->query($query);
         return $query->result();
     }

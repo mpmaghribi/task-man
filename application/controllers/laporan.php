@@ -12,6 +12,19 @@ class laporan extends CI_Controller {
         $this->load->model('laporan_model');
         $this->load->model('taskman_repository');
         $this->load->model('akun');
+        $this->load->model('pekerjaan_model');
+    }
+    
+    public function cetak_logaktifitas(){
+        $tahun = $this->input->post('tahun');
+        $bulan = $this->input->post('bulan');
+        $monthNum  = $bulan;
+        $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+        $monthName = $dateObj->format('F');
+        $data['tahun'] = $tahun;
+        $data['bulan'] = $monthName;
+        $data['aktifitas'] = $this->pekerjaan_model->logaktifitas($bulan,$tahun);
+        $this->load->view('laporan/cetak_aktifitas',$data);
     }
 
     public function cetak_form_skp() {

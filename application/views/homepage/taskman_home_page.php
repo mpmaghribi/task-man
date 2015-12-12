@@ -77,7 +77,7 @@
                         <div class="col-lg-12 calendar-blocks">
                             <section class="panel">
                                 <div class="panel-heading">
-                                    Pekerjaan Saya Bulan Ini
+                                    Aktifitas Pekerjaan Bulan <?php echo date('F Y'); ?>
                                 </div>
                                 <div class="panel-body">
                                     <!-- page start-->
