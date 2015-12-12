@@ -24,6 +24,7 @@
                                     </li>
                                 </ul>
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
+                                    
                                 </div>
                             </header>
                             <div class="panel-body">

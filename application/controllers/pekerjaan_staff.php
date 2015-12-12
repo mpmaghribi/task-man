@@ -134,6 +134,7 @@ class pekerjaan_staff extends ceklogin {
             'list_aktivitas' => $list_aktivitas_tugas,
             'detil_pekerjaan' => $detil_pekerjaan
         );
+        $data['file_pekerjaan']=$this->db->query("select * from file where id_pekerjaan='$id_pekerjaan'")->result_array();
         $this->load->view('pekerjaan_staff/view_detail_tugas', $data);
     }
 
@@ -959,8 +960,80 @@ class pekerjaan_staff extends ceklogin {
     }
 
     function update_tugas() {
-        $id_tugas=  intval($this->input->post('id_tugas'));
-        $id_pekerjaan=intval($this->input->post('id_pekerjaan'));
+        $id_tugas = intval($this->input->post('id_tugas'));
+        $id_pekerjaan = intval($this->input->post('id_pekerjaan'));
+        $list_id_staff_enroll = $this->input->post('staff_enroll');
+        $deskripsi = $this->input->post('deskripsi_pkj');
+        $tanggal_mulai = $this->input->post('tgl_mulai');
+        $tanggal_selesai = $this->input->post('tgl_selesai');
+        if (!is_array($list_id_staff_enroll)) {
+            redirect(site_url() . '/pekerjaan_staff');
+            return;
+        }
+        $q = $this->db->query("select * from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
+        if (count($q) <= 0) {
+            redirect(site_url() . '/pekerjaan_staff');
+            return;
+        }
+        $tugas = $q[0];
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        if (count($q) <= 0) {
+            redirect(site_url() . '/pekerjaan_staff');
+            echo 'Pekerjaan tidak dapat ditemukan';
+            return;
+        }
+        $pekerjaan = $q[0];
+        $detil_pekerjaan2 = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $detil_pekerjaan = array();
+        foreach ($detil_pekerjaan2 as $dp) {
+            $detil_pekerjaan[$dp['id_akun']] = $dp;
+        }
+        foreach ($list_id_staff_enroll as $key => $id_staff) {
+            if (!isset($detil_pekerjaan[$id_staff])) {
+                unset($list_id_staff_enroll[$key]);
+            }
+        }
+        $list_id_akun_old = json_decode(str_replace('{', '[', str_replace('}', ']', $tugas['id_akun'])));
+        $list_id_akun_hapus = array();
+        foreach ($list_id_akun_old as $id_old) {
+            if (!in_array($id_old, $list_id_staff_enroll)) {
+                $list_id_akun_hapus[] = $id_old;
+            }
+        }
+        $this->db->trans_begin();
+        $this->db->query("set datestyle to 'ISO, DMY'");
+        foreach ($list_id_akun_hapus as $id_akun) {
+            if (!isset($detil_pekerjaan[$id_akun])) {
+                continue;
+            }
+            $id_detil_pekerjaan = $detil_pekerjaan[$id_akun]['id_detil_pekerjaan'];
+            $this->db->query("delete from aktivitas_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan' and id_tugas='$id_tugas'");
+        }
+        $id_akun = '{' . implode(',', $list_id_staff_enroll) . '}';
+        $this->db->update('assign_tugas', array(
+            'id_akun' => $id_akun,
+            'id_pekerjaan' => $id_pekerjaan,
+            'deskripsi' => $deskripsi,
+            'tanggal_mulai' => $tanggal_mulai,
+            'tanggal_selesai' => $tanggal_selesai
+                ), array(
+            'id_assign_tugas' => $id_tugas
+                )
+        );
+        $this->load->library(array('myuploadlib'));
+        $uploader = new MyUploadLib();
+        $uploader->prosesUpload('berkas');
+        $uploadedFiles = $uploader->getUploadedFiles();
+        foreach ($uploadedFiles as $file) {
+            $this->db->insert('file', array(
+                'id_pekerjaan' => $id_pekerjaan,
+                'nama_file' => $file['name'],
+                'path' => $file['filePath'],
+                'id_tugas' => $id_tugas
+            ));
+        }
+        $this->db->trans_complete();
+        redirect(site_url() . '/pekerjaan_staff/detail_tugas?id_tugas=' . $id_tugas);
     }
 
     function update() {

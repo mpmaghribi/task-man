@@ -35,7 +35,7 @@ foreach ($users as $u) {
                                 </ul>
 
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    <a class="btn btn-info btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px" onclick="validasi_usulan(<?= $pekerjaan['id_pekerjaan'] ?>);">Validasi</a>
+                                    <a class="btn btn-info btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px;display:none" onclick="validasi_usulan(<?= $pekerjaan['id_pekerjaan'] ?>);">Validasi</a>
                                     <a class="btn btn-danger btn-xs" href="<?php echo site_url(); ?>/pekerjaan_staff/edit?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-warning btn-xs" href="javascript:batalkan_pekerjaan();" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                     <a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px;display:none">Perpanjangan Telah Dikirim</a>

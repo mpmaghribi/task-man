@@ -28,11 +28,11 @@ foreach ($users as $u) {
                                     <li class="active">
                                         <a data-toggle="tab" href="#deskripsiPekerjaan">Deskripsi Tugas</a>
                                     </li>
-
-                                    <!--                                    <li class="">
-                                                                            <a data-toggle="tab" href="#penilaianPekerjaan">Penilaian Kerja Staff</a>
-                                                                        </li>-->
                                 </ul>
+                                <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
+                                    <a class="btn btn-danger btn-xs" href="<?php echo site_url(); ?>/pekerjaan_staff/edit_tugas?id_tugas=<?php echo $tugas['id_assign_tugas']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
+                                    <a class="btn btn-warning btn-xs" href="javascript:batalkan_tugas();" id="tombol_batalkan_usulan" style="font-size: 10px">Hapus</a>
+                                </div>
 
                             </header>
                             <div class="panel-body">
@@ -77,10 +77,10 @@ foreach ($users as $u) {
                                         <div class="col-md-12">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
-                                                    File Pendukung
+                                                    File Pendukung Pekerjaan
                                                 </h4>
                                                 <div class="panel-body">
-                                                    <table class="table table-striped table-hover table-condensed" id="tabel_file_pendukung">
+                                                    <table class="table table-striped table-hover table-condensed" id="tabel_file_pekerjaan">
                                                         <thead>
                                                             <tr>
                                                                 <th style="width: 70px">#</th>
@@ -98,10 +98,10 @@ foreach ($users as $u) {
                                         <div class="col-md-12">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
-                                                    List File Progress
+                                                    File Pendukung Tugas
                                                 </h4>
                                                 <div class="panel-body">
-                                                    <table class="table table-striped table-hover table-condensed" id="table_file_progress">
+                                                    <table class="table table-striped table-hover table-condensed" id="tabel_file_tugas">
                                                         <thead>
                                                             <tr>
                                                                 <th style="width: 70px">#</th>
@@ -136,7 +136,7 @@ foreach ($users as $u) {
                                             </section>
                                         </div>
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                                         ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                                           ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -178,12 +178,10 @@ foreach ($users as $u) {
         var aktivitas =<?= json_encode($list_aktivitas) ?>;
         var base_url = '<?= base_url() ?>';
         var site_url = '<?= site_url() ?>';
+        var list_id_staff = <?= json_encode($list_id_staff) ?>;
+        var file_pekerjaan= <?=  json_encode($file_pekerjaan)?>;
         $(document).ready(function () {
-            document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
-            
-            $('#tabel_file_pendukung').dataTable({
-                "columnDefs": [{"targets": [2], "orderable": false}],
-            });
+            document.title = 'Deskripsi Pekerjaan: '+pekerjaan['nama_pekerjaan']+' - Task Management';
             var tab = $($('.sidebar-menu').children()[2]).children();
             $(tab[0]).attr('class', 'dcjq-parent active');
             $(tab[1]).show();
@@ -191,9 +189,10 @@ foreach ($users as $u) {
         });
         function init_anggota_tugas() {
             var tabel = $('#staff_pekerjaan');
-            var arr_id_akun = tugas['id_akun'];
-            arr_id_akun = arr_id_akun.replace('{', '').replace('}', '');
-            var list_id_akun = arr_id_akun.split(',');
+//            var arr_id_akun = tugas['id_akun'];
+//            arr_id_akun = arr_id_akun.replace('{', '').replace('}', '');
+//            var list_id_akun = arr_id_akun.split(',');
+            var list_id_akun = list_id_staff;
             console.log('list id akun ');
             console.log(list_id_akun);
             var counter = 0;
@@ -223,7 +222,7 @@ foreach ($users as $u) {
                     continue;
                 }
                 var status_tugas = 'Belum Dilihat';
-                
+
                 for (var j = 0, j2 = aktivitas.length; j < j2; j++) {
 
                 }
@@ -236,7 +235,7 @@ foreach ($users as $u) {
                 tabel.append(html);
             }
             $('#staff_pekerjaan').dataTable({
-                "columnDefs": [{"targets": [0,2], "orderable": false}]
+                "columnDefs": [{"targets": [0, 2], "orderable": false}]
             });
         }
     </script>

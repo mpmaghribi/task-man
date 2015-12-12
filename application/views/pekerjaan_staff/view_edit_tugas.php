@@ -197,6 +197,18 @@ $this->load->view("taskman_header_page");
                                                                         break;
                                                                     }
                                                                 }
+                                                                var detil_pekerjaan=list_detil_pekerjaan[tugas['id_pekerjaan']];
+                                                                var tidak_ada_di_detil=true;
+                                                                for(var j=0,j2=detil_pekerjaan.length;j<j2;j++){
+                                                                    var dp=detil_pekerjaan[j];
+                                                                    if(dp['id_akun']==id_terlibat2){
+                                                                        tidak_ada_di_detil=false;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                if(tidak_ada_di_detil==true){
+                                                                    continue;
+                                                                }
                                                                 enroll_staff(id_terlibat2,nama,'tugas');
                                                             }
 
