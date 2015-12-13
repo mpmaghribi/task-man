@@ -115,7 +115,7 @@ foreach ($users as $u) {
                                         <div class="col-md-12">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
-                                                    File Pendukung
+                                                    File Pendukung Pekerjaan
                                                 </h4>
                                                 <div class="panel-body">
                                                     <table class="table table-striped table-hover table-condensed" id="tabel_file_pendukung">
@@ -156,15 +156,16 @@ foreach ($users as $u) {
                                                     List File Progress
                                                 </h4>
                                                 <div class="panel-body">
-                                                    <table class="table table-striped table-hover table-condensed" id="table_file_progress">
+                                                    <table class="table table-striped table-hover table-condensed" id="tabel_file_progress">
                                                         <thead>
                                                             <tr>
                                                                 <th style="width: 70px">#</th>
                                                                 <th>Nama File</th>
+                                                                <th>Staff</th>
                                                                 <th style="width: 250px"></th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody id="tabel_file_progress_body">
 
                                                         </tbody>
                                                     </table>
@@ -362,7 +363,7 @@ foreach ($users as $u) {
                                         </div>
 
                                         <div class="panel-body">
-                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                           ?>/pekerjaan/usulan_pekerjaan">
+                                            <form style="display:none" class="cmxform form-horizontal " id="signupForm" method="POST" action="#<?php //echo site_url()                                                                              ?>/pekerjaan/usulan_pekerjaan">
                                                 <div class="form-group">
                                                     <div class="col-lg-12">
                                                         <button id="komentar" class="btn btn-primary" type="button">Lihat Komentar</button>
@@ -426,6 +427,9 @@ foreach ($users as $u) {
                                                                     var base_url = '<?= base_url() ?>';
                                                                     var site_url = '<?= site_url() ?>';
                                                                     var id_staff =<?= $id_staff ?>;
+                                                                    var file_progress = <?= json_encode($file_progress) ?>;
+                                                                    var detil_pekerjaan = <?= json_encode($detil_pekerjaan) ?>;
+                                                                    var users = <?= json_encode($users) ?>;
                                                                     $(document).ready(function () {
                                                                         document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
                                                                         $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + $('#id_detail_pkj').val());
@@ -437,7 +441,37 @@ foreach ($users as $u) {
                                                                         $('#tabel_file_pendukung').dataTable({
                                                                             "columnDefs": [{"targets": [2], "orderable": false}],
                                                                         });
+                                                                        init_file_progress();
                                                                     });
+                                                                    var tabel_file_progress = null;
+                                                                    function init_file_progress() {
+                                                                        var tabel = $('#tabel_file_progress_body');
+                                                                        for (var i = 0, i2 = file_progress.length; i < i2; i++) {
+                                                                            var berkas = file_progress[i];
+                                                                            var nama_staff = '';
+                                                                            for (var j = 0, j2 = detil_pekerjaan.length; j < j2; j++) {
+                                                                                var dp = detil_pekerjaan[j];
+                                                                                if (dp['id_detil_pekerjaan'] == berkas['id_detil_pekerjaan']) {
+                                                                                    for (var k = 0, k2 = users.length; k < k2; k++) {
+                                                                                        var user = users[k];
+                                                                                        if (dp['id_akun'] == user['id_akun']) {
+                                                                                            nama_staff = user['nama'];
+                                                                                            break;
+                                                                                        }
+                                                                                    }
+                                                                                    break;
+                                                                                }
+                                                                            }
+                                                                            var html = '<tr id="berkas_'+berkas['id_file']+'">'
+                                                                                    + '<td>' + (i + 1) + '</td>'
+                                                                                    + '<td>' + berkas['nama_file'] + '</td>'
+                                                                                    + '<td>' + nama_staff + '</td>'
+                                                                                    + '<td style="text-align:right"><a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + berkas['id_file'] + '" id="" style="font-size: 10px" target="_blank">Download</a><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file('+berkas['id_file']+', \''+berkas['nama_file']+'\');">Hapus</a></td>'
+                                                                                    + '</tr>';
+                                                                            tabel.append(html);
+                                                                        }
+                                                                        $('#tabel_file_progress').dataTable();
+                                                                    }
                                                                     function batalkan_pekerjaan() {
                                                                         var teks = "Apakah Anda yakin untuk membatalkan pekerjaan ini?";
                                                                         if (confirm(teks) == true) {
@@ -511,11 +545,11 @@ foreach ($users as $u) {
                                                                                 url: "<?php echo site_url(); ?>/pekerjaan_staff/hapus_file", // the file to call
                                                                                 success: function (response) { // on success..
 
-                                                                                    if (response === "OK") {
+                                                                                    if (response == "OK") {
                                                                                         $('#berkas_' + id_file).remove();
                                                                                         //$('#tombol_validasi_usulan').remove();
                                                                                     } else {
-                                                                                        alert("Gagal menghapus file, " + json.reason);
+                                                                                        alert("Gagal menghapus file, " + response);
                                                                                     }
                                                                                 }
                                                                             });

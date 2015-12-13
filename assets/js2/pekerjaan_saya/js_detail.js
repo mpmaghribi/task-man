@@ -16,7 +16,7 @@ $(document).ready(function () {
     }).on('changeDate', function (ev) {
         waktu_selesai_baru.setValue(new Date(ev.date));
         waktu_mulai_baru.hide();
-        waktu_selesai_baru.focus();
+        $('#waktu_selesai_baru').focus();
     }).data('datepicker');
     var waktu_selesai_baru = $('#waktu_selesai_baru').datepicker({
         format: 'dd-mm-yyyy',
@@ -24,7 +24,6 @@ $(document).ready(function () {
             return date < date_min || date > date_max || waktu_mulai_baru.date > date ? 'disabled' : '';
         }
     }).data('datepicker');
-    
     if (pekerjaan['kategori'] == 'rutin' || pekerjaan['kategori'] == 'project') {
         $('#tabel_progress').hide();
         $('#div_penilaian_skp').show();
@@ -33,6 +32,7 @@ $(document).ready(function () {
         $('#tabel_aktivitas').hide();
         init_tabel_progress();
     }
+    init_file_pekerjaan();
     init_tabel_file_progress();
     init_tampilan_form_tambah_aktivitas();
     if (detil_pekerjaan['status'] == 'locked') {
@@ -41,6 +41,24 @@ $(document).ready(function () {
 //    $('#jam_selesai_baru').timepicker();
 //$('#waktu_selesai_baru').datepicker();
 });
+var tabel_file_pekerjaan = null;
+function init_file_pekerjaan() {
+    if (tabel_file_pekerjaan != null) {
+        tabel_file_pekerjaan.fnDestroy();
+    }
+    var tabel = $('#table_file_pekerjaan_body');
+    tabel.html('');
+    for (var i = 0, i2 = file_pekerjaan.length; i < i2; i++) {
+        var berkas = file_pekerjaan[i];
+        var html = '<tr>'
+                + '<td>' + (i + 1) + '</td>'
+                + '<td>' + berkas['nama_file'] + '</td>'
+                + '<td style="text-align:right"><a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + berkas['id_file'] + '" id="" style="font-size: 10px" target="_blank">Download</a></td>'
+                + '</tr>';
+        tabel.append(html);
+    }
+    tabel_file_pekerjaan=$('#table_file_pekerjaan').dataTable();
+}
 var tabel_file_progress = null;
 function init_tabel_file_progress() {
     if (tabel_file_progress != null) {
@@ -64,9 +82,8 @@ function init_tabel_file_progress() {
         },
         "createdRow": function (row, data, index) {
             var id = data[0];
-
             $('td', row).eq(0).html(index + 1);
-            $('td', row).eq(2).html('download');
+            $('td', row).eq(2).html('<a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + id + '" id="" style="font-size: 10px" target="_blank">Download</a>').css('text-align','right');
 
             $(row).attr('id', 'row_' + id)
         }
@@ -88,6 +105,7 @@ function refreshAktivitas() {
     if (tabel_aktivitas != null) {
         tabel_aktivitas.fnDraw();
     }
+    init_tabel_file_progress();
 }
 function pilih_berkas_aktivitas() {
     $('#file_berkas_aktivitas').click();

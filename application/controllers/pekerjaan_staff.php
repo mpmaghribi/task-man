@@ -134,8 +134,8 @@ class pekerjaan_staff extends ceklogin {
             'list_aktivitas' => $list_aktivitas_tugas,
             'detil_pekerjaan' => $detil_pekerjaan
         );
-        $data['file_pekerjaan']=$this->db->query("select id_file,nama_file from file where id_pekerjaan='$id_pekerjaan' and id_progress is null and id_detil_pekerjaan is null and id_aktivitas is null and id_tugas is null")->result_array();
-        $data['file_tugas']=$this->db->query("select id_file,nama_file from file where id_pekerjaan='$id_pekerjaan' and id_progress is null and id_detil_pekerjaan is null and id_aktivitas is null and id_tugas='$id_tugas'")->result_array();
+        $data['file_pekerjaan'] = $this->db->query("select id_file,nama_file from file where id_pekerjaan='$id_pekerjaan' and id_progress is null and id_detil_pekerjaan is null and id_aktivitas is null and id_tugas is null")->result_array();
+        $data['file_tugas'] = $this->db->query("select id_file,nama_file from file where id_pekerjaan='$id_pekerjaan' and id_progress is null and id_detil_pekerjaan is null and id_aktivitas is null and id_tugas='$id_tugas'")->result_array();
         $this->load->view('pekerjaan_staff/view_detail_tugas', $data);
     }
 
@@ -155,14 +155,16 @@ class pekerjaan_staff extends ceklogin {
         }
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $detil_pekerjaan = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
-        $list_file = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_progress is null")->result_array();
+        $list_file = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_progress is null and id_detil_pekerjaan is null and id_aktivitas is null and id_tugas is null")->result_array();
+        $list_file_progress = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_detil_pekerjaan is not null and id_tugas is null")->result_array();
         $data = array(
             'pekerjaan' => $pekerjaan,
             'detil_pekerjaan' => $detil_pekerjaan,
             'users' => json_decode(file_get_contents($url)),
             'data_akun' => $session,
             'id_staff' => $id_staff,
-            'list_file' => $list_file
+            'list_file' => $list_file,
+            'file_progress' => $list_file_progress
         );
         $this->load->view('pekerjaan_staff/view_detail', $data);
     }
@@ -1236,8 +1238,10 @@ class pekerjaan_staff extends ceklogin {
             return;
         }
         $this->db->query("delete from file where id_file='$id_file'");
-        unlink($berkas['path']);
-        echo "OK";
+        if (file_exists($berkas['path'])){
+            unlink($berkas['path']);
+        }
+        echo 'OK';
     }
 
     function get_list_tugas_tambahan() {

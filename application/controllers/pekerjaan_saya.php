@@ -216,8 +216,8 @@ class pekerjaan_saya extends ceklogin {
             return;
         }
         $id_detil_pekerjaan = $detil_pekerjaan['id_detil_pekerjaan'];
-        $list_file_pendukung = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_progress is null")->result_array();
-        $list_file_progress = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+        $list_file_pendukung = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_progress is null and id_detil_pekerjaan is null and id_aktivitas is null and id_tugas is null")->result_array();
+        $list_file_progress = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_detil_pekerjaan='$id_detil_pekerjaan' and id_progress is null and id_tugas is null")->result_array();
         $data = array(
             'data_akun' => $session,
             'pekerjaan' => $pekerjaan,

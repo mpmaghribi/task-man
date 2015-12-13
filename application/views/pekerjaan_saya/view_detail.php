@@ -86,10 +86,10 @@ $list_tingkat_manfaat = array(
                                         <div class="col-md-12">
                                             <section class="panel">
                                                 <h4 style="color: #1FB5AD;">
-                                                    File Pendukung
+                                                    File Pendukung Pekerjaan
                                                 </h4>
                                                 <div class="panel-body">
-                                                    <table class="table table-striped table-hover table-condensed" id="table_list_file">
+                                                    <table class="table table-striped table-hover table-condensed" id="table_file_pekerjaan">
                                                         <thead>
                                                             <tr>
                                                                 <th style="width: 70px">#</th>
@@ -97,24 +97,8 @@ $list_tingkat_manfaat = array(
                                                                 <th style="width: 250px"></th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                            <?php
-                                                            if (isset($list_file_pendukung)) {
-                                                                $i = 1;
-                                                                foreach ($list_file_pendukung as $berkas) {
-                                                                    ?>
-                                                                    <tr id="berkas_<?php echo $berkas['id_file']; ?>" title="diupload pada <?php echo date("d-m-Y H:i", strtotime($berkas['waktu'])); ?>">
-                                                                        <td><?= $i; ?></td>
-                                                                        <td><?= $berkas['nama_file'] ?></td>
-                                                                        <td style="text-align: right">
-                                                                            <a class="btn btn-info btn-xs" href="<?= site_url() ?>/download?id_file=<?= $berkas['id_file']; ?>" id="" style="font-size: 10px" target="_blank">Download</a>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <?php
-                                                                    $i++;
-                                                                }
-                                                            }
-                                                            ?>
+                                                        <tbody id="table_file_pekerjaan_body">
+                                                           
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -135,26 +119,7 @@ $list_tingkat_manfaat = array(
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <?php
-                                                            if (isset($file_progress)) {
-                                                                $i = 1;
-                                                                foreach ($file_progress as $berkas) {
-                                                                    ?>
-                                                                    <tr id="berkas_<?php echo $berkas->id_file; ?>" title="diupload pada <?php echo date("d M Y H:i", strtotime($berkas->waktu)); ?>">
-                                                                        <td><?php echo $i; ?></td>
-                                                                        <td><?php echo basename($berkas->nama_file); ?></td>
-                                                                        <td style="text-align: right">
-                                                                            <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() ?>download?id_file=<?= $berkas->id_file; ?>');">Download</a>
-                                                                            <?php if ($atasan || $pengusul) { ?>
-                                                                                <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
-                                                                            <?php } ?>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <?php
-                                                                    $i++;
-                                                                }
-                                                            }
-                                                            ?>
+                                                            
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -426,127 +391,7 @@ $list_tingkat_manfaat = array(
                                             </div>
                                         </div>
 
-                                        <div class="modal fade" id="LogProgress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" style="width: 1100px">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title">History Progress</h4>
-                                                    </div>
-
-                                                    <div class="form modal-body">
-                                                        <div id="history_progress"></div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button data-dismiss="modal" class="btn btn-default" type="button">Tutup</button>
-                                                    </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal fade" id="UbahProgress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="tombol_tutup_progress">&times;</button>
-                                                        <h4 class="modal-title">Ubah Progress</h4>
-                                                    </div>
-                                                    <form class="cmxform form-horizontal" id="progress_form" action="#" method="POST" enctype="multipart/form-data">
-                                                        <div class="form modal-body">
-                                                            <input type="hidden" id="idp" name="idp" value="" />
-                                                            <input type="hidden" id="id_pkj" name="id_pkj" value="<?php echo $pekerjaan['id_pekerjaan'] ?>" />
-                                                            <div class="form-group ">
-                                                                <label for="progress" class="control-label col-lg-3">Progress</label>
-                                                                <div class="col-lg-8">
-                                                                    <select class="form-control" id="progress" name="progress">
-                                                                        <option if value="0">
-                                                                            0% Selesai
-                                                                        </option>
-                                                                        <option value="10">
-                                                                            10% Selesai
-                                                                        </option>
-                                                                        <option value="20">
-                                                                            20% Selesai
-                                                                        </option>
-                                                                        <option value="30">
-                                                                            30% Selesai
-                                                                        </option>
-                                                                        <option value="40">
-                                                                            40% Selesai
-                                                                        </option>
-                                                                        <option value="50">
-                                                                            50% Selesai
-                                                                        </option>
-                                                                        <option value="60">
-                                                                            60% Selesai
-                                                                        </option>
-                                                                        <option value="70">
-                                                                            70% Selesai
-                                                                        </option>
-                                                                        <option value="80">
-                                                                            80% Selesai
-                                                                        </option>
-                                                                        <option value="90">
-                                                                            90% Selesai
-                                                                        </option>
-                                                                        <option value="100">
-                                                                            100% Selesai
-                                                                        </option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group ">
-                                                                <label for="perubahan" class="control-label col-lg-3">Log Perubahan</label>
-                                                                <div class="col-lg-8">
-                                                                    <textarea class="form-control" type="text" id="perubahan" name="perubahan" rows="12" value=""></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group ">
-                                                                <label for="total_progress" class="control-label col-lg-3">Total Progress</label>
-                                                                <div class="col-lg-8">
-                                                                    <input readonly class="form-control" type="text" id="total_progress" name="total_progress" value="100" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group ">
-                                                                <label for="waktu_progress" class="control-label col-lg-3">Waktu Progress</label>
-                                                                <div class="col-lg-8">
-                                                                    <input readonly class="form-control" type="text" id="waktu_progress" name="waktu_progress" value="<?php
-                                                                    date_default_timezone_set("Asia/Jakarta");
-                                                                    echo date("Y-m-d h:i:s");
-                                                                    ?>" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group ">
-                                                                <label for="file1" class="control-label col-lg-3">File Progress</label>
-                                                                <div class="col-lg-8">
-                                                                    <input class="file_progress" type="file" id="file1" name="file1" value="" multiple=""/>
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="tampil_progress" style="display: none;">
-                                                                <div class="form-group ">
-                                                                    <label for="progressBar" class="control-label col-lg-3">Total</label>
-                                                                    <div class="col-lg-8">
-                                                                        <progress id="progressBar" value="0" max="100" style="width:300px;"></progress> 
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group ">
-                                                                    <label for="status" class="control-label col-lg-3">Status</label>
-                                                                    <div class="col-lg-8">
-                                                                        <h4 id="status"></h4> <p id="loaded_n_total"></p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button data-dismiss="modal" class="btn btn-default" id="batal_progress" type="button">Batal</button>
-                                                            <button class="btn btn-warning"  onclick="ubah_progress()" type="button"> Ubah Progress</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
+                                       
 
 
                                         <div class="panel-body">
@@ -616,6 +461,7 @@ $list_tingkat_manfaat = array(
                                                                 var list_akun =<?= json_encode($users) ?>;
                                                                 var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
                                                                 var pekerjaan = <?= json_encode($pekerjaan) ?>;
+                                                                var file_pekerjaan = <?= json_encode($list_file_pendukung) ?>;
                                                                 $(document).ready(function () {
                                                                     document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
                                                                     $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + $('#id_detail_pkj').val());

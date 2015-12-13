@@ -1,4 +1,3 @@
-
 <?php
 
 require_once APPPATH . '/libraries/dtpg.php';
