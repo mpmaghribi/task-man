@@ -26,9 +26,14 @@ class aktivitas_pekerjaan extends ceklogin {
         echo '<head></head>';
         echo '<body>';
         echo '<script>';
-        if ($res == 'ok') {
-            $id_aktivitas = $this->db->insert_id();
-            $q = $this->db->query("select * from aktivitas_pekerjaan where id_aktivitas='$id_aktivitas'")->result_array();
+        if (is_numeric($res)) {
+            $id_aktivitas = $res;
+            $q = $this->db->query("select *, to_char(waktu_mulai,'YYYY-MM-DD') as waktu_mulai2, to_char(waktu_selesai,'YYYY-MM-DD') as waktu_selesai2,
+					berkas.id_file, berkas.nama_file
+					from aktivitas_pekerjaan 
+					left join (select json_agg(id_file) as id_file, json_agg(nama_file) as nama_file, id_tugas,id_aktivitas from file group by id_tugas,id_aktivitas) berkas 
+					on berkas.id_aktivitas=aktivitas_pekerjaan.id_aktivitas and berkas.id_tugas=aktivitas_pekerjaan.id_tugas
+					where aktivitas_pekerjaan.id_aktivitas='$id_aktivitas'")->result_array();
             if (count($q) > 0) {
                 echo 'parent.set_my_aktivitas(' . json_encode($q[0]) . ');';
             }
@@ -86,7 +91,23 @@ class aktivitas_pekerjaan extends ceklogin {
         );
         $this->db->query("set datestyle to 'ISO, DMY'");
         $this->db->insert('aktivitas_pekerjaan', $akt);
-        return 'ok';
+		$id_aktivitas = $this->db->insert_id();
+		$this->load->library(array('myuploadlib'));
+		$uploader = new MyUploadLib();
+		$uploader->prosesUpload('berkas');
+		$uploadedFiles = $uploader->getUploadedFiles();
+		foreach ($uploadedFiles as $file) {
+			$berkas = array(
+				'id_pekerjaan' => $id_pekerjaan,
+				'id_detil_pekerjaan' => $detil_pekerjaan_saya['id_detil_pekerjaan'],
+				'id_aktivitas' => $id_aktivitas,
+				'id_tugas'=>$id_tugas,
+				'nama_file' => $file['name'],
+				'path' => $file['filePath']
+			);
+			$this->db->insert('file', $berkas);
+		}
+        return $id_aktivitas;
     }
 
     private function add() {

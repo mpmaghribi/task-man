@@ -156,7 +156,7 @@ class pekerjaan_staff extends ceklogin {
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $detil_pekerjaan = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
         $list_file = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_progress is null and id_detil_pekerjaan is null and id_aktivitas is null and id_tugas is null")->result_array();
-        $list_file_progress = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_detil_pekerjaan is not null and id_tugas is null")->result_array();
+        $list_file_progress = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_detil_pekerjaan is not null ")->result_array();
         $data = array(
             'pekerjaan' => $pekerjaan,
             'detil_pekerjaan' => $detil_pekerjaan,

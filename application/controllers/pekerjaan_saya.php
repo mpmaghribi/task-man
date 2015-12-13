@@ -194,7 +194,12 @@ class pekerjaan_saya extends ceklogin {
         }
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["users"] = json_decode(file_get_contents($url));
-        $data['aktivitas'] = $this->db->query("select * from aktivitas_pekerjaan where id_tugas='$id_tugas'")->result_array();
+        $data['aktivitas'] = $this->db->query("select *, to_char(waktu_mulai,'YYYY-MM-DD') as waktu_mulai2, 
+				to_char(waktu_selesai,'YYYY-MM-DD') as waktu_selesai2, berkas.id_file, berkas.nama_file
+				from aktivitas_pekerjaan 
+				left join (select json_agg(id_file) as id_file, json_agg(nama_file) as nama_file, id_tugas,id_aktivitas from file group by id_tugas,id_aktivitas) berkas 
+				on berkas.id_aktivitas=aktivitas_pekerjaan.id_aktivitas and berkas.id_tugas=aktivitas_pekerjaan.id_tugas
+				where aktivitas_pekerjaan.id_tugas='$id_tugas'")->result_array();
         $data['aktivitas_saya'] = null;
 //        print_r($data);
         foreach ($data['aktivitas'] as $akt) {
