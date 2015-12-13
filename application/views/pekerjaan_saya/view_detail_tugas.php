@@ -89,7 +89,9 @@
                                                 </h4>
                                                 <div class="panel-body">
                                                     <div class="form-horizontal" id="form_realisasi_tugas">
-                                                        <form method="post" enctype="multipart/form-data" action="<?= site_url() ?>/pekerjaan_saya/realisasi_tugas">
+                                                        <form method="post" enctype="multipart/form-data" action="<?= site_url() ?>/aktivitas_pekerjaan/add_realisasi_tugas_v2" target="my_frame">
+                                                            <input type="hidden" name="id_tugas" value="<?=$tugas['id_assign_tugas']?>"/>
+                                                            <input type="hidden" name="id_aktivitas" value="<?=$aktivitas_saya['id_aktivitas']?>"/>
                                                             <div class="form-group">
                                                                 <label class="control-label col-lg-2">Keterangan</label>
                                                                 <div class="col-lg-6">
@@ -178,7 +180,7 @@
 
             </section>
         </section>
-        <iframe id="frame_tambah_aktivitas" name="frame_tambah_aktivitas" style="display:none"></iframe>
+        <iframe id="my_frame" name="my_frame" style="display:none"></iframe>
         <!--main content end-->
         <!--right sidebar start-->
         <?php $this->load->view('taskman_rightbar_page') ?>
@@ -233,6 +235,9 @@
                                                                 tanggal_mulai.setValue(tanggal_bawah);
                                                                 tanggal_selesai.setValue(tanggal_atas);
                                                             });
+                                                            function set_my_aktivitas(akt){
+                                                                console.log(akt);
+                                                            }
                                                             function file_changed(elmnt, id_tabel) {
                                                                 $('#' + id_tabel).html('');
                                                                 var files = elmnt.files;

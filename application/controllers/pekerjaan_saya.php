@@ -59,8 +59,8 @@ class pekerjaan_saya extends ceklogin {
             $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengakses pekerjaan';
             $this->load->view('pekerjaan/kesalahan', $data);
         }
-    }    
-    
+    }
+
     //untuk data graph di controller pekerjaan saya, fungsi index
     public function vardata() {
         header('Cache-Control: no-cache, must-revalidate');
@@ -154,7 +154,7 @@ class pekerjaan_saya extends ceklogin {
         $id_tugas = intval($this->input->get('id_tugas'));
         $session = $this->session->userdata('logged_in');
         $q = $this->db->query("select *, to_char(tanggal_mulai,'YYYY-MM-DD') as tanggal_mulai2, to_char(tanggal_selesai,'YYYY-MM-DD') as tanggal_selesai2 "
-                . "from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
+                        . "from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
         if (count($q) <= 0) {
             redirect(site_url() . '/pekerjaan_saya');
             return;
@@ -173,17 +173,37 @@ class pekerjaan_saya extends ceklogin {
         }
         $pekerjaan = $q[0];
         $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        
         $data = array(
             'data_akun' => $session,
             'tugas' => $tugas,
             'pekerjaan' => $pekerjaan,
             'detil_pekerjaan' => $detil_pekerjaan
         );
+        $data['detil_pekerjaan_saya'] = null;
+        foreach ($detil_pekerjaan as $dp) {
+            if ($dp['id_akun'] == $session['id_akun']) {
+                $data['detil_pekerjaan_saya'] = $dp;
+//                print_r($data['detil_pekerjaan_saya']);
+                break;
+            }
+        }
+        if($data['detil_pekerjaan_saya']==null){
+            redirect(site_url().'/pekerjaan_saya');
+            return;
+        }
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["users"] = json_decode(file_get_contents($url));
-        $data['aktivitas']=$this->db->query("select * from aktivitas_pekerjaan where id_tugas='$id_tugas'")->result_array();
-        $data['file_pendukung_pekerjaan']=$this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_detil_pekerjaan is null and id_progress is null and id_tugas is null and id_aktivitas is null")->result_array();
-        $data['file_pendukung_tugas']=$this->db->query("select * from file where id_tugas = '$id_tugas'")->result_array();
+        $data['aktivitas'] = $this->db->query("select * from aktivitas_pekerjaan where id_tugas='$id_tugas'")->result_array();
+        $data['aktivitas_saya'] = null;
+//        print_r($data);
+        foreach ($data['aktivitas'] as $akt) {
+            if($akt['id_detil_pekerjaan']==$data['detil_pekerjaan_saya']['id_detil_pekerjaan']){
+                $data['aktivitas_saya'] = $akt;
+            }
+        }
+        $data['file_pendukung_pekerjaan'] = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan' and id_detil_pekerjaan is null and id_progress is null and id_tugas is null and id_aktivitas is null")->result_array();
+        $data['file_pendukung_tugas'] = $this->db->query("select * from file where id_tugas = '$id_tugas'")->result_array();
         $this->load->view('pekerjaan_saya/view_detail_tugas', $data);
     }
 

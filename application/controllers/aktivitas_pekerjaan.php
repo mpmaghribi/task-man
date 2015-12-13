@@ -20,6 +20,75 @@ class aktivitas_pekerjaan extends ceklogin {
         $this->load->model(array('aktivitas_model'));
     }
 
+    function add_realisasi_tugas_v2() {
+        $res = $this->add_realisasi_tugas();
+        echo '<html>';
+        echo '<head></head>';
+        echo '<body>';
+        echo '<script>';
+        if ($res == 'ok') {
+            $id_aktivitas = $this->db->insert_id();
+            $q = $this->db->query("select * from aktivitas_pekerjaan where id_aktivitas='$id_aktivitas'")->result_array();
+            if (count($q) > 0) {
+                echo 'parent.set_my_aktivitas(' . json_encode($q[0]) . ');';
+            }
+        } else {
+            echo 'parent.alert("' . $res . '");';
+        }
+        echo '</script>';
+        echo '</body>';
+        echo '</html>';
+    }
+
+    private function add_realisasi_tugas() {
+        $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
+        $id_tugas = intval($this->input->post('id_tugas'));
+        $deskripsi = $this->input->post('deskripsi');
+        $waktu_mulai = $this->input->post('waktu_mulai');
+        $waktu_selesai = $this->input->post('waktu_selesai');
+        $tugas = $this->aktivitas_model->get_tugas_by_id($id_tugas);
+        if ($tugas == null) {
+            return 'Tugas tidak dapat ditemukan';
+        }
+//        print_r($tugas);
+        $id_pekerjaan = $tugas['id_pekerjaan'];
+        $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
+        if ($pekerjaan == null) {
+            return 'Pekerjaan tidak dapat ditemukan';
+        }
+//        print_r($pekerjaan);
+        $session = $this->session->userdata('logged_in');
+        $tugas_list_id_akun = json_decode(str_replace('{', '[', str_replace('}', ']', $tugas['id_akun'])));
+        if (in_array($session['id_akun'], $tugas_list_id_akun) == false) {
+            return 'Anda tidak terlibat dalam tugas ini';
+        }
+        $detil_pekerjaan2 = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
+        $detil_pekerjaan = array();
+        foreach ($detil_pekerjaan2 as $dp) {
+            $detil_pekerjaan[$dp['id_akun']] = $dp;
+        }
+        if (isset($detil_pekerjaan[$session['id_akun']]) == false) {
+            return 'Anda tidak terlibat dalam Pekerjaan';
+        }
+        $detil_pekerjaan_saya = $detil_pekerjaan[$session['id_akun']];
+        $existing_realisasi = $this->aktivitas_model->get_realisasi_tugas($id_tugas, $detil_pekerjaan_saya['id_detil_pekerjaan']);
+        if ($existing_realisasi != null) {
+            return 'Anda telah melaksanakan tugas ini sebelumnya';
+        }
+        $akt = array(
+            'id_pekerjaan' => $id_pekerjaan,
+            'id_detil_pekerjaan' => $detil_pekerjaan_saya['id_detil_pekerjaan'],
+            'kuantitas_output' => 1,
+            'id_tugas' => $id_tugas,
+            'keterangan' => $deskripsi,
+            'waktu_mulai' => $waktu_mulai,
+            'waktu_selesai' => $waktu_selesai
+        );
+        $this->db->query("set datestyle to 'ISO, DMY'");
+        $this->db->insert('aktivitas_pekerjaan', $akt);
+        return 'ok';
+    }
+
     private function add() {
         $this->load->library(array('myuploadlib'));
         $id_pekerjaan = (int) $this->input->post('id_pekerjaan');

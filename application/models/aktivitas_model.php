@@ -79,4 +79,20 @@ class aktivitas_model extends dtpg {
         return $this->get_datatable($sql, $columns, $request);
     }
 
+    function get_tugas_by_id($id_tugas) {
+        $q=$this->db->query("select * from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
+        if(count($q)>0){
+            return $q[0];
+        }
+        return null;
+    }
+    
+    function get_realisasi_tugas($id_tugas,$id_detil_pekerjaan){
+        $q=$this->db->query("select * from aktivitas_pekerjaan where id_tugas='$id_tugas' and id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
+        if(count($q)>0){
+            return $q[0];
+        }
+        return null;
+    }
+
 }
