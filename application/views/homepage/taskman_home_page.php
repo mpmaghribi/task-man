@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php $this->load->view("taskman_header_page") ?> 
 <!--calendar css-->
 <link href="<?php echo base_url(); ?>assets/js/fullcalendar/bootstrap-fullcalendar.css" rel="stylesheet" />
