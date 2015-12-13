@@ -58,21 +58,29 @@ class berkas_model extends dtpg {
     }
 
     function get_list_file_aktivitas_datatable($id_detil_pekerjaan) {
-        $sql = "select * from file where id_detil_pekerjaan='$id_detil_pekerjaan' and id_aktivitas is not null";
+        $sql = "select file.*, aktivitas_pekerjaan.keterangan, aktivitas_pekerjaan.status_validasi "
+                . "from file "
+                . "inner join aktivitas_pekerjaan on aktivitas_pekerjaan.id_aktivitas=file.id_aktivitas "
+                . "where file.id_detil_pekerjaan='$id_detil_pekerjaan' and file.id_aktivitas is not null";
         $columns = array(
             array('name' => 'id_file'),
             array('name' => 'nama_file'),
-            array('name' => 'id_pekerjaan'),
+            array('name' => 'keterangan'),
+            array('name' => 'status_validasi')
         );
         return $this->get_datatable($sql, $columns, $_POST);
     }
 
     function get_list_file_progress_datatable($id_detil_pekerjaan) {
-        $sql = "select * from file where id_detil_pekerjaan='$id_detil_pekerjaan' and id_progress is not null";
+        $sql = "select file.*, detil_progress.deskripsi, detil_progress.validated "
+                . "from file "
+                . "inner join detil_progress on detil_progress.id_detil_progress=file.id_progress "
+                . "where file.id_detil_pekerjaan='$id_detil_pekerjaan' and file.id_progress is not null";
         $columns = array(
             array('name' => 'id_file'),
             array('name' => 'nama_file'),
-            array('name' => 'id_pekerjaan'),
+            array('name' => 'deskripsi'),
+            array('name' => 'validated'),
         );
         return $this->get_datatable($sql, $columns, $_POST);
     }

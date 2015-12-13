@@ -263,7 +263,7 @@ function init_tabel_aktivitas() {
             var html_berkas = '';
             if (list_id_berkas_json != null) {
                 for (var i = 0, n = list_id_berkas_json.length; i < n; i++) {
-                    html_berkas += '<a href="' + site_url + '/download?id_file=' + list_id_berkas_json[i] + '" target="_blank" title="' + list_berkas[i] + '"><i class="fa fa-paperclip fa-fw"></i></a> ';
+                    html_berkas += '<a href="' + site_url + '/download?id_file=' + list_id_berkas_json[i] + '" target="_blank" title="' + list_berkas[i] + '"><i class="fa fa-paperclip fa-fw"></i>'+list_berkas[i]+'</a> ';
                 }
             }
             $('td', row).eq(0).html(html);

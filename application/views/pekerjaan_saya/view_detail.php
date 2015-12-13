@@ -115,6 +115,7 @@ $list_tingkat_manfaat = array(
                                                             <tr>
                                                                 <th style="width: 70px">#</th>
                                                                 <th>Nama File</th>
+                                                                <th>Deskripsi Aktivitas</th>
                                                                 <th style="width: 250px"></th>
                                                             </tr>
                                                         </thead>

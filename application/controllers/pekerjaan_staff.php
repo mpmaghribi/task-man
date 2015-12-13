@@ -212,7 +212,7 @@ class pekerjaan_staff extends ceklogin {
             redirect(site_url() . '/pekerjaan_staff');
             return;
         }
-        $list_detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan' order by id_akun")->result_array();
+        $list_detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan' order by id_detil_pekerjaan")->result_array();
         $detil_pekerjaan = null;
         foreach ($list_detil_pekerjaan as $dp) {
             if ($dp['id_akun'] == $id_staff) {

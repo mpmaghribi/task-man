@@ -24,7 +24,7 @@
                                     </li>
                                 </ul>
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    
+
                                 </div>
                             </header>
                             <div class="panel-body">
@@ -88,22 +88,43 @@
                                                     Realisasi Tugas
                                                 </h4>
                                                 <div class="panel-body">
-                                                    <div class="form-horizontal">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-lg-2">Keterangan</label>
-                                                            <div class="col-lg-6">
-                                                                <input type="text" name="deskripsi" class="form-control"/>
+                                                    <div class="form-horizontal" id="form_realisasi_tugas">
+                                                        <form method="post" enctype="multipart/form-data" action="<?= site_url() ?>/pekerjaan_saya/realisasi_tugas">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-lg-2">Keterangan</label>
+                                                                <div class="col-lg-6">
+                                                                    <input type="text" name="deskripsi" class="form-control"/>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-lg-2">Waktu</label>
-                                                            <div class="col-lg-3">
-                                                                <input type="text" name="waktu_mulai" class="form-control"/>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-lg-2">Waktu</label>
+                                                                <div class="col-lg-3">
+                                                                    <input type="text" name="waktu_mulai" class="form-control" id="tugas_realisasi_waktu_mulai"/>
+                                                                </div>
+                                                                <div class="col-lg-3">
+                                                                    <input type="text" name="waktu_selesai" class="form-control" id="tugas_realisasi_waktu_selesai"/>
+                                                                </div>
                                                             </div>
-                                                            <div class="col-lg-3">
-                                                                <input type="text" name="waktu_selesai" class="form-control"/>
+                                                            <div class="form-group ">
+                                                                <label for="prioritas" class="control-label col-lg-2">File</label>
+                                                                <div class="col-lg-6">
+                                                                    <div id="list_file_upload_assign">
+                                                                        <div id="file_baru">
+                                                                            <table class="table table-hover general-table" id="berkas_baru_tugas"></table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div style="display:none">
+                                                                        <input type="file" multiple="" name="berkas[]" id="pilih_berkas_realisasi_tugas" onchange="file_changed(this, 'berkas_baru_tugas')">
+                                                                    </div>
+                                                                    <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                            <div class="form-group">
+                                                                <div class="col-lg-6 col-lg-offset-2">
+                                                                    <button class="btn btn-primary" type="submit">Simpan</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </section>
@@ -183,7 +204,60 @@
                                                                 init_anggota();
                                                                 init_file_pekerjaan();
                                                                 init_file_tugas();
+                                                                $('#button_trigger_file').on('click', function () {
+                                                                    $('#pilih_berkas_realisasi_tugas').click();
+                                                                });
+                                                                var tanggal_bawah = new Date(tugas['tanggal_mulai2']);
+                                                                tanggal_bawah.setHours(0);
+//                                                                console.log(tanggal_bawah);
+                                                                var tanggal_atas = new Date(tugas['tanggal_selesai2']);
+                                                                tanggal_atas.setHours(0);
+                                                                var tanggal_mulai = $('#tugas_realisasi_waktu_mulai').datepicker({
+                                                                    format: 'dd-mm-yyyy',
+                                                                    onRender: function (date) {
+                                                                        return  tanggal_bawah > date || date > tanggal_atas ? 'disabled' : '';
+                                                                    }
+                                                                }).on('changeDate', function (ev) {
+                                                                    tanggal_selesai.setValue(new Date(ev.date));
+                                                                    tanggal_mulai.hide();
+                                                                    $('#tugas_realisasi_waktu_selesai').focus();
+                                                                }).data('datepicker');
+                                                                var tanggal_selesai = $('#tugas_realisasi_waktu_selesai').datepicker({
+                                                                    format: 'dd-mm-yyyy',
+                                                                    onRender: function (date) {
+                                                                        return tanggal_bawah > date || date > tanggal_atas || tanggal_mulai.date > date ? 'disabled' : '';
+                                                                    }
+                                                                }).on('changeDate', function (ev) {
+                                                                    tanggal_selesai.hide();
+                                                                }).data('datepicker');
+                                                                tanggal_mulai.setValue(tanggal_bawah);
+                                                                tanggal_selesai.setValue(tanggal_atas);
                                                             });
+                                                            function file_changed(elmnt, id_tabel) {
+                                                                $('#' + id_tabel).html('');
+                                                                var files = elmnt.files;
+                                                                var jumlah_file = files.length;
+                                                                for (var i = 0; i < jumlah_file; i++) {
+                                                                    $('#' + id_tabel).append('<tr id="berkas_baru_' + i + '">' +
+                                                                            '<td id="nama_berkas_baru_' + i + '">' + files[i].name + ' ' + format_ukuran_file(files[i].size) + '</td>' +
+                                                                            '<td id="keterangan_' + i + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px">Baru</a></td>' +
+                                                                            '</tr>');
+                                                                }
+                                                            }
+                                                            function format_ukuran_file(s) {
+                                                                var KB = 1024;
+                                                                var spasi = ' ';
+                                                                var satuan = 'bytes';
+                                                                if (s > KB) {
+                                                                    s = s / KB;
+                                                                    satuan = 'KB';
+                                                                }
+                                                                if (s > KB) {
+                                                                    s = s / KB;
+                                                                    satuan = 'MB';
+                                                                }
+                                                                return '   [' + Math.round(s) + spasi + satuan + ']';
+                                                            }
                                                             function init_file_tugas() {
                                                                 var tabel = $('#tabel_file_tugas_body');
                                                                 tabel.html('');

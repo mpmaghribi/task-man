@@ -43,6 +43,7 @@ $(document).ready(function () {
 });
 var tabel_file_pekerjaan = null;
 function init_file_pekerjaan() {
+    //inisialisasi tabel file pekerjaan yang berisi daftar file pendukung pekerjaan
     if (tabel_file_pekerjaan != null) {
         tabel_file_pekerjaan.fnDestroy();
     }
@@ -50,23 +51,28 @@ function init_file_pekerjaan() {
     tabel.html('');
     for (var i = 0, i2 = file_pekerjaan.length; i < i2; i++) {
         var berkas = file_pekerjaan[i];
-        var html = '<tr>'
-                + '<td>' + (i + 1) + '</td>'
-                + '<td>' + berkas['nama_file'] + '</td>'
-                + '<td style="text-align:right"><a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + berkas['id_file'] + '" id="" style="font-size: 10px" target="_blank">Download</a></td>'
-                + '</tr>';
+//        var status_validasi = parseInt(berkas['status_validasi']);
+        var html = '<tr>';
+        html += '<td>' + (i + 1) + '</td>';
+        html += '<td>' + berkas['nama_file'] + '</td>';
+        html += '<td style="text-align:right">';
+        html += '<a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + berkas['id_file'] + '" id="" style="font-size: 10px" target="_blank">Download</a>';
+
+        html += '</td>';
+        html += '</tr>';
         tabel.append(html);
     }
-    tabel_file_pekerjaan=$('#table_file_pekerjaan').dataTable();
+    tabel_file_pekerjaan = $('#table_file_pekerjaan').dataTable();
 }
 var tabel_file_progress = null;
 function init_tabel_file_progress() {
+    //inisialisasi data file hasil progress/aktivitas ke tabel list file progress
     if (tabel_file_progress != null) {
         tabel_file_progress.fnDestroy();
     }
     tabel_file_progress = $('#table_file_progress').dataTable({
-        order: [[1, "asc"]],
-        "columnDefs": [{"targets": [2], "orderable": false}],
+        order: [[0, "asc"]],
+        "columnDefs": [{"targets": [3], "orderable": false}],
         "processing": true,
         "serverSide": true,
         "ajax": {
@@ -82,8 +88,14 @@ function init_tabel_file_progress() {
         },
         "createdRow": function (row, data, index) {
             var id = data[0];
+            var status_validasi=parseInt(data[3]);
+            var html = '<a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + id + '" id="" style="font-size: 10px" target="_blank">Download</a>';
+            if (status_validasi == 0) {
+                html += '<a class="btn btn-danger btn-xs" href="javascript:hapus_file(' + id+ ',\'' + data[1]+ '\')" id="" style="font-size: 10px" target="_blank">Hapus</a>';
+            }
+            
             $('td', row).eq(0).html(index + 1);
-            $('td', row).eq(2).html('<a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + id + '" id="" style="font-size: 10px" target="_blank">Download</a>').css('text-align','right');
+            $('td', row).eq(3).html(html).css('text-align', 'right');
 
             $(row).attr('id', 'row_' + id)
         }
@@ -102,16 +114,21 @@ function berkas_aktivitas_changed(elm) {
     }
 }
 function refreshAktivitas() {
+    //inisialisasi kembali tabel aktivitas/progress dan tabel file progress
     if (tabel_aktivitas != null) {
         tabel_aktivitas.fnDraw();
     }
-    init_tabel_file_progress();
+    if (tabel_file_progress != null) {
+        tabel_file_progress.fnDraw();
+    }
 }
 function pilih_berkas_aktivitas() {
+    //memicu event click pada input file, pada saat akan membuat aktivitas atau progress
     $('#file_berkas_aktivitas').click();
     return false;
 }
 function init_tampilan_form_tambah_aktivitas() {
+    //inisialisasi form mana yang ditampilkan, tampilan bergatung kepada kategori pekerjaan
     $('#div_aktivitas_angka_kredit').hide();
     $('#div_aktivitas_kualitas_mutu').hide();
     $('#div_aktivitas_biaya').hide();
@@ -134,7 +151,8 @@ function viewHapusAktivitas(id) {
             },
             success: function (data) {
                 if (data == 'ok') {
-                    tabel_aktivitas.fnDraw();
+                    refreshAktivitas();
+
                 } else {
                     alert(data);
                 }
@@ -147,6 +165,7 @@ function viewHapusAktivitas(id) {
     }
 }
 function viewHapusProgress(id) {
+    //
     var row = $('#row_' + id);
     var nama_progress = $(row.children()[2]).html();
     if (confirm("Apakah Anda yakin menghapus porgress " + nama_progress + "?") == true) {
@@ -158,7 +177,7 @@ function viewHapusProgress(id) {
             },
             success: function (data) {
                 if (data == 'ok') {
-                    tabel_aktivitas.fnDraw();
+                    refreshAktivitas();
                 } else {
                     alert(data);
                 }
@@ -172,6 +191,7 @@ function viewHapusProgress(id) {
 }
 var tabel_aktivitas = null;
 function init_tabel_progress() {
+    //inisialisasi tabel yang menampilkan data progress pekerjaan, 
     if (tabel_aktivitas != null) {
         tabel_aktivitas.fnDestroy();
     }
@@ -235,6 +255,7 @@ function init_tabel_progress() {
     });
 }
 function init_tabel_aktivitas() {
+    //inisialisasi tabel yag menampilkan daftar aktivitas user
     if (tabel_aktivitas != null) {
         tabel_aktivitas.fnDestroy();
     }

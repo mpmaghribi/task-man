@@ -36,7 +36,6 @@ function change_deadline_tugas() {
     }).on('changeDate', function (ev) {
         tanggal_selesai.setValue(new Date(ev.date));
         tanggal_mulai.hide();
-//        tanggal_selesai.click();
         $('#tugas_tanggal_selesai').focus();
     }).data('datepicker');
 

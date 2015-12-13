@@ -60,7 +60,7 @@ function init_tabel_tugas() {
                         }
                     }
                 }
-                var status = 'Belum Dibaca';
+                var status = 'Belum Dikerjakan';
 //                if(tugas['tanggal_dilihat']!=null){
 //                    status='Sudah Dibaca';
 //                }

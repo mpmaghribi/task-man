@@ -203,7 +203,7 @@ class pekerjaan_saya extends ceklogin {
             return;
         }
 
-        $detil_pekerjaans = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $detil_pekerjaans = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan' order by id_detil_pekerjaan")->result_array();
         $detil_pekerjaan = null;
         foreach ($detil_pekerjaans as $dp) {
             if ($dp['id_akun'] == $session['user_id']) {
