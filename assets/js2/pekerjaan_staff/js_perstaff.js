@@ -61,9 +61,12 @@ function init_tabel_tugas() {
                     }
                 }
                 var status = 'Belum Dikerjakan';
-//                if(tugas['tanggal_dilihat']!=null){
-//                    status='Sudah Dibaca';
-//                }
+				if(tugas['id_aktivitas']!=null){
+					status='Sudah Dikerjakan, Belum Divalidasi';
+					if(parseInt(tugas['status_validasi'])==1){
+						status='Sudah Dikerjakan, Sudah Divalidasi';
+					}
+				}
                 var aksi = '<div class="btn-group">';
                 aksi += '<button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button">Aksi <span class="caret"></span></button>';
                 aksi += '<ul class="dropdown-menu">';

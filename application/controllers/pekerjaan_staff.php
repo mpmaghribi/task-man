@@ -1327,7 +1327,7 @@ class pekerjaan_staff extends ceklogin {
     function get_list_tugas() {
         $id_staff = intval($this->input->post('id_staff'));
         $periode = abs(intval($this->input->post('periode')));
-        $list_tugas = $this->db->query("select assign_tugas.*, pekerjaan.nama_pekerjaan, aktivitas_pekerjaan.*, "
+        $list_tugas = $this->db->query("select assign_tugas.*, pekerjaan.nama_pekerjaan, aktivitas_pekerjaan.id_aktivitas, aktivitas_pekerjaan.status_validasi, "
                         . "to_char(assign_tugas.tanggal_mulai,'YYYY-MM-DD') as tanggal_mulai2,"
                         . "to_char(assign_tugas.tanggal_selesai,'YYYY-MM-DD') as tanggal_selesai2 "
                         . "from assign_tugas "

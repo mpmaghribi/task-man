@@ -530,16 +530,14 @@ $list_tingkat_manfaat = array(
                                                                             data: {id_file: id_file,
                                                                                 id_pekerjaan: <?php echo $pekerjaan['id_pekerjaan']; ?>
                                                                             }, // get the form data
-                                                                            type: "get", // GET or POST
-                                                                            url: "<?php echo site_url(); ?>/pekerjaan/hapus_file", // the file to call
+                                                                            type: "post", // GET or POST
+                                                                            url: "<?php echo site_url(); ?>/pekerjaan_saya/hapus_file", // the file to call
                                                                             success: function (response) { // on success..
-                                                                                var json = jQuery.parseJSON(response);
-                                                                                //alert(response);
-                                                                                if (json.status === "OK") {
-                                                                                    $('#berkas_' + id_file).remove();
-                                                                                    //$('#tombol_validasi_usulan').remove();
+                                                                                
+                                                                                if (response == "ok") {
+                                                                                    init_tabel_file_progress();
                                                                                 } else {
-                                                                                    alert("Gagal menghapus file, " + json.reason);
+                                                                                    alert("Gagal menghapus file, " + response);
                                                                                 }
                                                                             }
                                                                         });
