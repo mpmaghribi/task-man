@@ -248,10 +248,14 @@ foreach ($users as $u) {
                 if (user_terlibat == null) {
                     continue;
                 }
-                var status_tugas = 'Belum Dilihat';
-
+                var status_tugas = 'Belum Dikerjakan';
                 for (var j = 0, j2 = aktivitas.length; j < j2; j++) {
-
+					if(aktivitas[j]['id_detil_pekerjaan']==dp_terlibat['id_detil_pekerjaan']){
+						status_tugas='Telah Dikerjakan, Belum Divalidasi';
+						if(aktivitas[j]['status_validasi']=='1'){
+							status_tugas='Telah Dikerjakan, Telah Divalidasi';
+						}
+					}
                 }
                 counter++;
                 var html = '<tr>'

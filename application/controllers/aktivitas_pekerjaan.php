@@ -611,5 +611,73 @@ class aktivitas_pekerjaan extends ceklogin {
             echo json_encode($this->berkas_model->get_list_file_progress_datatable($id_detil_pekerjaan));
         }
     }
+	
+	function edit_realisasi_tugas(){
+		$id_tugas=intval($this->input->post('id_tugas'));
+		$waktu_selesai=$this->input->post('waktu_selesai');
+		$waktu_mulai=$this->input->post('waktu_mulai');
+		$deskripsi=$this->input->post('deskripsi');
+		$tugas=$this->aktivitas_model->get_tugas_by_id($id_tugas);
+		if($tugas==null){
+			$this->send_frame_error('Tugas tidak dapat ditemukan');
+			return;
+		}
+		$session=$this->session->userdata('logged_in');
+		$my_id=$session['id_akun'];
+		$id_pekerjaan=$tugas['id_pekerjaan'];
+		$q=$this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+		if(count($q)<=0){
+			$this->send_frame_error('Pekerjaan tidak dapat ditemukan');
+			return;
+		}
+		$q=$this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan' and id_akun='$my_id'")->result_array();
+		if(count($q)<=0){
+			$this->send_frame_error('Anda tidak terlibat di dalam pekerjaan');
+			return;
+		}
+		$detil_pekerjaan=$q[0];
+		$id_detil_pekerjaan=$detil_pekerjaan['id_detil_pekerjaan'];
+		$q=$this->db->query("select * from aktivitas_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan' and id_tugas='$id_tugas'")->result_array();
+		if(count($q)<=0){
+			$this->send_frame_error('Anda belum melakukan realisasi tugas, tidak ada data untuk diupdate');
+			return;
+		}
+		$aktivitas=$q[0];
+		$id_aktivitas=$aktivitas['id_aktivitas'];
+		$this->db->query("set datestyle to 'ISO, DMY'");
+		$this->db->update('aktivitas_pekerjaan',array('keterangan'=>$deskripsi,'waktu_mulai'=>$waktu_mulai,'waktu_selesai'=>$waktu_selesai),array('id_detil_pekerjaan'=>$id_detil_pekerjaan,'id_tugas'=>$id_tugas));
+		$this->load->library(array('myuploadlib'));
+		$uploader = new MyUploadLib();
+		$uploader->prosesUpload('berkas');
+		$uploadedFiles = $uploader->getUploadedFiles();
+		foreach ($uploadedFiles as $file) {
+			$berkas = array(
+				'id_pekerjaan' => $id_pekerjaan,
+				'id_detil_pekerjaan' => $id_detil_pekerjaan,
+				'id_aktivitas' => $id_aktivitas,
+				'id_tugas'=>$id_tugas,
+				'nama_file' => $file['name'],
+				'path' => $file['filePath']
+			);
+			$this->db->insert('file', $berkas);
+		}
+		$q=$this->db->query("select *, to_char(waktu_mulai,'YYYY-MM-DD') as waktu_mulai2, to_char(waktu_selesai,'YYYY-MM-DD') as waktu_selesai2,
+					berkas.id_file, berkas.nama_file
+					from aktivitas_pekerjaan 
+					left join (select json_agg(id_file) as id_file, json_agg(nama_file) as nama_file, id_tugas,id_aktivitas from file group by id_tugas,id_aktivitas) berkas 
+					on berkas.id_aktivitas=aktivitas_pekerjaan.id_aktivitas and berkas.id_tugas=aktivitas_pekerjaan.id_tugas
+					where aktivitas_pekerjaan.id_aktivitas='$id_aktivitas'")->result_array();
+		$result=null;
+		if(count($q)>0){
+			$result=$q[0];
+		}
+		$this->send_frame_ok('set_my_aktivitas',$result);
+	}
+	private function send_frame_ok($function_name,$data){
+		echo '<html><head></head><body><script>parent.'.$function_name.'('.json_encode($data).');</script></body></html>';
+	}
+	private function send_frame_error($pesan){
+		echo '<html><head></head><body><script>parent.alert('.$pesan.');</script></body></html>';
+	}
 
 }

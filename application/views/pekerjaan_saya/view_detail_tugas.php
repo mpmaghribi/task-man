@@ -118,7 +118,7 @@
                                                                     <div style="display:none">
                                                                         <input type="file" multiple="" name="berkas[]" id="pilih_berkas_realisasi_tugas" onchange="file_changed(this, 'berkas_baru_tugas')">
                                                                     </div>
-                                                                    <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
+                                                                    <button class="btn btn-primary" type="button" id="button_trigger_file" onclick="buka_file()">Pilih File</button>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
@@ -214,9 +214,6 @@ $this->load->view("taskman_footer_page");
 		init_anggota();
 		init_file_pekerjaan();
 		init_file_tugas();
-		$('#button_trigger_file').on('click', function () {
-			$('#pilih_berkas_realisasi_tugas').click();
-		});
 		var tanggal_bawah = new Date(tugas['tanggal_mulai2']);
 		tanggal_bawah.setHours(0);
 		var tanggal_atas = new Date(tugas['tanggal_selesai2']);
@@ -242,6 +239,34 @@ $this->load->view("taskman_footer_page");
 		tanggal_mulai.setValue(tanggal_bawah);
 		tanggal_selesai.setValue(tanggal_atas);
 	});
+	function hapus_file(id,nama){
+		if(confirm('Anda akan menghapus file '+nama+'. Lanjutkan?')==false){
+			return;
+		}
+		$.ajax({
+			type: "POST",
+			url: site_url + "/pekerjaan_saya/hapus_file",
+			data: {
+				id_file:id
+			},
+			success: function (data) {
+				if(data=='ok'){
+					$("#a_file_"+id).remove();
+					$("#hapus_file_"+id).remove();
+				}else{
+					alert(data);
+				}
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+
+			}
+		});
+	}
+	function buka_file(){
+		console.log("trigger file");
+		$('#pilih_berkas_realisasi_tugas').trigger('click');
+		//$('#pilih_berkas_realisasi_tugas').val('');
+	}
 	function batal_edit_realisasi_tugas(){
 		$('#div_form_realisasi_tugas').slideUp();
 		$('#div_view_realisasi').slideDown();
@@ -253,16 +278,27 @@ $this->load->view("taskman_footer_page");
 		$('#tugas_realisasi_deskripsi').val(aktivitas_saya['keterangan']);
 		tanggal_mulai.setValue((new Date(aktivitas_saya['waktu_mulai2'])).setHours(0));
 		tanggal_selesai.setValue((new Date(aktivitas_saya['waktu_selesai2'])).setHours(0));
+		$('#berkas_baru_tugas').html('');
+		//var div_file=$('#pilih_berkas_realisasi_tugas').parent();
+		//var file_element=div_file.html();
+		//div_file.html('');
+		//div_file.html(file_element);
+		$('#pilih_berkas_realisasi_tugas').val('');
 	}
 	function set_my_aktivitas(akt) {
 		console.log(akt);
+		var status_validasi=parseInt(akt['status_validasi']);
 		var html_berkas='';
 		var list_id_berkas = JSON.parse(akt.id_file);
 		if(list_id_berkas!=null){
 			var list_nama_berkas=JSON.parse(akt.nama_file);
 			var sep='';
 			for(var i=0,i2=list_id_berkas.length;i<i2;i++){
-				html_berkas+=sep+'<a href="'+site_url+'/download?id_file='+list_id_berkas[i]+'" target="_blank" title="'+list_nama_berkas[i]+'"><i class="fa fa-paperclip fa-fw"></i>'+list_nama_berkas[i]+'</a>';
+				html_berkas+=sep+'<a id="a_file_'+list_id_berkas[i]+'" href="'+site_url+'/download?id_file='+list_id_berkas[i]+'" target="_blank" title="'+list_nama_berkas[i]+'"><i class="fa fa-paperclip fa-fw"></i>'+list_nama_berkas[i];
+				if(status_validasi==0){
+					html_berkas+='<a id="hapus_file_'+list_id_berkas[i]+'" class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file('+list_id_berkas[i]+', \''+list_nama_berkas[i]+'\');">Hapus</a>';	
+				}				
+				html_berkas+='</a>';
 				sep='<br/>';
 			}
 		}
@@ -272,7 +308,7 @@ $this->load->view("taskman_footer_page");
 		tabel.append('<tr><td>Waktu</td><td>' + akt['waktu_mulai2'] + ' - ' + akt['waktu_selesai2'] + '</td></tr>');
 		tabel.append('<tr><td>Berkas</td><td>' + html_berkas + '</td></tr>');
 		aktivitas_saya=akt;
-		if(parseInt(akt['status_validasi'])==1){
+		if(status_validasi==1){
 			$('#button_edit_realisasi').hide();
 		}else{
 			
