@@ -114,7 +114,7 @@ class draft extends ceklogin {
                     echo 'id draft null';
                 }
             }
-            redirect(base_url() . 'draft');
+            redirect(site_url() . '/draft');
         } else {
             $data['data_akun'] = $temp;
             $data['judul_kesalahan'] = 'Tidak Berhak';

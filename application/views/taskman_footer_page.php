@@ -248,8 +248,78 @@
             }
         });
     }
+	var site_url= '<?= site_url() ?>';
+	function req_pending_task2() {
+        //console.log('req_pending_task');
+        var bulan = ["Januari", "February", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        $.ajax({// create an AJAX call...
+            type: "GET", // GET or POST
+            url: "<?php echo site_url(); ?>/pekerjaan/req_pending_task", // the file to call
+            success: function(response) { // on success..
+                var json = JSON.parse(response);
+				var sekarang_arr = json['sekarang'].split('-');
+				var html='';
+				var jumlah_notif=0;
+				console.log(sekarang_arr);
+				var pekerjaan=json['pekerjaan_saya'];
+				for(var i=0,i2=pekerjaan.length;i<i2;i++){
+					var p=pekerjaan[i];
+					var style='';
+					var text_style='';
+					var deadline1 = p['tanggal_selesai'].split('-');
+					var deadline = deadline1[2]+' '+ bulan[parseInt(deadline1[1])-1]+' '+deadline1[0];
+					var nama_pekerjaan=p['nama_pekerjaan'];
+					if(nama_pekerjaan.length>35){
+						nama_pekerjaan=nama_pekerjaan.substring(0,35)+'...';
+					}
+					html += '<li>' +
+							'<a href="'+site_url+'/pekerjaan_saya/detail?id_pekerjaan=' + p['id_pekerjaan'] + '&sumber=notifikasi" ' + style + '>' +
+							'<div class="task-info clearfix">' +
+							'<div class="desc pull-left" >' +
+							'<h5 style="text-transform:none;'+text_style+'">' + nama_pekerjaan + '</h5>' +
+							'<p style="'+text_style+'">' + deadline + '</p>' +
+							'</div>' +
+							'</div>' +
+							'</a>' +
+							'</li>';
+					jumlah_notif++;
+				}
+				var pekerjaan=json['pekerjaan_staff'];
+				for(var i=0,i2=pekerjaan.length;i<i2;i++){
+					var p=pekerjaan[i];
+					var style='';
+					var text_style='';
+					var deadline1 = p['tanggal_selesai'].split('-');
+					var deadline = deadline1[2]+' '+ bulan[parseInt(deadline1[1])-1]+' '+deadline1[0];
+					var nama_pekerjaan=p['nama_pekerjaan'];
+					if(nama_pekerjaan.length>35){
+						nama_pekerjaan=nama_pekerjaan.substring(0,35)+'...';
+					}
+					html += '<li>' +
+							'<a href="'+site_url+'/pekerjaan_staff/detail?id_pekerjaan=' + p['id_pekerjaan'] + '&sumber=notifikasi" ' + style + '>' +
+							'<div class="task-info clearfix">' +
+							'<div class="desc pull-left" >' +
+							'<h5 style="text-transform:none;'+text_style+'">' + nama_pekerjaan + '</h5>' +
+							'<p style="'+text_style+'">' + deadline + '</p>' +
+							'</div>' +
+							'</div>' +
+							'</a>' +
+							'</li>';
+					jumlah_notif++;
+				}
+				$("#bagian_pending_task").html(html);
+				if (jumlah_notif == 0)
+					jumlah_notif = "";
+				$("#jumlah_pending_task").html(jumlah_notif);
+            }
+        });
+    }
+	var req_pending_task_interval_id='';
     jQuery(document).ready(function() {
-        req_pending_task();
+        req_pending_task2();
+		req_pending_task_interval_id=setInterval(function(){
+			req_pending_task2();
+		},60000);
     });
 
     var tinggi = $(window).height();

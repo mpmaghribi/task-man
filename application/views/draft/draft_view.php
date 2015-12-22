@@ -47,7 +47,7 @@
                     </tbody>
                 </table>
                 <script>
-                    var url_hapus = '<?php echo base_url(); ?>draft/batalkan?id_draft=';
+                    var url_hapus = '<?php echo site_url(); ?>/draft/batalkan?id_draft=';
                     function confirm_batal(id_draft, judul) {
                         var myurl = url_hapus + id_draft;
                         var c = confirm('apakah anda yakin menghapus draft "' + judul + '"?');

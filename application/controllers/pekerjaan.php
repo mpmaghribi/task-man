@@ -695,21 +695,44 @@ class pekerjaan extends ceklogin {
     }
 
     public function req_pending_task() {
-        $temp = $this->session->userdata('logged_in');
+        $session = $this->session->userdata('logged_in');
+		$my_id=$session['id_akun'];
         $data['data_akun'] = $this->session->userdata('logged_in');
         $this->load->model(array("pekerjaan_model", "akun"));
-        $list_pekerjaan = $this->pekerjaan_model->list_pending_task($temp['user_id']);
-        $my_staff = $this->akun->my_staff($temp['id_akun']);
+        $list_pekerjaan = $this->db->query("
+			select p.*, to_char(p.tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, to_char(p.tgl_selesai,'YYYY-MM-DD') as tanggal_selesai
+			from pekerjaan p
+			where p.id_pekerjaan in (
+				select dp.id_pekerjaan 
+				from detil_pekerjaan dp
+				where dp.id_akun='$my_id'
+			)
+			order by p.tgl_selesai asc
+		")->result_array();
+        $my_staff = $this->akun->my_staff($session['id_akun']);
         $mystaff = array();
         $pekerjaan_staff = array();
         $detil_pekerjaan_staff = array();
         $progress_staff = array();
-        if (in_array(5, $temp['idmodul'])) {
+		
+        if (in_array(5, $session['idmodul'])) {
             foreach ($my_staff as $ms) {
                 $mystaff[] = $ms->id_akun;
             }
-            if (count($mystaff) > 0)
-                $pekerjaan_staff = $this->pekerjaan_model->get_pekerjaan_staff($mystaff);
+            if (count($mystaff) > 0){
+				$pekerjaan_staff=$this->db->query("
+					select *, to_char(tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai
+					from pekerjaan p 
+					where p.id_penanggung_jawab='$my_id' and p.id_pekerjaan in (
+						select dp.id_pekerjaan from detil_pekerjaan dp
+						where dp.locked=0 and dp.id_pekerjaan=p.id_pekerjaan
+						limit 1
+					)
+					order by p.tgl_selesai asc
+				")->result_array();
+			}
+                //$pekerjaan_staff = $this->pekerjaan_model->get_pekerjaan_staff($mystaff);
+			
 //            $list_id_pekerjaan = array();
 //            if (count($pekerjaan_staff) > 0){
 //                foreach ($pekerjaan_staff as $kerja) {
@@ -719,7 +742,8 @@ class pekerjaan extends ceklogin {
             //$detil_pekerjaan_staff = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
             //$progress_staff = $this->pekerjaan_model->get_progress_per_staff($mystaff);
         }
-        echo json_encode(array("status" => "OK", "pekerjaan_saya" => $list_pekerjaan,
+        echo json_encode(array("status" => "OK", 
+			"pekerjaan_saya" => $list_pekerjaan,
             "staff" => $my_staff,
             "pekerjaan_staff" => $pekerjaan_staff,
             "detil_pekerjaan_staff" => $detil_pekerjaan_staff,

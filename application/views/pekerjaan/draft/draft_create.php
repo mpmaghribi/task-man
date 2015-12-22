@@ -1,6 +1,6 @@
 <div id="div_create_draft" class="tab-pane">
     <div class="form" style="">
-        <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo $draft_create_submit; ?>" enctype="multipart/form-data">
+        <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url(); ?>/draft/create" enctype="multipart/form-data">
             <input type="hidden" name="jenis_usulan" value="draft"/>
             <div class="form-group ">
                 <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>

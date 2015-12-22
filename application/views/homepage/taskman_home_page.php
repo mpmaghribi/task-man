@@ -218,30 +218,7 @@
     <script src="<?php echo base_url(); ?>assets/js/fullcalendar/fullcalendar.min.js"></script>
     <!--script for this page only-->
     <script src="<?php echo base_url(); ?>assets/js/external-dragging-calendar.js"></script>  
-    <script>
-        var detil_pekerjaan_saya = jQuery.parseJSON('<?php if (isset($detil_pekerjaan_saya)) echo json_encode($detil_pekerjaan_saya); ?>');
-        var tgl_selesai_pekerjaan_saya = [];
-        var tgl_mulai_pekerjaan_saya = [];
-        var flag_usulan_pekerjaan_saya = [];
-<?php foreach ($pkj_karyawan as $pekerjaan_saya) { ?>
-            tgl_selesai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_selesai; ?>';
-            flag_usulan_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->flag_usulan; ?>';
-            tgl_mulai_pekerjaan_saya[<?php echo $pekerjaan_saya->id_pekerjaan; ?>] = '<?php echo $pekerjaan_saya->tgl_mulai; ?>';<?php }
-?>
-
-        document.title = "DashBoard - Task Management";
-        var jumlah_detil_saya = 0
-
-        if (detil_pekerjaan_saya != null)
-            jumlah_detil_saya = detil_pekerjaan_saya.length;
-
-        for (var i = 0; i < jumlah_detil_saya; i++) {
-            var detil = detil_pekerjaan_saya[i];
-            if (detil['id_akun'] == '<?php echo $data_akun['id_akun']; ?>') {
-                ubah_status_pekerjaan('pekerjaan_saya_status_' + detil['id_pekerjaan'], flag_usulan_pekerjaan_saya[detil['id_pekerjaan']], detil['sekarang'], tgl_mulai_pekerjaan_saya[detil['id_pekerjaan']], tgl_selesai_pekerjaan_saya[detil['id_pekerjaan']], detil['tgl_read'], detil['status'], detil['progress']);
-            }
-        }
-    </script>
+   
 
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
 
