@@ -320,6 +320,7 @@
 		req_pending_task_interval_id=setInterval(function(){
 			req_pending_task2();
 		},60000);
+		console.log('id interval = '+req_pending_task_interval_id);
     });
 
     var tinggi = $(window).height();

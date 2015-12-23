@@ -45,10 +45,10 @@ class home extends ceklogin {
             
             $staff = $this->akun->my_staff($temp['user_id']);
             $data['my_staff'] = $staff;
+			$url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
+            $data["users"] = json_decode(file_get_contents($url));
             if (count($data['my_staff']) > 0) {
-                
                 $data['list_draft'] = $this->pekerjaan_model->get_list_draft($temp['user_id']);
-                
                 $my_staff = array();
                 //print_r($staff);
                 //var_dump($staff);
@@ -71,7 +71,21 @@ class home extends ceklogin {
                 }
                 $data['detil_pekerjaan_staff'] = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
             }
-            
+            $tahun_max = date('Y');
+			$q = $this->db->query("select max(coalesce(date_part('year',tgl_selesai),periode,date_part('year',now()))) as tahun_max from pekerjaan")->result_array();
+			if (count($q) > 0) {
+				$tahun = (int) $q[0]['tahun_max'];
+				if ($tahun_max < $tahun) {
+					$tahun_max = $tahun;
+				}
+			}
+			$tahun_min = $tahun_max - 10;
+			$q = $this->db->query("select min(coalesce(date_part('year',tgl_mulai),periode,date_part('year',now()))) as tahun_min from pekerjaan")->result_array();
+			if (count($q) > 0) {
+				$tahun_min = (int) $q[0]['tahun_min'];
+			}
+			$data['tahun_max'] = $tahun_max;
+			$data['tahun_min'] = $tahun_min;
             $this->load->view('homepage/taskman_home_page', $data);
             //print_r($data);
             $this->session->set_userdata("prev", "home");
