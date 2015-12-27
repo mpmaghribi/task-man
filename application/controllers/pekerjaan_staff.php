@@ -1244,6 +1244,43 @@ class pekerjaan_staff extends ceklogin {
         echo 'OK';
     }
 
+    function get_list_skp_bawahan(){
+        $periode=abs(intval($this->input->post('periode')));
+        $q=$this->db->query("select p.*, dp2.id_akuns,
+            case when dp.tgl_read is null then '1, Belum Dilihat'
+                 when p.kategori='rutin' or p.kategori='project' then
+                 (
+                    case when dp.sasaran_kuantitas_output <= dp.realisasi_kuantitas_output then '4, Selesai'
+                        when now()::date > p.tgl_selesai::date then '5, Terlambat'
+                        when now()::date <= p.tgl_selesai::date and dp.realisasi_kuantitas_output > 0 then '3, Dikerjakan'
+                        else '2, Sudah Dibaca'
+                    end
+                 )
+                 else (
+                    case when dp.progress>=100 then '3, Selesai'
+                        when now()::date > p.tgl_selesai::date then '5, Terlambat'
+                        when now()::date <= p.tgl_selesai::date then '3, Dikerjakan'
+                        else '2, Sudah Dibaca'
+                    end
+                 )
+            end as status_pekerjaan2,
+            to_char(p.tgl_mulai,'YYYY-MM-DD') as tanggal_mulai,
+            to_char(p.tgl_selesai,'YYYY-MM-DD') as tanggal_selesai
+            from pekerjaan p 
+            inner join (
+               select array_agg(dp2.id_akun)as id_akuns, dp2.id_pekerjaan 
+               from detil_pekerjaan dp2 
+               group by dp2.id_pekerjaan
+            ) as dp2
+            on dp2.id_pekerjaan=p.id_pekerjaan
+            inner join (select distinct on (dp.id_pekerjaan) dp.* from detil_pekerjaan dp ) as dp
+            on dp.id_pekerjaan=p.id_pekerjaan
+            where (date_part('year',p.tgl_mulai)='$periode' or date_part('year',p.tgl_selesai)='$periode')
+            and p.status_pekerjaan='7'
+            ")->result_array();
+        echo json_encode($q);
+    }
+
     function get_list_tugas_tambahan() {
         $session = $this->session->userdata('logged_in');
         $periode = abs(intval($this->input->post('periode')));
