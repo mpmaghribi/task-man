@@ -1,6 +1,6 @@
 <div id="div_create_draft" class="tab-pane">
     <div class="form" style="">
-        <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?=site_url()?>index.php/draft/create" enctype="multipart/form-data">
+        <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?=site_url()?>/draft/create" enctype="multipart/form-data">
             <input type="hidden" name="jenis_usulan" value="draft"/>
             <div class="form-group ">
                 <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
@@ -17,6 +17,8 @@
                     <select name="kategori" class="form-control m-bot15">
                         <option value="rutin">Rutin</option>
                         <option value="project">Project</option>
+                        <option value="tambahan">Tambahan</option>
+                        <option value="kreativitas">Project</option>
                     </select>
                 </div>
             </div>
@@ -36,9 +38,9 @@
                 <label for="deadline" class="control-label col-lg-3">Deadline</label>
                 <div class="col-lg-6 ">
                     <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                        <input id="d" readonly type="text" class="form-control dpd1" value="" name="tgl_mulai_pkj">
+                        <input id="waktu_mulai_baru" readonly type="text" class="form-control" value="" name="tgl_mulai_pkj">
                         <span class="input-group-addon">Sampai</span>
-                        <input readonly type="text" class="form-control dpd2" value="" name="tgl_selesai_pkj">
+                        <input readonly id="waktu_selesai_baru" type="text" class="form-control dpd2" value="" name="tgl_selesai_pkj">
                     </div>
                 </div>
             </div>
@@ -73,8 +75,4 @@
         </form>
     </div>
 </div>
-<script>
-    $('#button_trigger_file').click(function() {
-        $('#pilih_berkas_assign').click();
-    });
-</script>
+<script src="<?=base_url()?>assets/js2/draft/js_create.js" type="text/javascript"></script>

@@ -83,12 +83,13 @@ class draft extends ceklogin {
             $insert['tgl_mulai'] = pg_escape_string($this->input->post('tgl_mulai_pkj'));
             $insert['tgl_selesai'] = pg_escape_string($this->input->post('tgl_selesai_pkj'));
             $insert['level_prioritas'] = pg_escape_string($this->input->post('prioritas'));
-            $insert['flag_usulan'] = '5';
+            $insert['status_pekerjaan'] = '9';
             $insert['asal_pekerjaan'] = 'task management';
             $insert['kategori'] = pg_escape_string(strtolower($this->input->post('kategori')));
             $insert['id_penanggung_jawab'] = $temp['id_akun'];
-
-
+            if (!in_array($insert['kategori'], array('rutin', 'project', 'tambahan', 'kreativitas'))) {
+                $insert['kategori'] = 'rutin';
+            }
 
             $lempar = 'draft';
 

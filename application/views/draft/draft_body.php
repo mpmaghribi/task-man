@@ -29,8 +29,8 @@
                                     <?php 
                                     
                                     //echo $draft_create_submit;
-                                    $this->load->view('pekerjaan/draft/draft_view');
-                                    $this->load->view('pekerjaan/draft/draft_create');
+                                    $this->load->view('draft/draft_view');
+                                    $this->load->view('draft/draft_create');
                                     ?>
                                 </div>
                             </div>
@@ -51,66 +51,8 @@
         <!--right sidebar end-->
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
-    <script type="text/javascript">
-        $(function() {
-            var nowTemp = new Date();
-            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-            var checkin = $('.dpd1').datepicker({
-                format: 'dd-mm-yyyy',
-                onRender: function(date) {
-                    return date.valueOf() < now.valueOf() ? 'disabled' : '';
-                }
-            }).on('changeDate', function(ev) {
-                if (ev.date.valueOf() > checkout.date.valueOf()) {
-                    var newDate = new Date(ev.date)
-                    newDate.setDate(newDate.getDate() + 1);
-                    checkout.setValue(newDate);
-                }
-                checkin.hide();
-                $('.dpd2')[0].focus();
-            }).data('datepicker');
-            var checkout = $('.dpd2').datepicker({
-                format: 'dd-mm-yyyy',
-                onRender: function(date) {
-                    return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
-                }
-            }).on('changeDate', function(ev) {
-                checkout.hide();
-            }).data('datepicker');
-        });
-        
-        
+    <script type="text/javascript"> 
         document.title = "Draft Pekerjaan - Task Management";
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-        
-        $('#pilih_berkas_assign').change(function() {
-            var pilih_berkas = document.getElementById('pilih_berkas_assign');
-            var files = pilih_berkas.files;
-           populate_file('berkas_baru', files);
-        });
-        function populate_file(id_tabel, files) {
-            $('#' + id_tabel).html('');
-            var jumlah_file = files.length;
-            for (var i = 0; i < jumlah_file; i++) {
-                $('#' + id_tabel).append('<tr id="berkas_baru_' + i + '">' +
-                        '<td id="nama_berkas_baru_' + i + '">' + files[i].name + ' ' + format_ukuran_file(files[i].size) + '</td>' +
-                        '<td id="keterangan_' + i + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px">Baru</a></td>' +
-                        '</tr>');
-            }
-        }
-        function format_ukuran_file(s) {
-            var KB = 1024;
-            var spasi = ' ';
-            var satuan = 'bytes';
-            if (s > KB) {
-                s = s / KB;
-                satuan = 'KB';
-            }
-            if (s > KB) {
-                s = s / KB;
-                satuan = 'MB';
-            }
-            return '   [' + Math.round(s) + spasi + satuan + ']';
-        }
         $('#div_view_draft').attr('class','tab-pane active');
     </script>

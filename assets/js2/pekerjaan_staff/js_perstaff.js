@@ -28,7 +28,7 @@ function init_tabel_tugas() {
         tabel_tugas.fnDestroy();
     }
     var tabel = $('#tabel_tugas_body');
-    
+
     $.ajax({
         type: "POST",
         url: site_url + "/pekerjaan_staff/get_list_tugas",
@@ -61,12 +61,12 @@ function init_tabel_tugas() {
                     }
                 }
                 var status = 'Belum Dikerjakan';
-				if(tugas['id_aktivitas']!=null){
-					status='Sudah Dikerjakan, Belum Divalidasi';
-					if(parseInt(tugas['status_validasi'])==1){
-						status='Sudah Dikerjakan, Sudah Divalidasi';
-					}
-				}
+                if (tugas['id_aktivitas'] != null) {
+                    status = 'Sudah Dikerjakan, Belum Divalidasi';
+                    if (parseInt(tugas['status_validasi']) == 1) {
+                        status = 'Sudah Dikerjakan, Sudah Divalidasi';
+                    }
+                }
                 var aksi = '<div class="btn-group">';
                 aksi += '<button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button">Aksi <span class="caret"></span></button>';
                 aksi += '<ul class="dropdown-menu">';
@@ -100,7 +100,7 @@ function init_tabel_skp_staff() {
         tabel_pekerjaan_staff.fnDestroy();
     }
     var body = $('#tabel_pekerjaan_staff_body');
-    
+
     $.ajax({
         type: "POST",
         url: site_url + "/pekerjaan_staff/get_list_skp",
@@ -194,7 +194,7 @@ function dialog_hapus_tugas(id) {
         type: "get",
         url: site_url + "/pekerjaan_staff/hapus_tugas",
         data: {
-            id_tugas:id
+            id_tugas: id
         },
         success: function (data) {
             if (data == 'ok') {

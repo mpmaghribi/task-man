@@ -325,11 +325,24 @@
 
     var tinggi = $(window).height();
     var lebar = $(window).width();
-    //console.log('tinggi = ' + tinggi);
     var tinggi_pending = Math.round(tinggi * 0.7);
     var lebar_pending = Math.round(lebar * 0.35);
     lebar_pending = 320;
     $('#bagian_pending_task').attr('style', 'overflow: scroll; max-height: ' + tinggi_pending + 'px;min-width:' + lebar_pending + 'px !important;overflow-x: hidden;max-width:0px !important;width:' + lebar_pending + 'px !important');
+    function format_ukuran_file(s) {
+            var KB = 1024;
+            var spasi = ' ';
+            var satuan = 'bytes';
+            if (s > KB) {
+                s = s / KB;
+                satuan = 'KB';
+            }
+            if (s > KB) {
+                s = s / KB;
+                satuan = 'MB';
+            }
+            return '   [' + Math.round(s) + spasi + satuan + ']';
+        }
 </script>
 </body>
 </html>
