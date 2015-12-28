@@ -1245,6 +1245,8 @@ class pekerjaan_staff extends ceklogin {
     }
 
     function get_list_skp_bawahan(){
+        $session = $this->session->userdata('logged_in');
+        $my_id = $session['id_akun'];
         $periode=abs(intval($this->input->post('periode')));
         $q=$this->db->query("select p.*, dp2.id_akuns,
             case when dp.tgl_read is null then '1, Belum Dilihat'
@@ -1275,7 +1277,7 @@ class pekerjaan_staff extends ceklogin {
             on dp2.id_pekerjaan=p.id_pekerjaan
             inner join (select distinct on (dp.id_pekerjaan) dp.* from detil_pekerjaan dp ) as dp
             on dp.id_pekerjaan=p.id_pekerjaan
-            where (date_part('year',p.tgl_mulai)='$periode' or date_part('year',p.tgl_selesai)='$periode')
+            where p.id_penanggung_jawab='$my_id' and (date_part('year',p.tgl_mulai)='$periode' or date_part('year',p.tgl_selesai)='$periode')
             and p.status_pekerjaan='7'
             ")->result_array();
         echo json_encode($q);
