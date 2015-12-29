@@ -4,8 +4,22 @@
             Daftar Draft Pekerjaan
         </header>
         <div class="panel-body">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-lg-1">Periode</label>
+                    <div class="col-lg-2">
+                        <select class="form-control" id="draft_select_periode" onchange="draft_ubah_periode()">
+                            <?php
+                            for($tahun=$tahun_max;$tahun>=$tahun_min;$tahun--){
+                                echo '<option value="'.$tahun.'">'.$tahun.'</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div class="form">
-                <table class="table table-striped table-hover table-condensed" id="tabel_pekerjaan_draft">
+                <table class="table table-striped table-hover table-condensed" id="tabel_draft">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -15,7 +29,7 @@
                             <th style="text-align: right; min-width: 248px; width: 300px"></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tabel_draft_body">
                         <?php
                         if (isset($list_draft)) {
                             $prioritas = array(1 => 'Urgent', 2 => 'Tinggi', 3 => 'Sedang', 4 => 'Rendah');
@@ -46,19 +60,7 @@
                     ?>
                     </tbody>
                 </table>
-                <script>
-                    var url_hapus = '<?php echo site_url(); ?>/draft/batalkan?id_draft=';
-                    function confirm_batal(id_draft, judul) {
-                        var myurl = url_hapus + id_draft;
-                        var c = confirm('apakah anda yakin menghapus draft "' + judul + '"?');
-                        if (c === true) {
-                            window.location = myurl;
-                        }
-                    }
-                    jQuery(document).ready(function() {
-                        $('#tabel_pekerjaan_draft').dataTable({});
-                    });
-                </script>
+                <script type="text/javascript" src="<?=base_url()?>assets/js2/draft/js_home.js"></script>
             </div>
         </div>
     </section></div>

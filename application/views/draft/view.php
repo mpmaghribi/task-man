@@ -14,13 +14,12 @@
                     <div class="col-md-12">
                         <section class="panel">
                             <header class="panel-heading  ">
-                                <?php echo $draft[0]->nama_pekerjaan; ?>
+                                Draft Pekerjaan
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -5px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                     <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>draft/assign?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">Assign</a>
                                     <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>draft/edit?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-success btn-xs" href="<?php echo base_url(); ?>draft/view?id_draft=<?php echo $draft[0]->id_pekerjaan; ?>" id="" style="font-size: 10px">View</a>
                                     <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="" onclick="confirm_batal(<?php echo $draft[0]->id_pekerjaan ?>, '<?php echo $draft[0]->nama_pekerjaan; ?>');" style="font-size: 10px">Batalkan</a>
-
                                 </div>
                                 <script>
                                     var url_hapus = '<?php echo base_url(); ?>draft/batalkan?id_draft=';
@@ -36,7 +35,7 @@
 
                             <div class="panel-body">
                                 <div class="tab-content">
-                                    <?php $this->load->view('pekerjaan/draft/detail_view'); ?>
+                                    <?php $this->load->view('draft/detail_view'); ?>
                                 </div>
                             </div>
                         </section>

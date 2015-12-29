@@ -11,6 +11,24 @@ class draft extends ceklogin {
         //$this->load->model("pengaduan_model");
     }
 
+    function get_list_draft(){
+        $session = $this->session->userdata('logged_in');
+        $periode = abs(intval($this->input->get('periode')));
+        $my_id = $session['id_akun'];
+        $q = $this->db->query("
+                select p.*, to_char(p.tgl_mulai, 'YYYY-MM-DD') as tanggal_mulai,
+                to_char(p.tgl_selesai, 'YYYY-MM-DD') as tanggal_selesai
+                from pekerjaan p
+                where p.id_penanggung_jawab = '$my_id'
+                and p.status_pekerjaan = '9'
+                and (
+                    date_part('year', p.tgl_mulai) = '$periode' or date_part('year', p.tgl_selesai) = '$periode'
+                )
+                "
+                )->result_array();
+        echo json_encode($q);
+    }
+    
     public function hapus_file() {
         $id_file = pg_escape_string($this->input->get('id_file'));
         $id_pekerjaan = pg_escape_string($this->input->get("id_draft"));
@@ -62,9 +80,29 @@ class draft extends ceklogin {
             foreach ($my_staff as $s) {
                 $staff_[] = $s->id_akun;
             }
-            $list_draft = $this->pekerjaan_model->get_list_draft($session['user_id']);
+            //$list_draft = $this->pekerjaan_model->get_list_draft($session['user_id']);
             //$draft_create_submit=base_url().'pekerjaan/usulan_pekerjaan2';
-            $this->load->view('draft/draft_body', array('draft_create_submit' => base_url() . 'draft/create', 'data_akun' => $session, 'list_draft' => $list_draft));
+            
+            $tahun_max = date('Y');
+        $q = $this->db->query("select max(coalesce(date_part('year',tgl_selesai),periode,date_part('year',now()))) as tahun_max from pekerjaan")->result_array();
+        if (count($q) > 0) {
+            $tahun = (int) $q[0]['tahun_max'];
+            if ($tahun_max < $tahun) {
+                $tahun_max = $tahun;
+            }
+        }
+        $tahun_min = $tahun_max - 10;
+        $q = $this->db->query("select min(coalesce(date_part('year',tgl_mulai),periode,date_part('year',now()))) as tahun_min from pekerjaan")->result_array();
+        if (count($q) > 0) {
+            $tahun_min = (int) $q[0]['tahun_min'];
+        }
+            $this->load->view('draft/draft_body', array(
+                'draft_create_submit' => site_url() . 'draft/create', 
+                'data_akun' => $session, 
+                'tahun_max'=>$tahun_max,
+                'tahun_min'=>$tahun_min
+                //'list_draft' => $list_draft
+                    ));
         } else {
             $data['data_akun'] = $session;
             $data['judul_kesalahan'] = 'Tidak Berhak';
@@ -84,7 +122,7 @@ class draft extends ceklogin {
             $insert['tgl_selesai'] = pg_escape_string($this->input->post('tgl_selesai_pkj'));
             $insert['level_prioritas'] = pg_escape_string($this->input->post('prioritas'));
             $insert['status_pekerjaan'] = '9';
-            $insert['asal_pekerjaan'] = 'task management';
+            $insert['asal_pekerjaan'] = 'taskmanagement';
             $insert['kategori'] = pg_escape_string(strtolower($this->input->post('kategori')));
             $insert['id_penanggung_jawab'] = $temp['id_akun'];
             if (!in_array($insert['kategori'], array('rutin', 'project', 'tambahan', 'kreativitas'))) {
@@ -180,7 +218,7 @@ class draft extends ceklogin {
             if (count($data['draft']) > 0) {
                 $data['id_draft'] = $id_draft;
                 $data['list_berkas'] = $this->berkas_model->get_berkas_of_pekerjaan($id_draft);
-                $this->load->view('pekerjaan/draft/view', $data);
+                $this->load->view('draft/view', $data);
             } else {
                 $data['judul_kesalahan'] = 'Kesalahan Draft';
                 $data['deskripsi_kesalahan'] = 'Draft tidak dapat ditemukan';
