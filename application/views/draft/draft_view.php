@@ -24,7 +24,8 @@
                         <tr>
                             <th>No</th>
                             <th class="hidden-phone">Nama Pekerjaan</th>
-                            <th class="hidden-phone">Waktu Pekerjaan</th>
+                            <th class="hidden-phone">Periode</th>
+                            <th class="hidden-phone">Kategori</th>
                             <th class="hidden-phone">Prioritas</th>
                             <th style="text-align: right; min-width: 248px; width: 300px"></th>
                         </tr>

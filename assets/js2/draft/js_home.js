@@ -5,11 +5,11 @@ function draft_ubah_periode() {
     get_list_draft();
 }
 var tabel_draft = null;
-var list_prioritas=[];
-list_prioritas[1]='Urgent';
-list_prioritas[2]='Tinggi';
-list_prioritas[3]='Sedang';
-list_prioritas[4]='Rendah';
+var list_prioritas = [];
+list_prioritas[1] = 'Urgent';
+list_prioritas[2] = 'Tinggi';
+list_prioritas[3] = 'Sedang';
+list_prioritas[4] = 'Rendah';
 function get_list_draft() {
     $.ajax({
         type: "get",
@@ -32,14 +32,25 @@ function get_list_draft() {
                         + '<td>' + (i + 1) + '</td>'
                         + '<td id="draft_nama_' + id + '"></td>'
                         + '<td id="draft_waktu_' + id + '"></td>'
+                + '<td id="draft_kategori_' + id + '"></td>'
                         + '<td id="draft_prioritas_' + id + '"></td>'
                         + '<td id="draft_aksi_' + id + '"></td>'
                         + '</tr>';
                 tabel.append(html);
-                $('#draft_nama_'+id).html(p['nama_pekerjaan']);
-                $('#draft_waktu_'+id).html(p['tanggal_mulai']+' - '+p['tanggal_selesai']);
-                $('#draft_prioritas_'+id).html(list_prioritas[p['level_prioritas']]);
-                $('#draft_aksi_'+id).html('');
+                $('#draft_nama_' + id).html(p['nama_pekerjaan']);
+                $('#draft_kategori_' + id).html(p['kategori']);
+                $('#draft_waktu_' + id).html(p['tanggal_mulai'] + ' - ' + p['tanggal_selesai']);
+                $('#draft_prioritas_' + id).html(list_prioritas[p['level_prioritas']]);
+                $('#draft_aksi_' + id).html(
+                        '<div class="btn-group">'
+                        + '<button data-toggle="dropdown" class="btn btn-success dropdown-toggle btn-xs" type="button">Aksi<span class="caret"></span></button>'
+                        + '<ul class="dropdown-menu">'
+                        + '<li><a href="'+site_url+'/draft/view?id_draft='+id+'" target="">Detail Draft</a></li>'
+                        + '<li><a href="'+site_url+'/draft/edit?id_draft='+id+'" target="">Edit Darft</a></li>'
+                        + '<li><a href="javascript:dialog_hapus_draft('+id+')" target="">Hapus Draft</a></li>'
+                        + '</ul>'
+                        + '</div>'
+                        );
             }
             tabel_draft = $('#tabel_draft').dataTable();
         },

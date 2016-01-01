@@ -181,13 +181,12 @@
                                                 <th> No</th>
                                                 <th>Nama Pekerjaan</th>
                                                 <th>Periode</th>
-                                                <th>Assign To</th>
                                                 <th>Kategori Pekerjaan</th>
-                                                <th>Status</th>
+                                                <th>Prioritas</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="dashboard_tabel_pekerjaan_draft_body">
                                         </tbody>
                                     </table>
                                 </div>

@@ -202,7 +202,7 @@ class draft extends ceklogin {
             $this->load->view('pekerjaan/kesalahan', $data);
         }
         if ($status == 0) {
-            $this->load->view('pekerjaan/draft/draft_edit_body', $data);
+            $this->load->view('draft/draft_edit_body', $data);
         }
     }
 
@@ -267,7 +267,7 @@ class draft extends ceklogin {
             $data['id_draft'] = $id_draft;
             $data['list_berkas'] = $this->berkas_model->get_berkas_of_pekerjaan($data['id_draft']);
             //$data['my_staff']=$this->akun->my_staff($session['user_id']);
-            $this->load->view('pekerjaan/draft/assign', $data);
+            $this->load->view('draft/assign', $data);
         }
         if ($status == 1) {
             $data['judul_kesalahan'] = $judul;
@@ -310,7 +310,7 @@ class draft extends ceklogin {
                             }
                         }
                     }
-                    redirect(base_url() . 'draft');
+                    redirect(site_url() . '/draft');
                 } else {
                     $data['judul_kesalahan'] = 'kesalahan';
                     $data['deskripsi_kesalahan'] = 'anda tidak berhak mengakses draft pekerjaan ini';
@@ -359,7 +359,7 @@ class draft extends ceklogin {
                         $this->upload_file($files, $path, $id_draft);
                     }
                     $data['list_draft'] = $this->pekerjaan_model->get_list_draft($session['user_id']);
-                    redirect(base_url() . 'draft/view/?id_draft=' . $id_draft);
+                    redirect(base_url() . 'index.php/draft/view?id_draft=' . $id_draft);
                 }
             } else {
                 $data['judul_kesalahan'] = 'kesalahan';
