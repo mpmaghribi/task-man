@@ -87,7 +87,7 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#ListPekerjaan">List Pekerjaan</a>
                                     </li>
-<?php if (in_array(2, $data_akun['idmodul'])) { ?>
+<?php if (in_array(2, $data_akun['idmodul']) && false) { ?>
                                         <li class="">
                                             <a data-toggle="tab" href="#TambahPekerjaan">Usulkan Pekerjaan</a>
                                         </li>

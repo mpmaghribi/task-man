@@ -1,3 +1,6 @@
+<?php
+$detail_draft = json_decode($draft['deskripsi_pekerjaan']);
+?>
 <div id="deskripsiPekerjaan" class="tab-pane active">
     <section class="panel" >
     </section>
@@ -7,28 +10,28 @@
                 Nama Pekerjaan
             </h4>
             <p style="font-size: larger">
-                <?php echo $draft[0]->nama_pekerjaan; ?> 
+                <?php echo $draft['nama_pekerjaan']; ?> 
             </p>
             <h4 style="color: #1FB5AD;">
                 Penjelasan Pekerjaan
             </h4>
             <p style="font-size: larger">
-                <?php echo $draft[0]->deskripsi_pekerjaan; ?> 
+                <?php echo $detail_draft->deskripsi ?> 
             </p>
             <h4 style="color: #1FB5AD;">
                 Jenis Pekerjaan
             </h4>
             <p style="font-size: larger">
-                <?php echo $draft[0]->nama_sifat_pekerjaan; ?>
+                <?php echo $draft['nama_sifat_pekerjaan']; ?>
             </p>
             <h4 style="color: #1FB5AD;">
                 Deadline
             </h4>
             <p style="font-size: larger">
                 <?php
-                echo date("d M Y", strtotime($draft[0]->tgl_mulai));
+                echo date("d M Y", strtotime($draft['tanggal_mulai']));
                 echo " - ";
-                echo date("d M Y", strtotime($draft[0]->tgl_selesai));
+                echo date("d M Y", strtotime($draft['tanggal_selesai']));
                 ?>
             </p>
         </section>
@@ -73,13 +76,14 @@
     </div>
 </div>
 <script>
+    var view_draft = <?= json_encode($draft); ?>;
     function hapus_file_draft(id, nama) {
         var c = confirm('Anda yakin ingin menghapus berkas "' + nama + '"?');
         if (c === true) {
             $.ajax({// create an AJAX call...
                 data: {
                     id_file: id,
-                    id_draft: '<?php echo $draft[0]->id_pekerjaan; ?>'
+                    id_draft: view_draft['id_pekerjaan']
                 }, // get the form data
                 type: "get", // GET or POST
                 url: "<?php echo site_url(); ?>/draft/hapus_file", // the file to call
