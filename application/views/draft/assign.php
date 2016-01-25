@@ -48,7 +48,6 @@
                                                     </div>
                                                     <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff();">Tambah Staff</a>
                                                     <button class="btn btn-primary" type="submit">Simpan</button>
-                                                    <input type="hidden" value="::" name="staff" id="staff"/>
                                                 </form>
                                             </section>
                                         </div>
@@ -111,37 +110,6 @@
         function init_list_staff(){
              
         }
-        function query_staff() {
-            if (list_id.length === 0) {
-                $.ajax({// create an AJAX call...
-                    data: "", // get the form data
-                    type: "GET", // GET or POST
-                    url: "<?php echo site_url(); ?>/user/my_staff", // the file to call
-                    success: function (response) { // on success..
-                        var json = jQuery.parseJSON(response);
-                        //alert(response);
-                        if (json.status === "OK") {
-                            var jumlah_data = json.data.length;
-                            for (var i = 0; i < jumlah_data; i++) {
-                                //var id = json.data[i]["id_akun"];
-                                list_nip[i] = json.data[i]['nip'];
-                                list_nama[i] = json.data[i]['nama'];
-                                list_departemen[i] = json.data[i]['nama_departemen'];
-                                list_id[i] = json.data[i]["id_akun"];
-                                var id = list_id[i];
-                                sudah_diproses = true;
-                                var cell = $('#nama_staff_' + id);
-                                if (cell.length > 0) {
-                                    cell.html(list_nama[i]);
-                                }
-                            }
-                        } else {
-                        }
-                    }
-                });
-            }
-        }
-        //query_staff();
         var tubuh = $("#tabel_list_enroll_staff_body");
         function tampilkan_staff() {
             var jumlah_staff = list_staff.length;
@@ -151,8 +119,9 @@
 			var list_staff_enrolled = $('.id_staff_enrolled');
 			for(var i=0, i2=list_staff_enrolled.length; i<i2; i++){
 				var staff_enrolled = list_staff_enrolled[i];
-				id_staff_assigned.push(staff_enrolled[id_akun]);
+				id_staff_assigned.push(staff_enrolled.value);
 			}
+			console.log(id_staff_assigned);
             var crow = 0;
             for (var i = 0; i < jumlah_staff; i++) {
 				var staff = list_staff[i];
@@ -175,21 +144,22 @@
             //var assigned = $('#staff').val().split('::');
         }
         function pilih_staff_ok() {
-            var jumlah_data = list_id.length;
+            var jumlah_data = list_staff.length;
             var staf = $('#staff');
             for (var i = 0; i < jumlah_data; i++) {
-                if ($('#enroll_' + list_id[i]).attr('checked')) {
-                    staf.val(staf.val() + list_id[i] + '::');
-                    $('#tabel_assign_staff').append('<tr id="staff_' + list_id[i] + '">' +
-                            '<td id="nama_staff_baru_' + i + '">' + list_nama[i] + '</td>' +
-                            '<td id="aksi_' + list_id[i] + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(' + list_id[i] + ')">Hapus</a></td>' +
+				var staff = list_staff[i];
+                if ($('#enroll_' + staff["id_akun"]).is(':checked')) {
+                    $('#tabel_assign_staff').append('<tr>' +
+                            '<td>' + staff["nama"] + '<input type="hidden" class="id_staff_enrolled" value="'+staff["id_akun"]+'" name="id_akun[]"/></td>' +
+                            '<td style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_staff(this)">Hapus</a></td>' +
                             '</tr>');
                 }
             }
             $('#tombol_tutup').click();
         }
-        function hapus_staff(id_staff) {
-            $('#staff_' + id_staff).remove();
-            $('#staff').val($('#staff').val().replace('::' + id_staff, ''));
+        function hapus_staff(button_element) {
+            var tr = button_element.parentNode.parentNode;
+			//console.log(tr);
+			tr.remove();
         }
     </script>

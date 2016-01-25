@@ -46,6 +46,7 @@ function get_list_draft() {
                         + '<button data-toggle="dropdown" class="btn btn-success dropdown-toggle btn-xs" type="button">Aksi<span class="caret"></span></button>'
                         + '<ul class="dropdown-menu">'
                         + '<li><a href="'+site_url+'/draft/view?id_draft='+id+'" target="">Detail Draft</a></li>'
+						+ '<li><a href="'+site_url+'/draft/assign?id_draft='+id+'" target="">Assign Draft</a></li>'
                         + '<li><a href="'+site_url+'/draft/edit?id_draft='+id+'" target="">Edit Darft</a></li>'
                         + '<li><a href="javascript:dialog_hapus_draft('+id+')" target="">Hapus Draft</a></li>'
                         + '</ul>'
