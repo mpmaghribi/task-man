@@ -88,7 +88,7 @@ ORDER BY pekerjaan.tgl_mulai asc";
     //untuk query aktifitas bulan ini di kalender / home
     public function listactivitythismonth($id_akun) {
         $query = "
-select pekerjaan.nama_pekerjaan, aktivitas_pekerjaan.id_detil_pekerjaan, aktivitas_pekerjaan.id_aktivitas, aktivitas_pekerjaan.waktu_mulai::timestamp::date, aktivitas_pekerjaan.waktu_selesai::timestamp::date
+select pekerjaan.nama_pekerjaan, aktivitas_pekerjaan.id_detil_pekerjaan, aktivitas_pekerjaan.id_aktivitas, aktivitas_pekerjaan.keterangan, aktivitas_pekerjaan.waktu_mulai::timestamp::date, aktivitas_pekerjaan.waktu_selesai::timestamp::date
 from aktivitas_pekerjaan
 left join detil_pekerjaan dp on dp.id_detil_pekerjaan = aktivitas_pekerjaan.id_detil_pekerjaan
 left join pekerjaan on pekerjaan.id_pekerjaan = dp.id_pekerjaan

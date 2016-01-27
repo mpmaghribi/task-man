@@ -9,7 +9,7 @@ $(document).ready(function () {
             var objData = eval(dataCheck);
             $.each(objData, function (index, value) {
                 thedata.push({
-                title: value.nama_pekerjaan,
+                title: value.nama_pekerjaan+' - '+value.keterangan,
                 start: new Date(value.waktu_mulai),
                 end: new Date(value.waktu_selesai)
             });
