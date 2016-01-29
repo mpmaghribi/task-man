@@ -28,45 +28,40 @@ class draft extends ceklogin {
                 )->result_array();
         echo json_encode($q);
     }
-
-    public function hapus_file() {
-        $id_file = pg_escape_string($this->input->get('id_file'));
-        $id_pekerjaan = pg_escape_string($this->input->get("id_draft"));
-        $this->load->model(array('pekerjaan_model', 'berkas_model'));
-        $session = $this->session->userdata('logged_in');
-        $parameter_valid = false;
-        if (strlen($id_pekerjaan) > 0 && strlen($id_file) > 0) {
-            $parameter_valid = true;
-        }
-        if ($parameter_valid) {
-            $cek = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
-            $hasil['status'] = 'error';
-            //print_r($cek);
-            if (count($cek) > 0) {
-                $berhak = false;
-                if ($cek[0]->id_penanggung_jawab == $session['user_id'] && $cek[0]->flag_usulan == '5') {
-                    $berhak = true;
-                } else {
-                    $hasil['reason'] = "Anda tidak berhak menghapus berkas";
-                }
-                $berhak &= in_array(3, $session['idmodul']);
-                if ($berhak) {
-                    $berkas = $this->berkas_model->get_berkas($id_file);
-                    $hapus = $this->berkas_model->hapus_file($id_file);
-                    if ($hapus == true) {
-                        $hasil['status'] = 'OK';
-                        if (file_exists($berkas[0]->nama_file))
-                            unlink($berkas[0]->nama_file);
-                    } else
-                        $hasil['reason'] = 'gagal menghapus';
-                }
-            }else {
-                $hasil['reason'] = 'Pekerjaan tidak ditemukan';
-            }
-            echo json_encode($hasil);
-        } else {
-            echo json_encode(array('status' => 'error', 'reason' => 'parameter tidak lengkap'));
-        }
+	private function hapus_file(){
+		$hasil = array("status" => "fail", "reason" => "unknown");
+		$id_file = intval($this->input->get("id_file"));
+		$session = $this->session->userdata("logged_in");
+		$q = $this->db->where(array("id_file"=>$id_file))->get("file")->result_array();
+		if(count($q)<1){
+			$hasil["reason"] = "File tidak dapat ditemukan";
+			return $hasil;
+		}
+		$berkas = $q[0];
+		$id_pekerjaan = $berkas["id_pekerjaan"];
+		$q = $this->db->where(array("id_pekerjaan"=>$id_pekerjaan, "status_pekerjaan"=>9))->get("pekerjaan")->result_array();
+		if(count($q)<1){
+			$hasil["reason"] = "Draft Pekerjaan tidak dapat ditemukan";
+			return $hasil;
+		}
+		$pekerjaan = $q[0];
+		if($pekerjaan["id_penanggung_jawab"] != $session["id_akun"]){
+			$hasil["reason"] = "Anda tidak berhak menghapus file pekerjaan draft milik orang lain";
+			return $hasil;
+		}
+		
+		if(file_exists($berkas["nama_file"])){
+			unlink($berkas["nama_file"]);
+		}
+		$this->db->delete("file", array("id_file"=>$id_file));
+		$hasil["status"]="ok";
+		return $hasil;
+	}
+	
+    public function hapus_file_json() {
+		$hasil = $this->hapus_file();
+		echo json_encode($hasil);
+		return;
     }
 
     public function index() {
