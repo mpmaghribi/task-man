@@ -31,6 +31,28 @@ function format_ukuran_file(s) {
     }
     return '   [' + Math.round(s) + spasi + satuan + ']';
 }
+function hapus_file_draft(id, nama) {
+	var c = confirm('Anda yakin ingin menghapus berkas "' + nama + '"?');
+	if (c === true) {
+		$.ajax({// create an AJAX call...
+			data: {
+				id_file: id
+			}, // get the form data
+			type: "get", // GET or POST
+			url: site_url+"/draft/hapus_file_json",
+			success: function(response) { // on success..
+				var json = jQuery.parseJSON(response);
+				//alert(response);
+				if (json.status === "ok") {
+					$('#berkas_' + id).remove();
+					//$('#tombol_validasi_usulan').remove();
+				} else {
+					alert("Gagal menghapus file, " + json.reason);
+				}
+			}
+		});
+	}
+}
 var draft_date_min = new Date();
 var draft_date_max = new Date();
 var waktu_mulai_baru = null;

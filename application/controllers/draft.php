@@ -31,8 +31,14 @@ class draft extends ceklogin {
 	private function hapus_file(){
 		$hasil = array("status" => "fail", "reason" => "unknown");
 		$id_file = intval($this->input->get("id_file"));
-		$id_pekerjaan = intval($this->input->get("id_draft"));
 		$session = $this->session->userdata("logged_in");
+		$q = $this->db->where(array("id_file"=>$id_file))->get("file")->result_array();
+		if(count($q)<1){
+			$hasil["reason"] = "File tidak dapat ditemukan";
+			return $hasil;
+		}
+		$berkas = $q[0];
+		$id_pekerjaan = $berkas["id_pekerjaan"];
 		$q = $this->db->where(array("id_pekerjaan"=>$id_pekerjaan, "status_pekerjaan"=>9))->get("pekerjaan")->result_array();
 		if(count($q)<1){
 			$hasil["reason"] = "Draft Pekerjaan tidak dapat ditemukan";
@@ -43,12 +49,7 @@ class draft extends ceklogin {
 			$hasil["reason"] = "Anda tidak berhak menghapus file pekerjaan draft milik orang lain";
 			return $hasil;
 		}
-		$q = $this->db->where(array("id_file"=>$id_file, "id_pekerjaan"=>$id_pekerjaan))->get("file")->result_array();
-		if(count($q)<1){
-			$hasil["reason"] = "File tidak dapat ditemukan";
-			return $hasil;
-		}
-		$berkas = $q[0];
+		
 		if(file_exists($berkas["nama_file"])){
 			unlink($berkas["nama_file"]);
 		}

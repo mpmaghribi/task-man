@@ -13,6 +13,7 @@ $(document).ready(function () {
     $('#tugas_select_pekerjaan').on('change', function () {
         get_list_detil_pekerjaan();
         change_deadline_tugas();
+		$("#button_tampilkan_staff_tugas").show("fast");
         $('#tabel_assign_staff_tugas').html('');
     });
     init_list_pekerjaan_untuk_periode();
@@ -73,8 +74,10 @@ function get_list_detil_pekerjaan() {
 }
 var list_pekerjaan = [];
 function init_list_pekerjaan_untuk_periode() {
+	$("#button_tampilkan_staff_tugas").hide("fast");
+	$('#tabel_assign_staff_tugas').html('');
     var select_pekerjaan = $('#tugas_select_pekerjaan');
-    select_pekerjaan.html('<option disabled>Pilih Pekerjaan</option>');
+    select_pekerjaan.html('<option disabled value="0" selected>Pilih Pekerjaan</option>');
     $.ajax({
         type: "get",
         url: site_url + "/pekerjaan_staff/get_list_skp2",
@@ -242,11 +245,24 @@ function enroll_staff(id_user, nama_user, tab) {
 function delete_enrolled_staff(id_staff, tab) {
     $('#staff_' + tab + '_' + id_staff).remove();
 }
-$('#pilih_berkas_assign').change(function () {
+function pilih_berkas_assign_changed(){
     var pilih_berkas = document.getElementById('pilih_berkas_assign');
     var files = pilih_berkas.files;
-    populate_file('berkas_baru', files);
-});
+    populate_file('berkas_assign', files);
+}
+function pilih_berkas_tugas_changed(){
+    var pilih_berkas = document.getElementById('pilih_berkas_tugas');
+    var files = pilih_berkas.files;
+    populate_file('berkas_tugas', files);
+}
+function click_pilih_berkas_tugas(){
+	console.log("trigger click event file tugas");
+	document.getElementById("pilih_berkas_tugas").click();
+}
+function click_pilih_berkas_assign(){
+	console.log("trigger click event");
+	document.getElementById("pilih_berkas_assign").click();
+}
 function populate_file(id_tabel, files) {
     $('#' + id_tabel).html('');
     var jumlah_file = files.length;
@@ -257,9 +273,6 @@ function populate_file(id_tabel, files) {
                 '</tr>');
     }
 }
-$('#button_trigger_file').click(function () {
-    $('#pilih_berkas_assign').click();
-});
 function format_ukuran_file(s) {
     var KB = 1024;
     var spasi = ' ';

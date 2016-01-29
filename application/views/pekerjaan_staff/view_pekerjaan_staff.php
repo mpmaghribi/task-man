@@ -189,13 +189,13 @@
                                                     <div class="col-lg-6">
                                                         <div id="list_file_upload_assign">
                                                             <div id="file_baru">
-                                                                <table  class="table table-hover general-table" id="berkas_baru"></table>
+                                                                <table  class="table table-hover general-table" id="berkas_assign"></table>
                                                             </div>
                                                         </div>
                                                         <div style="display:none">
-                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign" onchange="pilih_berkas_assign_changed()"/>
                                                         </div>
-                                                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
+                                                        <button class="btn btn-primary" type="button" id="button_pilih_berkas_assign" onclick="click_pilih_berkas_assign()">Pilih File</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -235,7 +235,7 @@
                                                             <table id="tabel_assign_staff_tugas" class="table table-hover general-table">
                                                             </table>
                                                         </div>
-                                                        <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff_tugas();">Tambah Staff</a>
+                                                        <a class="btn btn-success" data-toggle="modal" href="#modalTambahStaff" onclick="tampilkan_staff_tugas();" id="button_tampilkan_staff_tugas">Tambah Staff</a>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
@@ -261,13 +261,13 @@
                                                     <div class="col-lg-6">
                                                         <div id="list_file_upload_assign">
                                                             <div id="file_baru">
-                                                                <table  class="table table-hover general-table" id="berkas_baru"></table>
+                                                                <table  class="table table-hover general-table" id="berkas_tugas"></table>
                                                             </div>
                                                         </div>
                                                         <div style="display:none">
-                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_tugas" onchange="pilih_berkas_tugas_changed()"/>
                                                         </div>
-                                                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
+                                                        <button class="btn btn-info" type="button" id="button_pilih_berkas_tugas" onclick="click_pilih_berkas_tugas()"><i class="fa fa-archive"></i> Pilih File</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
