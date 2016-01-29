@@ -86,11 +86,11 @@ $detail_draft = json_decode($draft['deskripsi_pekerjaan']);
                     id_draft: view_draft['id_pekerjaan']
                 }, // get the form data
                 type: "get", // GET or POST
-                url: "<?php echo site_url(); ?>/draft/hapus_file", // the file to call
+                url: "<?php echo site_url(); ?>/draft/hapus_file_json", // the file to call
                 success: function(response) { // on success..
                     var json = jQuery.parseJSON(response);
                     //alert(response);
-                    if (json.status === "OK") {
+                    if (json.status === "ok") {
                         $('#berkas_' + id).remove();
                         //$('#tombol_validasi_usulan').remove();
                     } else {

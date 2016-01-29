@@ -105,9 +105,9 @@
                         <table  class="table table-hover general-table" id="berkas_baru"></table>
                     </div>
                     <div style="display:none">
-                        <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                        <input type="file" multiple="" name="berkas[]" id="pilih_berkas_draft" onchange="draft_file_changed()"/>
                     </div>
-                    <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
+                    <button class="btn btn-success" type="button" id="button_trigger_file" onclick="trigger_pilih_file()"><i class="fa fa-file"></i> Pilih File</button>
                 </div>
             </div>
             <div class="form-group">
