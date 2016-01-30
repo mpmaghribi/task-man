@@ -80,7 +80,8 @@
                             <?php if ($value == 9) { ?>
                                 <li><a href="<?php echo site_url() ?>/laporan">Laporan Pekerjaan Staff</a></li>
                             <?php } else if ($value == 8) { ?>
-                                <li><a href="#exportPeriodePkjSaya" data-toggle="modal">Laporan Pekerjaan Saya</a></li>
+                                <!--<li><a href="#exportPeriodePkjSaya" data-toggle="modal">Laporan Pekerjaan Saya</a></li>-->
+                                <li><a href="<?php echo site_url() ?>/laporan/myreport">Laporan Pekerjaan Pribadi</a></li>
                             <?php } ?>
                         <?php } ?>
                     </ul>

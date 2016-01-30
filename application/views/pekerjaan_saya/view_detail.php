@@ -155,6 +155,7 @@ $list_tingkat_manfaat = array(
                                                                     <input type="text" class="form-control" id="kuantitas_output_baru" name="kuantitas_output"/>
                                                                 </div>
                                                             </div>
+                                                            
                                                             <div class="form-group" id="div_aktivitas_kualitas_mutu">
                                                                 <label class="col-lg-2 control-label">Kualitas Mutu</label>
                                                                 <div class="col-lg-8">

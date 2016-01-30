@@ -22,7 +22,7 @@ class laporan extends CI_Controller {
         $monthName = $dateObj->format('F');
         $data['tahun'] = $tahun;
         $data['bulan'] = $monthName;
-        $data['aktifitas'] = $this->pekerjaan_model->logaktifitas($bulan,$tahun);
+        $data['aktifitas'] = $this->pekerjaan_model->logaktifitas($bulan,$tahun,$this->session->userdata['logged_in']["user_id"]);
         $this->load->view('laporan/cetak_aktifitas',$data);
     }
 
@@ -188,6 +188,31 @@ class laporan extends CI_Controller {
         // It will be called downloaded.pdf
         //header("Content-Disposition:attachment;filename=" . $filename);
         echo generate_pdf($html, $filename, false);
+    }
+    
+    function myreport()
+    {
+        $temp = $this->session->userdata('logged_in');
+        $data["data_akun"] = $this->session->userdata('logged_in');
+        $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat laporan pekerjaan dari para staffnya.");
+        $this->load->model("akun");
+        $data["my_staff"] = $this->akun->my_staff($temp["user_id"]);
+        $tahun_max = date('Y');
+        $q = $this->db->query("select max(coalesce(date_part('year',tgl_selesai),periode,date_part('year',now()))) as tahun_max from pekerjaan")->result_array();
+        if (count($q) > 0) {
+            $tahun = (int) $q[0]['tahun_max'];
+            if ($tahun_max < $tahun) {
+                $tahun_max = $tahun;
+            }
+        }
+        $tahun_min = $tahun_max - 10;
+        $q = $this->db->query("select min(coalesce(date_part('year',tgl_mulai),periode,date_part('year',now()))) as tahun_min from pekerjaan")->result_array();
+        if (count($q) > 0) {
+            $tahun_min = (int) $q[0]['tahun_min'];
+        }
+        $data['tahun_max'] = $tahun_max;
+        $data['tahun_min'] = $tahun_min;
+        $this->load->view("laporan/myreport",$data);
     }
 
     function laporan_pekerjaan_saya() {
