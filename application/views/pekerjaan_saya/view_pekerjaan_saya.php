@@ -28,7 +28,6 @@
                                     $tengah = ceil($jml / 2);
                                     if ($jml > 6) {
                                         ?>
-
                                         <div class="col-lg-6">
                                             <?php
                                             for ($a = 0; $a < $tengah; $a++) {
@@ -87,7 +86,7 @@
                                     <li class="active">
                                         <a data-toggle="tab" href="#ListPekerjaan">List Pekerjaan</a>
                                     </li>
-<?php if (in_array(2, $data_akun['idmodul']) && false) { ?>
+<?php if (in_array(2, $data_akun['idmodul']) ) { ?>
                                         <li class="">
                                             <a data-toggle="tab" href="#TambahPekerjaan">Usulkan Pekerjaan</a>
                                         </li>
@@ -189,32 +188,24 @@
                                                 </div>
                                             </div>
                                         </section>
-
                                     </div>
-
                                     <div id="TambahPekerjaan" class="tab-pane">
                                         <div class="form">
-                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan/usulan_pekerjaan" enctype="multipart/form-data">
-                                                <?php if ($atasan != null || isset($atasan)) { ?>
-
-                                                    <div class="form-group ">
-                                                        <label for="atasan" class="control-label col-lg-3">Atasan</label>
-                                                        <div class="col-lg-6">
-
-                                                            <select name="atasan" class="form-control m-bot15">
-
-                                                                <?php foreach ($atasan as $value) { ?>              
-                                                                    <option value="<?php echo $value->id_akun ?>"><?php echo $value->nama ?> - <?php echo $value->nama_jabatan ?></option>  
-                                                                <?php } ?>
-
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                <?php } ?>
+                                            <form class="cmxform form-horizontal " id="form_tambah_pekerjaan" method="POST" action="<?php echo site_url() ?>/pekerjaan_saya/create_usulan" enctype="multipart/form-data">
+												<div class="form-group ">
+													<label for="atasan" class="control-label col-lg-3">Atasan</label>
+													<div class="col-lg-6">
+														<select name="atasan" class="form-control m-bot15">
+															<?php foreach ($atasan as $value) { ?>              
+																<option value="<?php echo $value->id_akun ?>"><?php echo $value->nama ?> - <?php echo $value->nama_jabatan ?></option>  
+															<?php } ?>
+														</select>
+													</div>
+												</div>
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                     <div class="col-lg-6">
-                                                        <select name="sifat_pkj2" class="form-control m-bot15">
+                                                        <select name="sifat" class="form-control m-bot15">
                                                             <option value="1">Personal</option>
                                                             <option value="2">Umum</option>
                                                         </select>
@@ -223,32 +214,77 @@
                                                 <div class="form-group ">
                                                     <label for="kategori" class="control-label col-lg-3">Kategori Pekerjaan</label>
                                                     <div class="col-lg-6">
-                                                        <select name="kategori" class="form-control m-bot15">
-                                                            <option value="project">Project</option>
+                                                        <select name="kategori" class="form-control m-bot15" onchange="usulan_kategori_changed()" id="select_usulan_kategori">
                                                             <option value="rutin">Rutin</option>
+															<option value="project">Project</option>
+															<option value="tambahan">Tambahan</option>
+															<option value="kreativitas">Kreativitas</option>
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="form-group ">
+                                                <div class="form-group">
                                                     <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
                                                     <div class="col-lg-6">
-                                                        <input class=" form-control" id="nama_pkj2" name="nama_pkj2" type="text" />
+                                                        <input class=" form-control" id="usulan_nama_pekerjaan" name="nama_pekerjaan" type="text" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group ">
+                                                <div class="form-group">
                                                     <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
                                                     <div class="col-lg-6">
-                                                        <textarea class="form-control" name="deskripsi_pkj2" rows="12"></textarea>
+                                                        <textarea class="form-control" name="deskripsi_pekerjaan" rows="12"></textarea>
                                                     </div>
                                                 </div>
-                                                <div class="form-group ">
+												<div class="form-group" id="div_ak">
+                                                    <label class="control-label col-lg-3">Angka Kredit</label>
+                                                    <div class="col-lg-6">
+                                                        <input class="form-control" id="usulan_ak" name="angka_kredit" type="text" placeholder="Angka Kredit" value="1"/>
+                                                    </div>
+                                                </div>
+												<div class="form-group" id="div_kuantitas">
+                                                    <label class="control-label col-lg-3">Kuantitas Output</label>
+                                                    <div class="col-lg-4">
+                                                        <input class="form-control" id="usulan_kuantitas" name="kuantitas" type="text" placeholder="Kuantitas Outout" value="1"/>
+                                                    </div>
+													<div class="col-lg-2">
+                                                        <input class="form-control" id="usulan_satuan_kuantitas" name="satuan_kuantitas" type="text" value="item" placeholder="Satuan Kuantitas Output"/>
+                                                    </div>
+                                                </div>
+												<div class="form-group" id="div_kualitas">
+                                                    <label class="control-label col-lg-3">Kualitas Mutu</label>
+                                                    <div class="col-lg-6">
+                                                        <input class="form-control" id="usulan_kualitas" name="kualitas" type="text" placeholder="Kualitas Mutu" value="100"/>
+                                                    </div>
+                                                </div>
+												<div class="form-group" id="div_periode">
+                                                    <label class="control-label col-lg-3">Periode</label>
+                                                    <div class="col-lg-6">
+                                                        <input class="form-control" id="usulan_periode" name="periode" type="text" placeholder="Tahun Periode" value="<?= date('Y') ?>" onchange="periode_changed()"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" id="div_deadlie">
                                                     <label for="deadline" class="control-label col-lg-3">Deadline</label>
                                                     <div class="col-lg-6 ">
                                                         <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                                                            <input id="dd" readonly type="text" class="form-control dpd3" value="" name="tgl_mulai_pkj2">
+                                                            <input id="usulan_tanggal_mulai" readonly type="text" class="form-control" value="" name="tgl_mulai">
                                                             <span class="input-group-addon">Sampai</span>
-                                                            <input readonly type="text" class="form-control dpd4" value="" name="tgl_selesai_pkj2">
+                                                            <input id="usulan_tanggal_selesai" readonly type="text" class="form-control" value="" name="tgl_selesai">
                                                         </div>
+                                                    </div>
+                                                </div>
+												<div class="form-group" id="div_biaya">
+                                                    <label class="control-label col-lg-3">Biaya</label>
+                                                    <div class="col-lg-6">
+                                                        <input class="form-control" id="usulan_biaya" name="Biaya" type="text" placeholder="Biaya"/>
+                                                    </div>
+                                                </div>
+												<div class="form-group" id="div_manfaat">
+                                                    <label class="control-label col-lg-3">Kemanfaatan</label>
+                                                    <div class="col-lg-6">
+                                                        <select class="form-control" id="usulan_manfaat" name="manfaat">
+															<option value="1">Bermanfaat bagi unit kerjanya</option>
+															<option value="2">Bermanfaat bagi Organisasi</option>
+															<option value="3">Bermanfaat bagi Negara</option>
+														</select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
@@ -281,30 +317,19 @@
                                                 </div>
                                             </form>
                                         </div>
-
                                     </div>
-
-
-
                                 </div>
                             </div>
-
                         </section>
                     </div>
                 </div>
-
-
-
-
-
                 <!-- page end-->
             </section>
         </section>
         <!--main content end-->
         <!--right sidebar start-->
-<?php $this->load->view('taskman_rightbar_page') ?>
+	<?php $this->load->view('taskman_rightbar_page') ?>
         <!--right sidebar end-->
-
     </section>
     <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
         <div class="modal-dialog">
@@ -354,17 +379,12 @@
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
     <script src="<?= base_url() ?>assets/js2/date_picker_init.js" type="text/javascript"></script>
     <script src="<?= base_url() ?>assets/js2/pekerjaan_saya/js_view_pekerjaan_saya.js" type="text/javascript"></script>
-
-<?php $this->load->view("taskman_footer_page") ?>
-
+	<script src="<?= base_url() ?>assets/js2/pekerjaan_saya/js_usulan.js" type="text/javascript"></script>
+	<?php $this->load->view("taskman_footer_page") ?>
     <script>
-
         var site_url = '<?= site_url() ?>';
         var list_user = <?= json_encode($users) ?>;
         var base_url = '<?= base_url() ?>';
-
         document.title = "Pekerjaan Saya - Task Management";
-        //$('#submenu_pekerjaan_li').click();
         $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-        //$('#submenu_pekerjaan_ul').css('display','block');
     </script>

@@ -155,7 +155,7 @@ class draft extends ceklogin {
         $insert['deskripsi_pekerjaan'] = json_encode(array(
             'deskripsi' => pg_escape_string($this->input->post('deskripsi_pkj')),
             'angka_kredit' => floatval($this->input->post('angka_kredit')),
-            'kuantitas_output' => floatval($this->input->post('kuantitas_output')),
+            'kuantitas_output' => max(floatval($this->input->post('kuantitas_output')),1),
             'satuan_kuantitas' => pg_escape_string($this->input->post('satuan_kuantitas')),
             'kualitas_mutu' => ($mutu > 100 ? 100 : $mutu <= 0 ? 100 : $mutu),
             'pakai_biaya' => ($biaya == '-' ? false : true),
