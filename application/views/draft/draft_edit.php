@@ -154,6 +154,7 @@
 		$('#biaya').val(detail['pakai_biaya']?detail['biaya']:'-');
 		$('#manfaat').val(draft['level_manfaat']);
 		$('#periode').val(draft['periode']);
+		$('#prioritas').val(draft['level_prioritas']);
 		periode_changed();
 		kategori_changed();
 	});

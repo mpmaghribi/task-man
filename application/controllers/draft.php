@@ -28,6 +28,38 @@ class draft extends ceklogin {
                 )->result_array();
         echo json_encode($q);
     }
+	
+	private function hapus_draft(){
+		$id_draft = intval($this->input->get("id_draft"));
+		$hasil = array("status"=>"fail", "reason"=>"unknown");
+		$q = $this->db->where(array("id_pekerjaan"=>$id_draft,"status_pekerjaan"=>9))->get("pekerjaan")->result_array();
+		if(count($q)<1){
+			$hasil["reason"] = "Draft tidak dapat ditemukan";
+			return $hasil;
+		}
+		$draft = $q[0];
+		$session = $this->session->userdata("logged_in");
+		if($draft["id_penanggung_jawab"] != $session["id_akun"]){
+			$hasil["reason"] = "Anda tidak berhak menghapus draft orang lain";
+			return $hasil;
+		}
+		$q = $this->db->where(array("id_pekerjaan"=>$id_draft))->get("file")->result_array();
+		foreach($q as $berkas){
+			if(file_exists($berkas["nama_file"])){
+				unlink($berkas["nama_file"]);
+			}
+		}
+		$this->db->delete("file", array("id_pekerjaan"=>$id_draft));
+		$this->db->delete("pekerjaan", array("id_pekerjaan"=>$id_draft));
+		$hasil["status"]="ok";
+		return $hasil;
+	}
+	
+	function hapus_draft_json(){
+		$hasil = $this->hapus_draft();
+		echo json_encode($hasil);
+	}
+	
 	private function hapus_file(){
 		$hasil = array("status" => "fail", "reason" => "unknown");
 		$id_file = intval($this->input->get("id_file"));

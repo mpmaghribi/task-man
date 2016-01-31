@@ -28,11 +28,11 @@ function get_list_draft() {
             for (var i = 0, i2 = json.length; i < i2; i++) {
                 var p = json[i];
                 var id = p['id_pekerjaan'];
-                var html = '<tr>'
+                var html = '<tr id="draft_id_'+id+'">'
                         + '<td>' + (i + 1) + '</td>'
                         + '<td id="draft_nama_' + id + '"></td>'
                         + '<td id="draft_waktu_' + id + '"></td>'
-                + '<td id="draft_kategori_' + id + '"></td>'
+						+ '<td id="draft_kategori_' + id + '"></td>'
                         + '<td id="draft_prioritas_' + id + '"></td>'
                         + '<td id="draft_aksi_' + id + '"></td>'
                         + '</tr>';
@@ -48,7 +48,7 @@ function get_list_draft() {
                         + '<li><a href="'+site_url+'/draft/view?id_draft='+id+'" target="">Detail Draft</a></li>'
 						+ '<li><a href="'+site_url+'/draft/assign?id_draft='+id+'" target="">Assign Draft</a></li>'
                         + '<li><a href="'+site_url+'/draft/edit?id_draft='+id+'" target="">Edit Darft</a></li>'
-                        + '<li><a href="javascript:dialog_hapus_draft('+id+')" target="">Hapus Draft</a></li>'
+                        + '<li><a href="javascript:show_dialog_hapus_draft('+id+')" target="">Hapus Draft</a></li>'
                         + '</ul>'
                         + '</div>'
                         );
@@ -59,4 +59,31 @@ function get_list_draft() {
 
         }
     });
+}
+function show_dialog_hapus_draft(id_draft){
+	$("#id_draft_hapus").val(id_draft);
+	$("#modal_draft_hapus").modal("show");
+	var td = $("#draft_id_" + id_draft).children();
+	//console.log(td);
+	var nama_pekerjaan = $(td[1]).html();
+	$("#modal_draft_hapus_body").html("<h4>Anda akan menghapus draft pekerjaan <strong>" + nama_pekerjaan +"</strong>. Lanjutkan?</h4>");
+}
+function hapus_draft(){
+	var id_draft = $("#id_draft_hapus").val();
+	$.ajax({
+		data: {
+			id_draft: id_draft
+		},
+		type: "get",
+		url: site_url+"/draft/hapus_draft_json",
+		success: function(response) {
+			var json = jQuery.parseJSON(response);
+			if (json.status == "ok") {
+				$("#modal_draft_hapus").modal("hide");
+				get_list_draft();
+			} else {
+				alert(json.reason);
+			}
+		}
+	});
 }

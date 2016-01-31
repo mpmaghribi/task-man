@@ -31,37 +31,28 @@
                         </tr>
                     </thead>
                     <tbody id="tabel_draft_body">
-                        <?php
-                        if (isset($list_draft)) {
-                            $prioritas = array(1 => 'Urgent', 2 => 'Tinggi', 3 => 'Sedang', 4 => 'Rendah');
-                            $label_prioritas = array(1 => 'label-danger', 2 => 'label-success', 3 => 'label-info', 4 => 'label-inverse');
-                            //var_dump($my_staff);
-                            $counter = 0;
-                            foreach ($list_draft as $draft) {
-                                $counter++;
-                                echo '<tr>';
-                                echo '<td >' . $counter . '</td>';
-                                echo '<td>' . $draft->nama_pekerjaan . '</td>';
-                                echo '<td>' . date("d M Y", strtotime($draft->tgl_mulai)) . ' - ' . date("d M Y", strtotime($draft->tgl_selesai)) . '</td>';
-                                echo '<td><span class="label ' . $label_prioritas[$draft->level_prioritas] . ' label-mini">' . $prioritas[$draft->level_prioritas] . '</span></td>';
-                                ?>
-                            <td style="text-align: right;">
-                                <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: 0px;padding-top: 0px; font-size: 11px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>draft/assign?id_draft=<?php echo $draft->id_pekerjaan; ?>" id="" style="font-size: 10px">Assign</a>
-                                    <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>draft/edit?id_draft=<?php echo $draft->id_pekerjaan; ?>" id="" style="font-size: 10px">Edit</a>
-                                    <a class="btn btn-success btn-xs" href="<?php echo base_url(); ?>draft/view?id_draft=<?php echo $draft->id_pekerjaan; ?>" id="" style="font-size: 10px">View</a>
-                                    <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="" onclick="confirm_batal(<?php echo $draft->id_pekerjaan ?>, '<?php echo $draft->nama_pekerjaan; ?>');" style="font-size: 10px">Batalkan</a>
-                                </div>
-
-                            </td>
-                            <?php
-                            echo '</tr>';
-                        }
-                    }
-                    ?>
                     </tbody>
                 </table>
                 <script type="text/javascript" src="<?=base_url()?>assets/js2/draft/js_home.js"></script>
             </div>
         </div>
-    </section></div>
+    </section>
+</div>
+<div class="modal fade" id="modal_draft_hapus" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="modal_draft_hapus_judul">Hapus Draft</h4>
+            </div>
+            <div class="modal-body" id="modal_draft_hapus_body" style="">
+                
+            </div>
+			<input type="hidden" id="id_draft_hapus" value="0"/>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-info" id="tombol_close" type="button">Batal</button>
+                <button class="btn btn-danger" id="" type="button" style="visibility: visible" onclick="hapus_draft()">Hapus</button>
+            </div>
+        </div>
+    </div>
+</div>
