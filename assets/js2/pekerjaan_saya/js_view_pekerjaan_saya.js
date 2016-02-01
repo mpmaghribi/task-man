@@ -4,6 +4,7 @@ jQuery(document).ready(function () {
     $('#select_periode').on('change', function () {
         init_tabel_skp();
         init_tabel_tugas();
+		init_tabel_usulan();
     });
 });
 
@@ -15,6 +16,9 @@ warna_label[3] = 'label-default';
 warna_label[4] = 'label-success';
 warna_label[5] = 'label-danger';
 warna_label[10] = 'label-info';
+function init_tabel_usulan(){
+	
+}
 var tabel_tugas = null;
 function init_tabel_tugas() {
     $.ajax({
@@ -99,15 +103,25 @@ function init_tabel_skp() {
             for (var j = 0, m = json.length; j < m; j++) {
                 console.log("iterasi ke " + j + " dari " + m);
                 var p = json[j];
-                var list_anggota = p['id_akuns'].replace('}', '').replace('{', '').split(',');
+                var list_anggota = JSON.parse(p['id_akuns']);
+				console.log(list_anggota);
                 var anggota = '';
                 var sep = '';
                 for (var i = 0, n = list_user.length; i < n; i++) {
                     var st = list_user[i];
-                    if (list_anggota.indexOf(st['id_akun']) >= 0) {
+					//console.log("check if id "+st["id_akun"]+" is in list anggota ");
+					for(var k=0, k2=list_anggota.length; k<k2; k++){
+						if(list_anggota[k] == parseInt(st["id_akun"])){
+							//console.log("id "+st["id_akun"]+" is in list anggota ");
+							anggota += sep + st['nama'];
+							sep = '<br/>';
+						}
+					}
+                    /*if (list_anggota.indexOf(st['id_akun']) >= 0) {
+						console.log("id "+st["id_akun"]+" is in list anggota ");
                         anggota += sep + st['nama'];
                         sep = '<br/>';
-                    }
+                    }*/
                 }
                 var periode = p['tanggal_mulai'] + ' - ' + p['tanggal_selesai'];
                 var halaman_detail = 'detail';

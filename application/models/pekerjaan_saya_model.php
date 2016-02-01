@@ -113,13 +113,15 @@ class pekerjaan_saya_model extends dtpg {
             inner join detil_pekerjaan dp
             on p.id_pekerjaan=dp.id_pekerjaan
             inner join (
-               select array_agg(dp2.id_akun)as id_akuns, dp2.id_pekerjaan 
+               select json_agg(dp2.id_akun) as id_akuns, dp2.id_pekerjaan 
                from detil_pekerjaan dp2 
                group by dp2.id_pekerjaan
             ) as dp2
             on dp2.id_pekerjaan=p.id_pekerjaan
             where (date_part('year',p.tgl_mulai)='$periode' or date_part('year',p.tgl_selesai)='$periode')
-            and dp.id_akun='$my_id' order by p.periode, p.tgl_mulai";
+            and dp.id_akun='$my_id' 
+			and p.status_pekerjaan = 7
+			order by p.periode, p.tgl_mulai";
 //        echo $sql;
         return $this->db->query($sql)->result_array();
     }
