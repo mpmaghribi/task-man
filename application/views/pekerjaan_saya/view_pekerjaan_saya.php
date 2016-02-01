@@ -274,7 +274,7 @@
 												<div class="form-group" id="div_biaya">
                                                     <label class="control-label col-lg-3">Biaya</label>
                                                     <div class="col-lg-6">
-                                                        <input class="form-control" id="usulan_biaya" name="Biaya" type="text" placeholder="Biaya"/>
+                                                        <input class="form-control" id="usulan_biaya" name="biaya" type="text" placeholder="Biaya" value="-"/>
                                                     </div>
                                                 </div>
 												<div class="form-group" id="div_manfaat">
@@ -290,7 +290,7 @@
                                                 <div class="form-group ">
                                                     <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
                                                     <div class="col-lg-6">
-                                                        <select name="prioritas2" class="form-control m-bot15">
+                                                        <select name="prioritas" class="form-control m-bot15" id="select_prioritas">
                                                             <option value="1">Urgent</option>
                                                             <option value="2">Tinggi</option>
                                                             <option value="3">Sedang</option>
@@ -302,12 +302,12 @@
                                                     <label for="prioritas" class="control-label col-lg-3">File</label>
                                                     <div class="col-lg-6">
                                                         <div id="file_baru">
-                                                            <table  class="table table-hover general-table" id="berkas_baru"></table>
+                                                            <table  class="table table-hover general-table" id="berkas_usulan"></table>
                                                         </div>
                                                         <div style="display:none">
-                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_usulan" onchange="berkas_usulan_changed()"/>
                                                         </div>
-                                                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
+                                                        <button class="btn btn-primary" type="button" id="button_pilih_berkas_usulan" onclick="click_pilih_berkas_usulan()">Pilih File</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">

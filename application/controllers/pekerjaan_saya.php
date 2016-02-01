@@ -60,7 +60,68 @@ class pekerjaan_saya extends ceklogin {
             $this->load->view('pekerjaan/kesalahan', $data);
         }
     }
-
+	
+	function create_usulan(){
+		$session = $this->session->userdata("logged_in");
+		print_r($session);
+		$data = array("data_akun" => $session);
+		if(in_array(2, $session["idmodul"])==false){
+			$data['judul_kesalahan'] = 'Tidak berhak';
+            $data['deskripsi_kesalahan'] = 'Anda tidak berhak untuk membuat usulan pekerjaan';
+            $this->load->view('pekerjaan/kesalahan', $data);
+			return;
+		}
+		$atasan = intval($this->input->post("atasan"));
+		if($atasan != $session["atasan"]){
+			$data['judul_kesalahan'] = 'Tidak berhak';
+            $data['deskripsi_kesalahan'] = 'Anda belum memilih atasan untuk usulan pekerjaan';
+            $this->load->view('pekerjaan/kesalahan', $data);
+			return;
+		}
+		$kategori = $this->input->post("kategori");
+		if(in_array($kategori,array("rutin","project","tambahan","kreativitas"))==false){
+			$kategori="rutin";
+		}
+		$tgl_mulai = $this->input->post("tgl_mulai");
+		$tgl_selesai = $this->input->post("tgl_selesai");
+		$pekerjaan_baru = array(
+			"id_sifat_pekerjaan" => intval($this->input->post("sifat")),
+			"nama_pekerjaan" => $this->input->post("nama_pekerjaan"),
+			"deskripsi_pekerjaan" => $this->input->post("deskripsi_pekerjaan"),
+			"tgl_mulai" => $tgl_mulai,
+			"tgl_selesai" => $tgl_selesai,
+			"asal_pekerjaan" => "taskmanagement",
+			"level_prioritas" => intval($this->input->post("prioritas")),
+			"kategori"=>$kategori,
+			"id_penanggung_jawab" => $atasan,
+			"id_pengusul"=> $session["id_akun"],
+			"status_pekerjaan" => 6,
+			"periode" => intval($this->input->post("periode"))
+		);
+		$biaya = $this->input->post("biaya");
+		$this->db->trans_begin();
+		$this->db->query("set datestyle to 'ISO, DMY'");
+		$this->db->insert("pekerjaan", $pekerjaan_baru);
+		$id_pekerjaan = $this->db->insert_id();
+		$detil_pekerjaan = array(
+			"id_pekerjaan" => $id_pekerjaan,
+			"id_akun" => $session["id_akun"],
+			"skor" => 0,
+			"progress" => 0,
+			"sasaran_angka_kredit" => abs(floatval($this->input->post("angka_kredit"))),
+			"sasaran_kuantitas_output" => max(intval($this->input->post("kuantitas"))),
+			"sasaran_kualitas_mutu" => max(1, min(100, intval($this->input->post("kualitas")))),
+			"sasaran_waktu" => 12,
+			"sasaran_biaya" => ($biaya == "-" ? 0 : abs(floatval($biaya))),
+			"pakai_biaya" => ($biaya == "-" ? 0 : 1),
+			"satuan_kuantitas" => $this->input->post("satuan_kuantitas"),
+			"satuan_waktu" => "bulan"
+		);
+		$this->db->insert("detil_pekerjaan", $detil_pekerjaan);
+		$this->db->trans_complete();
+		redirect(site_url() . "/pekerjaan_saya/view_usulan?id_pekerjaan=" . $id_pekerjaan);
+	}
+	
     //untuk data graph di controller pekerjaan saya, fungsi index
     public function vardata() {
         header('Cache-Control: no-cache, must-revalidate');

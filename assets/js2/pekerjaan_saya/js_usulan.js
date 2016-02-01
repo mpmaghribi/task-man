@@ -21,6 +21,31 @@ jQuery(document).ready(function () {
 	periode_changed();
 });
 
+function berkas_usulan_changed(){
+	var berkas = document.getElementById("pilih_berkas_usulan");
+	console.log(berkas.files);
+	populate_file("berkas_usulan", berkas.files);
+}
+
+function click_pilih_berkas_usulan(){
+	$("#pilih_berkas_usulan")[0].click();
+}
+
+function format_ukuran_file(s) {
+    var KB = 1024;
+    var spasi = ' ';
+    var satuan = 'bytes';
+    if (s > KB) {
+        s = s / KB;
+        satuan = 'KB';
+    }
+    if (s > KB) {
+        s = s / KB;
+        satuan = 'MB';
+    }
+    return '   [' + Math.round(s) + spasi + satuan + ']';
+}
+
 var waktu_mulai=null;
 var waktu_selesai=null;
 function init_date_picker(){
@@ -55,6 +80,17 @@ function periode_changed(){
 	usulan_date_max.setFullYear(periode);
 	waktu_mulai.setValue(usulan_date_min);
 	waktu_selesai.setValue(usulan_date_max);
+}
+
+function populate_file(id_tabel, files) {
+    $('#' + id_tabel).html('');
+    var jumlah_file = files.length;
+    for (var i = 0; i < jumlah_file; i++) {
+        $('#' + id_tabel).append('<tr id="berkas_baru_' + i + '">' +
+                '<td id="nama_berkas_baru_' + i + '">' + files[i].name + ' ' + format_ukuran_file(files[i].size) + '</td>' +
+                '<td id="keterangan_' + i + '" style="width=10px;text-align:right"><a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 12px">Baru</a></td>' +
+                '</tr>');
+    }
 }
 
 function usulan_kategori_changed(){
