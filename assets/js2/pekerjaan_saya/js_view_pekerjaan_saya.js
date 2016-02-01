@@ -1,13 +1,11 @@
 jQuery(document).ready(function () {
-    init_tabel_skp();
-    init_tabel_tugas();
-    $('#select_periode').on('change', function () {
-        init_tabel_skp();
+    select_periode_changed();
+});
+function select_periode_changed(){
+	init_tabel_skp();
         init_tabel_tugas();
 		init_tabel_usulan();
-    });
-});
-
+}
 var tabel_skp = null;
 var warna_label = [];
 warna_label[1] = 'label-warning';
@@ -16,8 +14,68 @@ warna_label[3] = 'label-default';
 warna_label[4] = 'label-success';
 warna_label[5] = 'label-danger';
 warna_label[10] = 'label-info';
+var tabel_usulan = null;
 function init_tabel_usulan(){
-	
+	$.ajax({
+        type: "get",
+        url: site_url + "/pekerjaan_saya/get_list_usulan",
+        data: {
+            periode: $('#select_periode').val()
+        },
+        success: function (data) {
+            var json = JSON.parse(data);
+            var counter = 0;
+            if (tabel_usulan != null) {
+                tabel_usulan.fnDestroy();
+            }
+            var tabel = $('#tabel_usulan_body');
+            tabel.html('');
+			var list_kategori = [];
+			list_kategori["rutin"] = "Pekerjaan Rutin";
+			list_kategori["project"] = "Pekerjaan Project";
+			list_kategori["tambahan"] = "Pekerjaan Tambahan";
+			list_kategori["kreativitas"] = "Pekerjaan kreativitas";
+            for (var i = 0, i2 = json.length; i < i2; i++) {
+                var usulan = json[i];
+                var anggota = '';
+                var anggota1 = JSON.parse(usulan['id_akuns']);
+                var sep = '';
+                for (var j = 0, j2 = anggota1.length; j < j2; j++) {
+                    var id_anggota = anggota1[j];
+                    for (var k = 0, k2 = list_user.length; k < k2; k++) {
+                        var user1 = list_user[k];
+                        if (id_anggota == user1['id_akun']) {
+                            anggota += sep + user1['nama'];
+                            sep = '<br/>';
+                            break;
+                        }
+                    }
+                }
+                var status = 'Draft';
+                var aksi = '<div class="btn-group">';
+                aksi += '<button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button">Aksi <span class="caret"></span></button>';
+                aksi += '<ul class="dropdown-menu">';
+                aksi += '<li><a href="' + site_url + '/pekerjaan_saya/detail_usulan?id_pekerjaan=' + usulan['id_pekerjaan'] + '" target="">Detail Usulan</a></li>';
+                aksi += '</ul>';
+                aksi += '</div>'
+                counter++;
+                var html = '<tr>'
+                        + '<td>' + counter + '</td>'
+                        + '<td>' + usulan['nama_pekerjaan'] + '</td>'
+                        + '<td>' + usulan['tanggal_mulai'] +' - '+usulan['tanggal_selesai']+ '</td>'
+                        + '<td>' + anggota + '</td>'
+                        + '<td>' + list_kategori[usulan["kategori"]] + '</td>'
+						+ '<td>' + status + '</td>'
+                        + '<td>' + aksi + '</td>'
+                        + '</tr>';
+                tabel.append(html);
+            }
+            tabel_usulan = $('#tabel_usulan').dataTable();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+
+        }
+    });
 }
 var tabel_tugas = null;
 function init_tabel_tugas() {
@@ -93,7 +151,7 @@ function init_tabel_skp() {
     var body = $('#tablePekerjaanSaya_body');
     body.html('');
     $.ajax({
-        type: "POST",
+        type: "get",
         url: site_url + "/pekerjaan_saya/get_list_skp_saya",
         data: {
             periode: $('#select_periode').val()

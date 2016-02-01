@@ -281,7 +281,7 @@ class pekerjaan_saya extends ceklogin {
     public function get_list_skp_saya() {
         $this->load->model(array('pekerjaan_saya_model'));
         $session = $this->session->userdata('logged_in');
-        $periode = abs(intval($this->input->post('periode')));
+        $periode = abs(intval($this->input->get('periode')));
         echo json_encode($this->pekerjaan_saya_model->get_list_skp_saya($session['user_id'], $periode));
     }
 
@@ -298,22 +298,51 @@ class pekerjaan_saya extends ceklogin {
             ")->result_array();
         echo json_encode($q);
     }
+	
+	function get_list_usulan(){
+		$periode = abs(intval($this->input->get("periode")));
+		$session = $this->session->userdata("logged_in");
+		$my_id = $session["id_akun"];
+		$q = $this->db->query(
+		"select p.*, detils.id_akuns, to_char(p.tgl_mulai, 'YYYY-MM-DD') as tanggal_mulai,
+		to_char(p.tgl_selesai, 'YYYY-MM-DD') as tanggal_selesai
+		from pekerjaan p
+		inner join (
+			select dp2.id_pekerjaan, json_agg(dp2.id_akun) as id_akuns
+			from detil_pekerjaan dp2
+			group by dp2.id_pekerjaan
+		) as detils
+		on detils.id_pekerjaan = p.id_pekerjaan
+		where p.status_pekerjaan = 6
+		and p.id_pekerjaan in (
+			select id_pekerjaan 
+			from detil_pekerjaan dp
+			where dp.id_akun = '$my_id'
+		)
+		and p.id_pengusul = '$my_id'
+		order by waktu_transaksi asc
+		"
+		)->result_array();
+		echo json_encode($q);
+	}
 
     function get_list_tugas() {
         $periode = abs(intval($this->input->get('periode')));
         $session = $this->session->userdata('logged_in');
         $my_id = $session['user_id'];
-        $q = $this->db->query("select assign_tugas.*, "
-                        . "pekerjaan.nama_pekerjaan, "
-                        . "aktivitas_pekerjaan.id_aktivitas, aktivitas_pekerjaan.status_validasi as status_validasi_aktivitas, "
-                        . "to_char(assign_tugas.tanggal_mulai,'YYYY-MM-DD') as tanggal_mulai2,"
-                        . "to_char(assign_tugas.tanggal_selesai,'YYYY-MM-DD') as tanggal_selesai2 "
-                        . "from assign_tugas "
-                        . "inner join pekerjaan on pekerjaan.id_pekerjaan=assign_tugas.id_pekerjaan "
-                        . "inner join detil_pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan and detil_pekerjaan.id_akun='$my_id' "
-                        . "left join aktivitas_pekerjaan on aktivitas_pekerjaan.id_detil_pekerjaan=detil_pekerjaan.id_detil_pekerjaan and assign_tugas.id_assign_tugas=aktivitas_pekerjaan.id_tugas "
-                        . "where '$my_id'=any(assign_tugas.id_akun) "
-                        . "and date_part('year',assign_tugas.tanggal_mulai)='$periode'")->result_array();
+        $q = $this->db->query(
+		"select assign_tugas.*, 
+		pekerjaan.nama_pekerjaan, 
+		aktivitas_pekerjaan.id_aktivitas, aktivitas_pekerjaan.status_validasi as status_validasi_aktivitas, 
+		to_char(assign_tugas.tanggal_mulai,'YYYY-MM-DD') as tanggal_mulai2,
+		to_char(assign_tugas.tanggal_selesai,'YYYY-MM-DD') as tanggal_selesai2 
+		from assign_tugas 
+		inner join pekerjaan on pekerjaan.id_pekerjaan=assign_tugas.id_pekerjaan 
+		inner join detil_pekerjaan on pekerjaan.id_pekerjaan=detil_pekerjaan.id_pekerjaan and detil_pekerjaan.id_akun='$my_id' 
+		left join aktivitas_pekerjaan on aktivitas_pekerjaan.id_detil_pekerjaan=detil_pekerjaan.id_detil_pekerjaan and assign_tugas.id_assign_tugas=aktivitas_pekerjaan.id_tugas 
+		where '$my_id'=any(assign_tugas.id_akun) 
+		and date_part('year',assign_tugas.tanggal_mulai)='$periode'"
+		)->result_array();
         echo json_encode($q);
     }
 

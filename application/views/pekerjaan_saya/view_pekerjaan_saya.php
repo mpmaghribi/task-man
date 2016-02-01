@@ -97,27 +97,25 @@
                                 <div class="tab-content">
                                     <div id="ListPekerjaan" class="tab-pane active">
                                         <section class="panel">
-                                            <header class="panel-heading">
-                                                Daftar Pekerjaan yang Saya Kerjakan
-                                            </header>
                                             <div class="panel-body">
                                                 <div class="form-horizontal">
                                                     <div class="form-group">
                                                         <label class="control-label col-lg-1">Periode</label>
                                                         <div class="col-lg-3">
-
-                                                            <select class="form-control" id="select_periode" onchange="">
+                                                            <select class="form-control" id="select_periode" onchange="select_periode_changed()">
                                                                 <?php
                                                                 for ($i = $tahun_max; $i >= $tahun_min; $i--) {
                                                                     echo '<option value="' . $i . '">' . $i . '</option>';
                                                                 }
                                                                 ?>
-
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+											<header class="panel-heading">
+                                                Daftar Pekerjaan yang Saya Kerjakan
+                                            </header>
                                             <div class="panel-body">
                                                 <div class="form">
                                                     <table class="table table-striped table-hover table-condensed" id="tablePekerjaanSaya">
@@ -147,7 +145,7 @@
                                                     Daftar Usulan Pekerjaan Saya
                                                 </header>
                                                 <div class="form">
-                                                    <table class="table table-striped table-hover table-condensed" id="tableUsulanPekerjaan">
+                                                    <table class="table table-striped table-hover table-condensed" id="tabel_usulan">
                                                         <thead>
                                                             <tr>
                                                                 <th> No</th>
@@ -159,7 +157,7 @@
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody id="tabel_usulan_body">
                                                         </tbody>
                                                     </table>
                                                 </div>
