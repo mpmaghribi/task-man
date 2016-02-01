@@ -8,7 +8,7 @@ class pekerjaan extends ceklogin {
 
     public function __construct() {
         parent::__construct();
-        //$this->load->model("pengaduan_model");
+        $this->load->model("pekerjaan_saya_model");
     }
 
     public function index() {
@@ -26,6 +26,8 @@ class pekerjaan extends ceklogin {
         $data['temp'] = $this->session->userdata('logged_in');
         $data['data_akun'] = $this->session->userdata('logged_in');
         //print_r($url);
+        $periode = date('Y');
+        $data['pekerjaansaya'] = $this->pekerjaan_saya_model->get_list_skp_saya($this->session->userdata['logged_in']["user_id"], $periode);
         $this->load->view("pekerjaan/pengaduan_page", $data);
     }
 

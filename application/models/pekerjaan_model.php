@@ -15,14 +15,14 @@ class pekerjaan_model extends dtpg {
     }
 
     //log aktifitas, parameter bulan $ tahun
-    public function logaktifitas($bulan, $tahun) {
+    public function logaktifitas($bulan, $tahun, $akun) {
         $query = "select pekerjaan.nama_pekerjaan, aktivitas_pekerjaan.id_detil_pekerjaan, aktivitas_pekerjaan.id_aktivitas, aktivitas_pekerjaan.keterangan,
 to_char(aktivitas_pekerjaan.waktu_mulai::timestamp::date, 'dd Month YYYY') as waktu_mulai, to_char(aktivitas_pekerjaan.waktu_selesai::timestamp::date, 'dd Month YYYY') as waktu_selesai
 from aktivitas_pekerjaan
 left join detil_pekerjaan dp on dp.id_detil_pekerjaan = aktivitas_pekerjaan.id_detil_pekerjaan
 left join pekerjaan on pekerjaan.id_pekerjaan = dp.id_pekerjaan
 where 
-dp.id_akun = 2
+dp.id_akun = $akun
 and
 (
 extract( month from aktivitas_pekerjaan.waktu_mulai) = $bulan

@@ -215,6 +215,115 @@ class aktivitas_pekerjaan extends ceklogin {
         $this->db->trans_complete();
         return 'ok';
     }
+    
+    function addFromPengaduan() {
+        $this->load->library(array('myuploadlib'));
+        $id_pekerjaan = (int) $this->input->post('id_pekerjaan');
+        $id_akun = (int) $this->input->post('id_akun');
+        $pre = $this->input->post('keterangan');
+        $kode = $this->input->post('kodepengaduan');
+        $keterangan = "[Pengaduan ".$kode.")] ".$pre;
+        
+        $kuantitas_output = abs((double) $this->input->post('kuantitas_output'));
+        $kuantitas_output = 1;
+        $kualitas_mutu = abs((double) $this->input->post('kualitas_mutu'));
+        $waktu_mulai = $this->input->post('waktu_mulai');
+        $waktu_selesai = $this->input->post('waktu_selesai');
+        $biaya = abs((double) $this->input->post('biaya'));
+        $ak = abs((double) $this->input->post('ak'));
+        $nilai_progress = intval($this->input->post('nilai_progress'));
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $pekerjaan = null;
+        if (count($q) > 0) {
+            $pekerjaan = $q[0];
+        }
+        if ($pekerjaan == null) {
+            return 'Pekerjaan tidak dapat ditemukan';
+        }
+        $q = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan' and id_akun='$id_akun'")->result_array();
+        $detil_pekerjaan = null;
+        if (count($q) > 0) {
+            $detil_pekerjaan = $q[0];
+        }
+        if ($detil_pekerjaan == null) {
+            return 'Anda tidak termasuk dalam anggota staff yang mengerjakan pekerjaan ini';
+        }
+        if ($detil_pekerjaan['locked'] == '1') {
+            return 'Pekerjaan Anda telah di-lock. Anda tidak bisa menambahkan aktivitas';
+        }
+        $this->db->query("set datestyle to 'European'");
+        $this->db->trans_begin();
+//        $sql = "insert into aktivitas_pekerjaan (id_pekerjaan, id_akun, keterangan, angka_kredit, kuantitas_output, kualitas_mutu,"
+//                . " waktu_mulai, waktu_selesai, biaya, status_validasi, tanggal_transaksi) values ($id_pekerjaan, $id_akun, "
+//                . "'$keterangan', $ak, $kuantitas_output, $kualitas_mutu, '$waktu_mulai', '$waktu_selesai', $biaya, 0, now())";
+        $uploader = new MyUploadLib();
+
+        if (in_array($pekerjaan['kategori'], array('rutin', 'project'))) {
+            $aktivitas = array(
+                'id_pekerjaan' => $id_pekerjaan,
+                'id_detil_pekerjaan' => $detil_pekerjaan['id_detil_pekerjaan'],
+                'waktu_mulai' => $waktu_mulai . ' 08:00',
+                'waktu_selesai' => $waktu_selesai . ' 16:00',
+                'kuantitas_output' => $kuantitas_output,
+//                'kuantitas_output' => 1,
+                'kualitas_mutu' => $kualitas_mutu,
+                'angka_kredit' => $ak,
+                'keterangan' => $keterangan
+            );
+            if ($detil_pekerjaan['pakai_biaya'] == '1') {
+                $aktivitas['biaya'] = $biaya;
+            }
+            $this->db->insert('aktivitas_pekerjaan', $aktivitas);
+            $id_aktivitas = $this->db->insert_id();
+            $uploader->prosesUpload('berkas_aktivitas');
+            $uploadedFiles = $uploader->getUploadedFiles();
+            foreach ($uploadedFiles as $file) {
+                $berkas = array(
+                    'id_pekerjaan' => $id_pekerjaan,
+                    'id_detil_pekerjaan' => $detil_pekerjaan['id_detil_pekerjaan'],
+                    'id_aktivitas' => $id_aktivitas,
+                    'nama_file' => $file['name'],
+                    'path' => $file['filePath']
+                );
+                $this->db->insert('file', $berkas);
+            }
+        } else {
+            $aktivitas = array(
+                'id_pekerjaan' => $id_pekerjaan,
+                'id_detil_pekerjaan' => $detil_pekerjaan['id_detil_pekerjaan'],
+                'deskripsi' => $keterangan,
+                'progress' => $nilai_progress,
+                'total_progress' => 100,
+                'waktu_mulai' => $waktu_mulai . ' 08:00',
+                'waktu_selesai' => $waktu_selesai . ' 16:00'
+            );
+            $this->db->insert('detil_progress', $aktivitas);
+            $id_progress = $this->db->insert_id();
+            $uploader->prosesUpload('berkas_aktivitas');
+            $uploadedFiles = $uploader->getUploadedFiles();
+            foreach ($uploadedFiles as $file) {
+                $berkas = array(
+                    'id_pekerjaan' => $id_pekerjaan,
+                    'id_detil_pekerjaan' => $detil_pekerjaan['id_detil_pekerjaan'],
+                    'id_progress' => $id_progress,
+                    'nama_file' => $file['name'],
+                    'path' => $file['filePath']
+                );
+                $this->db->insert('file', $berkas);
+            }
+//            $id_detil_pekerjaan = $detil_pekerjaan['id_detil_pekerjaan'];
+//            $sql = "select * from detil_progress where id_detil_pekerjaan='$id_detil_pekerjaan' order by waktu_mulai desc limit 1";
+//            $q = $this->db->query($sql)->result_array();
+//            if (count($q) > 0) {
+//                $last = $q[0];
+//                $this->db->update('detil_pekerjaan', array('progress' => $last['progress']), array('id_detil_pekerjaan' => $id_detil_pekerjaan));
+//            }
+        }
+//        $this->db->query($sql);
+        $this->mark_started($detil_pekerjaan['id_detil_pekerjaan']);
+        $this->db->trans_complete();
+        redirect(site_url() . '/pekerjaan/pengaduan');
+    }
 
     private function mark_started($id_detil_pekerjaan = 0) {
         $this->db->query("update detil_pekerjaan set tglasli_mulai=now() where id_detil_pekerjaan='$id_detil_pekerjaan' and tglasli_mulai is null");
