@@ -120,7 +120,7 @@ class pekerjaan_saya extends ceklogin {
 		$this->db->insert("detil_pekerjaan", $detil_pekerjaan);
 		$this->load->library(array('myuploadlib'));
 		$uploader = new MyUploadLib();
-		$uploader->prosesUpload('berkas');
+		$uploader->prosesUpload('berkas', 'upload/' . date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
 		$uploadedFiles = $uploader->getUploadedFiles();
 		foreach ($uploadedFiles as $file) {
 			//$sql = "insert into file (id_pekerjaan,nama_file,waktu, path) values ($id_pekerjaan,'" . $file['name'] . "',now(),'" . $file['filePath'] . "')";
@@ -163,6 +163,7 @@ class pekerjaan_saya extends ceklogin {
 		$pekerjaan = $q[0];
 		$detil_pekerjaan = $this->db->where(array("id_pekerjaan"=>$id_pekerjaan))->get("detil_pekerjaan")->result_array();
 		$berkas = $this->db->where(array("id_pekerjaan"=>$id_pekerjaan, "id_progress"=>NULL, "id_detil_pekerjaan"=>NULL, "id_aktivitas"=>NULL, "id_tugas"=>NULL))->get("file")->result_array();
+		//print_r($this->db->last_query());
 		$url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
 		$users = json_decode(file_get_contents($url));
 		$data["pekerjaan"] = $pekerjaan;
@@ -350,19 +351,48 @@ class pekerjaan_saya extends ceklogin {
         $this->db->query("update detil_pekerjaan set tgl_read=now() where id_akun='$id_akun' and id_pekerjaan='$id_pekerjaan' and tgl_read is null");
     }
 	
+	function hapus_usulan(){
+		$id_pekerjaan = intval($this->input->get("id_pekerjaan"));
+		$q = $this->db->where(array("status_pekerjaan" => 6,"id_pekerjaan" => $id_pekerjaan))->get("pekerjaan")->result_array();
+		$session = $this->session->userdata("logged_in");
+		$data = array("data_akun" => $session);
+		if(count($q)<1){
+			$data['judul_kesalahan'] = 'Tidak berhak';
+            $data['deskripsi_kesalahan'] = 'Anda belum memilih atasan untuk usulan pekerjaan';
+            $this->load->view('pekerjaan/kesalahan', $data);
+			return;
+		}		
+		$usulan = $q[0];
+		if($usulan["id_penanggung_jawab"] == $session["id_akun"] || $usulan["id_pengusul"] == $session["id_akun"]){
+			//hapus usulan
+			$this->db->trans_begin();
+			$files = $this->db->where(array("id_pekerjaan" => $id_pekerjaan))->get("file")->result_array();
+			foreach($files as $file){
+				if(file_exists($file["path"])){
+					unlink($file["path"]);
+				}
+			}
+			$this->db->delete("file", array("id_pekerjaan" => $id_pekerjaan));
+			$this->db->delete("detil_pekerjaan", array("id_pekerjaan" => $id_pekerjaan));
+			$this->db->delete("pekerjaan", array("id_pekerjaan" => $id_pekerjaan));
+			$this->db->trans_complete();
+		}
+		redirect(site_url() . "/pekerjaan_saya");
+	}
+	
 	function hapus_file_json(){
 		$hasil = $this->hapus_file();
 		echo json_encode($hasil);
 	}
 	
     private function hapus_file() {
-        $id_file = intval($this->input->post('id_file'));
+        $id_file = intval($this->input->get('id_file'));
         $session = $this->session->userdata('logged_in');
 		$hasil = array("status"=>"fail","reason"=>"unknown");
         $q = $this->db->query("select * from file where id_file='$id_file'")->result_array();
         if (count($q) <= 0) {
-            $hasil["reason"] = "Berkas tidak dapat ditemukan";
-            return;
+            $hasil["reason"] = "Berkas dengan id $id_file tidak dapat ditemukan";
+            return $hasil;
         }
         $berkas = $q[0];
 		$id_pekerjaan = $berkas["id_pekerjaan"];
@@ -385,6 +415,7 @@ class pekerjaan_saya extends ceklogin {
 			}
 		}
 		if($pekerjaan["id_penanggung_jawab"] == $session["id_akun"]){
+			//penanggung jawab berhak menghapus berkas apapun yang berkaitan dengan pekerjaan ini
 			if (file_exists($berkas['path'])) {
 				unlink($berkas['path']);
 			}
@@ -405,7 +436,7 @@ class pekerjaan_saya extends ceklogin {
         }*/
         $id_aktivitas = $berkas['id_aktivitas'];
         $id_progress = $berkas['id_progress'];
-        if (intval($id_aktivitas) > 0) {
+        /*if (intval($id_aktivitas) > 0) {
             $q = $this->db->query("select * from aktivitas_pekerjaan where id_aktivitas='$id_aktivitas'")->result_array();
             if (count($q) <= 0) {
                 $hasil["reason"]='Aktivitas pekerjaan tidak dapat ditemukan';
@@ -427,12 +458,12 @@ class pekerjaan_saya extends ceklogin {
                 $hasil["reason"]= 'Anda tidak berhak menghapus berkas di progress yang sudah divalidasi';
                 return $hasil;
             }
-        }
-        if (file_exists($berkas['path'])) {
+        }*/
+        /*if (file_exists($berkas['path'])) {
             unlink($berkas['path']);
         }
         $this->db->query("delete from file where id_file='$id_file'");
-		$hasil["status"]="ok";
+		$hasil["status"]="ok";*/
         return $hasil;
     }
 

@@ -31,7 +31,7 @@ foreach ($users as $u) {
                                 </ul>
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                     <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
-                                    <a class="btn btn-warning btn-xs" href="javascript:show_dialog_hapus_usulan();" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
+                                    <a class="btn btn-warning btn-xs" href="javascript:hapus_usulan();" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                 </div>
                             </header>
                             <div class="panel-body">
@@ -79,7 +79,7 @@ foreach ($users as $u) {
                                                                         <td id="berkas_nama_<?= $berkas["id_file"]; ?>"><?php echo $berkas["nama_file"]; ?></td>
                                                                         <td style="text-align: right">
                                                                             <a class="btn btn-info btn-xs" href="<?php echo base_url() ?>download?id_file=<?= $berkas["id_file"]; ?>" id="" style="font-size: 10px" target="_blank">Download</a>
-                                                                            <a class="btn btn-danger btn-xs" href="javascript:hapus_file(<?php echo $berkas["id_file"] ?>); ?>');" id="" style="font-size: 10px" onclick=";">Hapus</a>
+                                                                            <a class="btn btn-danger btn-xs" href="javascript:hapus_file(<?php echo $berkas["id_file"] ?>);" id="" style="font-size: 10px" onclick=";">Hapus</a>
                                                                         </td>
                                                                     </tr>
                                                                     <?php
@@ -126,127 +126,8 @@ foreach ($users as $u) {
 										</div>
 									</section>
 								</div>
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title">Permintaan Perpanjangan</h4>
-                                                    </div>
-                                                    <div class="form modal-body">
-                                                        <div class="col-lg-12">
-                                                            <textarea class="form-control" id="alasan_perpanjangan" rows="10" placeholder="Isi Alasan Perpanjangan"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button data-dismiss="modal" class="btn btn-default" onclick="minta_perpanjang();" type="button">Kirim Permintaan</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="tombol_tutup_progress">&times;</button>
-                                                        <h4 class="modal-title">Ubah Progress</h4>
-                                                    </div>
-                                                    <form class="cmxform form-horizontal" id="progress_form" action="#" method="POST" enctype="multipart/form-data">
-                                                        <div class="form modal-body">
-                                                            <input type="hidden" id="idp" name="idp" value="" />
-                                                            <input type="hidden" id="id_pkj" name="id_pkj" value="<?php echo $pekerjaan['id_pekerjaan'] ?>" />
-                                                            <div class="form-group ">
-                                                                <label for="progress" class="control-label col-lg-3">Progress</label>
-                                                                <div class="col-lg-8">
-                                                                    <select class="form-control" id="progress" name="progress">
-                                                                        <option if value="0">
-                                                                            0% Selesai
-                                                                        </option>
-                                                                        <option value="10">
-                                                                            10% Selesai
-                                                                        </option>
-                                                                        <option value="20">
-                                                                            20% Selesai
-                                                                        </option>
-                                                                        <option value="30">
-                                                                            30% Selesai
-                                                                        </option>
-                                                                        <option value="40">
-                                                                            40% Selesai
-                                                                        </option>
-                                                                        <option value="50">
-                                                                            50% Selesai
-                                                                        </option>
-                                                                        <option value="60">
-                                                                            60% Selesai
-                                                                        </option>
-                                                                        <option value="70">
-                                                                            70% Selesai
-                                                                        </option>
-                                                                        <option value="80">
-                                                                            80% Selesai
-                                                                        </option>
-                                                                        <option value="90">
-                                                                            90% Selesai
-                                                                        </option>
-                                                                        <option value="100">
-                                                                            100% Selesai
-                                                                        </option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group ">
-                                                                <label for="perubahan" class="control-label col-lg-3">Log Perubahan</label>
-                                                                <div class="col-lg-8">
-                                                                    <textarea class="form-control" type="text" id="perubahan" name="perubahan" rows="12" value=""></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group ">
-                                                                <label for="total_progress" class="control-label col-lg-3">Total Progress</label>
-                                                                <div class="col-lg-8">
-                                                                    <input readonly class="form-control" type="text" id="total_progress" name="total_progress" value="100" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group ">
-                                                                <label for="waktu_progress" class="control-label col-lg-3">Waktu Progress</label>
-                                                                <div class="col-lg-8">
-                                                                    <input readonly class="form-control" type="text" id="waktu_progress" name="waktu_progress" value="<?php
-                                                                    date_default_timezone_set("Asia/Jakarta");
-                                                                    echo date("Y-m-d h:i:s");
-                                                                    ?>" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group ">
-                                                                <label for="file1" class="control-label col-lg-3">File Progress</label>
-                                                                <div class="col-lg-8">
-                                                                    <input class="file_progress" type="file" id="file1" name="file1" value="" multiple=""/>
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="tampil_progress" style="display: none;">
-                                                                <div class="form-group ">
-                                                                    <label for="progressBar" class="control-label col-lg-3">Total</label>
-                                                                    <div class="col-lg-8">
-                                                                        <progress id="progressBar" value="0" max="100" style="width:300px;"></progress> 
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group ">
-                                                                    <label for="status" class="control-label col-lg-3">Status</label>
-                                                                    <div class="col-lg-8">
-                                                                        <h4 id="status"></h4> <p id="loaded_n_total"></p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button data-dismiss="modal" class="btn btn-default" id="batal_progress" type="button">Batal</button>
-                                                            <button class="btn btn-warning"  onclick="ubah_progress()" type="button"> Ubah Progress</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
+                                            
+                            
 
 
                                         <div class="panel-body">
@@ -314,10 +195,19 @@ foreach ($users as $u) {
 		var list_akun =<?= json_encode($users) ?>;
 		var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
 		$(document).ready(function () {
-			document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
+			document.title = 'Deskripsi Pekerjaan: ' + pekerjaan["nama_pekerjaan"] + ' - Task Management';
 			$('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + $('#id_detail_pkj').val());
+			$('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+			$('#submenu_pekerjaan_ul').show();
 		});
-
+		
+		function hapus_usulan(){
+			if(confirm("Anda akan membatalkan usulan pekerjaan " + pekerjaan["nama_pekerjaan"] + ". Lanjutkan?") == false){
+				return;
+			}
+			window.location = site_url + "/pekerjaan_saya/hapus_usulan?id_pekerjaan=" + pekerjaan["id_pekerjaan"];
+		}
+		
 		function _(el) {
 			return document.getElementById(el);
 		}
@@ -382,7 +272,7 @@ foreach ($users as $u) {
 						id_file: id_file,
 					}, 
 					type: "get", // GET or POST
-					url: "<?php echo site_url(); ?>/pekerjaan_saya/hapus_file", // the file to call
+					url: "<?php echo site_url(); ?>/pekerjaan_saya/hapus_file_json", // the file to call
 					success: function (response) { // on success..
 						var json = jQuery.parseJSON(response);
 						//alert(response);

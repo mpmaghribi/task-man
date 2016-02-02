@@ -9,8 +9,8 @@ $(document).ready(function () {
     warna_label[4] = 'label-success';
     warna_label[5] = 'label-danger';
     warna_label[10] = 'label-info';
+	document.title = "Daftar Pekerjaan Staff - Task Management";
     $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-    document.title = "Daftar Pekerjaan Staff - Task Management";
     $('#submenu_pekerjaan_ul').show();
     init_tabel_skp_staff();
     init_tabel_tugas();
