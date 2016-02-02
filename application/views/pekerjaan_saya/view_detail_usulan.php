@@ -4,7 +4,12 @@ $user = array();
 foreach ($users as $u) {
     $user[$u->id_akun] = $u;
 }
-//var_dump($user);
+$list_kategori = array(
+	"rutin" => "Pekerjaan Rutin",
+	"project" => "Pekerjaan Project",
+	"tambahan" => "Pekerjaan Tambahan",
+	"kreativitas" => "Pekerjaan Kreativitas"
+);
 ?>
 <body>
 
@@ -30,7 +35,7 @@ foreach ($users as $u) {
                                     </li>
                                 </ul>
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>pekerjaan/edit?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
+                                    <a class="btn btn-danger btn-xs" href="<?php echo site_url(); ?>/pekerjaan_saya/view_edit_usulan?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
                                     <a class="btn btn-warning btn-xs" href="javascript:hapus_usulan();" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                 </div>
                             </header>
@@ -48,7 +53,20 @@ foreach ($users as $u) {
                                                 <h4 style="color: #1FB5AD;">Jenis Pekerjaan</h4>
                                                 <p style="font-size: larger"><?php echo $pekerjaan['nama_sifat_pekerjaan']; ?></p>
                                                 <h4 style="color: #1FB5AD;">Kategori Pekerjaan</h4>
-                                                <p style="font-size: larger">Pekerjaan Kreativitas</p>
+                                                <p style="font-size: larger"><?= $list_kategori[$pekerjaan["kategori"]] ?></p>
+												<?php 
+												if($pekerjaan["kategori"] == "kreativitas"){
+													$list_level_manfaat = array(
+														1 => "Bermanfaat untuk Unit Kerja",
+														2 => "Bermanfaat untuk Organisasi",
+														3 => "Bermanfaat untuk Negara"
+													);
+													?>
+													<h4 style="color: #1FB5AD;">Tingkat Manfaat</h4>
+													<p style="font-size: larger"><?= $list_level_manfaat[$pekerjaan["level_manfaat"]] ?></p>
+													<?php
+												}
+												?>
                                                 <h4 style="color: #1FB5AD;">Periode</h4>
                                                 <p style="font-size: larger"><?= explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
                                             </section>

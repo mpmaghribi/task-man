@@ -96,7 +96,8 @@ class pekerjaan_saya extends ceklogin {
 			"id_penanggung_jawab" => $atasan,
 			"id_pengusul"=> $session["id_akun"],
 			"status_pekerjaan" => 6,
-			"periode" => intval($this->input->post("periode"))
+			"periode" => intval($this->input->post("periode")),
+			"level_manfaat" => intval($this->input->post("manfaat"))
 		);
 		$biaya = $this->input->post("biaya");
 		$this->db->trans_begin();
@@ -367,14 +368,15 @@ class pekerjaan_saya extends ceklogin {
 			//hapus usulan
 			$this->db->trans_begin();
 			$files = $this->db->where(array("id_pekerjaan" => $id_pekerjaan))->get("file")->result_array();
+			$this->db->delete("file", array("id_pekerjaan" => $id_pekerjaan));
+			$this->db->delete("komentar", array("id_pekerjaan" => $id_pekerjaan));			
+			$this->db->delete("detil_pekerjaan", array("id_pekerjaan" => $id_pekerjaan));
+			$this->db->delete("pekerjaan", array("id_pekerjaan" => $id_pekerjaan));
 			foreach($files as $file){
 				if(file_exists($file["path"])){
 					unlink($file["path"]);
 				}
 			}
-			$this->db->delete("file", array("id_pekerjaan" => $id_pekerjaan));
-			$this->db->delete("detil_pekerjaan", array("id_pekerjaan" => $id_pekerjaan));
-			$this->db->delete("pekerjaan", array("id_pekerjaan" => $id_pekerjaan));
 			$this->db->trans_complete();
 		}
 		redirect(site_url() . "/pekerjaan_saya");
