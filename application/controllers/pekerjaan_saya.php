@@ -301,7 +301,74 @@ class pekerjaan_saya extends ceklogin {
             return;
         }
         $pekerjaan = $q[0];
-        
+        if($session["id_akun"] != $pekerjaan["id_pengusul"]){
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengubah usulan pekerjaan orang lain';
+            $this->load->view('pekerjaan/kesalahan', $data);
+            return;
+        }
+        $atasan = intval($this->input->post("atasan"));
+        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $session["user_id"] . "/format/json";
+        $list_atasan = json_decode(file_get_contents($url));
+        $atasan_valid = false;
+        foreach ($list_atasan as $ats){
+            if($ats->id_akun == $atasan){
+                $atasan_valid = true;
+                break;
+            }
+        }
+        if ($atasan_valid == false) {
+            $data['judul_kesalahan'] = 'Tidak berhak';
+            $data['deskripsi_kesalahan'] = 'Anda belum memilih atasan untuk usulan pekerjaan';
+            $this->load->view('pekerjaan/kesalahan', $data);
+            return;
+        }
+        $kategori = $this->input->post("kategori_pekerjaan");
+        if(in_array($kategori, array("rutin", "project", "tambahan", "kreativitas")) == false){
+            $kategori = "rutin";
+        }
+        $level_manfaat = intval($this->input->post("select_kemanfaatan"));
+        $level_manfaat = max(min($level_manfaat, 3), 1);
+        $update_pekerjaan = array(
+            "id_sifat_pekerjaan" => intval($this->input->post("sifat_pkj")),
+            "nama_pekerjaan" => $this->input->post("nama_pkj"),
+            "deskripsi_pekerjaan" => $this->input->post("deskripsi_pkj"),
+            "tgl_mulai" => $this->input->post("tgl_mulai"),
+            "tgl_selesai" => $this->input->post("tgl_selesai"),
+            "asal_pekerjaan" => "taskmanagement",
+            "level_prioritas" => intval($this->input->post("prioritas")),
+            "kategori" => $kategori,
+            "id_penanggung_jawab" => $atasan,
+            "periode" => intval($this->input->post("periode")),
+            "level_manfaat" => $level_manfaat
+        );
+        $biaya = $this->input->post("biaya");
+        $this->db->trans_begin();
+        $this->db->query("set datestyle to 'ISO, DMY'");
+        $this->db->update("pekerjaan", $update_pekerjaan, array("id_pekerjaan"=>$id_pekerjaan));
+        $update_detil_pekerjaan = array(
+            "sasaran_angka_kredit" => floatval($this->input->post("angka_kredit")),
+            "sasaran_kuantitas_output" => intval($this->input->post("kuantitas_output")),
+            "sasaran_kualitas_mutu" => intval($this->input->post("kualitas_mutu")),
+            "sasaran_biaya" => ($biaya == "-" ? 0 : floatval($biaya)),
+            "pakai_biaya" => ($biaya == "-"? 0 : 1),
+            "satuan_kuantitas" => $this->input->post("satuan_kuantitas")
+        );
+        $this->db->update("detil_pekerjaan", $update_detil_pekerjaan, array("id_pekerjaan"=>$id_pekerjaan,"id_akun"=>$session["id_akun"]));
+        $this->load->library(array("myuploadlib"));
+        $uploader = new MyUploadLib();
+        $uploader->prosesUpload('berkas', 'upload/' . date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
+        $uploadedFiles = $uploader->getUploadedFiles();
+        foreach ($uploadedFiles as $file) {
+            $berkas = array(
+                "id_pekerjaan" => $id_pekerjaan,
+                "nama_file" => $file["name"],
+                "path" => $file["filePath"]
+            );
+            $this->db->insert("file", $berkas);
+        }
+        $this->db->trans_complete();
+        redirect(site_url() . "/pekerjaan_saya/detail_usulan?id_pekerjaan=" . $id_pekerjaan);
     }
     
     function view_edit_usulan() {

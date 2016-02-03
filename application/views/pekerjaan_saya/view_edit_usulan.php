@@ -26,7 +26,7 @@ $this->load->view("taskman_header_page");
                                                 <div class="form-group ">
                                                     <label for="staff" class="control-label col-lg-3">Atasan</label>
                                                     <div class="col-lg-6">
-                                                    	<select class="form-control" id="select_atasan">
+                                                    	<select class="form-control" id="select_atasan" name="atasan">
                                                             <?php
                                                             foreach($list_atasan as $atasan){
                                                                     echo '<option value="'.$atasan->id_akun.'">'.$atasan->nama.'</option>';
