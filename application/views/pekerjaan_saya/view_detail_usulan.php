@@ -54,19 +54,19 @@ $list_kategori = array(
                                                 <p style="font-size: larger"><?php echo $pekerjaan['nama_sifat_pekerjaan']; ?></p>
                                                 <h4 style="color: #1FB5AD;">Kategori Pekerjaan</h4>
                                                 <p style="font-size: larger"><?= $list_kategori[$pekerjaan["kategori"]] ?></p>
-												<?php 
-												if($pekerjaan["kategori"] == "kreativitas"){
-													$list_level_manfaat = array(
-														1 => "Bermanfaat untuk Unit Kerja",
-														2 => "Bermanfaat untuk Organisasi",
-														3 => "Bermanfaat untuk Negara"
-													);
-													?>
-													<h4 style="color: #1FB5AD;">Tingkat Manfaat</h4>
-													<p style="font-size: larger"><?= $list_level_manfaat[$pekerjaan["level_manfaat"]] ?></p>
-													<?php
-												}
-												?>
+                                                <?php 
+                                                if($pekerjaan["kategori"] == "kreativitas"){
+                                                    $list_level_manfaat = array(
+                                                        1 => "Bermanfaat untuk Unit Kerja",
+                                                        2 => "Bermanfaat untuk Organisasi",
+                                                        3 => "Bermanfaat untuk Negara"
+                                                    );
+                                                    ?>
+                                                    <h4 style="color: #1FB5AD;">Tingkat Manfaat</h4>
+                                                    <p style="font-size: larger"><?= $list_level_manfaat[$pekerjaan["level_manfaat"]] ?></p>
+                                                    <?php
+                                                }
+                                                ?>
                                                 <h4 style="color: #1FB5AD;">Periode</h4>
                                                 <p style="font-size: larger"><?= explode(' ', $pekerjaan['tgl_mulai'])[0] . ' - ' . explode(' ', $pekerjaan['tgl_selesai'])[0] ?></p>
                                             </section>
@@ -97,7 +97,7 @@ $list_kategori = array(
                                                                         <td id="berkas_nama_<?= $berkas["id_file"]; ?>"><?php echo $berkas["nama_file"]; ?></td>
                                                                         <td style="text-align: right">
                                                                             <a class="btn btn-info btn-xs" href="<?php echo base_url() ?>download?id_file=<?= $berkas["id_file"]; ?>" id="" style="font-size: 10px" target="_blank">Download</a>
-                                                                            <a class="btn btn-danger btn-xs" href="javascript:hapus_file(<?php echo $berkas["id_file"] ?>);" id="" style="font-size: 10px" onclick=";">Hapus</a>
+                                                                            <a class="btn btn-danger btn-xs" href="javascript:dialog_hapus_file(<?php echo $berkas["id_file"] ?>);" id="" style="font-size: 10px" onclick=";">Hapus</a>
                                                                         </td>
                                                                     </tr>
                                                                     <?php
@@ -113,37 +113,37 @@ $list_kategori = array(
                                     </div>
                                             
                                 </div>
-								<div class="col-md-12" id="anggota_tim">
-									<section class="panel">
-										<h4 style="color: #1FB5AD;">
-											Anggota Tim
-										</h4>
-										<div class="panel-body">
-											<table class="table table-striped table-hover table-condensed" id="staff_pekerjaan">
-												<thead>
-													<tr>
-														<th>#</th>
-														<th>Nama</th>
-													</tr>
-												</thead>
-												<tbody>
-													<?php
-													$counter = 0;
-													foreach ($detil_pekerjaan as $dp) {
-														if (!isset($user[$dp['id_akun']]))
-															continue;
-														$counter++;
-														echo '<tr>';
-														echo '<td>' . $counter . '</td>';
-														echo '<td>' . $user[$dp['id_akun']]->nama . '</td>';
-														echo '</tr>';
-													}
-													?>
-												</tbody>
-											</table>
-										</div>
-									</section>
-								</div>
+                                <div class="col-md-12" id="anggota_tim">
+                                        <section class="panel">
+                                                <h4 style="color: #1FB5AD;">
+                                                        Anggota Tim
+                                                </h4>
+                                                <div class="panel-body">
+                                                        <table class="table table-striped table-hover table-condensed" id="staff_pekerjaan">
+                                                                <thead>
+                                                                        <tr>
+                                                                                <th>#</th>
+                                                                                <th>Nama</th>
+                                                                        </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                        <?php
+                                                                        $counter = 0;
+                                                                        foreach ($detil_pekerjaan as $dp) {
+                                                                                if (!isset($user[$dp['id_akun']]))
+                                                                                        continue;
+                                                                                $counter++;
+                                                                                echo '<tr>';
+                                                                                echo '<td>' . $counter . '</td>';
+                                                                                echo '<td>' . $user[$dp['id_akun']]->nama . '</td>';
+                                                                                echo '</tr>';
+                                                                        }
+                                                                        ?>
+                                                                </tbody>
+                                                        </table>
+                                                </div>
+                                        </section>
+                                </div>
                                             
                             
 
@@ -188,10 +188,24 @@ $list_kategori = array(
                                 </div>
                             </div>
                         </section>
+                    
+
+                <div class="modal fade" id="modal_any" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="modal_any_title">Modal Title</h4>
+                            </div>
+                            <div class="form modal-body" id="modal_any_body">
+                            </div>
+                            <div class="modal-footer">
+                                <button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_cancel">Cancel</button>
+                                <button class="btn btn-default" type="button" id="modal_any_button_ok">OK</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!--script for this page only-->
 
             </section>
         </section>
@@ -280,11 +294,20 @@ $list_kategori = array(
 			//alert(file.name+" | "+file.size+" | "+file.type); 
 
 		}
+                function dialog_hapus_file(id_file){
+                    var nama_file = $("#berkas_nama_" + id_file).html();
+                    $("#modal_any").modal("show");
+                    $("#modal_any_button_cancel").attr({class: "btn btn-success"}).html("Batal");
+                    $("#modal_any_button_ok").attr({class: "btn btn-danger", onclick: "hapus_file("+id_file+")"}).html("Hapus");
+                    $("#modal_any_title").html("Konfirmasi Hapus Berkas");
+                    $("#modal_any_body").html("<h5>Anda akan menghapus berkas <strong>"+nama_file+"</strong>. Lanjutkan?</h5>");
+                }
 		function hapus_file(id_file)
 		{
-			var deskripsi = $("#berkas_nama_" + id_file).html();
-			var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
-			if (c == true) {
+                    $("#modal_any").modal("hide");
+			
+			//var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
+//			if (c == true) {
 				$.ajax({// create an AJAX call...
 					data: {
 						id_file: id_file,
@@ -302,9 +325,9 @@ $list_kategori = array(
 						}
 					}
 				});
-			}
-			else {
-			}
+//			}
+//			else {
+//			}
 		}
 		function ubah_komentar(id_komen) {
 			$.ajax({// create an AJAX call...

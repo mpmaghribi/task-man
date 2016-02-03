@@ -56,6 +56,8 @@ function init_tabel_usulan(){
                 aksi += '<button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button">Aksi <span class="caret"></span></button>';
                 aksi += '<ul class="dropdown-menu">';
                 aksi += '<li><a href="' + site_url + '/pekerjaan_saya/detail_usulan?id_pekerjaan=' + usulan['id_pekerjaan'] + '" target="">Detail Usulan</a></li>';
+                aksi += '<li><a href="' + site_url + '/pekerjaan_saya/view_edit_usulan?id_pekerjaan=' + usulan['id_pekerjaan'] + '" target="">Edit Usulan</a></li>';
+                aksi += '<li><a href="' + site_url + '/pekerjaan_saya/detail_usulan?id_pekerjaan=' + usulan['id_pekerjaan'] + '" target="">Hapus Usulan</a></li>';
                 aksi += '</ul>';
                 aksi += '</div>'
                 counter++;

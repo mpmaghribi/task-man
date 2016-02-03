@@ -1,0 +1,257 @@
+<?php
+$this->load->view("taskman_header_page");
+?> 
+<body>
+    <section id="container" >
+        <!--header start-->
+        <?php $this->load->view("taskman_header2_page") ?>
+        <!--header end-->
+        <?php $this->load->view("taskman_sidebarleft_page") ?>
+        <!--sidebar end-->
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                <!-- page start-->
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <section class="panel">
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                    <div id="div_skp" class="tab-pane active">
+                                        <div class="form">
+                                            <form class="cmxform form-horizontal " id="form_edit_usulan" method="POST" action="<?php echo site_url() ?>/pekerjaan_saya/update_usulan" enctype="multipart/form-data">
+                                                <input type="hidden" name="jenis_usulan" value="usulan"/>
+                                                <input type="hidden" name="id_pekerjaan" value="<?=$pekerjaan['id_pekerjaan']?>"/>
+                                                <div class="form-group ">
+                                                    <label for="staff" class="control-label col-lg-3">Atasan</label>
+                                                    <div class="col-lg-6">
+                                                    	<select class="form-control" id="select_atasan">
+                                                    		<?php
+                                                    		foreach($list_atasan as $atasan){
+                                                    			echo '<option value="'.$atasan->id_akun.'">'.$atasan->nama.'</option>';
+                                                    		}
+                                                    		?>
+                                                    	</select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="sifat_pkj" class="form-control m-bot15" id="select_sifat_pekerjaan">
+                                                            <option value="1">Personal</option>
+                                                            <option value="2">Umum</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="sifat_pkj" class="control-label col-lg-3">Ketegroi Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="kategori_pekerjaan" class="form-control m-bot15" id="select_usulan_kategori" onchange="usulan_kategori_changed()">
+                                                            <option value="rutin">Rutin</option>
+                                                            <option value="project">Project</option>
+                                                            <option value="tambahan">Tambahan</option>
+                                                            <option value="kreativitas">Kreativitas</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="nama_pkj" class="control-label col-lg-3">Nama Pekerjaan</label>
+                                                    <div class="col-lg-6">
+                                                        <input class=" form-control" id="usulan_nama_pekerjaan" name="nama_pkj" type="text" value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="deskripsi_pkj" class="control-label col-lg-3">Deskripsi</label>
+                                                    <div class="col-lg-6">
+                                                        <textarea class="form-control" name="deskripsi_pkj" rows="12" id="usulan_deskripsi_pekerjaan"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group " id="div_ak">
+                                                    <label for="prioritas" class="control-label col-lg-3">Angka Kredit</label>
+                                                    <div class="col-lg-6">
+                                                        <input type="text" class="form-control" id="angka_kredit" name="angka_kredit" value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group " id="div_kuantitas">
+                                                    <label for="prioritas" class="control-label col-lg-3">Kuantitas Output</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="text" class="form-control" id="kuantitas_output" name="kuantitas_output" value=""/>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <input type="text" class="form-control" id="satuan_kuantitas" name="satuan_kuantitas" value="item" placeholder="satuan kuanttias" value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" id="div_kualitas">
+                                                    <label for="prioritas" class="control-label col-lg-3">Kualitas Mutu</label>
+                                                    <div class="col-lg-6">
+                                                        <input type="text" class="form-control" id="kualitas_mutu" name="kualitas_mutu" value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="prioritas" class="control-label col-lg-3">Periode</label>
+                                                    <div class="col-lg-6" id="">
+                                                        <input type="text" class="form-control" id="usulan_periode" name="periode" value="<?php echo date("Y"); ?>" onchange="periode_changed()"/>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="prioritas" class="control-label col-lg-3">Deadline</label>
+                                                    <div class="col-lg-6" id="div_periode_tanggal">
+                                                        <div class="input-group input-large" data-date-format="dd-mm-yyyy">
+                                                            <input id="usulan_tanggal_mulai" readonly type="text" class="form-control" value="" name="tgl_mulai">
+                                                            <span class="input-group-addon">Sampai</span>
+                                                            <input id="usulan_tanggal_selesai" readonly type="text" class="form-control" value="" name="tgl_selesai">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group " id="div_biaya">
+                                                    <label for="prioritas" class="control-label col-lg-3">Biaya</label>
+                                                    <div class="col-lg-6">
+                                                        <input type="text" class="form-control" id="biaya" name="biaya" value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group " id="div_manfaat">
+                                                    <label for="prioritas" class="control-label col-lg-3">Tingkat Kemanfaatan</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="select_kemanfaatan" class="form-control">
+                                                            <option value="1">Bermanfaat bagi unit kerja</option>
+                                                            <option value="2">Bermanfaat bagi oragnisasi</option>
+                                                            <option value="3">Bermanfaat bagi negara</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
+                                                    <div class="col-lg-6">
+                                                        <select name="prioritas" class="form-control m-bot15">
+                                                            <option value="1">Urgent</option>
+                                                            <option value="2">Tinggi</option>
+                                                            <option value="3">Sedang</option>
+                                                            <option value="4">Rendah</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="prioritas" class="control-label col-lg-3">File</label>
+                                                    <div class="col-lg-6">
+                                                        <div id="list_file_upload_assign">
+	                                                        <div id="file_lama">
+									                            <table  class="table table-hover general-table">
+									                                <?php
+									                                    foreach ($list_berkas as $berkas) {
+									                                        ?>
+									                                        <tr id="berkas_<?php echo $berkas["id_file"]; ?>">
+									                                            <td id="nama_file_<?php echo $berkas["id_file"]; ?>"><?php echo $berkas["nama_file"]; ?></td>
+									                                            <td id="aksi_<?php echo $berkas["id_file"]; ?>" style="width: 10px;text-align:right"><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="dialog_hapus_file(<?php echo $berkas["id_file"] ?>);">Hapus</a></td>
+									                                        </tr>
+									                                        <?php
+									                                    }
+									                                
+									                                ?>
+									                            </table>
+									                        </div>
+                                                            <div id="file_baru">
+                                                                <table  class="table table-hover general-table" id="berkas_baru"></table>
+                                                            </div>
+                                                        </div>
+                                                        <div style="display:none">
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_usulan"/>
+                                                        </div>
+                                                        <button class="btn btn-primary" type="button" id="button_pilih_berkas_usulan">Pilih File</button>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-lg-offset-3 col-lg-6">
+                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <!-- page end-->
+            </section>
+        </section>
+        <div class="modal fade" id="modal_any" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	        <div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="modal_any_title">Modal Title</h4>
+					</div>
+					<div class="form modal-body" id="modal_any_body">
+					</div>
+					<div class="modal-footer">
+						<button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_cancel">Cancel</button>
+						<button class="btn btn-default" type="button" id="modal_any_button_ok">OK</button>
+					</div>
+				</div>
+			</div>
+		</div>
+        <!--main content end-->
+        <!--right sidebar start-->
+        <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
+
+        <!-- END JAVASCRIPTS -->
+        <?php $this->load->view('taskman_rightbar_page'); ?>
+        <!--right sidebar end-->
+    </section>
+    <?php $this->load->view("taskman_footer_page"); ?>
+    <script type="text/javascript" src="<?= base_url() ?>assets/js2/pekerjaan_saya/js_usulan.js"></script>
+    <script >
+		var list_users = <?php echo json_encode($list_users); ?>;
+		var pekerjaan =<?= json_encode($pekerjaan) ?>;
+		var detil_pekerjaan = <?= json_encode($detil_pekerjaan) ?>;
+		var site_url='<?=site_url()?>';
+		jQuery(document).ready(function () {
+			var dp = detil_pekerjaan[0];
+			$("#usulan_nama_pekerjaan").val(pekerjaan["nama_pekerjaan"]);
+			$("#select_sifat_pekerjaan").val(pekerjaan["id_sifat_pekerjaan"]);
+			$("#select_usulan_kategori").val(pekerjaan["kategori"]);
+			$("#usulan_deskripsi_pekerjaan").html(pekerjaan["deskripsi_pekerjaan"]);
+			$("#angka_kredit").val(dp["sasaran_angka_kredit"]);
+			$("#kuantitas_output").val(dp["sasaran_kuantitas_output"]);
+			$("#kualitas_mutu").val(dp["sasaran_kualitas_mutu"]);
+			$("#biaya").val(dp["pakai_biaya"] == "1" ? $dp["sasaran_biaya"] : "-");
+			$("#satuan_kuantitas").val(dp["satuan_kuantitas"]);
+			$("#usulan_periode").val(pekerjaan["periode"]);
+			periode_changed();
+			var tanggal = new Date();
+			tanggal.setHours(0, 0, 0, 0);
+			var tanggal_mulai = pekerjaan["tgl_mulai"].split(" ")[0].split("-");
+			var tanggal_selesai = pekerjaan["tgl_selesai"].split(" ")[0].split("-");
+			tanggal.setFullYear(parseInt(tanggal_mulai[0]), parseInt(tanggal_mulai[1])-1, parseInt(tanggal_mulai[2]));
+			waktu_mulai.setValue(tanggal);
+			tanggal.setFullYear(parseInt(tanggal_selesai[0]), parseInt(tanggal_selesai[1])-1, parseInt(tanggal_selesai[2]));
+			waktu_selesai.setValue(tanggal);
+			usulan_kategori_changed();
+			$("#select_atasan").val(pekerjaan["id_penanggung_jawab"]);
+// 			for(var i=0, i2=list_users.length; i<i2; i++){
+// 				var user = list_users[i];
+// 				if(user["id_akun"] == pekerjaan["id_penanggung_jawab"]){
+// 					$("#select_atasan").append('<option value="'+user["id_akun"]+'">'+user["nama"]+'</option>');
+// 				}
+// 			}
+		});
+		function dialog_hapus_file(id_file){
+			var tr = document.getElementById("berkas_"+id_file);
+			if(tr == null){
+				return;
+			}
+			var tds = tr.children;
+			var nama_file = tds[0].innerHTML;
+			$("#modal_any").modal("show");
+			$("#modal_any_button_cancel").attr({class: "btn btn-success"}).html("Batal");
+			$("#modal_any_button_ok").attr({class: "btn btn-danger", onclick: "hapus_file("+id_file+")"}).html("Hapus");
+			$("#modal_any_title").html("Konfirmasi Hapus Berkas");
+			$("#modal_any_body").html("<h5>Anda akan menghapus berkas <strong>"+nama_file+"</strong>. Lanjutkan?</h5>");
+		}
+
+		function hapus_file(id_file){
+		}
+    </script>
