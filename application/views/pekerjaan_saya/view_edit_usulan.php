@@ -29,7 +29,7 @@ $this->load->view("taskman_header_page");
                                                     	<select class="form-control" id="select_atasan" name="atasan">
                                                             <?php
                                                             foreach($list_atasan as $atasan){
-                                                                    echo '<option value="'.$atasan->id_akun.'">'.$atasan->nama.'</option>';
+                                                                echo '<option value="'.$atasan->id_akun.'">'.$atasan->nama.'</option>';
                                                             }
                                                             ?>
                                                     	</select>
@@ -158,12 +158,12 @@ $this->load->view("taskman_header_page");
                                                         <div style="display:none">
                                                             <input type="file" multiple="" name="berkas[]" id="pilih_berkas_usulan" onchange="berkas_usulan_changed()"/>
                                                         </div>
-                                                        <button class="btn btn-primary" type="button" id="button_pilih_berkas_usulan" onclick="click_pilih_berkas_usulan()">Pilih File</button>
+                                                        <button class="btn btn-success" type="button" id="button_pilih_berkas_usulan" onclick="click_pilih_berkas_usulan()"><i class="fa fa-files-o"></i> Pilih File</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="col-lg-offset-3 col-lg-6">
-                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                                        <button class="btn btn-info" type="submit"><i class="fa fa-save"></i> Save</button>
                                                     </div>
                                                 </div>
                                             </form>
