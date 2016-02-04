@@ -124,6 +124,7 @@ class pekerjaan_staff_model extends dtpg {
 	     ) as dp2
              on dp2.id_pekerjaan=p.id_pekerjaan
              where p.id_penanggung_jawab='$my_id'
+             and p.status_pekerjaan = 7
              and ( date_part('year',p.tgl_mulai)='$periode' or date_part('year',p.tgl_selesai)='$periode')
              and dp.id_akun='$id_staff'
              order by p.periode, p.tgl_mulai";

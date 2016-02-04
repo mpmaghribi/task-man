@@ -57,6 +57,27 @@
                             </div>
                             <div class="panel-body">
                                 <header class="panel-heading" id="">
+                                    Usulan Pekerjaan
+                                </header>
+                                <div class="form">
+                                    <table class="table table-striped table-hover table-condensed" id="tabel_usulan">
+                                        <thead>
+                                            <tr>
+                                                <th style="" id="kolom_nomor">No</th>
+                                                <th>Pekerjaan</th>
+                                                <th>Deadline</th>
+                                                <th>Assign To</th>
+                                                <th style="">Status</th>
+                                                <th style="">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabel_usulan_body">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <header class="panel-heading" id="">
                                     Tugas
                                 </header>
                                 <div class="form">

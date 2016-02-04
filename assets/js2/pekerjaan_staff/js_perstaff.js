@@ -12,15 +12,78 @@ $(document).ready(function () {
 	document.title = "Daftar Pekerjaan Staff - Task Management";
     $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
     $('#submenu_pekerjaan_ul').show();
-    init_tabel_skp_staff();
-    init_tabel_tugas();
-//    init_tabel_tambahan_staff();
-//    init_tabel_kreativitas();
+    ubah_periode();
 });
 function ubah_periode() {
     init_tabel_skp_staff();
     init_tabel_tugas();
+    init_tabel_usulan();
 }
+
+var tabel_usulan = null;
+
+function init_tabel_usulan(){
+    if (tabel_usulan != null) {
+        tabel_usulan.fnDestroy();
+    }
+    var tabel = $('#tabel_usulan_body');
+    $.ajax({
+        type: "get",
+        url: site_url + "/pekerjaan_staff/get_list_usulan",
+        data: {
+            periode: $('#select_periode').val(),
+            id_staff: id_staff
+        },
+        success: function (data) {
+            tabel.html('');
+            var json = JSON.parse(data);
+//            var list_pekerjaan = json['pekerjaan'];
+            var counter = 0;
+            for (var i = 0, i2 = json.length; i < i2; i++) {
+                counter++;
+                var pekerjaan = json[i];
+                var anggota = '';
+                for(var j=0, j2=list_staff.length; j<j2; j++){
+                    var staff = list_staff[j];
+                    if(staff['id_akun'] == pekerjaan['id_pengusul']){
+                        anggota = staff['nama'];
+                        break;
+                    }
+                }
+                var kategori = 'Pekerjaan Rutin';
+                if(pekerjaan['kategori'] == 'project'){
+                    kategori = 'Pekerjaan Project';
+                }else if(pekerjaan['kategori'] == 'tambahan'){
+                    kategori = 'Pekerjaan Tambahan';
+                }else if(pekerjaan['kategori'] == 'kreativitas'){
+                    kategori = 'Pekerjaan Kreativitas';
+                }
+                var aksi = '<div class="btn-group">';
+                aksi += '<button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button">Aksi <span class="caret"></span></button>';
+                aksi += '<ul class="dropdown-menu">';
+                aksi += '<li><a href="' + site_url + '/pekerjaan_staff/detail_usulan?id_pekerjaan=' + pekerjaan['id_pekerjaan'] + '" target="">Detail Usulan</a></li>';
+                aksi += '<li><a href="' + site_url + '/pekerjaan_staff/edit_usulan?id_pekerjaan=' + pekerjaan['id_pekerjaan'] + '" target="">Edit Usulan</a></li>';
+                aksi += '<li><a href="javascript:dialog_hapus_usulan(' + pekerjaan['id_pekerjaan'] + ')" target="">Hapus Usulan</a></li>';
+                aksi += '</ul>';
+                aksi += '</div>'
+                var html = '<tr>'
+                        + '<td>' + counter + '</td>'
+                        + '<td>' + pekerjaan['nama_pekerjaan'] + '</td>'
+                        + '<td>' + pekerjaan['tanggal_mulai'] + ' - ' + pekerjaan['tanggal_selesai'] + '</td>'
+                        + '<td>' + anggota + '</td>'
+                        + '<td>' + kategori + '</td>'
+                        + '<td>' + aksi + '</td>'
+                        + '</tr>';
+                tabel.append(html);
+            }
+            tabel_usulan = $('#tabel_usulan').dataTable();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+
+        }
+    });
+}
+
 var tabel_tugas = null;
 var list_tugas_staff = [];
 function init_tabel_tugas() {
@@ -92,7 +155,6 @@ function init_tabel_tugas() {
 
         }
     });
-
 }
 var list_pekerjaan_staff = [];
 function init_tabel_skp_staff() {
