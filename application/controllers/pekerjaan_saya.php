@@ -562,15 +562,15 @@ class pekerjaan_saya extends ceklogin {
                 return $hasil;
             }
         }
-        if ($pekerjaan["id_penanggung_jawab"] == $session["id_akun"]) {
-            //penanggung jawab berhak menghapus berkas apapun yang berkaitan dengan pekerjaan ini
-            if (file_exists($berkas['path'])) {
-                unlink($berkas['path']);
-            }
-            $this->db->query("delete from file where id_file='$id_file'");
-            $hasil["status"] = "ok";
-            return $hasil;
-        }
+//        if ($pekerjaan["id_penanggung_jawab"] == $session["id_akun"]) {
+//            //penanggung jawab berhak menghapus berkas apapun yang berkaitan dengan pekerjaan ini
+//            if (file_exists($berkas['path'])) {
+//                unlink($berkas['path']);
+//            }
+//            $this->db->query("delete from file where id_file='$id_file'");
+//            $hasil["status"] = "ok";
+//            return $hasil;
+//        }
         $id_detil_pekerjaan = $berkas['id_detil_pekerjaan'];
         /* $q = $this->db->query("select * from detil_pekerjaan where id_detil_pekerjaan='$id_detil_pekerjaan'")->result_array();
           if (count($q) <= 0) {

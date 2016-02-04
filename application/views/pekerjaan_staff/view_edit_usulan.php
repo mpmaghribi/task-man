@@ -20,21 +20,9 @@ $this->load->view("taskman_header_page");
                                 <div class="tab-content">
                                     <div id="div_skp" class="tab-pane active">
                                         <div class="form">
-                                            <form class="cmxform form-horizontal " id="form_edit_usulan" method="POST" action="<?php echo site_url() ?>/pekerjaan_saya/update_usulan" enctype="multipart/form-data">
+                                            <form class="cmxform form-horizontal " id="form_edit_usulan" method="POST" action="<?php echo site_url() ?>/pekerjaan_staff/update_usulan" enctype="multipart/form-data">
                                                 <input type="hidden" name="jenis_usulan" value="usulan"/>
                                                 <input type="hidden" name="id_pekerjaan" value="<?=$pekerjaan['id_pekerjaan']?>"/>
-                                                <div class="form-group ">
-                                                    <label for="staff" class="control-label col-lg-3">Atasan</label>
-                                                    <div class="col-lg-6">
-                                                    	<select class="form-control" id="select_atasan" name="atasan">
-                                                            <?php
-                                                            foreach($list_atasan as $atasan){
-                                                                echo '<option value="'.$atasan->id_akun.'">'.$atasan->nama.'</option>';
-                                                            }
-                                                            ?>
-                                                    	</select>
-                                                    </div>
-                                                </div>
                                                 <div class="form-group ">
                                                     <label for="sifat_pkj" class="control-label col-lg-3">Sifat Pekerjaan</label>
                                                     <div class="col-lg-6">
@@ -202,9 +190,9 @@ $this->load->view("taskman_header_page");
         <!--right sidebar end-->
     </section>
     <?php $this->load->view("taskman_footer_page"); ?>
-    <script type="text/javascript" src="<?= base_url() ?>assets/js2/pekerjaan_saya/js_usulan.js"></script>
+    <script type="text/javascript" src="<?= base_url() ?>assets/js2/pekerjaan_staff/js_usulan.js"></script>
     <script >
-        var list_users = <?php echo json_encode($list_users); ?>;
+        var list_users = <?php echo json_encode($list_user); ?>;
         var pekerjaan =<?= json_encode($pekerjaan) ?>;
         var detil_pekerjaan = <?= json_encode($detil_pekerjaan) ?>;
         var site_url='<?=site_url()?>';
@@ -260,7 +248,7 @@ $this->load->view("taskman_header_page");
                     id_file: id_file,
                 }, 
                 type: "get",
-                url: "<?php echo site_url(); ?>/pekerjaan_saya/hapus_file_json", 
+                url: "<?php echo site_url(); ?>/pekerjaan_staff/hapus_file_json", 
                 success: function (response) { 
                     var json = jQuery.parseJSON(response);
                     if (json.status === "ok") {

@@ -62,7 +62,7 @@ function init_tabel_usulan(){
                 aksi += '<button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button">Aksi <span class="caret"></span></button>';
                 aksi += '<ul class="dropdown-menu">';
                 aksi += '<li><a href="' + site_url + '/pekerjaan_staff/detail_usulan?id_pekerjaan=' + pekerjaan['id_pekerjaan'] + '" target="">Detail Usulan</a></li>';
-                aksi += '<li><a href="' + site_url + '/pekerjaan_staff/edit_usulan?id_pekerjaan=' + pekerjaan['id_pekerjaan'] + '" target="">Edit Usulan</a></li>';
+                aksi += '<li><a href="' + site_url + '/pekerjaan_staff/view_edit_usulan?id_pekerjaan=' + pekerjaan['id_pekerjaan'] + '" target="">Edit Usulan</a></li>';
                 aksi += '<li><a href="javascript:dialog_hapus_usulan(' + pekerjaan['id_pekerjaan'] + ')" target="">Hapus Usulan</a></li>';
                 aksi += '</ul>';
                 aksi += '</div>'
