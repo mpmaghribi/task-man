@@ -36,7 +36,7 @@ $list_kategori = array(
                                 </ul>
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                     <a class="btn btn-danger btn-xs" href="<?php echo site_url(); ?>/pekerjaan_saya/view_edit_usulan?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
-                                    <a class="btn btn-warning btn-xs" href="javascript:hapus_usulan();" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
+                                    <a class="btn btn-warning btn-xs" href="javascript:dialog_hapus_usulan();" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                 </div>
                             </header>
                             <div class="panel-body">
@@ -233,11 +233,16 @@ $list_kategori = array(
 			$('#submenu_pekerjaan_ul').show();
 		});
 		
-		function hapus_usulan(){
-			if(confirm("Anda akan membatalkan usulan pekerjaan " + pekerjaan["nama_pekerjaan"] + ". Lanjutkan?") == false){
-				return;
-			}
-			window.location = site_url + "/pekerjaan_saya/hapus_usulan?id_pekerjaan=" + pekerjaan["id_pekerjaan"];
+                function dialog_hapus_usulan(){
+                    $("#modal_any").modal("show");
+                    $("#modal_any_title").html("Konfirmasi Hapus Usulan");
+                    $("#modal_any_body").html('<h5>Anda akan menghapus usulan pekerjaan <strong>'+pekerjaan['nama_pekerjaan']+'</strong>. Lanjutkan?</h5>');
+                    $("#modal_any_button_cancel").attr({'class': 'btn btn-success'}).html("Batal");
+                    $("#modal_any_button_ok").attr({onclick: 'hapus_usulan()', 'class': 'btn btn-danger'}).html("Hapus Usulan");
+                }
+                
+		function hapus_usulan(){	
+                    window.location = site_url + "/pekerjaan_saya/hapus_usulan_page?id_pekerjaan=" + pekerjaan["id_pekerjaan"];
 		}
 		
 		function _(el) {

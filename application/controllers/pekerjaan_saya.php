@@ -118,8 +118,8 @@ class pekerjaan_saya extends ceklogin {
             "id_akun" => $session["id_akun"],
             "skor" => 0,
             "progress" => 0,
-            "sasaran_angka_kredit" => abs(floatval($this->input->post("angka_kredit"))),
-            "sasaran_kuantitas_output" => max(intval($this->input->post("kuantitas"))),
+            "sasaran_angka_kredit" => max(floatval($this->input->post("angka_kredit")), 1),
+            "sasaran_kuantitas_output" => max(intval($this->input->post("kuantitas")), 1),
             "sasaran_kualitas_mutu" => max(1, min(100, intval($this->input->post("kualitas")))),
             "sasaran_waktu" => 12,
             "sasaran_biaya" => ($biaya == "-" ? 0 : abs(floatval($biaya))),
@@ -339,18 +339,20 @@ class pekerjaan_saya extends ceklogin {
             "level_prioritas" => intval($this->input->post("prioritas")),
             "kategori" => $kategori,
             "id_penanggung_jawab" => $atasan,
-            "periode" => intval($this->input->post("periode")),
+            "periode" => abs(intval($this->input->post("periode"))),
             "level_manfaat" => $level_manfaat
         );
         $biaya = $this->input->post("biaya");
         $this->db->trans_begin();
         $this->db->query("set datestyle to 'ISO, DMY'");
+        $kualitas = intval($this->input->post("kualitas_mutu"));
+        $kualitas = max(min($kualitas,100),1);
         $this->db->update("pekerjaan", $update_pekerjaan, array("id_pekerjaan"=>$id_pekerjaan));
         $update_detil_pekerjaan = array(
-            "sasaran_angka_kredit" => floatval($this->input->post("angka_kredit")),
-            "sasaran_kuantitas_output" => intval($this->input->post("kuantitas_output")),
-            "sasaran_kualitas_mutu" => intval($this->input->post("kualitas_mutu")),
-            "sasaran_biaya" => ($biaya == "-" ? 0 : floatval($biaya)),
+            "sasaran_angka_kredit" => abs(floatval($this->input->post("angka_kredit"))),
+            "sasaran_kuantitas_output" => max(intval($this->input->post("kuantitas_output"),1)),
+            "sasaran_kualitas_mutu" => $kualitas,
+            "sasaran_biaya" => ($biaya == "-" ? 0 : max(floatval($biaya), 1)),
             "pakai_biaya" => ($biaya == "-"? 0 : 1),
             "satuan_kuantitas" => $this->input->post("satuan_kuantitas")
         );
@@ -457,7 +459,7 @@ class pekerjaan_saya extends ceklogin {
         $session = $this->session->userdata('logged_in');
         $my_id = $session['user_id'];
         $q = $this->db->query(
-                        "select assign_tugas.*, 
+                "select assign_tugas.*, 
 		pekerjaan.nama_pekerjaan, 
 		aktivitas_pekerjaan.id_aktivitas, aktivitas_pekerjaan.status_validasi as status_validasi_aktivitas, 
 		to_char(assign_tugas.tanggal_mulai,'YYYY-MM-DD') as tanggal_mulai2,
@@ -479,6 +481,20 @@ class pekerjaan_saya extends ceklogin {
     function hapus_usulan_json() {
         $hasil = $this->hapus_usulan();
         echo json_encode($hasil);
+    }
+    
+    function hapus_usulan_page(){
+        $session = $this->session->userdata("logged_in");
+        $hasil = $this->hapus_usulan();
+        if($hasil["status"] == "ok"){
+            redirect(site_url().'/pekerjaan_saya');
+        }else{
+            $data=array("data_akun" => $session);
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = $hasil['reason'];
+            $this->load->view('pekerjaan/kesalahan', $data);
+            return;
+        }
     }
 
     private function hapus_usulan() {
