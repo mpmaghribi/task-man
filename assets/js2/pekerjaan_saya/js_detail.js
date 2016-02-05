@@ -88,18 +88,43 @@ function init_tabel_file_progress() {
         },
         "createdRow": function (row, data, index) {
             var id = data[0];
-            var status_validasi=parseInt(data[3]);
+            var status_validasi = parseInt(data[3]);
             var html = '<a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + id + '" id="" style="font-size: 10px" target="_blank">Download</a>';
             if (status_validasi == 0) {
-                html += '<a class="btn btn-danger btn-xs" href="javascript:hapus_file(' + id+ ',\'' + data[1]+ '\')" id="" style="font-size: 10px" target="_blank">Hapus</a>';
+                html += '<a class="btn btn-danger btn-xs" href="javascript:dialog_hapus_file(' + id + ')" id="" style="font-size: 10px" target="_blank">Hapus</a>';
             }
-            
+
             $('td', row).eq(0).html(index + 1);
             $('td', row).eq(3).html(html).css('text-align', 'right');
 
-            $(row).attr('id', 'row_' + id)
+            $(row).attr('id', 'berkas_' + id)
         }
     });
+}
+function dialog_hapus_file(id_file){
+    var berkas_nama = $($('#berkas_'+id_file).children()[1]).html();
+    $('#modal_any').modal('show');
+    $('#modal_any_title').html('Konfirmasi Hapus Berkas');
+    $('#modal_any_body').html('<h5>Anda akan menghapus berkas <strong>'+berkas_nama+'</strong>. Lanjutkan?</h5>');
+    $('#modal_any_button_cancel').attr({class: 'btn btn-success'}).html('Batal');
+    $('#modal_any_button_ok').attr({class: 'btn btn-danger', 'onclick': 'hapus_file('+id_file+');'}).html('Hapus');
+}
+function hapus_file(id_file){
+        $.ajax({
+            data: {id_file: id_file
+            }, // get the form data
+            type: "get", // GET or POST
+            url: site_url+"/pekerjaan_saya/hapus_file_json",
+            success: function (response) {
+                var json = JSON.parse(response);
+                if (json['status'] == "ok") {
+                    init_tabel_file_progress();
+                } else {
+                    alert("Gagal menghapus file, " + json['reason']);
+                }
+            }
+        });
+ 
 }
 function berkas_aktivitas_changed(elm) {
     var tabel = $('#tabel_berkas_aktivitas');
