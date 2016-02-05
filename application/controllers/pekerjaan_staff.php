@@ -1249,7 +1249,7 @@ class pekerjaan_staff extends ceklogin {
         if (!in_array($level_manfaat, array(1, 2, 3))) {
             $level_manfaat = 1;
         }
-        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan' and status_pekerjaan=7")->result_array();
         if (count($q) <= 0) {
             header('refresh:1;url=' . site_url() . '/pekerjaan_staff');
             echo 'Pekerjaan tidak dapat ditemukan';
@@ -1313,24 +1313,15 @@ class pekerjaan_staff extends ceklogin {
         print_r($date1);
         print_r($date2);
         print_r($interval);
-        if ($kategori_pakerjaan == 'rutin') {
-            $pekerjaan['periode'] = $periode;
-            $pekerjaan['tgl_mulai'] = $tanggal_mulai;
-            $pekerjaan['tgl_selesai'] = $tanggal_selesai;
-            $pekerjaan['kategori'] = 'rutin';
-        } else {
-            $pekerjaan['tgl_mulai'] = $tanggal_mulai;
-            $pekerjaan['tgl_selesai'] = $tanggal_selesai;
-            if (in_array($kategori_pakerjaan, array('project', 'tambahan', 'kreativitas'))) {
-                $pekerjaan['kategori'] = $kategori_pakerjaan;
-                if ($kategori_pakerjaan == 'kreativitas') {
-                    $pekerjaan['level_manfaat'] = $level_manfaat;
-                }
-            } else {
-                redirect(site_url() . '/pekerjaan_staff');
-                return;
-            }
-        }
+
+        $pekerjaan['periode'] = $periode;
+        $pekerjaan['tgl_mulai'] = $tanggal_mulai;
+        $pekerjaan['tgl_selesai'] = $tanggal_selesai;
+        $pekerjaan['kategori'] = 'rutin';
+        $pekerjaan['tgl_mulai'] = $tanggal_mulai;
+        $pekerjaan['tgl_selesai'] = $tanggal_selesai;
+        $pekerjaan['kategori'] = $kategori_pakerjaan;
+        $pekerjaan['level_manfaat'] = $level_manfaat;
         $this->db->trans_begin();
         $this->db->query("set datestyle to 'European'");
 
@@ -1355,14 +1346,14 @@ class pekerjaan_staff extends ceklogin {
                     'id_akun' => $id_staff
                 );
 
-                $detil_pekerjaan['sasaran_angka_kredit'] = max(0,$angka_kredit);
-                $detil_pekerjaan['sasaran_kuantitas_output'] = max(1,$kuantitas_output);
-                $detil_pekerjaan['sasaran_kualitas_mutu'] = max(1,min(100,$kualitas_mutu));
+                $detil_pekerjaan['sasaran_angka_kredit'] = max(0, $angka_kredit);
+                $detil_pekerjaan['sasaran_kuantitas_output'] = max(1, $kuantitas_output);
+                $detil_pekerjaan['sasaran_kualitas_mutu'] = max(1, min(100, $kualitas_mutu));
                 if ($biaya == '-') {
                     $detil_pekerjaan['pakai_biaya'] = 0;
                 } else {
                     $detil_pekerjaan['pakai_biaya'] = 1;
-                    $detil_pekerjaan['sasaran_biaya'] = max(1,floatval($biaya));
+                    $detil_pekerjaan['sasaran_biaya'] = max(1, floatval($biaya));
                 }
                 $detil_pekerjaan['satuan_kuantitas'] = $satuan_kuantitas;
                 $detil_pekerjaan['sasaran_waktu'] = $bulan;
