@@ -12,10 +12,10 @@ $nama_periode=array(
     'oktober'=>'Oktober',
     'november'=>'November',
     'desember'=>'Desember',
-    'tri_1'=>'Trisemester I',
-    'tri_2'=>'Trisemester II',
-    'tri_3'=>'Trisemester III',
-    'tri_4'=>'Trisemester IV',
+    'tri_1'=>'Triwulan I',
+    'tri_2'=>'Triwulan II',
+    'tri_3'=>'Triwulan III',
+    'tri_4'=>'Triwulan IV',
     'sms_1'=>'Semester I',
     'sms_2'=>'Semester II'
 );
