@@ -67,7 +67,7 @@
                                                 <th>Pekerjaan</th>
                                                 <th>Deadline</th>
                                                 <th>Assign To</th>
-                                                <th style="">Status</th>
+                                                <th style="">Kategori</th>
                                                 <th style="">Aksi</th>
                                             </tr>
                                         </thead>
@@ -132,6 +132,22 @@
                 </div>
                 <!-- page end-->
             </section>
+            <div class="modal fade" id="modal_any" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="modal_any_title">Modal Title</h4>
+                            </div>
+                            <div class="form modal-body" id="modal_any_body">
+                            </div>
+                            <div class="modal-footer">
+                                <button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_cancel">Cancel</button>
+                                <button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_ok">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </section>
         <!--main content end-->
         <!--right sidebar start-->

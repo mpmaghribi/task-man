@@ -66,7 +66,7 @@ function init_tabel_usulan(){
                 aksi += '<li><a href="javascript:dialog_hapus_usulan(' + pekerjaan['id_pekerjaan'] + ')" target="">Hapus Usulan</a></li>';
                 aksi += '</ul>';
                 aksi += '</div>'
-                var html = '<tr>'
+                var html = '<tr id="row_pekerjaan_'+pekerjaan['id_pekerjaan']+'">'
                         + '<td>' + counter + '</td>'
                         + '<td>' + pekerjaan['nama_pekerjaan'] + '</td>'
                         + '<td>' + pekerjaan['tanggal_mulai'] + ' - ' + pekerjaan['tanggal_selesai'] + '</td>'
@@ -213,7 +213,7 @@ function init_tabel_skp_staff() {
                 }
                 var status_pekerjaan_arr = p['status_pekerjaan2'].split(',');
                 var status_pekerjaan = '<span class="label ' + warna_label[status_pekerjaan_arr[0]] + ' label-mini">' + status_pekerjaan_arr[1] + '</span>';
-                var html = '<tr>'
+                var html = '<tr id="row_pekerjaan_'+p['id_pekerjaan']+'">'
                         + '<td id="pekerjaan_no_' + p['id_pekerjaan'] + '"></td>'
                         + '<td id="pekerjaan_nama_' + p['id_pekerjaan'] + '"></td>'
                         + '<td id="pekerjaan_periode_' + p['id_pekerjaan'] + '"></td>'
@@ -268,11 +268,47 @@ function dialog_hapus_tugas(id) {
         }
     });
 }
+
+function dialog_hapus_usulan(id_pekerjaan){
+    var deskripsi = $($("#row_pekerjaan_"+id_pekerjaan).children()[1]).html();
+    $('#modal_any').modal('show');
+    $('#modal_any_title').html('Konfirmasi Hapus Usulan Pekerjaan');
+    $('#modal_any_body').html('<h5>Anda akan menghapus usulan pekerjaan <strong>'+deskripsi+'</strong>. Lanjutkan?</h5>');
+    $('#modal_any_button_cancel').attr({class: 'btn btn-success'}).html('Batal');
+    $('#modal_any_button_ok').attr({class: 'btn btn-danger', 'onclick': 'hapus_usulan('+id_pekerjaan+');'}).html('Hapus');
+}
+
+function hapus_usulan(id_pekerjaan){
+    $.ajax({
+        type: "get",
+        url: site_url + "/pekerjaan_staff/hapus_usulan_json",
+        data: {
+            id_pekerjaan: id_pekerjaan
+        },
+        success: function (data) {
+            var json = JSON.parse(data);
+            if (json['status'] == 'ok') {
+                init_tabel_usulan();
+            }else{
+                alert(json['reason']);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+
+        }
+    });
+}
+
 function dialog_hapus_pekerjaan(id) {
-    var pekerjaan = list_pekerjaan_staff[id];
-    if (confirm('Anda akan menghapus pekerjaan "' + pekerjaan['nama_pekerjaan'] + '". Lanjutkan?') == false) {
-        return;
-    }
+    var deskripsi = $($("#row_pekerjaan_"+id).children()[1]).html();
+    $('#modal_any').modal('show');
+    $('#modal_any_title').html('Konfirmasi Hapus Pekerjaan');
+    $('#modal_any_body').html('<h5>Anda akan menghapus pekerjaan <strong>'+deskripsi+'</strong>. Lanjutkan?</h5>');
+    $('#modal_any_button_cancel').attr({class: 'btn btn-success'}).html('Batal');
+    $('#modal_any_button_ok').attr({class: 'btn btn-danger', 'onclick': 'hapus_pekerjaan('+id+');'}).html('Hapus');
+}
+
+function hapus_pekerjaan(id){
     $.ajax({
         type: "get",
         url: site_url + "/pekerjaan_staff/batalkan_v2",
@@ -280,8 +316,11 @@ function dialog_hapus_pekerjaan(id) {
             id_pekerjaan: id
         },
         success: function (data) {
-            if (data == 'ok') {
+            var json = JSON.parse(data);
+            if (json['status'] == 'ok') {
                 init_tabel_skp_staff();
+            }else{
+                alert(json['reason']);
             }
         },
         error: function (xhr, ajaxOptions, thrownError) {

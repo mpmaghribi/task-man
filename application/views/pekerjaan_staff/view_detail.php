@@ -37,7 +37,7 @@ foreach ($users as $u) {
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -35px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
                                     <a class="btn btn-info btn-xs" href="javascript:void(0);" id="tombol_validasi_usulan" style="font-size: 10px;display:none" onclick="validasi_usulan(<?= $pekerjaan['id_pekerjaan'] ?>);">Validasi</a>
                                     <a class="btn btn-danger btn-xs" href="<?php echo site_url(); ?>/pekerjaan_staff/edit?id_pekerjaan=<?php echo $pekerjaan['id_pekerjaan']; ?>" id="tombol_edit_usulan" style="font-size: 10px">Edit</a>
-                                    <a class="btn btn-warning btn-xs" href="javascript:batalkan_pekerjaan();" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
+                                    <a class="btn btn-warning btn-xs" href="javascript:dialog_batalkan_pekerjaan();" id="tombol_batalkan_usulan" style="font-size: 10px">Batalkan</a>
                                     <a class="btn btn-primary btn-xs" href="javascript:void(0);" id="tombol_perpanjang" style="font-size: 10px;display:none">Perpanjangan Telah Dikirim</a>
                                     <a class="btn btn-primary btn-xs" href="javascript:void(0);" id="setuju_perpanjang"  style="font-size: 10px;display:none">Minta Diperpanjang</a>
                                     <a class="btn btn-primary btn-xs" data-toggle="modal" href="#modal_perpanjang" id="tombol_perpanjang" style="font-size: 10px;display:none">Minta Perpanjang</a>
@@ -71,16 +71,11 @@ foreach ($users as $u) {
                                         </div>
                                         <div class="col-md-12">
                                             <section class="panel">
-                                                <h4 style="color: #1FB5AD;">
+                                                <h4 style="color: #1FB5AD;"> Penanggung Jawab
                                                     <?php
-                                                    if ($pekerjaan['status_pekerjaan'] == '7') {
-                                                        echo 'Pembuat Pekerjaan';
-                                                    } else {
-                                                        echo 'Ditujukan Kepada';
-                                                    }
                                                     $list_kategori = array(
-                                                        'rutin' => 'SKP Rutin',
-                                                        'project' => 'SKP Project',
+                                                        'rutin' => 'Pekerjaan Rutin',
+                                                        'project' => 'Pekerjaan Project',
                                                         'tambahan' => 'Pekerjaan Tambahan',
                                                         'kreativitas' => 'Pekerjaan Kreativitas'
                                                     );
@@ -412,6 +407,22 @@ foreach ($users as $u) {
                 <!--script for this page only-->
                 <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
             </section>
+            <div class="modal fade" id="modal_any" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="modal_any_title">Modal Title</h4>
+                            </div>
+                            <div class="form modal-body" id="modal_any_body">
+                            </div>
+                            <div class="modal-footer">
+                                <button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_cancel">Cancel</button>
+                                <button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_ok">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </section>
         <!--main content end-->
         <!--right sidebar start-->
@@ -423,206 +434,215 @@ foreach ($users as $u) {
     $this->load->view("taskman_footer_page");
     ?>
     <script>
-                                                                    var id_pekerjaan = <?= $pekerjaan['id_pekerjaan'] ?>;
-                                                                    var base_url = '<?= base_url() ?>';
-                                                                    var site_url = '<?= site_url() ?>';
-                                                                    var id_staff =<?= $id_staff ?>;
-                                                                    var file_progress = <?= json_encode($file_progress) ?>;
-                                                                    var detil_pekerjaan = <?= json_encode($detil_pekerjaan) ?>;
-                                                                    var users = <?= json_encode($users) ?>;
-                                                                    $(document).ready(function () {
-                                                                        document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
-                                                                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + $('#id_detail_pkj').val());
-                                                                        $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-                                                                        $('#submenu_pekerjaan_ul').show();
-                                                                        $('#staff_pekerjaan').dataTable({
-                                                                            "columnDefs": [{"targets": [0], "orderable": false}],
-                                                                        });
-                                                                        $('#tabel_file_pendukung').dataTable({
-                                                                            "columnDefs": [{"targets": [2], "orderable": false}],
-                                                                        });
-                                                                        init_file_progress();
-                                                                    });
-                                                                    var tabel_file_progress = null;
-                                                                    function init_file_progress() {
-                                                                        var tabel = $('#tabel_file_progress_body');
-                                                                        for (var i = 0, i2 = file_progress.length; i < i2; i++) {
-                                                                            var berkas = file_progress[i];
-                                                                            var nama_staff = '';
-                                                                            for (var j = 0, j2 = detil_pekerjaan.length; j < j2; j++) {
-                                                                                var dp = detil_pekerjaan[j];
-                                                                                if (dp['id_detil_pekerjaan'] == berkas['id_detil_pekerjaan']) {
-                                                                                    for (var k = 0, k2 = users.length; k < k2; k++) {
-                                                                                        var user = users[k];
-                                                                                        if (dp['id_akun'] == user['id_akun']) {
-                                                                                            nama_staff = user['nama'];
-                                                                                            break;
-                                                                                        }
-                                                                                    }
-                                                                                    break;
-                                                                                }
-                                                                            }
-                                                                            var html = '<tr id="berkas_'+berkas['id_file']+'">'
-                                                                                    + '<td>' + (i + 1) + '</td>'
-                                                                                    + '<td>' + berkas['nama_file'] + '</td>'
-                                                                                    + '<td>' + nama_staff + '</td>'
-                                                                                    + '<td style="text-align:right"><a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + berkas['id_file'] + '" id="" style="font-size: 10px" target="_blank">Download</a><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file('+berkas['id_file']+', \''+berkas['nama_file']+'\');">Hapus</a></td>'
-                                                                                    + '</tr>';
-                                                                            tabel.append(html);
-                                                                        }
-                                                                        $('#tabel_file_progress').dataTable();
-                                                                    }
-                                                                    function batalkan_pekerjaan() {
-                                                                        var teks = "Apakah Anda yakin untuk membatalkan pekerjaan ini?";
-                                                                        if (confirm(teks) == true) {
-                                                                            window.location = site_url + '/pekerjaan_staff/batalkan?id_pekerjaan=' + id_pekerjaan + '&id_staff=' + id_staff;
-                                                                        }
-                                                                    }
+        var pekerjaan = <?= json_encode($pekerjaan); ?>;
+        var id_pekerjaan = <?= $pekerjaan['id_pekerjaan'] ?>;
+        var base_url = '<?= base_url() ?>';
+        var site_url = '<?= site_url() ?>';
+        var id_staff =<?= $id_staff ?>;
+        var file_progress = <?= json_encode($file_progress) ?>;
+        var detil_pekerjaan = <?= json_encode($detil_pekerjaan) ?>;
+        var users = <?= json_encode($users) ?>;
+        $(document).ready(function () {
+            document.title = 'Deskripsi Pekerjaan: <?php echo $pekerjaan['nama_pekerjaan']; ?> - Task Management';
+            $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + $('#id_detail_pkj').val());
+            $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+            $('#submenu_pekerjaan_ul').show();
+            $('#staff_pekerjaan').dataTable({
+                "columnDefs": [{"targets": [0], "orderable": false}],
+            });
+            $('#tabel_file_pendukung').dataTable({
+                "columnDefs": [{"targets": [2], "orderable": false}],
+            });
+            init_file_progress();
+        });
+        var tabel_file_progress = null;
+        function init_file_progress() {
+            var tabel = $('#tabel_file_progress_body');
+            for (var i = 0, i2 = file_progress.length; i < i2; i++) {
+                var berkas = file_progress[i];
+                var nama_staff = '';
+                for (var j = 0, j2 = detil_pekerjaan.length; j < j2; j++) {
+                    var dp = detil_pekerjaan[j];
+                    if (dp['id_detil_pekerjaan'] == berkas['id_detil_pekerjaan']) {
+                        for (var k = 0, k2 = users.length; k < k2; k++) {
+                            var user = users[k];
+                            if (dp['id_akun'] == user['id_akun']) {
+                                nama_staff = user['nama'];
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                var html = '<tr id="berkas_'+berkas['id_file']+'">'
+                        + '<td>' + (i + 1) + '</td>'
+                        + '<td>' + berkas['nama_file'] + '</td>'
+                        + '<td>' + nama_staff + '</td>'
+                        + '<td style="text-align:right"><a class="btn btn-info btn-xs" href="' + site_url + '/download?id_file=' + berkas['id_file'] + '" id="" style="font-size: 10px" target="_blank">Download</a><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file('+berkas['id_file']+', \''+berkas['nama_file']+'\');">Hapus</a></td>'
+                        + '</tr>';
+                tabel.append(html);
+            }
+            $('#tabel_file_progress').dataTable();
+        }
+        
+        function dialog_batalkan_pekerjaan(){
+            $('#modal_any').modal('show');
+            $('#modal_any_title').html('Konfirmasi Hapus Pekerjaan');
+            $('#modal_any_body').html('<h5>Anda akan menghapus pekerjaan <strong>'+pekerjaan['nama_pekerjaan']+'</strong>. Lanjutkan?</h5>');
+            $('#modal_any_button_cancel').attr({class: 'btn btn-success'}).html('Batal');
+            $('#modal_any_button_ok').attr({class: 'btn btn-danger', 'onclick': 'batalkan_pekerjaan();'}).html('Hapus');
+        }
+        
+        function batalkan_pekerjaan() {
+            
+                window.location = site_url + '/pekerjaan_staff/batalkan?id_pekerjaan=' + id_pekerjaan + '&id_staff=' + id_staff;
+            
+        }
 
-                                                                    function _(el) {
-                                                                        return document.getElementById(el);
-                                                                    }
-                                                                    function progressHandler(event) {
-                                                                        _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes of " + event.total;
-                                                                        var percent = (event.loaded / event.total) * 100;
-                                                                        _("progressBar").value = Math.round(percent);
-                                                                        _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
-                                                                    }
-                                                                    function completeHandler(event) {
-                                                                        _("status").innerHTML = '';
-                                                                        _("progressBar").value = 0;
-                                                                    }
-                                                                    function errorHandler(event) {
-                                                                        _("status").innerHTML = "Upload Failed";
-                                                                    }
-                                                                    function abortHandler(event) {
-                                                                        _("status").innerHTML = "Upload Aborted";
-                                                                    }
+        function _(el) {
+            return document.getElementById(el);
+        }
+        function progressHandler(event) {
+            _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes of " + event.total;
+            var percent = (event.loaded / event.total) * 100;
+            _("progressBar").value = Math.round(percent);
+            _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+        }
+        function completeHandler(event) {
+            _("status").innerHTML = '';
+            _("progressBar").value = 0;
+        }
+        function errorHandler(event) {
+            _("status").innerHTML = "Upload Failed";
+        }
+        function abortHandler(event) {
+            _("status").innerHTML = "Upload Aborted";
+        }
 
-                                                                    function uploadFile() {
-                                                                        $(".tampil_progress").css("display", "block");
-                                                                        var file = _("file1").files[0];
-                                                                        var idp = document.getElementById("id_pkj").value;
-                                                                        var nama_file = document.getElementById("nama_file").value;
-                                                                        if (file.type === "application/pdf" || file.type === "application/x-download" || file.type === "application/msword")
-                                                                        {
-                                                                            var formdata = new FormData();
-                                                                            formdata.append("file1", file);
-                                                                            formdata.append("id_pekerjaan", idp);
-                                                                            if (file.type === "application/x-download" || file.type === "application/pdf") {
-                                                                                formdata.append("nama_file", nama_file + "_" + new Date().toDateString() + ".pdf");
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                formdata.append("nama_file", nama_file + "_" + new Date().toDateString() + ".doc");
-                                                                            }
-                                                                            var ajax = new XMLHttpRequest();
-                                                                            ajax.upload.addEventListener("progress", progressHandler, false);
-                                                                            ajax.addEventListener("load", completeHandler, false);
-                                                                            ajax.addEventListener("error", errorHandler, false);
-                                                                            ajax.addEventListener("abort", abortHandler, false);
-                                                                            ajax.open("POST", "<?php echo site_url() ?>/file_upload_parser");
-                                                                            ajax.send(formdata);
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            //alert(file.name+" | "+file.size+" | "+file.type); 
+        function uploadFile() {
+            $(".tampil_progress").css("display", "block");
+            var file = _("file1").files[0];
+            var idp = document.getElementById("id_pkj").value;
+            var nama_file = document.getElementById("nama_file").value;
+            if (file.type === "application/pdf" || file.type === "application/x-download" || file.type === "application/msword")
+            {
+                var formdata = new FormData();
+                formdata.append("file1", file);
+                formdata.append("id_pekerjaan", idp);
+                if (file.type === "application/x-download" || file.type === "application/pdf") {
+                    formdata.append("nama_file", nama_file + "_" + new Date().toDateString() + ".pdf");
+                }
+                else
+                {
+                    formdata.append("nama_file", nama_file + "_" + new Date().toDateString() + ".doc");
+                }
+                var ajax = new XMLHttpRequest();
+                ajax.upload.addEventListener("progress", progressHandler, false);
+                ajax.addEventListener("load", completeHandler, false);
+                ajax.addEventListener("error", errorHandler, false);
+                ajax.addEventListener("abort", abortHandler, false);
+                ajax.open("POST", "<?php echo site_url() ?>/file_upload_parser");
+                ajax.send(formdata);
+            }
+            else
+            {
+                //alert(file.name+" | "+file.size+" | "+file.type); 
 
-                                                                            alert("Silahkan upload hanya pdf dan ms word < 2007 saja.");
-                                                                        }
-                                                                        //alert(file.name+" | "+file.size+" | "+file.type); 
+                alert("Silahkan upload hanya pdf dan ms word < 2007 saja.");
+            }
+            //alert(file.name+" | "+file.size+" | "+file.type); 
 
-                                                                    }
-                                                                    function hapus_file(id_file, deskripsi)
-                                                                    {
-                                                                        var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
-                                                                        if (c == true) {
-                                                                            $.ajax({// create an AJAX call...
-                                                                                data: {
-                                                                                    id_file: id_file
-                                                                                }, // get the form data
-                                                                                type: "get", // GET or POST
-                                                                                url: "<?php echo site_url(); ?>/pekerjaan_staff/hapus_file", // the file to call
-                                                                                success: function (response) { // on success..
+        }
+        function hapus_file(id_file, deskripsi)
+        {
+            var c = confirm("Anda yakin menghapus file " + deskripsi + "?");
+            if (c == true) {
+                $.ajax({// create an AJAX call...
+                    data: {
+                        id_file: id_file
+                    }, // get the form data
+                    type: "get", // GET or POST
+                    url: "<?php echo site_url(); ?>/pekerjaan_staff/hapus_file", // the file to call
+                    success: function (response) { // on success..
 
-                                                                                    if (response == "OK") {
-                                                                                        $('#berkas_' + id_file).remove();
-                                                                                        //$('#tombol_validasi_usulan').remove();
-                                                                                    } else {
-                                                                                        alert("Gagal menghapus file, " + response);
-                                                                                    }
-                                                                                }
-                                                                            });
-                                                                        }
-                                                                        else {
-                                                                        }
-                                                                    }
-                                                                    function ubah_komentar(id_komen) {
-                                                                        $.ajax({// create an AJAX call...
-                                                                            data: {
-                                                                                id_komentar_ubah: id_komen
-                                                                            },
-                                                                            type: "GET", // GET or POST
-                                                                            url: "<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan_by_id", // the file to call
-                                                                            success: function (response) { // on success..
-                                                                                var json = jQuery.parseJSON(response);
-                                                                                $("#komentar_pkj_ubah").val(json.data);
-                                                                            }
-                                                                        });
-                                                                        $('#ubah_komen').click(function (e) {
-                                                                            e.preventDefault();
-                                                                            var id_pkj = document.getElementById('id_detail_pkj').value;
-                                                                            $.ajax({// create an AJAX call...
-                                                                                data: {
-                                                                                    id_komentar_ubah: id_komen,
-                                                                                    isi_komentar_ubah: $('#komentar_pkj_ubah').val()
-                                                                                }, // get the form data
-                                                                                type: "GET", // GET or POST
-                                                                                url: "<?php echo site_url(); ?>/pekerjaan/ubah_komentar_pekerjaan", // the file to call
-                                                                                success: function (response) { // on success..
-                                                                                    //var json = jQuery.parseJSON(response);
-                                                                                    $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
-                                                                                }
-                                                                            });
-                                                                        });
-                                                                    }
+                        if (response == "OK") {
+                            $('#berkas_' + id_file).remove();
+                            //$('#tombol_validasi_usulan').remove();
+                        } else {
+                            alert("Gagal menghapus file, " + response);
+                        }
+                    }
+                });
+            }
+            else {
+            }
+        }
+        function ubah_komentar(id_komen) {
+            $.ajax({// create an AJAX call...
+                data: {
+                    id_komentar_ubah: id_komen
+                },
+                type: "GET", // GET or POST
+                url: "<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan_by_id", // the file to call
+                success: function (response) { // on success..
+                    var json = jQuery.parseJSON(response);
+                    $("#komentar_pkj_ubah").val(json.data);
+                }
+            });
+            $('#ubah_komen').click(function (e) {
+                e.preventDefault();
+                var id_pkj = document.getElementById('id_detail_pkj').value;
+                $.ajax({// create an AJAX call...
+                    data: {
+                        id_komentar_ubah: id_komen,
+                        isi_komentar_ubah: $('#komentar_pkj_ubah').val()
+                    }, // get the form data
+                    type: "GET", // GET or POST
+                    url: "<?php echo site_url(); ?>/pekerjaan/ubah_komentar_pekerjaan", // the file to call
+                    success: function (response) { // on success..
+                        //var json = jQuery.parseJSON(response);
+                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
+                    }
+                });
+            });
+        }
 
-                                                                    function hapus(id) {
-                                                                        $('#hapus_komen').click(function (e) {
-                                                                            //alert("pekerjaan yg divalidasi " + id_pekerjaan);
-                                                                            e.preventDefault();
-                                                                            var id_pkj = document.getElementById('id_detail_pkj').value;
-                                                                            $.ajax({// create an AJAX call...
-                                                                                data:
-                                                                                        {
-                                                                                            id_komentar: id
-                                                                                        }, // get the form data                     type: "GET", // GET or POST
-                                                                                url: "<?php echo site_url(); ?>/pekerjaan/hapus_komentar_pekerjaan", // the file to call
-                                                                                success: function (response) { // on success..
-                                                                                    $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
-                                                                                }
-                                                                            });
-                                                                        });
-                                                                    }
+        function hapus(id) {
+            $('#hapus_komen').click(function (e) {
+                //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+                e.preventDefault();
+                var id_pkj = document.getElementById('id_detail_pkj').value;
+                $.ajax({// create an AJAX call...
+                    data:
+                            {
+                                id_komentar: id
+                            }, // get the form data                     type: "GET", // GET or POST
+                    url: "<?php echo site_url(); ?>/pekerjaan/hapus_komentar_pekerjaan", // the file to call
+                    success: function (response) { // on success..
+                        $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
+                    }
+                });
+            });
+        }
 
 
-                                                                    $('#save_komen').click(function (e) {
-                                                                        //alert("pekerjaan yg divalidasi " + id_pekerjaan);
-                                                                        e.preventDefault();
-                                                                        var id_pkj = document.getElementById('id_detail_pkj').value;
-                                                                        $.ajax({// create an AJAX call...
-                                                                            data:
-                                                                                    {
-                                                                                        id_detail_pkj: document.getElementById('id_detail_pkj').value, // get the form data
-                                                                                        komentar_pkj: document.getElementById('komentar_pkj').value,
-                                                                                        is_isi_komentar: document.getElementById('is_isi_komentar').value
-                                                                                    }, // get the form data
-                                                                            type: "GET", // GET or POST
-                                                                            url: "<?php echo site_url(); ?>/pekerjaan/komentar_pekerjaan", // the file to call
-                                                                            success: function (response) { // on success..
-                                                                                $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
-                                                                                document.getElementById('komentar_pkj').value = '';
-                                                                            }
-                                                                        });
-                                                                    });
+        $('#save_komen').click(function (e) {
+            //alert("pekerjaan yg divalidasi " + id_pekerjaan);
+            e.preventDefault();
+            var id_pkj = document.getElementById('id_detail_pkj').value;
+            $.ajax({// create an AJAX call...
+                data:
+                        {
+                            id_detail_pkj: document.getElementById('id_detail_pkj').value, // get the form data
+                            komentar_pkj: document.getElementById('komentar_pkj').value,
+                            is_isi_komentar: document.getElementById('is_isi_komentar').value
+                        }, // get the form data
+                type: "GET", // GET or POST
+                url: "<?php echo site_url(); ?>/pekerjaan/komentar_pekerjaan", // the file to call
+                success: function (response) { // on success..
+                    $('#lihat_komen').load("<?php echo site_url(); ?>/pekerjaan/lihat_komentar_pekerjaan/" + id_pkj);
+                    document.getElementById('komentar_pkj').value = '';
+                }
+            });
+        });
     </script>

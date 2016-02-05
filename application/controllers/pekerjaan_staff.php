@@ -806,16 +806,20 @@ class pekerjaan_staff extends ceklogin {
     function batalkan() {
         $result = $this->hapus_pekerjaan();
         $id_staff_c = abs(intval($this->input->get('id_staff')));
-        if ($result == 'ok') {
+        if ($result['status'] == 'ok') {
             redirect(site_url() . '/pekerjaan_staff/staff?id_staff=' . $id_staff_c);
         } else {
-            redirect(site_url() . '/pekerjaan_staff');
+//            redirect(site_url() . '/pekerjaan_staff');
+            $data=array('data_akun'=>$this->session->userdata('logged_in'));
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = $result['reason'];
+            $this->load->view('pekerjaan/kesalahan', $data);
         }
     }
 
     function batalkan_v2() {
         $result = $this->hapus_pekerjaan();
-        echo $result;
+        echo json_encode($result);
     }
 
     function hapus_tugas() {
@@ -848,6 +852,11 @@ class pekerjaan_staff extends ceklogin {
             $data['deskripsi_kesalahan'] = 'Pekerjaan tidak dapat ditemukan';
             $this->load->view('pekerjaan/kesalahan', $data);
         }
+    }
+    
+    function hapus_usulan_json(){
+        $hasil = $this->hapus_usulan();
+        echo json_encode($hasil);
     }
 
     private function hapus_usulan() {
@@ -884,6 +893,7 @@ class pekerjaan_staff extends ceklogin {
     private function hapus_pekerjaan() {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
         $session = $this->session->userdata('logged_in');
+        $hasil = array('status'=>'fail','reason'=>'');
         $this->db->trans_begin();
         $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         $pekerjaan = null;
@@ -892,11 +902,15 @@ class pekerjaan_staff extends ceklogin {
         }
         if ($pekerjaan == null) {
 //            redirect(site_url() . '/pekerjaan_staff');
-            return 'Pekerjaan tidak dapat ditemukan';
+            $hasil['reason']='Pekerjaan tidak dapat ditemukan';
+//            return 'Pekerjaan tidak dapat ditemukan';
+            return $hasil;
         }
         if ($pekerjaan['id_penanggung_jawab'] != $session['user_id']) {
 //            redirect(site_url() . '/pekerjaan_staff');
-            return 'Pekerjaan tidak dapat ditemukan';
+//            return 'Pekerjaan tidak dapat ditemukan';
+            $hasil['reason']='Anda tidak berhak menghapus pekerjaan ini';
+            return $hasil;
         }
         $list_id_staff = array();
         $q = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
@@ -905,11 +919,8 @@ class pekerjaan_staff extends ceklogin {
         }
 //        foreach ($list_id_staff as $id_staff) {
 //        }
-        $q = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan'")->result_array();
-        foreach ($q as $f) {
-            if (file_exists($f['path']))
-                unlink($f['path']);
-        }
+        $files = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan'")->result_array();
+        
         $this->db->query("delete from komentar where id_pekerjaan='$id_pekerjaan' ");
         $this->db->query("delete from detil_progress where id_pekerjaan='$id_pekerjaan' ");
         $this->db->query("delete from aktivitas_pekerjaan where id_pekerjaan='$id_pekerjaan' ");
@@ -917,8 +928,13 @@ class pekerjaan_staff extends ceklogin {
 
         $this->db->query("delete from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->query("delete from pekerjaan where id_pekerjaan='$id_pekerjaan'");
+        foreach ($files as $f) {
+            if (file_exists($f['path']))
+                unlink($f['path']);
+        }
         $this->db->trans_complete();
-        return 'ok';
+        $hasil['status']='ok';
+        return $hasil;
     }
 
     function lock_nilai() {
@@ -1183,7 +1199,7 @@ class pekerjaan_staff extends ceklogin {
         $this->db->update("detil_pekerjaan", $update_detil_pekerjaan, array("id_pekerjaan" => $id_pekerjaan));
         $this->load->library(array("myuploadlib"));
         $uploader = new MyUploadLib();
-        $uploader->prosesUpload('berkas', 'upload/' . date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
+        $uploader->prosesUpload('berkas',  date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
         $uploadedFiles = $uploader->getUploadedFiles();
         foreach ($uploadedFiles as $file) {
             $berkas = array(

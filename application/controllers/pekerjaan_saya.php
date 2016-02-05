@@ -130,7 +130,7 @@ class pekerjaan_saya extends ceklogin {
         $this->db->insert("detil_pekerjaan", $detil_pekerjaan);
         $this->load->library(array('myuploadlib'));
         $uploader = new MyUploadLib();
-        $uploader->prosesUpload('berkas', 'upload/' . date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
+        $uploader->prosesUpload('berkas',  date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
         $uploadedFiles = $uploader->getUploadedFiles();
         foreach ($uploadedFiles as $file) {
             //$sql = "insert into file (id_pekerjaan,nama_file,waktu, path) values ($id_pekerjaan,'" . $file['name'] . "',now(),'" . $file['filePath'] . "')";
@@ -166,7 +166,7 @@ class pekerjaan_saya extends ceklogin {
                         ->get("pekerjaan")->result_array();
         if (count($q) < 1) {
             $data['judul_kesalahan'] = 'Tidak berhak';
-            $data['deskripsi_kesalahan'] = 'Anda belum memilih atasan untuk usulan pekerjaan';
+            $data['deskripsi_kesalahan'] = 'Pekerjaan tidak dapat ditemukan';
             $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
@@ -364,7 +364,7 @@ class pekerjaan_saya extends ceklogin {
         $this->db->update("detil_pekerjaan", $update_detil_pekerjaan, array("id_pekerjaan" => $id_pekerjaan, "id_akun" => $session["id_akun"]));
         $this->load->library(array("myuploadlib"));
         $uploader = new MyUploadLib();
-        $uploader->prosesUpload('berkas', 'upload/' . date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
+        $uploader->prosesUpload('berkas', date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
         $uploadedFiles = $uploader->getUploadedFiles();
         foreach ($uploadedFiles as $file) {
             $berkas = array(
