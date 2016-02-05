@@ -162,7 +162,7 @@ class pekerjaan_staff extends ceklogin {
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $detil_pekerjaan = $this->db->where(array('id_pekerjaan' => $id_pekerjaan))->get('detil_pekerjaan')->result_array();
         $list_file = $this->db->where(array('id_pekerjaan' => $id_pekerjaan, 'id_detil_pekerjaan' => NULL, 'id_aktivitas' => NULL, 'id_progress' => NULL, 'id_tugas' => NULL))->get('file')->result_array();
-        $list_file_progress = $this->db->where(array('id_pekerjaan' => $id_pekerjaan, 'id_detil_pekerjaan is NOT NULL' => NULL, 'id_aktivitas' => NULL, 'id_progress' => NULL, 'id_tugas' => NULL))->get('file')->result_array();
+        $list_file_progress = $this->db->where(array('id_pekerjaan' => $id_pekerjaan, 'id_detil_pekerjaan is NOT NULL' => NULL))->get('file')->result_array();
         $data = array(
             'pekerjaan' => $pekerjaan,
             'detil_pekerjaan' => $detil_pekerjaan,
@@ -207,16 +207,21 @@ class pekerjaan_staff extends ceklogin {
 
     function detail_aktivitas() {
         $session = $this->session->userdata('logged_in');
+        $data = array('data_akun'=>$session);
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
         $id_staff = (int) $this->input->get('id_staff');
         $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
         $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
         if ($pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Pekerjaan tidak dapat ditemukan';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         if ($pekerjaan['id_penanggung_jawab'] != $session['user_id']) {
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengakses pekerjaan ini';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $list_detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan' order by id_detil_pekerjaan")->result_array();
@@ -227,7 +232,9 @@ class pekerjaan_staff extends ceklogin {
             }
         }
         if ($detil_pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Staff yang anda pilih tidak terlibat dalam pekerjaan ini';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";

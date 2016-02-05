@@ -5,8 +5,8 @@ foreach ($users as $u) {
     $user[$u->id_akun] = $u;
 }
 $list_kategori = array(
-    'rutin' => 'SKP Rutin',
-    'project' => 'SKP Project',
+    'rutin' => 'Pekerjaan Rutin',
+    'project' => 'Pekerjaan Project',
     'tambahan' => 'Pekerjaan Tambahan',
     'kreativitas' => 'Pekerjaan Kreativitas'
 );
@@ -53,15 +53,7 @@ $list_tingkat_manfaat = array(
                                     <div id="deskripsiPekerjaan" class="tab-pane active">
                                         <div class="col-md-12">
                                             <section class="panel">
-                                                <h4 style="color: #1FB5AD;">
-                                                    <?php
-                                                    if ($pekerjaan['status_pekerjaan'] == '7') {
-                                                        echo 'Penanggung Jawab';
-                                                    } else if ($pekerjaan['status_pekerjaan'] == '6') {
-                                                        echo 'Ditujukan Kepada';
-                                                    }
-                                                    ?>
-                                                </h4>
+                                                <h4 style="color: #1FB5AD;">Penanggung Jawab</h4>
                                                 <p style="font-size: larger" id="nama_penanggung_jawab"><?= $user[$pekerjaan['id_penanggung_jawab']]->nama ?></p>
                                                 <h4 style="color: #1FB5AD;">Nama Pekerjaan</h4>
                                                 <p style="font-size: larger"><?= $pekerjaan['nama_pekerjaan'] ?></p>
@@ -98,7 +90,6 @@ $list_tingkat_manfaat = array(
                                                             </tr>
                                                         </thead>
                                                         <tbody id="table_file_pekerjaan_body">
-                                                           
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -195,7 +186,7 @@ $list_tingkat_manfaat = array(
                                                                 <div class="col-lg-8">
                                                                     <table class="table" id="tabel_berkas_aktivitas"></table>
                                                                     <button class="btn btn-info" id="button_pilih_berkas_aktivitas" onclick="return pilih_berkas_aktivitas();
-                                                                            return false;">Pilih Berkas</button>
+                                                                            return false;"><i class="fa fa-files-o"></i> Pilih Berkas</button>
                                                                     <div style="display:none">
                                                                         <input type="file" id="file_berkas_aktivitas" name="berkas_aktivitas[]" multiple=""/>
                                                                     </div>
@@ -203,7 +194,7 @@ $list_tingkat_manfaat = array(
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="col-lg-8 col-lg-offset-2">
-                                                                    <button class="btn btn-warning" id="button_simpan_aktivitas" onclick="simpan_aktivitas()" type="button">Simpan Aktivitas</button>
+                                                                    <button class="btn btn-warning" id="button_simpan_aktivitas" onclick="simpan_aktivitas()" type="button"><i class="fa fa-save"></i> Simpan Aktivitas</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -250,43 +241,7 @@ $list_tingkat_manfaat = array(
                                                     <h4 style="color: #1FB5AD;">
                                                         Detil Pekerjaan
                                                     </h4>
-<!--                                                    <table class="table table-striped table-hover table-condensed" id="" >
-                                                        <thead>
-                                                            <tr >
-                                                                <th style="vertical-align: middle" rowspan="2">Kegiatan</th>
-                                                                <th style="vertical-align: middle; text-align: center" colspan="5">Sasaran</th>
-                                                                <th style="vertical-align: middle; text-align: center" colspan="5">Realisasi</th>
-                                                                <th style="vertical-align: middle" rowspan="2">Penghitungan</th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>AK</th>
-                                                                <th>Kuantitas Output</th>
-                                                                <th>Kualitas Mutu</th>
-                                                                <th>Waktu</th>
-                                                                <th>Biaya</th>
-                                                                <th>AK</th>
-                                                                <th>Kuantitas Output</th>
-                                                                <th>Kualitas Mutu</th>
-                                                                <th>Waktu</th>
-                                                                <th>Biaya</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="">
-                                                            <tr>
-                                                                <td><?= $pekerjaan['nama_pekerjaan'] ?></td>
-                                                                <td><?= $detil_pekerjaan['sasaran_angka_kredit'] ?></td>
-                                                                <td><?= $detil_pekerjaan['sasaran_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
-                                                                <td><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
-                                                                <td><?= $detil_pekerjaan['sasaran_waktu'] .' '.$detil_pekerjaan['satuan_waktu'] ?></td>
-                                                                <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['sasaran_biaya'],2,',','.') : '-' ?></td>
-                                                                <td><?= $detil_pekerjaan['realisasi_angka_kredit'] ?></td>
-                                                                <td><?= $detil_pekerjaan['realisasi_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
-                                                                <td><?= $detil_pekerjaan['realisasi_kualitas_mutu'] ?>%</td>
-                                                                <td><?= $detil_pekerjaan['realisasi_waktu'] .' '.$detil_pekerjaan['satuan_waktu'] ?></td>
-                                                                <td><?= $detil_pekerjaan['pakai_biaya'] == '1' ? 'Rp. ' . number_format($detil_pekerjaan['realisasi_biaya'],2,',','.') : '-' ?></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>-->
+
                                                     <table class="table table-striped table-hover table-condensed" id="" >
                                                         <tbody id="">
                                                             <tr>
@@ -299,7 +254,6 @@ $list_tingkat_manfaat = array(
                                                             </tr>
                                                             <tr>
                                                                 <th >Sasaran</th>
-                                                            
                                                                 <td><?= $detil_pekerjaan['sasaran_angka_kredit'] ?></td>
                                                                 <td><?= $detil_pekerjaan['sasaran_kuantitas_output'] . ' ' . $detil_pekerjaan['satuan_kuantitas'] ?></td>
                                                                 <td><?= $detil_pekerjaan['sasaran_kualitas_mutu'] ?>%</td>
@@ -351,7 +305,7 @@ $list_tingkat_manfaat = array(
                                                                     continue;
                                                                 $counter++;
                                                                 echo '<tr>';
-                                                                if ($pekerjaan['id_sifat_pekerjaan'] == '2') {
+                                                                if ($pekerjaan['id_sifat_pekerjaan'] == '2' && false) {
                                                                     echo '<td><a  href="' . site_url() . '/pekerjaan_staff/detail_aktivitas?id_pekerjaan=' . $pekerjaan['id_pekerjaan'] . '&id_staff=' . $dp['id_akun'] . '" class="btn btn-success btn-xs" target="_blank"><i class="fa fa-eye"> Lihat Aktivitas</i></a></td>';
                                                                 } else {
                                                                     echo '<td>' . $counter . '</td>';

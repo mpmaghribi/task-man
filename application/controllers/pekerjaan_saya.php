@@ -248,16 +248,19 @@ class pekerjaan_saya extends ceklogin {
     function detail() {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
         $session = $this->session->userdata('logged_in');
+        $data = array('data_akun'=>$session);
         $pekerjaan = null;
         $q = $this->db->query("select *, to_char(tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai "
                         . "from pekerjaan p "
                         . "inner join sifat_pekerjaan s on s.id_sifat_pekerjaan=p.id_sifat_pekerjaan "
-                        . "where p.id_pekerjaan='$id_pekerjaan'")->result_array();
+                        . "where p.id_pekerjaan='$id_pekerjaan' and p.status_pekerjaan = 7")->result_array();
         if (count($q) > 0) {
             $pekerjaan = $q[0];
         }
         if ($pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_saya');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Pekerjaan tidak dapat ditemukan';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
 
@@ -270,7 +273,9 @@ class pekerjaan_saya extends ceklogin {
             }
         }
         if ($detil_pekerjaan == null) {
-            redirect(site_url() . '/pekerjaan_saya');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Anda tidak terlibat dalam pekerjaan ini';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $id_detil_pekerjaan = $detil_pekerjaan['id_detil_pekerjaan'];
