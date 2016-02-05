@@ -465,15 +465,16 @@ class draft extends ceklogin {
         $this->db->trans_begin();
         $this->db->query("set datestyle to 'ISO, DMY'");
         $this->db->update('pekerjaan', $update, array('id_pekerjaan' => $id_draft));
-        if (isset($_FILES["berkas"])) {
-            //$path = './uploads/pekerjaan/' . $id_draft . '/';
-            $path = './uploads/' . date('Y') . '/' . date('m') . '/' . date('d') . '/' . $id_draft . '/';
-            //$this->load->library('upload');
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-            }
-            $files = $_FILES["berkas"];
-            $this->upload_file($files, $path, $id_draft);
+        $this->load->library(array('myuploadlib'));
+        $uploader = new MyUploadLib();
+        $uploader->prosesUpload('berkas', date('Y') . '/' . date('m') . '/' . $id_draft);
+        $uploadedFiles = $uploader->getUploadedFiles();
+        foreach ($uploadedFiles as $file) {
+            $this->db->insert('file', array(
+                'id_pekerjaan' => $id_draft,
+                'nama_file' => $file['name'],
+                'path' => $file['filePath']
+            ));
         }
 //                    $data['list_draft'] = $this->pekerjaan_model->get_list_draft($session['user_id']);
         $this->db->trans_complete();
