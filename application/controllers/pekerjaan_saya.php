@@ -108,6 +108,16 @@ class pekerjaan_saya extends ceklogin {
             "periode" => intval($this->input->post("periode")),
             "level_manfaat" => intval($this->input->post("manfaat"))
         );
+        $date1 = new DateTime($pekerjaan_baru['tgl_mulai']);
+        $date2 = new DateTime($pekerjaan_baru['tgl_selesai']);
+        $interval = $date1->diff($date2);
+        $bulan = $interval->m;
+        if ($interval->y > 0) {
+            $bulan+=($interval->y * 12);
+        }
+        if ($interval->d > 0) {
+            $bulan++;
+        }
         $biaya = $this->input->post("biaya");
         $this->db->trans_begin();
         $this->db->query("set datestyle to 'ISO, DMY'");
@@ -121,7 +131,7 @@ class pekerjaan_saya extends ceklogin {
             "sasaran_angka_kredit" => max(floatval($this->input->post("angka_kredit")), 1),
             "sasaran_kuantitas_output" => max(intval($this->input->post("kuantitas")), 1),
             "sasaran_kualitas_mutu" => max(1, min(100, intval($this->input->post("kualitas")))),
-            "sasaran_waktu" => 12,
+            "sasaran_waktu" => max(1,$bulan),
             "sasaran_biaya" => ($biaya == "-" ? 0 : abs(floatval($biaya))),
             "pakai_biaya" => ($biaya == "-" ? 0 : 1),
             "satuan_kuantitas" => $this->input->post("satuan_kuantitas"),
@@ -347,6 +357,16 @@ class pekerjaan_saya extends ceklogin {
             "periode" => abs(intval($this->input->post("periode"))),
             "level_manfaat" => $level_manfaat
         );
+        $date1 = new DateTime($update_pekerjaan['tgl_mulai']);
+        $date2 = new DateTime($update_pekerjaan['tgl_selesai']);
+        $interval = $date1->diff($date2);
+        $bulan = $interval->m;
+        if ($interval->y > 0) {
+            $bulan+=($interval->y * 12);
+        }
+        if ($interval->d > 0) {
+            $bulan++;
+        }
         $biaya = $this->input->post("biaya");
         $this->db->trans_begin();
         $this->db->query("set datestyle to 'ISO, DMY'");
@@ -357,6 +377,7 @@ class pekerjaan_saya extends ceklogin {
             "sasaran_angka_kredit" => abs(floatval($this->input->post("angka_kredit"))),
             "sasaran_kuantitas_output" => max(intval($this->input->post("kuantitas_output"), 1)),
             "sasaran_kualitas_mutu" => $kualitas,
+            'sasaran_waktu'=>max(1,$bulan),
             "sasaran_biaya" => ($biaya == "-" ? 0 : max(floatval($biaya), 1)),
             "pakai_biaya" => ($biaya == "-" ? 0 : 1),
             "satuan_kuantitas" => $this->input->post("satuan_kuantitas")

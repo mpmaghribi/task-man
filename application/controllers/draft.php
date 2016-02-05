@@ -383,6 +383,16 @@ class draft extends ceklogin {
         $kualitas_mutu = $detail_draft->kualitas_mutu;
         $pakai_biaya = $detail_draft->pakai_biaya;
         $biaya = $detail_draft->biaya;
+        $date1 = new DateTime($draft['tgl_mulai']);
+        $date2 = new DateTime($draft['tgl_selesai']);
+        $interval = $date1->diff($date2);
+        $bulan = $interval->m;
+        if ($interval->y > 0) {
+            $bulan+=($interval->y * 12);
+        }
+        if ($interval->d > 0) {
+            $bulan++;
+        }
         $update = $this->db->update("pekerjaan", array("deskripsi_pekerjaan" => $deskripsi_pekerjaan, "status_pekerjaan" => 7), array("id_pekerjaan" => $id_draft));
         //print_r($update);
         if ($update === true) {
@@ -393,7 +403,7 @@ class draft extends ceklogin {
                 "sasaran_angka_kredit" => $angka_kredit,
                 "sasaran_kuantitas_output" => $kuantitas_output,
                 "sasaran_kualitas_mutu" => $kualitas_mutu,
-                "sasaran_waktu" => 12,
+                "sasaran_waktu" => $bulan,
                 "sasaran_biaya" => $biaya,
                 "pakai_biaya" => $pakai_biaya,
                 "satuan_kuantitas" => $satuan_kuantitas,
