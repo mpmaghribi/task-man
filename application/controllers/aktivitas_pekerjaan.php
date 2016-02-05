@@ -118,8 +118,8 @@ class aktivitas_pekerjaan extends ceklogin {
         $kuantitas_output = abs((double) $this->input->post('kuantitas_output'));
         $kuantitas_output = 1;
         $kualitas_mutu = abs((double) $this->input->post('kualitas_mutu'));
-        $waktu_mulai = $this->input->post('waktu_mulai');
-        $waktu_selesai = $this->input->post('waktu_selesai');
+        $waktu_mulai = $this->input->post('waktu_mulai') .' '. $this->input->post('jam_mulai');
+        $waktu_selesai = $this->input->post('waktu_selesai').' '. $this->input->post('jam_selesai');
         $biaya = abs((double) $this->input->post('biaya'));
         $ak = abs((double) $this->input->post('ak'));
         $nilai_progress = intval($this->input->post('nilai_progress'));
@@ -153,8 +153,8 @@ class aktivitas_pekerjaan extends ceklogin {
             $aktivitas = array(
                 'id_pekerjaan' => $id_pekerjaan,
                 'id_detil_pekerjaan' => $detil_pekerjaan['id_detil_pekerjaan'],
-                'waktu_mulai' => $waktu_mulai . ' 08:00',
-                'waktu_selesai' => $waktu_selesai . ' 16:00',
+                'waktu_mulai' => $waktu_mulai ,
+                'waktu_selesai' => $waktu_selesai ,
                 'kuantitas_output' => $kuantitas_output,
 //                'kuantitas_output' => 1,
                 'kualitas_mutu' => $kualitas_mutu,

@@ -167,12 +167,18 @@ $list_tingkat_manfaat = array(
                                                             </div>
                                                             <div class="form-group" id="div_aktivitas_waktu">
                                                                 <label class="col-lg-2 control-label">Waktu</label>
-                                                                <div class="col-lg-4">
+                                                                <div class="col-lg-2">
                                                                     <input type="text" class="form-control" id="waktu_mulai_baru" name="waktu_mulai"/>
                                                                 </div>
-                                                                <div class="col-lg-4">
+                                                                <div class="col-lg-2">
+                                                                    <select class="form-control" id="jam_mulai_baru" name="jam_mulai"></select>
+                                                                </div>
+                                                                <div class="col-lg-2">
                                                                     <input type="text" class="form-control" id="waktu_selesai_baru" name="waktu_selesai"/>
                                                                     <!--<input type="text" class="form-control time " id="jam_selesai_baru" name="jam_selesai"/>-->
+                                                                </div>
+                                                                <div class="col-lg-2">
+                                                                    <select class="form-control" id="jam_selesai_baru" name="jam_selesai"></select>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group" id="div_aktivitas_biaya">

@@ -23,6 +23,8 @@ $(document).ready(function () {
         onRender: function (date) {
             return date < date_min || date > date_max || waktu_mulai_baru.date > date ? 'disabled' : '';
         }
+    }).on('changeDate', function (ev) {
+        waktu_selesai_baru.hide();
     }).data('datepicker');
     if (pekerjaan['kategori'] == 'rutin' || pekerjaan['kategori'] == 'project') {
         $('#tabel_progress').hide();
@@ -38,8 +40,17 @@ $(document).ready(function () {
     if (detil_pekerjaan['status'] == 'locked') {
         $('#button_tampilkan_form_aktivitas').attr({onclick: ''}).html('Locked');
     }
-//    $('#jam_selesai_baru').timepicker();
-//$('#waktu_selesai_baru').datepicker();
+    var jam_mulai = $('#jam_mulai_baru');
+    var jam_selesai = $('#jam_selesai_baru');
+    for(var i=0;i<24;i++){
+        for(var j=0;j<60;j+=5){
+            var jam = '<option value="'+i+':'+j+'">'+i+':'+j+'</option>';
+            jam_mulai.append(jam);
+            jam_selesai.append(jam);
+        }
+    }
+    jam_mulai.val('7:0');
+    jam_selesai.val('16:0');
 });
 var tabel_file_pekerjaan = null;
 function init_file_pekerjaan() {
