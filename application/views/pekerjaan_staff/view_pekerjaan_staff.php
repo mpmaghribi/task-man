@@ -159,7 +159,7 @@
                                                 <div class="form-group " id="div_biaya">
                                                     <label for="prioritas" class="control-label col-lg-3">Biaya</label>
                                                     <div class="col-lg-6">
-                                                        <input type="text" class="form-control" id="biaya" name="biaya"/>
+                                                        <input type="text" class="form-control" id="biaya" name="biaya" value="-"/>
                                                     </div>
                                                 </div>
                                                 <div class="form-group " id="div_manfaat">
@@ -195,12 +195,12 @@
                                                         <div style="display:none">
                                                             <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign" onchange="pilih_berkas_assign_changed()"/>
                                                         </div>
-                                                        <button class="btn btn-primary" type="button" id="button_pilih_berkas_assign" onclick="click_pilih_berkas_assign()">Pilih File</button>
+                                                        <button class="btn btn-info" type="button" id="button_pilih_berkas_assign" onclick="click_pilih_berkas_assign()"><i class="fa fa-files-o"></i> Pilih File</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="col-lg-offset-3 col-lg-6">
-                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                                        <button class="btn btn-success" type="submit"><i class="fa fa-save"></i> Save</button>
                                                     </div>
                                                 </div>
                                             </form>

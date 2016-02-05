@@ -207,7 +207,7 @@ class pekerjaan_staff extends ceklogin {
 
     function detail_aktivitas() {
         $session = $this->session->userdata('logged_in');
-        $data = array('data_akun'=>$session);
+        $data = array('data_akun' => $session);
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
         $id_staff = (int) $this->input->get('id_staff');
         $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
@@ -325,10 +325,10 @@ class pekerjaan_staff extends ceklogin {
 
     function setujui_usulan_page() {
         $hasil = $this->setujui_usulan();
-        if($hasil['status']=='ok'){
-            redirect(site_url().'/pekerjaan_staff/detail?id_pekerjaan='.$hasil['id_pekerjaan'].'&id_staff='.$hasil['id_staff']);
-        }else{
-            $data=array('data_akun'=>$this->session->userdata('logged_in'));
+        if ($hasil['status'] == 'ok') {
+            redirect(site_url() . '/pekerjaan_staff/detail?id_pekerjaan=' . $hasil['id_pekerjaan'] . '&id_staff=' . $hasil['id_staff']);
+        } else {
+            $data = array('data_akun' => $this->session->userdata('logged_in'));
             $data['judul_kesalahan'] = 'Kesalahan';
             $data['deskripsi_kesalahan'] = 'Pekerjaan tidak dapat ditemukan';
             $this->load->view('pekerjaan/kesalahan', $data);
@@ -345,14 +345,14 @@ class pekerjaan_staff extends ceklogin {
             return $hasil;
         }
         $pekerjaan = $q[0];
-        if($pekerjaan['id_penanggung_jawab'] != $session['id_akun']){
+        if ($pekerjaan['id_penanggung_jawab'] != $session['id_akun']) {
             $hasil['reason'] = 'Anda tidak berhak menyetujui pekerjaan ini';
             return $hasil;
         }
-        $this->db->update('pekerjaan', array('status_pekerjaan'=>7), array('id_pekerjaan'=>$id_pekerjaan));
-        $hasil['status']='ok';
-        $hasil['id_pekerjaan']=$pekerjaan['id_pekerjaan'];
-        $hasil['id_staff']=$pekerjaan['id_pengusul'];
+        $this->db->update('pekerjaan', array('status_pekerjaan' => 7), array('id_pekerjaan' => $id_pekerjaan));
+        $hasil['status'] = 'ok';
+        $hasil['id_pekerjaan'] = $pekerjaan['id_pekerjaan'];
+        $hasil['id_staff'] = $pekerjaan['id_pengusul'];
         return $hasil;
     }
 
@@ -597,10 +597,12 @@ class pekerjaan_staff extends ceklogin {
 
     function add() {
         $session = $this->session->userdata('logged_in');
+        $data = array('data_akun' => $session);
         $list_id_staff_enroll = $this->input->post('staff_enroll');
         if (!is_array($list_id_staff_enroll)) {
-            redirect(site_url() . '/pekerjaan_staff');
-            echo 'staff diperlukan';
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Anda belum meilih staff yang akan diberikan pekerjaan';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $sifat_pekerjaan = (int) $this->input->post('sifat_pkj');
@@ -612,7 +614,7 @@ class pekerjaan_staff extends ceklogin {
         $prioritas = (int) $this->input->post('prioritas');
         $list_staff = $this->akun->my_staff($session["user_id"]);
         $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
-        $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
+        $kuantitas_output = abs(intval($this->input->post('kuantitas_output')));
         $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
         if ($kualitas_mutu > 100) {
             $kualitas_mutu = 100;
@@ -662,6 +664,7 @@ class pekerjaan_staff extends ceklogin {
         print_r($date1);
         print_r($date2);
         print_r($interval);
+        $pekerjaan['kategori'] = 'rutin';
         if ($kategori_pakerjaan == 'rutin') {
             $pekerjaan['periode'] = $periode;
             $pekerjaan['tgl_mulai'] = $tanggal_mulai;
@@ -676,14 +679,10 @@ class pekerjaan_staff extends ceklogin {
                     if (!in_array($level_manfaat, array(1, 2, 3))) {
                         $level_manfaat = 1;
                     }
-                    $pekerjaan['level_manfaat'] = $level_manfaat;
                 }
-            } else {
-                redirect(site_url() . '/pekerjaan_staff');
-                echo 'kategori tidak dikenal';
-                return;
             }
         }
+        $pekerjaan['level_manfaat'] = $level_manfaat;
         $this->db->trans_begin();
         $this->db->query("set datestyle to 'European'");
 
@@ -692,11 +691,16 @@ class pekerjaan_staff extends ceklogin {
             $id_pekerjaan = $this->db->insert_id();
             $this->load->library(array('myuploadlib'));
             $uploader = new MyUploadLib();
-            $uploader->prosesUpload('berkas');
+            $uploader->prosesUpload('berkas', date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
             $uploadedFiles = $uploader->getUploadedFiles();
             foreach ($uploadedFiles as $file) {
-                $sql = "insert into file (id_pekerjaan,nama_file,waktu,path) values ($id_pekerjaan,'" . $file['name'] . "',now(),'" . $file['filePath'] . "')";
-                $this->db->query($sql);
+//                $sql = "insert into file (id_pekerjaan,nama_file,waktu,path) values ($id_pekerjaan,'" . $file['name'] . "',now(),'" . $file['filePath'] . "')";
+//                $this->db->query($sql);
+                $this->db->insert('file', array(
+                    'id_pekerjaan' => $id_pekerjaan,
+                    'nama_file' => $file['name'],
+                    'path' => $file['filePath']
+                ));
             }
             $pekerjaan_rutin = $kategori_pakerjaan == 'rutin';
             $pekerjaan_project = $kategori_pakerjaan == 'project';
@@ -706,15 +710,15 @@ class pekerjaan_staff extends ceklogin {
                     'id_akun' => $id_staff
                 );
                 if ($pekerjaan_rutin || $pekerjaan_project) {
-                    $detil_pekerjaan['sasaran_waktu'] = $bulan;
-                    $detil_pekerjaan['sasaran_angka_kredit'] = $angka_kredit;
-                    $detil_pekerjaan['sasaran_kuantitas_output'] = $kuantitas_output;
-                    $detil_pekerjaan['sasaran_kualitas_mutu'] = $kualitas_mutu;
+                    $detil_pekerjaan['sasaran_waktu'] = max(1, $bulan);
+                    $detil_pekerjaan['sasaran_angka_kredit'] = max(0, $angka_kredit);
+                    $detil_pekerjaan['sasaran_kuantitas_output'] = max(1, $kuantitas_output);
+                    $detil_pekerjaan['sasaran_kualitas_mutu'] = max(1, min(100, $kualitas_mutu));
                     if ($biaya == '-') {
                         $detil_pekerjaan['pakai_biaya'] = 0;
                     } else {
                         $detil_pekerjaan['pakai_biaya'] = 1;
-                        $detil_pekerjaan['sasaran_biaya'] = floatval($biaya);
+                        $detil_pekerjaan['sasaran_biaya'] = max(1, floatval($biaya));
                     }
 //                    $detil_pekerjaan['pakai_biaya'] = $pakai_biaya;
                     $detil_pekerjaan['satuan_kuantitas'] = $satuan_kuantitas;
@@ -730,7 +734,10 @@ class pekerjaan_staff extends ceklogin {
         } else {
             $this->db->trans_rollback();
             echo "rollback";
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Terjadi kesalahan saat membuat pekerjaan baru';
+            $this->load->view('pekerjaan/kesalahan', $data);
+            return;
         }
     }
 
@@ -810,7 +817,7 @@ class pekerjaan_staff extends ceklogin {
             redirect(site_url() . '/pekerjaan_staff/staff?id_staff=' . $id_staff_c);
         } else {
 //            redirect(site_url() . '/pekerjaan_staff');
-            $data=array('data_akun'=>$this->session->userdata('logged_in'));
+            $data = array('data_akun' => $this->session->userdata('logged_in'));
             $data['judul_kesalahan'] = 'Kesalahan';
             $data['deskripsi_kesalahan'] = $result['reason'];
             $this->load->view('pekerjaan/kesalahan', $data);
@@ -853,8 +860,8 @@ class pekerjaan_staff extends ceklogin {
             $this->load->view('pekerjaan/kesalahan', $data);
         }
     }
-    
-    function hapus_usulan_json(){
+
+    function hapus_usulan_json() {
         $hasil = $this->hapus_usulan();
         echo json_encode($hasil);
     }
@@ -893,7 +900,7 @@ class pekerjaan_staff extends ceklogin {
     private function hapus_pekerjaan() {
         $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
         $session = $this->session->userdata('logged_in');
-        $hasil = array('status'=>'fail','reason'=>'');
+        $hasil = array('status' => 'fail', 'reason' => '');
         $this->db->trans_begin();
         $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         $pekerjaan = null;
@@ -902,14 +909,14 @@ class pekerjaan_staff extends ceklogin {
         }
         if ($pekerjaan == null) {
 //            redirect(site_url() . '/pekerjaan_staff');
-            $hasil['reason']='Pekerjaan tidak dapat ditemukan';
+            $hasil['reason'] = 'Pekerjaan tidak dapat ditemukan';
 //            return 'Pekerjaan tidak dapat ditemukan';
             return $hasil;
         }
         if ($pekerjaan['id_penanggung_jawab'] != $session['user_id']) {
 //            redirect(site_url() . '/pekerjaan_staff');
 //            return 'Pekerjaan tidak dapat ditemukan';
-            $hasil['reason']='Anda tidak berhak menghapus pekerjaan ini';
+            $hasil['reason'] = 'Anda tidak berhak menghapus pekerjaan ini';
             return $hasil;
         }
         $list_id_staff = array();
@@ -920,7 +927,7 @@ class pekerjaan_staff extends ceklogin {
 //        foreach ($list_id_staff as $id_staff) {
 //        }
         $files = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan'")->result_array();
-        
+
         $this->db->query("delete from komentar where id_pekerjaan='$id_pekerjaan' ");
         $this->db->query("delete from detil_progress where id_pekerjaan='$id_pekerjaan' ");
         $this->db->query("delete from aktivitas_pekerjaan where id_pekerjaan='$id_pekerjaan' ");
@@ -933,7 +940,7 @@ class pekerjaan_staff extends ceklogin {
                 unlink($f['path']);
         }
         $this->db->trans_complete();
-        $hasil['status']='ok';
+        $hasil['status'] = 'ok';
         return $hasil;
     }
 
@@ -1199,7 +1206,7 @@ class pekerjaan_staff extends ceklogin {
         $this->db->update("detil_pekerjaan", $update_detil_pekerjaan, array("id_pekerjaan" => $id_pekerjaan));
         $this->load->library(array("myuploadlib"));
         $uploader = new MyUploadLib();
-        $uploader->prosesUpload('berkas',  date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
+        $uploader->prosesUpload('berkas', date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
         $uploadedFiles = $uploader->getUploadedFiles();
         foreach ($uploadedFiles as $file) {
             $berkas = array(
@@ -1225,7 +1232,7 @@ class pekerjaan_staff extends ceklogin {
         $tanggal_selesai = $this->input->post('tgl_selesai');
         $prioritas = (int) $this->input->post('prioritas');
         $angka_kredit = abs(floatval($this->input->post('angka_kredit')));
-        $kuantitas_output = abs(floatval($this->input->post('kuantitas_output')));
+        $kuantitas_output = intval($this->input->post('kuantitas_output'));
         $kualitas_mutu = abs(floatval($this->input->post('kualitas_mutu')));
         if ($kualitas_mutu > 100) {
             $kualitas_mutu = 100;
@@ -1334,8 +1341,11 @@ class pekerjaan_staff extends ceklogin {
             $uploader->prosesUpload('berkas');
             $uploadedFiles = $uploader->getUploadedFiles();
             foreach ($uploadedFiles as $file) {
-                $sql = "insert into file (id_pekerjaan,nama_file,waktu, path) values ($id_pekerjaan,'" . $file['name'] . "',now(),'" . $file['filePath'] . "')";
-                $this->db->query($sql);
+                $this->db->insert('file', array(
+                    'id_pekerjaan' => $id_pekerjaan,
+                    'nama_file' => $file['name'],
+                    'path' => $file['filePath']
+                ));
             }
             $pekerjaan_rutin = $kategori_pakerjaan == 'rutin';
             $pekerjaan_project = $kategori_pakerjaan == 'project';
@@ -1344,21 +1354,19 @@ class pekerjaan_staff extends ceklogin {
                     'id_pekerjaan' => $id_pekerjaan,
                     'id_akun' => $id_staff
                 );
-                if ($pekerjaan_rutin || $pekerjaan_project) {
-                    $detil_pekerjaan['sasaran_angka_kredit'] = $angka_kredit;
-                    $detil_pekerjaan['sasaran_kuantitas_output'] = $kuantitas_output;
-                    $detil_pekerjaan['sasaran_kualitas_mutu'] = $kualitas_mutu;
-                    if ($biaya == '-') {
-                        $detil_pekerjaan['pakai_biaya'] = 0;
-                    } else {
-                        $detil_pekerjaan['pakai_biaya'] = 1;
-                        $detil_pekerjaan['sasaran_biaya'] = floatval($biaya);
-                    }
-                    $detil_pekerjaan['satuan_kuantitas'] = $satuan_kuantitas;
-                    $detil_pekerjaan['sasaran_waktu'] = $bulan;
+
+                $detil_pekerjaan['sasaran_angka_kredit'] = max(0,$angka_kredit);
+                $detil_pekerjaan['sasaran_kuantitas_output'] = max(1,$kuantitas_output);
+                $detil_pekerjaan['sasaran_kualitas_mutu'] = max(1,min(100,$kualitas_mutu));
+                if ($biaya == '-') {
+                    $detil_pekerjaan['pakai_biaya'] = 0;
                 } else {
-                    
+                    $detil_pekerjaan['pakai_biaya'] = 1;
+                    $detil_pekerjaan['sasaran_biaya'] = max(1,floatval($biaya));
                 }
+                $detil_pekerjaan['satuan_kuantitas'] = $satuan_kuantitas;
+                $detil_pekerjaan['sasaran_waktu'] = $bulan;
+
                 if (in_array($id_staff, $list_id_detil_pekerjaan_update)) {
 //                    $this->db->where("locked", 0);
 //                    $this->db->where("id_pekerjaan", $id_pekerjaan);
