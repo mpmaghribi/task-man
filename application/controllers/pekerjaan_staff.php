@@ -25,7 +25,6 @@ class pekerjaan_staff extends ceklogin {
         //print_r($temp);
         $data["data_akun"] = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_insert_activity($session['user_id'], 0, "Aktivitas Pekerjaan", $session['user_nama'] . " sedang melihat progress pekerjaan dari para staffnya.");
-
         $data["my_staff"] = $this->akun->my_staff($session["user_id"]);
         $tahun_max = date('Y');
         $q = $this->db->query("select max(coalesce(date_part('year',tgl_selesai),periode,date_part('year',now()))) as tahun_max from pekerjaan")->result_array();
@@ -45,56 +44,6 @@ class pekerjaan_staff extends ceklogin {
         $this->load->view("pekerjaan_staff/view_pekerjaan_staff", $data);
     }
 
-//    function detail_tambahan() {
-//        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
-//        $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
-//        $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
-//        if ($pekerjaan == null) {
-//            redirect(site_url() . '/pekerjaan_staff');
-//            return;
-//        }
-//        if ($pekerjaan['kategori'] != 'tambahan') {
-//            redirect(site_url() . '/pekerjaan_staff');
-//            return;
-//        }
-//        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-//        $detil_pekerjaan = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
-//        $session = $this->session->userdata('logged_in');
-//        $data = array(
-//            'pekerjaan' => $pekerjaan,
-//            'detil_pekerjaan' => $detil_pekerjaan,
-//            'users' => json_decode(file_get_contents($url)),
-//            'data_akun' => $session
-//        );
-//        $my_id = $session['user_id'];
-////        $this->mark_read($my_id, $id_pekerjaan);
-//        $this->load->view('pekerjaan_staff/view_detail_tambahan', $data);
-//    }
-//    function detail_kreativitas() {
-//        $id_pekerjaan = (int) $this->input->get('id_pekerjaan');
-//        $this->load->model(array('pekerjaan_model', 'detil_pekerjaan_model'));
-//        $pekerjaan = $this->pekerjaan_model->get_pekerjaan($id_pekerjaan);
-//        if ($pekerjaan == null) {
-//            redirect(site_url() . '/pekerjaan_staff');
-//            return;
-//        }
-//        if ($pekerjaan['kategori'] != 'kreativitas') {
-//            redirect(site_url() . '/pekerjaan_staff');
-//            return;
-//        }
-//        $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
-//        $detil_pekerjaan = $this->detil_pekerjaan_model->get_detil_pekerjaan($id_pekerjaan);
-//        $session = $this->session->userdata('logged_in');
-//        $data = array(
-//            'pekerjaan' => $pekerjaan,
-//            'detil_pekerjaan' => $detil_pekerjaan,
-//            'users' => json_decode(file_get_contents($url)),
-//            'data_akun' => $session
-//        );
-//        $my_id = $session['user_id'];
-////        $this->mark_read($my_id, $id_pekerjaan);
-//        $this->load->view('pekerjaan_staff/view_detail_kreativitas', $data);
-//    }
     function detail_tugas() {
         $session = $this->session->userdata('logged_in');
         $id_tugas = intval($this->input->get('id_tugas'));
@@ -295,18 +244,24 @@ class pekerjaan_staff extends ceklogin {
     function edit() {
         $id_pekerjaan = abs(intval($this->input->get('id_pekerjaan')));
         $this->load->model(array('akun'));
+        $session = $this->session->userdata('logged_in');
+        $data = array('data_akun'=>$session);
         $pekerjaan = null;
-        $q = $this->db->query("select *, to_char(tgl_mulai,'DD-MM-YYYY') as tanggal_mulai, to_char(tgl_selesai,'DD-MM-YYYY') as tanggal_selesai from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $q = $this->db->query("select *, to_char(tgl_mulai,'DD-MM-YYYY') as tanggal_mulai, to_char(tgl_selesai,'DD-MM-YYYY') as tanggal_selesai from pekerjaan where id_pekerjaan='$id_pekerjaan' and status_pekerjaan=7")->result_array();
         if (count($q) > 0) {
             $pekerjaan = $q[0];
         }
         if ($pekerjaan == null) {
-            echo 'Pekerjaan tidak dapat ditemukan';
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Pekerjaan tidak dapat ditemukan';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
-        $session = $this->session->userdata('logged_in');
+        
         if ($session['user_id'] != $pekerjaan['id_penanggung_jawab']) {
-            echo 'Anda tidak berhak mengubah pekerjaan ini';
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengubah pekerjaan ini';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();

@@ -1,15 +1,7 @@
 var tipe_kalender = 'rutin';
 var date_min = 0;
 var date_max = 0;
-$('#periode').on('change', function () {
-    var year = parseInt(this.value);
-    date_min = new Date(year, 0, 0, 23, 59, 59, 0);
-    date_max = new Date(year + 1, 0, 1, 0, 0, 0, 0);
-    $('.dpd1').val('01-01-' + (date_min.getFullYear() + 1));
-    $('.dpd2').val('31-12-' + (date_min.getFullYear() + 1));
-});
 $(function () {
-
     var nowTemp = new Date();
     //var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 //    var now = new Date(Date.UTC(nowTemp.getFullYear(), 0, 0, 0, 0, 0, 0));

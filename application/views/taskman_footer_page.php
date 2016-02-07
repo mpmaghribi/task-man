@@ -67,8 +67,8 @@
 
 <script src="<?php echo base_url() ?>assets/js/dynamic_table_init.js"></script>
 <script>
-    var data_akun=<?=json_encode($data_akun)?>;
-    var satuhari = 1000*60*60*24;
+    var data_akun =<?= json_encode($data_akun) ?>;
+    var satuhari = 1000 * 60 * 60 * 24;
     function req_notifikasi() {
 
     }
@@ -78,7 +78,7 @@
         $.ajax({// create an AJAX call...
             type: "GET", // GET or POST
             url: "<?php echo site_url(); ?>/pekerjaan/req_pending_task", // the file to call
-            success: function(response) { // on success..
+            success: function (response) { // on success..
                 var json = jQuery.parseJSON(response);
                 //alert(response);
                 if (json.status === "OK") {
@@ -180,7 +180,7 @@
                     var jumlah_notif = 0;
                     for (var i = 0; i < jumlah_data; i++) {
                         var style = '';
-                        var text_style='';
+                        var text_style = '';
                         var id = list_id_pekerjaan[i];
                         var progress = (list_pekerjaan_progress[id] / list_jumlah_pekerja[id]);
                         if (list_id_pekerjaan_staff.indexOf(id) >= 0) {//pekerjaan staff
@@ -197,15 +197,15 @@
                                 if (jumlah_hari_lewat >= jumlah_hari_kerja) {//jika telat
                                     //console.log('telat');
                                     style = 'style="background:#FF6C60;"';
-                                    text_style='color:white !important;';
-                                } else{
-                                    var rasio= jumlah_hari_lewat/jumlah_hari_kerja;
+                                    text_style = 'color:white !important;';
+                                } else {
+                                    var rasio = jumlah_hari_lewat / jumlah_hari_kerja;
                                     //console.log('rasio = '+rasio);
-                                    if(rasio<0.2){
+                                    if (rasio < 0.2) {
                                         style = 'style="background:#A1A1A1;"';
-                                        text_style='color:white !important;';
+                                        text_style = 'color:white !important;';
                                     }
-                                    
+
                                 }
                             } else {//jika hari ini belum hari pekerjaan dimulai
                                 continue;
@@ -224,8 +224,8 @@
                                 '<a href="<?= base_url() ?>pekerjaan/deskripsi_pekerjaan?id_detail_pkj=' + id + '&sumber=notifikasi" ' + style + '>' +
                                 '<div class="task-info clearfix">' +
                                 '<div class="desc pull-left" >' +
-                                '<h5 style="text-transform:none;'+text_style+'">' + nama_pekerjaan + '</h5>' +
-                                '<p style="'+text_style+'">' + progress + '%, ' + deadline + '</p>' +
+                                '<h5 style="text-transform:none;' + text_style + '">' + nama_pekerjaan + '</h5>' +
+                                '<p style="' + text_style + '">' + progress + '%, ' + deadline + '</p>' +
                                 '</div>' +
                                 '</div>' +
                                 '</a>' +
@@ -248,79 +248,87 @@
             }
         });
     }
-	var site_url= '<?= site_url() ?>';
-	function req_pending_task2() {
+    var site_url = '<?= site_url() ?>';
+    function req_pending_task2() {
         //console.log('req_pending_task');
         var bulan = ["Januari", "February", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         $.ajax({// create an AJAX call...
             type: "GET", // GET or POST
             url: "<?php echo site_url(); ?>/pekerjaan/req_pending_task", // the file to call
-            success: function(response) { // on success..
+            success: function (response) { // on success..
                 var json = JSON.parse(response);
-				var sekarang_arr = json['sekarang'].split('-');
-				var html='';
-				var jumlah_notif=0;
-				console.log(sekarang_arr);
-				var pekerjaan=json['pekerjaan_saya'];
-				for(var i=0,i2=pekerjaan.length;i<i2;i++){
-					var p=pekerjaan[i];
-					var style='';
-					var text_style='';
-					var deadline1 = p['tanggal_selesai'].split('-');
-					var deadline = deadline1[2]+' '+ bulan[parseInt(deadline1[1])-1]+' '+deadline1[0];
-					var nama_pekerjaan=p['nama_pekerjaan'];
-					if(nama_pekerjaan.length>35){
-						nama_pekerjaan=nama_pekerjaan.substring(0,35)+'...';
-					}
-					html += '<li>' +
-							'<a href="'+site_url+'/pekerjaan_saya/detail?id_pekerjaan=' + p['id_pekerjaan'] + '&sumber=notifikasi" ' + style + '>' +
-							'<div class="task-info clearfix">' +
-							'<div class="desc pull-left" >' +
-							'<h5 style="text-transform:none;'+text_style+'">' + nama_pekerjaan + '</h5>' +
-							'<p style="'+text_style+'">' + deadline + '</p>' +
-							'</div>' +
-							'</div>' +
-							'</a>' +
-							'</li>';
-					jumlah_notif++;
-				}
-				var pekerjaan=json['pekerjaan_staff'];
-				for(var i=0,i2=pekerjaan.length;i<i2;i++){
-					var p=pekerjaan[i];
-					var style='';
-					var text_style='';
-					var deadline1 = p['tanggal_selesai'].split('-');
-					var deadline = deadline1[2]+' '+ bulan[parseInt(deadline1[1])-1]+' '+deadline1[0];
-					var nama_pekerjaan=p['nama_pekerjaan'];
-					if(nama_pekerjaan.length>35){
-						nama_pekerjaan=nama_pekerjaan.substring(0,35)+'...';
-					}
-					html += '<li>' +
-							'<a href="'+site_url+'/pekerjaan_staff/detail?id_pekerjaan=' + p['id_pekerjaan'] + '&sumber=notifikasi" ' + style + '>' +
-							'<div class="task-info clearfix">' +
-							'<div class="desc pull-left" >' +
-							'<h5 style="text-transform:none;'+text_style+'">' + nama_pekerjaan + '</h5>' +
-							'<p style="'+text_style+'">' + deadline + '</p>' +
-							'</div>' +
-							'</div>' +
-							'</a>' +
-							'</li>';
-					jumlah_notif++;
-				}
-				$("#bagian_pending_task").html(html);
-				if (jumlah_notif == 0)
-					jumlah_notif = "";
-				$("#jumlah_pending_task").html(jumlah_notif);
+                var sekarang_arr = json['sekarang'].split('-');
+                var html = '';
+                var jumlah_notif = 0;
+                console.log(sekarang_arr);
+                var pekerjaan = json['pekerjaan_saya'];
+                for (var i = 0, i2 = pekerjaan.length; i < i2; i++) {
+                    var p = pekerjaan[i];
+                    var style = '';
+                    var text_style = '';
+                    var deadline1 = p['tanggal_selesai'].split('-');
+                    var deadline = deadline1[2] + ' ' + bulan[parseInt(deadline1[1]) - 1] + ' ' + deadline1[0];
+                    var nama_pekerjaan = p['nama_pekerjaan'];
+                    if (nama_pekerjaan.length > 35) {
+                        nama_pekerjaan = nama_pekerjaan.substring(0, 35) + '...';
+                    }
+                    var detail = 'pekerjaan_saya/detail';
+                    if(p['status_pekerjaan'] == 6){
+                        detail = 'pekerjaan_saya/detail_usulan';
+                    }
+                    html += '<li>' +
+                            '<a href="' + site_url + '/'+detail+'?id_pekerjaan=' + p['id_pekerjaan'] + '&sumber=notifikasi" ' + style + '>' +
+                            '<div class="task-info clearfix">' +
+                            '<div class="desc pull-left" >' +
+                            '<h5 style="text-transform:none;' + text_style + '">' + nama_pekerjaan + '</h5>' +
+                            '<p style="' + text_style + '">' + deadline + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</a>' +
+                            '</li>';
+                    jumlah_notif++;
+                }
+                var pekerjaan = json['pekerjaan_staff'];
+                for (var i = 0, i2 = pekerjaan.length; i < i2; i++) {
+                    var p = pekerjaan[i];
+                    var style = '';
+                    var text_style = '';
+                    var deadline1 = p['tanggal_selesai'].split('-');
+                    var deadline = deadline1[2] + ' ' + bulan[parseInt(deadline1[1]) - 1] + ' ' + deadline1[0];
+                    var nama_pekerjaan = p['nama_pekerjaan'];
+                    if (nama_pekerjaan.length > 35) {
+                        nama_pekerjaan = nama_pekerjaan.substring(0, 35) + '...';
+                    }
+                    var detail = 'pekerjaan_staff/detail';
+                    if(p['status_pekerjaan'] == 6){
+                        detail = 'pekerjaan_staff/detail_usulan';
+                    }
+                    html += '<li>' +
+                            '<a href="' + site_url + '/'+detail+'?id_pekerjaan=' + p['id_pekerjaan'] + '&sumber=notifikasi" ' + style + '>' +
+                            '<div class="task-info clearfix">' +
+                            '<div class="desc pull-left" >' +
+                            '<h5 style="text-transform:none;' + text_style + '">' + nama_pekerjaan + '</h5>' +
+                            '<p style="' + text_style + '">' + deadline + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</a>' +
+                            '</li>';
+                    jumlah_notif++;
+                }
+                $("#bagian_pending_task").html(html);
+                if (jumlah_notif == 0)
+                    jumlah_notif = "";
+                $("#jumlah_pending_task").html(jumlah_notif);
             }
         });
     }
-	var req_pending_task_interval_id='';
-    jQuery(document).ready(function() {
+    var req_pending_task_interval_id = '';
+    jQuery(document).ready(function () {
         req_pending_task2();
-		req_pending_task_interval_id=setInterval(function(){
-			req_pending_task2();
-		},60000);
-		console.log('id interval = '+req_pending_task_interval_id);
+        req_pending_task_interval_id = setInterval(function () {
+            req_pending_task2();
+        }, 60000);
+        console.log('id interval = ' + req_pending_task_interval_id);
     });
 
     var tinggi = $(window).height();
@@ -330,19 +338,19 @@
     lebar_pending = 320;
     $('#bagian_pending_task').attr('style', 'overflow: scroll; max-height: ' + tinggi_pending + 'px;min-width:' + lebar_pending + 'px !important;overflow-x: hidden;max-width:0px !important;width:' + lebar_pending + 'px !important');
     function format_ukuran_file(s) {
-            var KB = 1024;
-            var spasi = ' ';
-            var satuan = 'bytes';
-            if (s > KB) {
-                s = s / KB;
-                satuan = 'KB';
-            }
-            if (s > KB) {
-                s = s / KB;
-                satuan = 'MB';
-            }
-            return '   [' + Math.round(s) + spasi + satuan + ']';
+        var KB = 1024;
+        var spasi = ' ';
+        var satuan = 'bytes';
+        if (s > KB) {
+            s = s / KB;
+            satuan = 'KB';
         }
+        if (s > KB) {
+            s = s / KB;
+            satuan = 'MB';
+        }
+        return '   [' + Math.round(s) + spasi + satuan + ']';
+    }
 </script>
 </body>
 </html>

@@ -1,6 +1,16 @@
 $(document).ready(function () {
     init_assigned_staff();
     ubah_view_input(pekerjaan['kategori']);
+    if(input_deadline_mulai != null){
+        var tanggal1 = pekerjaan['tanggal_mulai'].split('-');
+        var tanggal2 = new Date(tanggal1[2], parseInt(tanggal1[1])-1, tanggal1[0], 0, 0, 0, 0);
+        input_deadline_mulai.setValue(tanggal2);
+    }
+    if(input_deadline_selesai != null){
+        var tanggal1 = pekerjaan['tanggal_selesai'].split('-');
+        var tanggal2 = new Date(tanggal1[2], parseInt(tanggal1[1])-1, tanggal1[0], 0, 0, 0, 0);
+        input_deadline_selesai.setValue(tanggal2);
+    }
 });
 function init_assigned_staff() {
     var tabel = $('#tabel_assign_staff_skp');

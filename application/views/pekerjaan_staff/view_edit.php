@@ -128,7 +128,7 @@ if (count($detil_pekerjaan) > 0) {
                                                 <div class="form-group " >
                                                     <label for="prioritas" class="control-label col-lg-3">Periode</label>
                                                     <div class="col-lg-6" id="">
-                                                        <input type="text" class="form-control" id="periode" name="periode" value="<?= intval($pekerjaan['periode']) > 0 ? $pekerjaan['periode'] : date('Y') ?>"/>
+                                                        <input type="text" class="form-control" id="input_assign_periode" name="periode" value="<?= $pekerjaan['periode'] ?>" onchange="assign_periode_changed()"/>
                                                     </div>
                                                     
                                                 </div>
@@ -136,19 +136,10 @@ if (count($detil_pekerjaan) > 0) {
                                                     <label for="prioritas" class="control-label col-lg-3">Deadline</label>
                                                     <div class="col-lg-6" id="div_periode_tanggal">
                                                         <div class=" input-group input-large" data-date-format="dd-mm-yyyy">
-                                                            <input readonly type="text" class="form-control dpd1" value="<?= $pekerjaan['tanggal_mulai'] ?>" name="tgl_mulai">
+                                                            <input id="assign_input_tanggal_mulai" readonly type="text" class="form-control" value="" name="tgl_mulai">
                                                             <span class="input-group-addon">Sampai</span>
-                                                            <input readonly type="text" class="form-control dpd2" value="<?= $pekerjaan['tanggal_selesai'] ?>" name="tgl_selesai">
+                                                            <input id="assign_input_tanggal_selesai" readonly type="text" class="form-control" value="" name="tgl_selesai">
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group " id="div_pakai_biaya">
-                                                    <label for="prioritas" class="control-label col-lg-3">Pakai Biaya</label>
-                                                    <div class="col-lg-6">
-                                                        <select name="pakai_biaya" id="pakai_biaya" class="form-control">
-                                                            <option value="0">Tanpa Biaya</option>
-                                                            <option value="1" <?= $dp['pakai_biaya'] == '1' ? 'selected=""' : '' ?>>Biaya</option>
-                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group " id="div_biaya">
@@ -217,12 +208,11 @@ if (count($detil_pekerjaan) > 0) {
         <!--right sidebar end-->
     </section>
     <?php $this->load->view("taskman_footer_page"); ?>
-    <script type="text/javascript" src="<?= base_url() ?>assets/js2/date_picker_init.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>assets/js2/pekerjaan_staff/js_view_pekerjaan_staff.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>assets/js2/pekerjaan_staff/js_edit.js"></script>
     <script >
-                                                            var list_staff = <?php echo json_encode($list_staff); ?>;
-                                                            var pekerjaan =<?= json_encode($pekerjaan) ?>;
-                                                            var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
-                                                            var site_url='<?=site_url()?>';
+        var list_staff = <?php echo json_encode($list_staff); ?>;
+        var pekerjaan =<?= json_encode($pekerjaan) ?>;
+        var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
+        var site_url='<?=site_url()?>';
     </script>

@@ -13,11 +13,78 @@ $(document).ready(function () {
     $('#tugas_select_pekerjaan').on('change', function () {
         get_list_detil_pekerjaan();
         change_deadline_tugas();
-		$("#button_tampilkan_staff_tugas").show("fast");
+        $("#button_tampilkan_staff_tugas").show("fast");
         $('#tabel_assign_staff_tugas').html('');
     });
     init_list_pekerjaan_untuk_periode();
+    init_input_deadline();
 });
+
+function assign_periode_changed(){
+    var input_periode2 = document.getElementById('input_assign_periode');
+    console.log('old value = ' + input_periode2.oldvalue);
+    console.log('new value = ' + input_periode2.value);
+    var input_periode = $('#input_assign_periode');
+    var periode = parseInt(input_periode.val());
+    console.log('periode = '+periode);
+    if(isNaN(periode)){
+        var hari_ini = new Date();
+        periode = hari_ini.getFullYear();
+    }else if(periode < 0){
+        periode = -periode;
+    }
+    input_periode.val(periode);
+    ubah_input_deadline();
+}
+
+function ubah_input_deadline(){
+    var periode = parseInt($('#input_assign_periode').val());
+    assign_date_max.setFullYear(periode);
+    assign_date_min.setFullYear(periode);
+    input_deadline_mulai.setValue(assign_date_min);
+    input_deadline_selesai.setValue(assign_date_max);
+}
+
+var assign_date_max = new Date();
+var assign_date_min = new Date();
+var input_deadline_mulai = null;
+var input_deadline_selesai = null;
+function init_input_deadline(){
+    assign_date_max.setMilliseconds(0);
+    assign_date_max.setSeconds(0);
+    assign_date_max.setMinutes(0);
+    assign_date_max.setHours(0);
+    assign_date_max.setMonth(11)
+    assign_date_max.setDate(31);
+    console.log(assign_date_max);
+    assign_date_min.setMilliseconds(0);
+    assign_date_min.setSeconds(0);
+    assign_date_min.setMinutes(0);
+    assign_date_min.setHours(0);
+    assign_date_min.setMonth(0)
+    assign_date_min.setDate(1);
+    console.log(assign_date_min);
+    input_deadline_mulai = $('#assign_input_tanggal_mulai').datepicker({
+        format: 'dd-mm-yyyy',
+        onRender: function (date) {
+            return date < assign_date_min || date >= assign_date_max ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+        input_deadline_mulai.hide('fast');
+        $('#assign_input_tanggal_selesai').focus();
+    }).data('datepicker');
+    input_deadline_selesai = $('#assign_input_tanggal_selesai').datepicker({
+        format: 'dd-mm-yyyy',
+        onRender: function (date) {
+            return date <= input_deadline_mulai.date || date >= assign_date_max ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+        input_deadline_selesai.hide('fast');
+    }).data('datepicker');
+    input_deadline_mulai.setValue(assign_date_min);
+    input_deadline_selesai.setValue(assign_date_max);
+}
+
 function change_deadline_tugas() {
     var id_pekerjaan = $('#tugas_select_pekerjaan').val();
     var p = list_pekerjaan[id_pekerjaan];
@@ -52,7 +119,6 @@ function change_deadline_tugas() {
 var list_detil_pekerjaan = [];
 function get_list_detil_pekerjaan() {
     var id_pekerjaan = $('#tugas_select_pekerjaan').val();
-
     $.ajax({
         type: "get",
         url: site_url + "/pekerjaan_staff/get_list_detil_pekerjaan",
@@ -74,8 +140,8 @@ function get_list_detil_pekerjaan() {
 }
 var list_pekerjaan = [];
 function init_list_pekerjaan_untuk_periode() {
-	$("#button_tampilkan_staff_tugas").hide("fast");
-	$('#tabel_assign_staff_tugas').html('');
+    $("#button_tampilkan_staff_tugas").hide("fast");
+    $('#tabel_assign_staff_tugas').html('');
     var select_pekerjaan = $('#tugas_select_pekerjaan');
     select_pekerjaan.html('<option disabled value="0" selected>Pilih Pekerjaan</option>');
     $.ajax({
@@ -245,23 +311,23 @@ function enroll_staff(id_user, nama_user, tab) {
 function delete_enrolled_staff(id_staff, tab) {
     $('#staff_' + tab + '_' + id_staff).remove();
 }
-function pilih_berkas_assign_changed(){
+function pilih_berkas_assign_changed() {
     var pilih_berkas = document.getElementById('pilih_berkas_assign');
     var files = pilih_berkas.files;
     populate_file('berkas_assign', files);
 }
-function pilih_berkas_tugas_changed(){
+function pilih_berkas_tugas_changed() {
     var pilih_berkas = document.getElementById('pilih_berkas_tugas');
     var files = pilih_berkas.files;
     populate_file('berkas_tugas', files);
 }
-function click_pilih_berkas_tugas(){
-	console.log("trigger click event file tugas");
-	document.getElementById("pilih_berkas_tugas").click();
+function click_pilih_berkas_tugas() {
+    console.log("trigger click event file tugas");
+    document.getElementById("pilih_berkas_tugas").click();
 }
-function click_pilih_berkas_assign(){
-	console.log("trigger click event");
-	document.getElementById("pilih_berkas_assign").click();
+function click_pilih_berkas_assign() {
+    console.log("trigger click event");
+    document.getElementById("pilih_berkas_assign").click();
 }
 function populate_file(id_tabel, files) {
     $('#' + id_tabel).html('');
