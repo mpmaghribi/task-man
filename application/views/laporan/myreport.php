@@ -56,11 +56,10 @@
                                                         <div class="btn-group">
                                                             <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button"> Cetak Laporan<span class="caret"></span> </button>
                                                             <ul class="dropdown-menu">
-                                                                <li><a href="#" id="export<?php echo $this->session->userdata['logged_in']['id_akun'] ?>" onclick="print_form({url: '<?= site_url() ?>/laporan/exportToPDF', id_akun: '<?= $this->session->userdata['logged_in']['id_akun'] ?>', jabatan: '<?= $this->session->userdata['logged_in']['nama_jabatan'] ?>', departemen: '<?= $this->session->userdata['logged_in']['nama_departemen'] ?>', nama: '<?= $this->session->userdata['logged_in']['nama'] ?>', nip: '<?= $this->session->userdata['logged_in']['nip'] ?>'})" >Form SKP</a></li>
-                                                                <li><a href="#" id="export<?php echo $this->session->userdata['logged_in']['id_akun'] ?>" onclick="print_form({url: '<?= site_url() ?>/laporan/exportFormCKP', id_akun: '<?= $this->session->userdata['logged_in']['id_akun'] ?>', jabatan: '<?= $this->session->userdata['logged_in']['nama_jabatan'] ?>', departemen: '<?= $this->session->userdata['logged_in']['nama_departemen'] ?>', nama: '<?= $this->session->userdata['logged_in']['nama'] ?>', nip: '<?= $this->session->userdata['logged_in']['nip'] ?>'})" >Form CKP</a></li>
-                                                                <li><a href="#exportPeriode" data-toggle="modal"  onclick="exportPeriode('<?php echo $this->session->userdata['logged_in']['id_akun'] ?>', '<?php echo $this->session->userdata['logged_in']['nama'] ?>', '<?php echo $this->session->userdata['logged_in']['nama_jabatan'] ?>', '<?php echo $this->session->userdata['logged_in']['nama_departemen'] ?>', '<?php echo $this->session->userdata['logged_in']['nip'] ?>')" >Laporan SKP per Periode</a></li>
-                                                                <li><a href="#exportPeriode2" data-toggle="modal"  onclick="exportPeriode2('<?php echo $this->session->userdata['logged_in']['id_akun'] ?>', '<?php echo $this->session->userdata['logged_in']['nama'] ?>', '<?php echo $this->session->userdata['logged_in']['nama_jabatan'] ?>', '<?php echo $this->session->userdata['logged_in']['nama_departemen'] ?>', '<?php echo $this->session->userdata['logged_in']['nip'] ?>')" >Laporan CKP per Periode</a></li>
-                                                                <li></li>
+                                                                <li><a href="javascript:export_pdf({tipe: 'skp', id_akun: '<?= $this->session->userdata['logged_in']['id_akun'] ?>'});">Form SKP</a></li>
+                                                                <li><a href="javascript:export_pdf({tipe: 'ckp', id_akun: '<?= $this->session->userdata['logged_in']['id_akun'] ?>'});">Form CKP</a></li>
+                                                                <li><a href="javascript:export_periode({'tipe': 'skp', 'id_akun': '<?= $this->session->userdata['logged_in']['id_akun'] ?>'});" data-toggle="modal">Laporan SKP per Periode</a></li>
+                                                                <li><a href="javascript:export_periode({'tipe': 'ckp', 'id_akun': '<?= $this->session->userdata['logged_in']['id_akun'] ?>'});" data-toggle="modal">Laporan CKP per Periode</a></li>
                                                             </ul>
                                                         </div>
                                                     </td>
@@ -247,17 +246,42 @@
             $("#nip2").val(nip);
         }
         var site_url = '<?= site_url() ?>';
-        function print_form(data) {
+        
+        function export_periode(data){
+            //$('#modal_export_form').attr({'action': site_url + '/laporan/export_periode'});
+            $('#modal_export').modal('show');
+            $('#modal_export_id_akun').val(data.id_akun);
+            $('#modal_export_tipe').val(data.tipe);
+        }
+        
+        function print_skp(id_staff){
+            var form = $('#form_submit');
+            form.attr({'method':'get','target':'_blank', 'action': site_url+'/laporan/cetak_form_skp'});
+            form.html($('<input></input>').attr({'name':'id_akun','value':id_staff}));
+            form.append($('<input></input>').attr({name: 'periode', value: $('#select_periode').val()}));
+            form.submit();
+        }
+        
+        function print_ckp(id_staff){
+            var form = $('#form_submit');
+            form.attr({'method':'get','target':'_blank', 'action': site_url+'/laporan/cetak_form_ckp'});
+            form.html($('<input></input>').attr({'name':'id_akun','value':id_staff}));
+            form.append($('<input></input>').attr({name: 'periode', value: $('#select_periode').val()}));
+            form.submit();
+        }
+        
+        function export_pdf(data) {
             var form = $('#form_submit');
             console.log('function print_form_skp(data)');
             console.log(data);
-            form.attr({action: data.url, method: 'get', target: '_blank'});
+            form.attr({action: site_url + '/laporan/pdf', method: 'get', target: '_blank'});
             form.html($('<input></input>').attr({type: 'hidden', name: 'periode', value: $('#select_periode').val()}));
-            form.append($('<input></input>').attr({type: 'hidden', name: 'departemen', value: data.departemen}));
+//            form.append($('<input></input>').attr({type: 'hidden', name: 'departemen', value: data.departemen}));
             form.append($('<input></input>').attr({type: 'hidden', name: 'id_akun', value: data.id_akun}));
-            form.append($('<input></input>').attr({type: 'hidden', name: 'jabatan', value: data.jabatan}));
-            form.append($('<input></input>').attr({type: 'hidden', name: 'nama', value: data.nama}));
-            form.append($('<input></input>').attr({type: 'hidden', name: 'nip', value: data.nip}));
+            form.append($('<input></input>').attr({type: 'hidden', name: 'tipe', value: data.tipe}));
+//            form.append($('<input></input>').attr({type: 'hidden', name: 'jabatan', value: data.jabatan}));
+//            form.append($('<input></input>').attr({type: 'hidden', name: 'nama', value: data.nama}));
+//            form.append($('<input></input>').attr({type: 'hidden', name: 'nip', value: data.nip}));
             form.submit();
         }
     </script>

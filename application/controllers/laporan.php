@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -13,21 +14,21 @@ class laporan extends CI_Controller {
         $this->load->model('akun');
         $this->load->model('pekerjaan_model');
     }
-    
-    public function cetak_logaktifitas(){
+
+    public function cetak_logaktifitas() {
         $tahun = $this->input->post('tahun');
         $bulan = $this->input->post('bulan');
-        $monthNum  = $bulan;
-        $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+        $monthNum = $bulan;
+        $dateObj = DateTime::createFromFormat('!m', $monthNum);
         $monthName = $dateObj->format('F');
         $data['tahun'] = $tahun;
         $data['bulan'] = $monthName;
-        $data['aktifitas'] = $this->pekerjaan_model->logaktifitas($bulan,$tahun,$this->session->userdata['logged_in']["user_id"]);
-        $this->load->view('laporan/cetak_aktifitas',$data);
+        $data['aktifitas'] = $this->pekerjaan_model->logaktifitas($bulan, $tahun, $this->session->userdata['logged_in']["user_id"]);
+        $this->load->view('laporan/cetak_aktifitas', $data);
     }
 
     public function cetak_form_skp() {
-        $id = $this->input->get('id_akun');
+        $id = intval($this->input->get('id_akun'));
         //$data["nilai_skp"] = $this->laporan_model->nilai_laporan_skp($id);
         $periode = abs(intval($this->input->get('periode')));
         $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori "
@@ -36,38 +37,23 @@ class laporan extends CI_Controller {
                         . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
                         . "and (date_part('year',tgl_mulai)='$periode' or date_part('year',tgl_selesai)='$periode') "
                         . "order by urutan_kategori")->result_array();
-        $data["jabatan"] = $this->input->get('jabatan');
-        $data["departemen"] = $this->input->get('departemen');
-        $data["nama"] = $this->input->get('nama');
-        $data["nip"] = $this->input->get('nip');
+        $data_staff = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id . "/format/json"));
+        if (count($data_staff) > 0) {
+            $data['data_staff'] = $data_staff[0];
+        }
         $this->load->helper(array('pdf', 'date'));
         $filename = 'Laporan SKP.pdf';
         $data['state'] = 'Report';
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $temp;
-        $data['temp'] = $temp;
         $id_penilai = $temp["user_id"];
-        $jabatan = json_decode(
+        $data_atasan = json_decode(
                 file_get_contents(
                         str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"
         ));
-        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
-        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
-        $data["nama_penilai"] = $jabatan[0]->nama;
-        $data["nip_penilai"] = $jabatan[0]->nip;
-        $this->load->model("pekerjaan_model");
-        $result = $this->taskman_repository->sp_view_pekerjaan($id);
-        $data['pkj_karyawan'] = $result;
-        $list_id_pekerjaan = array();
-        foreach ($result as $pekerjaan) {
-            $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
+        if (count($data_atasan) > 0) {
+            $data['data_atasan'] = $data_atasan[0];
         }
-        //var_dump($list_id_pekerjaan);
-        $staff = $this->akun->my_staff($temp["user_id"]);
-        $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
-        $data["detil_pekerjaan"] = json_encode($detil_pekerjaan);
-        $data["my_staff"] = json_encode($staff);
-
         $this->load->view('laporan/cetak_form_skp', $data);
     }
 
@@ -81,10 +67,10 @@ class laporan extends CI_Controller {
                         . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
                         . "and (date_part('year',tgl_mulai)='$periode' or date_part('year',tgl_selesai)='$periode') "
                         . "order by urutan_kategori")->result_array();
-        $data["jabatan"] = $this->input->get('jabatan');
-        $data["departemen"] = $this->input->get('departemen');
-        $data["nama"] = $this->input->get('nama');
-        $data["nip"] = $this->input->get('nip');
+        $data_staff = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id . "/format/json"));
+        if (count($data_staff) > 0) {
+            $data['data_staff'] = $data_staff[0];
+        }
         $this->load->helper(array('pdf', 'date'));
         $filename = 'Laporan Capaian Kerja Staff.pdf';
         $data['state'] = 'Report';
@@ -92,27 +78,13 @@ class laporan extends CI_Controller {
         $data['data_akun'] = $temp;
         $data['temp'] = $temp;
         $id_penilai = $temp["user_id"];
-        $jabatan = json_decode(
+        $data_atasan = json_decode(
                 file_get_contents(
                         str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"
         ));
-        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
-        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
-        $data["nama_penilai"] = $jabatan[0]->nama;
-        $data["nip_penilai"] = $jabatan[0]->nip;
-        $this->load->model("pekerjaan_model");
-        $result = $this->taskman_repository->sp_view_pekerjaan($id);
-        $data['pkj_karyawan'] = $result;
-        $list_id_pekerjaan = array();
-        foreach ($result as $pekerjaan) {
-            $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
+        if (count($data_atasan) > 0) {
+            $data['data_atasan'] = $data_atasan[0];
         }
-        //var_dump($list_id_pekerjaan);
-        $staff = $this->akun->my_staff($temp["user_id"]);
-        $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
-        $data["detil_pekerjaan"] = json_encode($detil_pekerjaan);
-        $data["my_staff"] = json_encode($staff);
-
         $this->load->view('laporan/cetak_form_ckp', $data);
     }
 
@@ -189,9 +161,8 @@ class laporan extends CI_Controller {
         //header("Content-Disposition:attachment;filename=" . $filename);
         echo generate_pdf($html, $filename, false);
     }
-    
-    function myreport()
-    {
+
+    function myreport() {
         $temp = $this->session->userdata('logged_in');
         $data["data_akun"] = $this->session->userdata('logged_in');
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat laporan pekerjaan dari para staffnya.");
@@ -212,7 +183,7 @@ class laporan extends CI_Controller {
         }
         $data['tahun_max'] = $tahun_max;
         $data['tahun_min'] = $tahun_min;
-        $this->load->view("laporan/myreport",$data);
+        $this->load->view("laporan/myreport", $data);
     }
 
     function laporan_pekerjaan_saya() {
@@ -315,23 +286,31 @@ class laporan extends CI_Controller {
         }
     }
 
-    function laporan_ckp_per_periode() {
+    function export_periode() {
         $temp = $this->session->userdata("logged_in");
-        $periode = $this->input->get("periode2");
-        $tahun = intval($this->input->get('tahun2'));
+        $periode = $this->input->get("periode");
+        $tahun = intval($this->input->get('tahun'));
+        $filename = 'Laporan CKP Per Periode.pdf';
         $data["periode"] = $periode;
         $data["data_akun"] = $this->session->userdata("logged_in");
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat laporan pekerjaan per periode dari para staffnya.");
         $id_penilai = $temp["user_id"];
-        $jabatan = json_decode(
-                file_get_contents(
-                        str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"
-        ));
-        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
-        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
-        $data["nama_penilai"] = $jabatan[0]->nama;
-        $data["nip_penilai"] = $jabatan[0]->nip;
-        $id = $this->input->get("id_akun2");
+        $data_atasan = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"));
+        if (count($data_atasan) > 0) {
+            $data['data_atasan'] = $data_atasan[0];
+        }
+//        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
+//        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
+//        $data["nama_penilai"] = $jabatan[0]->nama;
+//        $data["nip_penilai"] = $jabatan[0]->nip;
+        $id = intval($this->input->get("id_akun"));
+        $tipe = $this->input->get('tipe');
+        $data_staff = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id . "/format/json"));
+        $nama_staff = '';
+        if (count($data_staff) > 0) {
+            $data['data_staff'] = $data_staff[0];
+            $nama_staff = $data_staff[0]->nama;
+        }
 //        $data["nilai_skp"] = $this->laporan_model->nilai_laporan_ckp($id);
         $tanggal_min = $tahun . '-01-01';
         $tanggal_max = $tahun . '-12-31';
@@ -401,7 +380,7 @@ class laporan extends CI_Controller {
                         . "left join ("
                         . "select ak.id_detil_pekerjaan, coalesce(sum(ak.kuantitas_output),0) as realisasi_kuantitas_output, min(ak.waktu_mulai) as waktu_min, max(ak.waktu_selesai) as waktu_max  "
                         . "from aktivitas_pekerjaan ak "
-                        . "where to_date('$tanggal_min','YYYY-MM-DD') <= ak.waktu_mulai and ak.waktu_selesai < to_date('$tanggal_max','YYYY-MM-DD') "
+                        . "where ak.status_validasi=1 and  to_date('$tanggal_min','YYYY-MM-DD') <= ak.waktu_mulai and ak.waktu_selesai < to_date('$tanggal_max','YYYY-MM-DD') "
                         . "group by ak.id_detil_pekerjaan "
                         . ") as ak on ak.id_detil_pekerjaan=dp.id_detil_pekerjaan "
                         . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
@@ -409,23 +388,31 @@ class laporan extends CI_Controller {
                         . "and (date_part('year',tgl_mulai)='$tahun' or date_part('year',tgl_selesai)='$tahun') "
                         . "order by urutan_kategori")->result_array();
 //        echo $this->db->last_query();
+//        print_r($data['nilai_skp']);
         $data['tanggal_min'] = $tanggal_min;
         $data['tanggal_max'] = $tanggal_max;
-        $data["jabatan"] = $this->input->get("nama_jabatan2");
-        $data["departemen"] = $this->input->get("nama_departemen2");
-        $data["nama"] = $this->input->get("nama2");
-        $data["nip"] = $this->input->get("nip2");
-        $data['tahun']=$tahun;
+//        $data["jabatan"] = $this->input->get("nama_jabatan2");
+//        $data["departemen"] = $this->input->get("nama_departemen2");
+//        $data["nama"] = $this->input->get("nama2");
+//        $data["nip"] = $this->input->get("nip2");
+        $data['tahun'] = $tahun;
         $this->load->helper(array('pdf', 'date'));
-        $filename = 'Laporan CKP Per Periode.pdf';
+        
         $data['state'] = 'Report';
-        $temp = $this->session->userdata('logged_in');
+//        $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $temp;
-        $data['temp'] = $temp;
-        $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
-        $data['pkj_karyawan'] = $result;
+//        $data['temp'] = $temp;
+//        $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
+//        $data['pkj_karyawan'] = $result;
 //        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, false);
-        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, true);
+        if($tipe=='ckp'){
+//        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, true);
+            $html = $this->load->view('laporan/pdf_ckp', $data, true);
+            $filename = 'Laporan CKP '. $nama_staff.' periode ' . $periode . ' '. $tahun .'.pdf';
+        }else{
+            $html = $this->load->view('laporan/pdf_skp', $data, true);
+            $filename = 'Laporan SKP '. $nama_staff.' periode ' . $periode . ' '. $tahun .'.pdf';
+        }
         header("Content-type:application/pdf");
         echo generate_pdf($html, $filename, false);
 //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
@@ -518,19 +505,19 @@ class laporan extends CI_Controller {
 //        echo $this->db->last_query();
         $data['tanggal_min'] = $tanggal_min;
         $data['tanggal_max'] = $tanggal_max;
-        $data['tahun']=$tahun;
-        $data["jabatan"] = $this->input->get("nama_jabatan");
-        $data["departemen"] = $this->input->get("nama_departemen");
-        $data["nama"] = $this->input->get("nama");
-        $data["nip"] = $this->input->get("nip");
+        $data['tahun'] = $tahun;
+//        $data["jabatan"] = $this->input->get("nama_jabatan");
+//        $data["departemen"] = $this->input->get("nama_departemen");
+//        $data["nama"] = $this->input->get("nama");
+//        $data["nip"] = $this->input->get("nip");
         $this->load->helper(array('pdf', 'date'));
         $filename = 'Laporan SKP Per Periode.pdf';
         $data['state'] = 'Report';
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $temp;
-        $data['temp'] = $temp;
-        $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
-        $data['pkj_karyawan'] = $result;
+//        $data['temp'] = $temp;
+//        $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
+//        $data['pkj_karyawan'] = $result;
         $html = $this->load->view('laporan/laporan_pekerjaan_pdf', $data, true);
         //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
         header("Content-type:application/pdf");
@@ -658,8 +645,8 @@ Data Pengaduan ' . $ket . '
         echo $stringData;
     }
 
-    function exportToPDF() {
-        $id = $this->input->get('id_akun');
+    function pdf() {
+        $id = intval($this->input->get('id_akun'));
         $periode = abs(intval($this->input->get('periode')));
         $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori "
                         . "from pekerjaan p "
@@ -667,43 +654,51 @@ Data Pengaduan ' . $ket . '
                         . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
                         . "and (date_part('year',tgl_mulai)='$periode' or date_part('year',tgl_selesai)='$periode') "
                         . "order by urutan_kategori")->result_array();
-        $data["jabatan"] = $this->input->get('jabatan');
-        $data["jabatan"] = $this->input->get('jabatan');
-        $data["departemen"] = $this->input->get('departemen');
-        $data["nama"] = $this->input->get('nama');
-        $data["nip"] = $this->input->get('nip');
+        $data_staff = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id . "/format/json"));
+        $nama_staff = '';
+        if (count($data_staff) > 0) {
+            $data['data_staff'] = $data_staff[0];
+            $nama_staff = $data_staff[0]->nama;
+        }
         $this->load->helper(array('pdf', 'date'));
         $filename = 'Laporan SKP.pdf';
         $data['state'] = 'Report';
         $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $temp;
-        $data['temp'] = $temp;
+//        $data['temp'] = $temp;
         $id_penilai = $temp["user_id"];
-        $jabatan = json_decode(
-                file_get_contents(
-                        str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"
-        ));
-        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
-        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
-        $data["nama_penilai"] = $jabatan[0]->nama;
-        $data["nip_penilai"] = $jabatan[0]->nip;
-        $this->load->model("pekerjaan_model");
-        $result = $this->taskman_repository->sp_view_pekerjaan($id);
-        $data['pkj_karyawan'] = $result;
-        $list_id_pekerjaan = array();
-        foreach ($result as $pekerjaan) {
-            $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
+        $data_atasan = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"));
+        if (count($data_atasan) > 0) {
+            $data['data_atasan'] = $data_atasan[0];
         }
+//        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
+//        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
+//        $data["nama_penilai"] = $jabatan[0]->nama;
+//        $data["nip_penilai"] = $jabatan[0]->nip;
+//        $this->load->model("pekerjaan_model");
+//        $result = $this->taskman_repository->sp_view_pekerjaan($id);
+//        $data['pkj_karyawan'] = $result;
+//        $list_id_pekerjaan = array();
+//        foreach ($result as $pekerjaan) {
+//            $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
+//        }
         //var_dump($list_id_pekerjaan);
-        $staff = $this->akun->my_staff($temp["user_id"]);
-        $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
-        $data["detil_pekerjaan"] = json_encode($detil_pekerjaan);
-        $data["my_staff"] = json_encode($staff);
-
-        $html = $this->load->view('laporan/laporan_pekerjaan_pdf', $data, true);
+//        $staff = $this->akun->my_staff($temp["user_id"]);
+//        $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
+//        $data["detil_pekerjaan"] = json_encode($detil_pekerjaan);
+//        $data["my_staff"] = json_encode($staff);
+        $tipe = $this->input->get('tipe');
+        $html='';
+        if ($tipe == 'ckp') {
+            $html = $this->load->view('laporan/pdf_ckp', $data, true);
+            $filename = 'Laporan CKP ' . $nama_staff . ' - ' . $periode .'.pdf';
+        } else {
+//            $html = $this->load->view('laporan/laporan_pekerjaan_pdf', $data, false);
+            $html = $this->load->view('laporan/pdf_skp', $data, true);
+            $filename = 'Laporan SKP ' . $nama_staff . ' - ' . $periode .'.pdf';
+        }
         //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
         header("Content-type:application/pdf");
-
         // It will be called downloaded.pdf
         //header("Content-Disposition:attachment;filename=" . $filename);
         echo generate_pdf($html, $filename, false);
