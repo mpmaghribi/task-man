@@ -151,10 +151,12 @@
                                     </div>
                                     <input type="hidden" id="modal_export_id_akun" name="id_akun" value="" />
                                     <input type="hidden" id="modal_export_tipe" name="tipe" value=""/>
+                                    <input type="hidden" id="modal_export_out" name="out" value=""/>
                                 </div>
                                 <div class="modal-footer">
                                     <button data-dismiss="modal" class="btn btn-default" type="button">Batal</button>
-                                    <button class="btn btn-warning" type="submit"> Export PDF</button>
+                                    <button class="btn btn-warning" type="button" onclick="set_export_as('pdf')"> Export PDF</button>
+                                    <button class="btn btn-warning" type="button" onclick="set_export_as('xls')"> Export Excel</button>
                                 </div>
                             </form>
                         </div>
@@ -298,5 +300,9 @@
 //            form.append($('<input></input>').attr({type: 'hidden', name: 'nama', value: data.nama}));
 //            form.append($('<input></input>').attr({type: 'hidden', name: 'nip', value: data.nip}));
             form.submit();
+        }
+        function set_export_as(out){
+            $('#modal_export_out').val(out);
+            $('#modal_export_form').submit();
         }
     </script>

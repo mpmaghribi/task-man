@@ -39,7 +39,7 @@ $nama_bulan = array(
 $this->load->library('excel');
 $xls = new PHPExcel();
 $sheet = $xls->setActiveSheetIndex(0);
-$sheet->setCellValue('A1', 'FORMULIR SASARAN KERJA')->mergeCells('a1:k1');
+$sheet->setCellValue('A1', 'FORMULIR SASARAN KERJA '.(isset($periode2)?"Selama " . $nama_periode[$periode2] . " Tahun ".$periode :''))->mergeCells('a1:k1');
 $sheet->setCellValue('A2', 'PEGAWAI NEGERI SIPIL')->mergeCells('a2:k2');
 $sheet->getStyle('a1:k2')->applyFromArray(array('font'=>array('bold'=>true),'alignment'=>array('horizontal'=>'center')));
 $sheet->getColumnDimension('a')->setWidth(4);
@@ -156,7 +156,7 @@ $sheet->getStyle('c'.$row_number.':k'.$row_number)->applyFromArray(array('alignm
 $xls_out = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
 // Redirect output to a client’s web browser (Excel5)
 header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment;filename="Formulir SKP '.$data_staff->nama.' - '.$periode.'.xls"');
+header('Content-Disposition: attachment;filename="Formulir SKP '.$data_staff->nama.' - '.(isset($periode)?$periode:'').'.xls"');
 header('Cache-Control: max-age=0');
 // If you're serving to IE 9, then the following may be needed
 header('Cache-Control: max-age=1');

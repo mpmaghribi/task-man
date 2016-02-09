@@ -66,7 +66,7 @@ and open the template in the editor.
                         <div class="col-md-6">
                             <section class="panel">
                                 <div class="form">
-                                    <h2 align="center">Formulir Capaian Kerja Pegawai Negeri Sipil <?php if (isset($periode)) echo "Selama " . $nama_periode[$periode] . " Tahun ".$tahun ?></h2>
+                                    <h2 align="center">Formulir Capaian Kerja Pegawai Negeri Sipil <?php if (isset($periode2)) echo "Selama " . $nama_periode[$periode2] . " Tahun ".$periode ?></h2>
                                 </div>
 
                             </section>

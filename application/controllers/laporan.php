@@ -4,6 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 require_once APPPATH . '/libraries/ceklogin.php';
+
 class laporan extends ceklogin {
 
     public function __construct() {
@@ -292,19 +293,23 @@ class laporan extends ceklogin {
         $periode = $this->input->get("periode");
         $tahun = intval($this->input->get('tahun'));
         $filename = 'Laporan CKP Per Periode.pdf';
-        $data["periode"] = $periode;
+        $data["periode2"] = $periode;
+        $id = intval($this->input->get("id_akun"));
         $data["data_akun"] = $this->session->userdata("logged_in");
         $result = $this->taskman_repository->sp_insert_activity($temp['user_id'], 0, "Aktivitas Pekerjaan", $temp['user_nama'] . " sedang melihat laporan pekerjaan per periode dari para staffnya.");
         $id_penilai = $temp["user_id"];
-        $data_atasan = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"));
-        if (count($data_atasan) > 0) {
-            $data['data_atasan'] = $data_atasan[0];
+        $data_atasan = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $id . "/format/json"));
+        foreach ($data_atasan as $atasan) {
+            $data['data_atasan'] = $atasan;
+            if ($atasan->id_akun == $temp['id_akun']) {
+                break;
+            }
         }
 //        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
 //        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
 //        $data["nama_penilai"] = $jabatan[0]->nama;
 //        $data["nip_penilai"] = $jabatan[0]->nip;
-        $id = intval($this->input->get("id_akun"));
+
         $tipe = $this->input->get('tipe');
         $data_staff = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id . "/format/json"));
         $nama_staff = '';
@@ -373,7 +378,7 @@ class laporan extends ceklogin {
         $data["nilai_skp"] = $this->db->query("select p.*, "
                         . "dp.sasaran_angka_kredit, dp.sasaran_kuantitas_output, dp.sasaran_kualitas_mutu,"
                         . "dp.sasaran_waktu, dp.sasaran_biaya, dp.pakai_biaya, dp.satuan_kuantitas,"
-                        . "dp.realisasi_angka_kredit, dp.realisasi_kualitas_mutu, dp.realisasi_biaya,"
+                        . "dp.realisasi_angka_kredit, dp.realisasi_kualitas_mutu, dp.realisasi_biaya, dp.satuan_waktu, "
                         . "ak.*, ((date_part('year',waktu_max) - date_part('year',waktu_min))*12) + (date_part('month',waktu_max) - date_part('month',waktu_min) + case when date_part('day',waktu_max)-date_part('day',waktu_min) > 0 then 1 else 0 end) as realisasi_waktu, "
                         . "case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori "
                         . "from pekerjaan p "
@@ -396,8 +401,8 @@ class laporan extends ceklogin {
 //        $data["departemen"] = $this->input->get("nama_departemen2");
 //        $data["nama"] = $this->input->get("nama2");
 //        $data["nip"] = $this->input->get("nip2");
-        $data['tahun'] = $tahun;
-        $this->load->helper(array('pdf', 'date'));
+        $data['periode'] = $tahun;
+
 
         $data['state'] = 'Report';
 //        $temp = $this->session->userdata('logged_in');
@@ -406,16 +411,26 @@ class laporan extends ceklogin {
 //        $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
 //        $data['pkj_karyawan'] = $result;
 //        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, false);
-        if ($tipe == 'ckp') {
-//        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, true);
-            $html = $this->load->view('laporan/pdf_ckp', $data, true);
-            $filename = 'Laporan CKP ' . $nama_staff . ' periode ' . $periode . ' ' . $tahun . '.pdf';
+        $out = $this->input->get('out');
+        if ($out == 'xls') {
+            if ($tipe == 'ckp') {
+                $this->load->view('laporan/xls_ckp', $data);
+            } else {
+                $this->load->view('laporan/xls_skp', $data);
+            }
         } else {
-            $html = $this->load->view('laporan/pdf_skp', $data, true);
-            $filename = 'Laporan SKP ' . $nama_staff . ' periode ' . $periode . ' ' . $tahun . '.pdf';
+            $this->load->helper(array('pdf', 'date'));
+            if ($tipe == 'ckp') {
+//        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, true);
+                $html = $this->load->view('laporan/pdf_ckp', $data, true);
+                $filename = 'Laporan CKP ' . $nama_staff . ' periode ' . $periode . ' ' . $tahun . '.pdf';
+            } else {
+                $html = $this->load->view('laporan/pdf_skp', $data, true);
+                $filename = 'Laporan SKP ' . $nama_staff . ' periode ' . $periode . ' ' . $tahun . '.pdf';
+            }
+            header("Content-type:application/pdf");
+            echo generate_pdf($html, $filename, false);
         }
-        header("Content-type:application/pdf");
-        echo generate_pdf($html, $filename, false);
 //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
         // It will be called downloaded.pdf
 //        header("Content-Disposition:attachment;filename=" . $filename);
@@ -655,7 +670,7 @@ Data Pengaduan ' . $ket . '
                         . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
                         . "and (date_part('year',tgl_mulai)='$periode' or date_part('year',tgl_selesai)='$periode') "
                         . "order by urutan_kategori")->result_array();
-        
+
         $data_staff = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id . "/format/json"));
         $nama_staff = '';
         if (count($data_staff) > 0) {
@@ -663,7 +678,7 @@ Data Pengaduan ' . $ket . '
             $nama_staff = $data_staff[0]->nama;
         }
         $data['periode'] = $periode;
-//        $this->load->helper(array('pdf', 'date'));
+
 //        echo 'hehe';
         $filename = 'Laporan SKP.pdf';
         $data['state'] = 'Report';
@@ -671,19 +686,23 @@ Data Pengaduan ' . $ket . '
         $data['data_akun'] = $temp;
 //        $data['temp'] = $temp;
         $id_penilai = $temp["user_id"];
-        $data_atasan = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id_penilai . "/format/json"));
-        if (count($data_atasan) > 0) {
-            $data['data_atasan'] = $data_atasan[0];
+        $data_atasan = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/atasan/id/" . $id . "/format/json"));
+        foreach ($data_atasan as $atasan) {
+            $data['data_atasan'] = $atasan;
+            if ($atasan->id_akun == $temp['id_akun']) {
+                break;
+            }
         }
         $tipe = $this->input->get('tipe');
         $out = $this->input->get('out');
         if ($out == 'xls') {
-            if($tipe=='ckp'){
+            if ($tipe == 'ckp') {
                 $this->load->view('laporan/xls_ckp', $data);
-            }else{
+            } else {
                 $this->load->view('laporan/xls_skp', $data);
             }
         } else {
+            $this->load->helper(array('pdf', 'date'));
             $html = '';
             if ($tipe == 'ckp') {
                 $html = $this->load->view('laporan/pdf_ckp', $data, true);

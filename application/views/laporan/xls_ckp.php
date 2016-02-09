@@ -41,9 +41,9 @@ $this->load->library('excel');
 $xls = new PHPExcel();
 
 $sheet = $xls->setActiveSheetIndex(0);
-$sheet->setCellValue('A1', 'PENILAIAN CAPAIAN SASARAN KERJA')->mergeCells('a1:k1');
-$sheet->setCellValue('A2', 'PEGAWAI NEGERI SIPIL')->mergeCells('a2:k2');
-$sheet->setCellValue('A3', 'Jangka Waktu Penilaian');
+$sheet->setCellValue('A1', 'PENILAIAN CAPAIAN SASARAN KERJA ')->mergeCells('a1:r1');
+$sheet->setCellValue('A2', 'PEGAWAI NEGERI SIPIL')->mergeCells('a2:r2');
+$sheet->setCellValue('A3', 'Jangka Waktu Penilaian '.(isset($periode2)? $nama_periode[$periode2]  :''). " Tahun ".$periode);
 $sheet->getStyle('a1:k2')->applyFromArray(array('font' => array('bold' => true), 'alignment' => array('horizontal' => 'center')));
 $sheet->getColumnDimension('a')->setWidth(4);
 $sheet->getColumnDimension('b')->setWidth(70);
@@ -270,7 +270,7 @@ $xls_out = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
 $xls_out->setPreCalculateFormulas(false);
 // Redirect output to a client’s web browser (Excel5)
 header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment;filename="Formulir CKP ' . $data_staff->nama . ' - ' . $periode . '.xls"');
+header('Content-Disposition: attachment;filename="Formulir CKP ' . $data_staff->nama . ' - ' . (isset($periode)?$periode:'') . '.xls"');
 header('Cache-Control: max-age=0');
 // If you're serving to IE 9, then the following may be needed
 header('Cache-Control: max-age=1');
