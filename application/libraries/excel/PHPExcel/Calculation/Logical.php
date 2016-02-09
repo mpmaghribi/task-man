@@ -279,6 +279,8 @@ class PHPExcel_Calculation_Logical {
 	 * @return	mixed	The value of errorpart or testValue determined by error condition
 	 */
 	public static function IFERROR($testValue = '', $errorpart = '') {
+//            echo "test value = ".$testValue;
+//            echo "error part = ".$errorpart;
 		$testValue	= (is_null($testValue))	? '' :	PHPExcel_Calculation_Functions::flattenSingleValue($testValue);
 		$errorpart	= (is_null($errorpart))	? '' :	PHPExcel_Calculation_Functions::flattenSingleValue($errorpart);
 
