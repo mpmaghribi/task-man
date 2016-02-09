@@ -227,13 +227,14 @@ class pekerjaan_staff extends ceklogin {
         $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $list_user = json_decode(file_get_contents($url));
-        
+        $berkas_tugas = $this->db->where(array('id_tugas'=>$id_tugas))->get('file')->result_array();
         $data = array(
             'tugas' => $tugas,
             'pekerjaan' => $pekerjaan,
             'detil_pekerjaan' => $detil_pekerjaan,
             'users' => $list_user,
-            'data_akun' => $session
+            'data_akun' => $session,
+            'berkas_tugas' => $berkas_tugas
         );
         $tahun_max = date('Y');
         $q = $this->db->query("select max(coalesce(date_part('year',tanggal_selesai),date_part('year',now()))) as tahun_max from assign_tugas")->result_array();
