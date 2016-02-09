@@ -79,8 +79,10 @@
                                                     <div class="btn-group">
                                                         <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-xs" type="button"> Simpan PDF<span class="caret"></span> </button>
                                                         <ul class="dropdown-menu">
-                                                            <li><a href="javascript:export_pdf({tipe: 'skp', id_akun: '<?= $staff->id_akun ?>'});">Form SKP</a></li>
-                                                            <li><a href="javascript:export_pdf({tipe: 'ckp', id_akun: '<?= $staff->id_akun ?>'});">Form CKP</a></li>
+                                                            <li><a href="javascript:export_pekerjaan({tipe: 'skp', id_akun: '<?= $staff->id_akun ?>', 'out': 'pdf'});">Form SKP</a></li>
+                                                            <li><a href="javascript:export_pekerjaan({tipe: 'ckp', id_akun: '<?= $staff->id_akun ?>', 'out': 'pdf'});">Form CKP</a></li>
+                                                            <li><a href="javascript:export_pekerjaan({tipe: 'skp', id_akun: '<?= $staff->id_akun ?>', out: 'xls'});">Form SKP Excel</a></li>
+                                                            <li><a href="javascript:export_pekerjaan({tipe: 'ckp', id_akun: '<?= $staff->id_akun ?>', out: 'xls'});">Form CKP Excel</a></li>
                                                             <li><a href="javascript:export_periode({'tipe': 'skp', 'id_akun': '<?= $staff->id_akun ?>'});" data-toggle="modal">Laporan SKP per Periode</a></li>
                                                             <li><a href="javascript:export_periode({'tipe': 'ckp', 'id_akun': '<?= $staff->id_akun ?>'});" data-toggle="modal">Laporan CKP per Periode</a></li>
                                                         </ul>
@@ -283,13 +285,13 @@
             form.submit();
         }
         
-        function export_pdf(data) {
+        function export_pekerjaan(data) {
             var form = $('#form_submit');
             console.log('function print_form_skp(data)');
             console.log(data);
-            form.attr({action: site_url + '/laporan/pdf', method: 'get', target: '_blank'});
+            form.attr({action: site_url + '/laporan/export', method: 'get', target: '_blank'});
             form.html($('<input></input>').attr({type: 'hidden', name: 'periode', value: $('#select_periode').val()}));
-//            form.append($('<input></input>').attr({type: 'hidden', name: 'departemen', value: data.departemen}));
+            form.append($('<input></input>').attr({type: 'hidden', name: 'out', value: data.out}));
             form.append($('<input></input>').attr({type: 'hidden', name: 'id_akun', value: data.id_akun}));
             form.append($('<input></input>').attr({type: 'hidden', name: 'tipe', value: data.tipe}));
 //            form.append($('<input></input>').attr({type: 'hidden', name: 'jabatan', value: data.jabatan}));

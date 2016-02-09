@@ -274,7 +274,7 @@
             var form = $('#form_submit');
             console.log('function print_form_skp(data)');
             console.log(data);
-            form.attr({action: site_url + '/laporan/pdf', method: 'get', target: '_blank'});
+            form.attr({action: site_url + '/laporan/export', method: 'get', target: '_blank'});
             form.html($('<input></input>').attr({type: 'hidden', name: 'periode', value: $('#select_periode').val()}));
 //            form.append($('<input></input>').attr({type: 'hidden', name: 'departemen', value: data.departemen}));
             form.append($('<input></input>').attr({type: 'hidden', name: 'id_akun', value: data.id_akun}));

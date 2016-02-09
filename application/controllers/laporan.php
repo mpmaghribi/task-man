@@ -3,11 +3,12 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-//require APPPATH . '/libraries/ceklogin.php';
-class laporan extends CI_Controller {
+require_once APPPATH . '/libraries/ceklogin.php';
+class laporan extends ceklogin {
 
     public function __construct() {
         parent::__construct();
+//        echo 'hehe';
         //$this->load->database();
         $this->load->model('laporan_model');
         $this->load->model('taskman_repository');
@@ -397,7 +398,7 @@ class laporan extends CI_Controller {
 //        $data["nip"] = $this->input->get("nip2");
         $data['tahun'] = $tahun;
         $this->load->helper(array('pdf', 'date'));
-        
+
         $data['state'] = 'Report';
 //        $temp = $this->session->userdata('logged_in');
         $data['data_akun'] = $temp;
@@ -405,13 +406,13 @@ class laporan extends CI_Controller {
 //        $result = $this->laporan_model->sp_laporan_per_periode($periode, $id);
 //        $data['pkj_karyawan'] = $result;
 //        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, false);
-        if($tipe=='ckp'){
+        if ($tipe == 'ckp') {
 //        $html = $this->load->view('laporan/laporan_ckp_pdf', $data, true);
             $html = $this->load->view('laporan/pdf_ckp', $data, true);
-            $filename = 'Laporan CKP '. $nama_staff.' periode ' . $periode . ' '. $tahun .'.pdf';
-        }else{
+            $filename = 'Laporan CKP ' . $nama_staff . ' periode ' . $periode . ' ' . $tahun . '.pdf';
+        } else {
             $html = $this->load->view('laporan/pdf_skp', $data, true);
-            $filename = 'Laporan SKP '. $nama_staff.' periode ' . $periode . ' '. $tahun .'.pdf';
+            $filename = 'Laporan SKP ' . $nama_staff . ' periode ' . $periode . ' ' . $tahun . '.pdf';
         }
         header("Content-type:application/pdf");
         echo generate_pdf($html, $filename, false);
@@ -645,7 +646,7 @@ Data Pengaduan ' . $ket . '
         echo $stringData;
     }
 
-    function pdf() {
+    function export() {
         $id = intval($this->input->get('id_akun'));
         $periode = abs(intval($this->input->get('periode')));
         $data["nilai_skp"] = $this->db->query("select *, case when p.kategori='rutin' or p.kategori='project' then 0 else 1 end as urutan_kategori "
@@ -654,13 +655,16 @@ Data Pengaduan ' . $ket . '
                         . "where dp.id_akun='$id' and p.status_pekerjaan=7 "
                         . "and (date_part('year',tgl_mulai)='$periode' or date_part('year',tgl_selesai)='$periode') "
                         . "order by urutan_kategori")->result_array();
+        
         $data_staff = json_decode(file_get_contents(str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/userjabdep/id/" . $id . "/format/json"));
         $nama_staff = '';
         if (count($data_staff) > 0) {
             $data['data_staff'] = $data_staff[0];
             $nama_staff = $data_staff[0]->nama;
         }
-        $this->load->helper(array('pdf', 'date'));
+        $data['periode'] = $periode;
+//        $this->load->helper(array('pdf', 'date'));
+//        echo 'hehe';
         $filename = 'Laporan SKP.pdf';
         $data['state'] = 'Report';
         $temp = $this->session->userdata('logged_in');
@@ -671,37 +675,30 @@ Data Pengaduan ' . $ket . '
         if (count($data_atasan) > 0) {
             $data['data_atasan'] = $data_atasan[0];
         }
-//        $data["jabatan_penilai"] = $jabatan[0]->nama_jabatan;
-//        $data["departemen_penilai"] = $jabatan[0]->nama_departemen;
-//        $data["nama_penilai"] = $jabatan[0]->nama;
-//        $data["nip_penilai"] = $jabatan[0]->nip;
-//        $this->load->model("pekerjaan_model");
-//        $result = $this->taskman_repository->sp_view_pekerjaan($id);
-//        $data['pkj_karyawan'] = $result;
-//        $list_id_pekerjaan = array();
-//        foreach ($result as $pekerjaan) {
-//            $list_id_pekerjaan[] = $pekerjaan->id_pekerjaan;
-//        }
-        //var_dump($list_id_pekerjaan);
-//        $staff = $this->akun->my_staff($temp["user_id"]);
-//        $detil_pekerjaan = $this->pekerjaan_model->get_detil_pekerjaan($list_id_pekerjaan);
-//        $data["detil_pekerjaan"] = json_encode($detil_pekerjaan);
-//        $data["my_staff"] = json_encode($staff);
         $tipe = $this->input->get('tipe');
-        $html='';
-        if ($tipe == 'ckp') {
-            $html = $this->load->view('laporan/pdf_ckp', $data, true);
-            $filename = 'Laporan CKP ' . $nama_staff . ' - ' . $periode .'.pdf';
+        $out = $this->input->get('out');
+        if ($out == 'xls') {
+            if($tipe=='ckp'){
+                $this->load->view('laporan/xls_ckp', $data);
+            }else{
+                $this->load->view('laporan/xls_skp', $data);
+            }
         } else {
+            $html = '';
+            if ($tipe == 'ckp') {
+                $html = $this->load->view('laporan/pdf_ckp', $data, true);
+                $filename = 'Laporan CKP ' . $nama_staff . ' - ' . $periode . '.pdf';
+            } else {
 //            $html = $this->load->view('laporan/laporan_pekerjaan_pdf', $data, false);
-            $html = $this->load->view('laporan/pdf_skp', $data, true);
-            $filename = 'Laporan SKP ' . $nama_staff . ' - ' . $periode .'.pdf';
+                $html = $this->load->view('laporan/pdf_skp', $data, true);
+                $filename = 'Laporan SKP ' . $nama_staff . ' - ' . $periode . '.pdf';
+            }
+            //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
+            header("Content-type:application/pdf");
+            // It will be called downloaded.pdf
+            //header("Content-Disposition:attachment;filename=" . $filename);
+            echo generate_pdf($html, $filename, false);
         }
-        //$pdf->WriteHTML($html, isset($_GET['vuehtml']));
-        header("Content-type:application/pdf");
-        // It will be called downloaded.pdf
-        //header("Content-Disposition:attachment;filename=" . $filename);
-        echo generate_pdf($html, $filename, false);
     }
 
     public function get_idModule() {
