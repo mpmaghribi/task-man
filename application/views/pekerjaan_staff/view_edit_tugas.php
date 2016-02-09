@@ -106,19 +106,22 @@ $this->load->view("taskman_header_page");
                                                     <label for="prioritas" class="control-label col-lg-3">File</label>
                                                     <div class="col-lg-6">
                                                         <div id="list_file_upload_assign">
+                                                            <div id="file_lama">
+                                                                <table  class="table table-hover general-table" id="berkas_tugas_lama"></table>
+                                                            </div>
                                                             <div id="file_baru">
-                                                                <table  class="table table-hover general-table" id="berkas_baru"></table>
+                                                                <table  class="table table-hover general-table" id="berkas_tugas"></table>
                                                             </div>
                                                         </div>
                                                         <div style="display:none">
-                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_tugas" onchange="pilih_berkas_tugas_changed()"/>
                                                         </div>
-                                                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
+                                                        <button class="btn btn-success" type="button" id="button_trigger_file" onclick="click_pilih_berkas_tugas()"><i class="fa fa-files-o"></i> Pilih File</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="col-lg-offset-3 col-lg-6">
-                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                                        <button class="btn btn-info" type="submit"><i class="fa fa-save"></i> Save</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -141,75 +144,74 @@ $this->load->view("taskman_header_page");
         <!--right sidebar end-->
     </section>
     <?php $this->load->view("taskman_footer_page"); ?>
-    <script type="text/javascript" src="<?= base_url() ?>assets/js2/date_picker_init.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>assets/js2/pekerjaan_staff/js_view_pekerjaan_staff.js"></script>
 
     <script >
-                                                            var list_staff = <?php echo json_encode($users) ?>;
-                                                            var pekerjaan =<?= json_encode($pekerjaan) ?>;
-                                                            var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
-                                                            var site_url = '<?= site_url() ?>';
-                                                            var tugas=<?=  json_encode($tugas)?>;
-                                                            $(document).ready(function () {
-                                                                var p = pekerjaan;
-                                                                var tanggal_bawah_arr = p['tanggal_mulai'].split('-');
-                                                                var tanggal_atas_arr = p['tanggal_selesai'].split('-');
-                                                                var tanggal_bawah = new Date(parseInt(tanggal_bawah_arr[0]), parseInt(tanggal_bawah_arr[1]) - 1, parseInt(tanggal_bawah_arr[2]));
-//                                                                console.log('tanggal bawah = ' + tanggal_bawah);
-                                                                var tanggal_atas = new Date(parseInt(tanggal_atas_arr[0]), parseInt(tanggal_atas_arr[1]) - 1, parseInt(tanggal_atas_arr[2]));
-                                                                console.log('tanggal atas = ' + tanggal_atas);
-//                                                                $('#tugas_tanggal_mulai').val(tanggal_bawah_arr[2] + '-' + tanggal_bawah_arr[1] + '-' + tanggal_bawah_arr[0]);
-//                                                                $('#tugas_tanggal_selesai').val(tanggal_atas_arr[2] + '-' + tanggal_atas_arr[1] + '-' + tanggal_atas_arr[0]);
-                                                                var tanggal_mulai = $('#tugas_tanggal_mulai').datepicker({
-                                                                    format: 'dd-mm-yyyy',
-                                                                    onRender: function (date) {
-                                                                        return  tanggal_bawah > date || date > tanggal_atas ? 'disabled' : '';
-                                                                    }
-                                                                }).on('changeDate', function (ev) {
-                                                                    tanggal_selesai.setValue(new Date(ev.date));
-                                                                    tanggal_mulai.hide();
-//        tanggal_selesai.click();
-                                                                    $('#tugas_tanggal_selesai').focus();
-                                                                }).data('datepicker');
-
-                                                                var tanggal_selesai = $('#tugas_tanggal_selesai').datepicker({
-                                                                    format: 'dd-mm-yyyy',
-                                                                    onRender: function (date) {
-                                                                        return tanggal_bawah > date || date > tanggal_atas || tanggal_mulai.date > date ? 'disabled' : '';
-                                                                    }
-                                                                }).on('changeDate', function (ev) {
-                                                                    tanggal_selesai.hide();
-                                                                }).data('datepicker');
-                                                            });
-                                                            list_detil_pekerjaan[pekerjaan['id_pekerjaan']] = [];
-                                                            for (var i = 0, i2 = detil_pekerjaan.length; i < i2; i++) {
-                                                                var dp = detil_pekerjaan[i];
-                                                                list_detil_pekerjaan[pekerjaan['id_pekerjaan']].push(dp);
-                                                            }
-                                                            var list_id_terlibat2 = JSON.parse(tugas['id_akun'].replace('{', '[').replace('}', ']'));
-                                                            query_staff();
-                                                            for (var i = 0, i2 = list_id_terlibat2.length; i < i2; i++) {
-                                                                var id_terlibat2 = list_id_terlibat2[i];
-                                                                var nama='';
-                                                                for (var j = 0, j2 = list_id.length; j < j2; j++) {
-                                                                    if(id_terlibat2==list_id[j]){
-                                                                        nama=list_nama[j];
-                                                                        break;
-                                                                    }
-                                                                }
-                                                                var detil_pekerjaan=list_detil_pekerjaan[tugas['id_pekerjaan']];
-                                                                var tidak_ada_di_detil=true;
-                                                                for(var j=0,j2=detil_pekerjaan.length;j<j2;j++){
-                                                                    var dp=detil_pekerjaan[j];
-                                                                    if(dp['id_akun']==id_terlibat2){
-                                                                        tidak_ada_di_detil=false;
-                                                                        break;
-                                                                    }
-                                                                }
-                                                                if(tidak_ada_di_detil==true){
-                                                                    continue;
-                                                                }
-                                                                enroll_staff(id_terlibat2,nama,'tugas');
-                                                            }
+    var list_staff = <?php echo json_encode($users) ?>;
+    var pekerjaan =<?= json_encode($pekerjaan) ?>;
+    var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
+    var site_url = '<?= site_url() ?>';
+    var tugas=<?=  json_encode($tugas)?>;
+    $(document).ready(function () {
+        var p = pekerjaan;
+        var tanggal_bawah_arr = p['tanggal_mulai'].split('-');
+        var tanggal_atas_arr = p['tanggal_selesai'].split('-');
+        var tanggal_bawah = new Date(parseInt(tanggal_bawah_arr[0]), parseInt(tanggal_bawah_arr[1]) - 1, parseInt(tanggal_bawah_arr[2]), 0, 0, 0, 0);
+        var tanggal_atas = new Date(parseInt(tanggal_atas_arr[0]), parseInt(tanggal_atas_arr[1]) - 1, parseInt(tanggal_atas_arr[2]), 0, 0, 0, 0);
+        console.log('tanggal mulai tugas = ' + tanggal_bawah);
+        console.log('tanggal selesai tugas = ' + tanggal_atas);
+        init_input_deadline_tugas();
+        input_deadline_tugas_mulai.setValue(tanggal_bawah);
+        input_deadline_tugas_selesai.setValue(tanggal_atas);
+//        console.log('tanggal atas = ' + tanggal_atas);
+//        var tanggal_mulai = $('#tugas_tanggal_mulai').datepicker({
+//            format: 'dd-mm-yyyy',
+//            onRender: function (date) {
+//                return  tanggal_bawah > date || date > tanggal_atas ? 'disabled' : '';
+//            }
+//        }).on('changeDate', function (ev) {
+////            tanggal_selesai.setValue(new Date(ev.date));
+//            tanggal_mulai.hide();
+//            $('#tugas_tanggal_selesai').focus();
+//        }).data('datepicker');
+//        var tanggal_selesai = $('#tugas_tanggal_selesai').datepicker({
+//            format: 'dd-mm-yyyy',
+//            onRender: function (date) {
+//                return tanggal_bawah > date || date > tanggal_atas || tanggal_mulai.date > date ? 'disabled' : '';
+//            }
+//        }).on('changeDate', function (ev) {
+//            tanggal_selesai.hide();
+//        }).data('datepicker');
+    });
+    list_detil_pekerjaan[pekerjaan['id_pekerjaan']] = [];
+    for (var i = 0, i2 = detil_pekerjaan.length; i < i2; i++) {
+        var dp = detil_pekerjaan[i];
+        list_detil_pekerjaan[pekerjaan['id_pekerjaan']].push(dp);
+    }
+    var list_id_terlibat2 = JSON.parse(tugas['id_akun'].replace('{', '[').replace('}', ']'));
+    for (var i = 0, i2 = list_id_terlibat2.length; i < i2; i++) {
+        var id_terlibat2 = list_id_terlibat2[i];
+        var nama='';
+        for (var j = 0, j2 = list_staff.length; j < j2; j++) {
+            var staff = list_staff[j];
+            if(id_terlibat2 == staff['id_akun']){
+                nama = staff['nama'];
+                break;
+            }
+        }
+        var detil_pekerjaan = list_detil_pekerjaan[tugas['id_pekerjaan']];
+        var tidak_ada_di_detil=true;
+        for(var j=0,j2=detil_pekerjaan.length;j<j2;j++){
+            var dp=detil_pekerjaan[j];
+            if(dp['id_akun']==id_terlibat2){
+                tidak_ada_di_detil=false;
+                break;
+            }
+        }
+        if(tidak_ada_di_detil==true){
+            continue;
+        }
+        enroll_staff(id_terlibat2,nama,'tugas');
+    }
 
     </script>

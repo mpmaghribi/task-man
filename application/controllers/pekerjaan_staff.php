@@ -199,23 +199,35 @@ class pekerjaan_staff extends ceklogin {
 
     function edit_tugas() {
         $id_tugas = intval($this->input->get('id_tugas'));
+        $session = $this->session->userdata('logged_in');
+        $data = array('data_akun' => $session);
         $q = $this->db->query("select *, date_part('year', tanggal_mulai) as periode, to_char(tanggal_mulai,'DD-MM-YYYY') as tanggal_mulai2, to_char(tanggal_selesai,'DD-MM-YYYY') as tanggal_selesai2 from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
         if (count($q) <= 0) {
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Tugas tidak dapat ditemukan';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $tugas = $q[0];
         $id_pekerjaan = $tugas['id_pekerjaan'];
-        $q = $this->db->query("select *, to_char(tgl_mulai, 'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $q = $this->db->query("select *, to_char(tgl_mulai, 'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai from pekerjaan where id_pekerjaan='$id_pekerjaan' and status_pekerjaan=7")->result_array();
         if (count($q) <= 0) {
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Pekerjaan tidak dapat ditemukan';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $pekerjaan = $q[0];
+        if($pekerjaan['id_penanggung_jawab'] != $session['id_akun']){
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengubah tugas di pekerjaan <strong>'.$pekerjaan['nama_pekerjaan'].'</strong>';
+            $this->load->view('pekerjaan/kesalahan', $data);
+            return;
+        }
         $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         $url = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $list_user = json_decode(file_get_contents($url));
-        $session = $this->session->userdata('logged_in');
+        
         $data = array(
             'tugas' => $tugas,
             'pekerjaan' => $pekerjaan,
@@ -245,7 +257,7 @@ class pekerjaan_staff extends ceklogin {
         $id_pekerjaan = abs(intval($this->input->get('id_pekerjaan')));
         $this->load->model(array('akun'));
         $session = $this->session->userdata('logged_in');
-        $data = array('data_akun'=>$session);
+        $data = array('data_akun' => $session);
         $pekerjaan = null;
         $q = $this->db->query("select *, to_char(tgl_mulai,'DD-MM-YYYY') as tanggal_mulai, to_char(tgl_selesai,'DD-MM-YYYY') as tanggal_selesai from pekerjaan where id_pekerjaan='$id_pekerjaan' and status_pekerjaan=7")->result_array();
         if (count($q) > 0) {
@@ -257,7 +269,7 @@ class pekerjaan_staff extends ceklogin {
             $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
-        
+
         if ($session['user_id'] != $pekerjaan['id_penanggung_jawab']) {
             $data['judul_kesalahan'] = 'Kesalahan';
             $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengubah pekerjaan ini';
@@ -497,24 +509,30 @@ class pekerjaan_staff extends ceklogin {
 //    }
     function add_tugas() {
         $session = $this->session->userdata('logged_in');
+        $data = array('data_akun'=>$session);
         $id_pekerjaan = intval($this->input->post('id_pekerjaan'));
         $list_id_enroll = $this->input->post('staff_enroll');
         $deskripsi = $this->input->post('deskripsi_pkj');
         $tgl_mulai = $this->input->post('tgl_mulai');
         $tgl_selesai = $this->input->post('tgl_selesai');
         if (is_array($list_id_enroll) == false) {
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Anda belum memilih staff untuk diberikan tugas ini';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
-        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan' and status_pekerjaan=7")->result_array();
         if (count($q) <= 0) {
-            echo '';
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Pekerjaan tidak dapat ditemukan';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $pekerjaan = $q[0];
         if ($pekerjaan['id_penanggung_jawab'] != $session['user_id']) {
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Anda tidak berhak menambahkan tugas ke dalam pekerjaan <strong>'.$pekerjaan['nama_pekerjaan'].'</strong>';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $detil_pekerjaan = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
@@ -531,7 +549,9 @@ class pekerjaan_staff extends ceklogin {
             }
         }
         if (count($list_id_enroll) <= 0) {
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Tidak staff yang dipilih untuk mengerjakan pekerjaan ini';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $id_akun = '{' . implode(',', $list_id_enroll) . '}';
@@ -546,6 +566,18 @@ class pekerjaan_staff extends ceklogin {
         );
         $this->db->insert('assign_tugas', $tugas_baru);
         $id_assign = $this->db->insert_id();
+        $this->load->library(array('myuploadlib'));
+        $uploader = new MyUploadLib();
+        $uploader->prosesUpload('berkas', date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
+        $uploadedFiles = $uploader->getUploadedFiles();
+        foreach ($uploadedFiles as $file) {
+            $this->db->insert('file', array(
+                'id_pekerjaan' => $id_pekerjaan,
+                'nama_file' => $file['name'],
+                'path' => $file['filePath'],
+                'id_tugas' => $id_assign
+            ));
+        }
         echo "id assign $id_assign";
         redirect(site_url() . '/pekerjaan_staff/detail_tugas?id_tugas=' . $id_assign);
     }
@@ -1037,23 +1069,36 @@ class pekerjaan_staff extends ceklogin {
         $deskripsi = $this->input->post('deskripsi_pkj');
         $tanggal_mulai = $this->input->post('tgl_mulai');
         $tanggal_selesai = $this->input->post('tgl_selesai');
+        $session = $this->session->userdata('logged_in');
+        $data['data_akun'] = $session;
         if (!is_array($list_id_staff_enroll)) {
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Anda belum memilih staff untuk diberikan tugas';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $q = $this->db->query("select * from assign_tugas where id_assign_tugas='$id_tugas'")->result_array();
         if (count($q) <= 0) {
-            redirect(site_url() . '/pekerjaan_staff');
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Tugas yang akan diupdate tidak dapat ditemukan';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $tugas = $q[0];
-        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
+        $q = $this->db->query("select * from pekerjaan where id_pekerjaan='$id_pekerjaan' and status_pekerjaan=7")->result_array();
         if (count($q) <= 0) {
-            redirect(site_url() . '/pekerjaan_staff');
-            echo 'Pekerjaan tidak dapat ditemukan';
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Pekerjaan tidak dapat ditemukan';
+            $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
         $pekerjaan = $q[0];
+        if($pekerjaan['id_penanggung_jawab'] != $session['id_akun']){
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Anda tidak berhak menambahkan tugas ke dalam pekerjaan <strong>'.$pekerjaan['nama_pekerjaan'].'</strong>';
+            $this->load->view('pekerjaan/kesalahan', $data);
+            return;
+        }
         $detil_pekerjaan2 = $this->db->query("select * from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'")->result_array();
         $detil_pekerjaan = array();
         foreach ($detil_pekerjaan2 as $dp) {
@@ -1551,7 +1596,7 @@ class pekerjaan_staff extends ceklogin {
         $session = $this->session->userdata('logged_in');
         $periode = abs(intval($this->input->get('periode')));
         $my_id = $session['user_id'];
-        $result = $this->db->query("select *, to_char(tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai from pekerjaan where id_penanggung_jawab='$my_id' and (date_part('year',tgl_mulai)='$periode') and kategori='rutin'")->result_array();
+        $result = $this->db->query("select *, to_char(tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai from pekerjaan where status_pekerjaan=7 and id_penanggung_jawab='$my_id' and (date_part('year',tgl_mulai)='$periode') and (kategori='rutin' or kategori='project')")->result_array();
         echo json_encode($result);
     }
 

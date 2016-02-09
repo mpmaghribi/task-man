@@ -14,30 +14,32 @@ $(document).ready(function () {
         get_list_detil_pekerjaan();
         change_deadline_tugas();
         $("#button_tampilkan_staff_tugas").show("fast");
+        console.log('clear assigned staff in tugas');
         $('#tabel_assign_staff_tugas').html('');
     });
     init_list_pekerjaan_untuk_periode();
     init_input_deadline();
+    init_input_deadline_tugas();
 });
 
-function assign_periode_changed(){
+function assign_periode_changed() {
     var input_periode2 = document.getElementById('input_assign_periode');
     console.log('old value = ' + input_periode2.oldvalue);
     console.log('new value = ' + input_periode2.value);
     var input_periode = $('#input_assign_periode');
     var periode = parseInt(input_periode.val());
-    console.log('periode = '+periode);
-    if(isNaN(periode)){
+    console.log('periode = ' + periode);
+    if (isNaN(periode)) {
         var hari_ini = new Date();
         periode = hari_ini.getFullYear();
-    }else if(periode < 0){
+    } else if (periode < 0) {
         periode = -periode;
     }
     input_periode.val(periode);
     ubah_input_deadline();
 }
 
-function ubah_input_deadline(){
+function ubah_input_deadline() {
     var periode = parseInt($('#input_assign_periode').val());
     assign_date_max.setFullYear(periode);
     assign_date_min.setFullYear(periode);
@@ -49,7 +51,7 @@ var assign_date_max = new Date();
 var assign_date_min = new Date();
 var input_deadline_mulai = null;
 var input_deadline_selesai = null;
-function init_input_deadline(){
+function init_input_deadline() {
     assign_date_max.setMilliseconds(0);
     assign_date_max.setSeconds(0);
     assign_date_max.setMinutes(0);
@@ -81,8 +83,73 @@ function init_input_deadline(){
     }).on('changeDate', function (ev) {
         input_deadline_selesai.hide('fast');
     }).data('datepicker');
-    input_deadline_mulai.setValue(assign_date_min);
-    input_deadline_selesai.setValue(assign_date_max);
+    if (input_deadline_mulai != null) {
+        input_deadline_mulai.setValue(assign_date_min);
+    }
+    if (input_deadline_selesai != null) {
+        input_deadline_selesai.setValue(assign_date_max);
+    }
+}
+
+var input_deadline_tugas_mulai = null;
+var input_deadline_tugas_selesai = null;
+var tugas_date_max = new Date();
+var tugas_date_min = new Date();
+var input_deadline_tugas_inited = false;
+function init_input_deadline_tugas(tgl_mulai, tgl_selesai) {
+    if(input_deadline_tugas_inited == true){
+        return;
+    }
+    input_deadline_tugas_inited = true;
+    console.log(tgl_mulai);
+    console.log(tgl_selesai);
+    tugas_date_max.setMonth(11);
+    tugas_date_max.setDate(31);
+    tugas_date_max.setHours(0);
+    tugas_date_max.setMinutes(0);
+    tugas_date_max.setSeconds(0);
+    tugas_date_max.setMilliseconds(0);
+    tugas_date_min.setMonth(0);
+    tugas_date_min.setDate(1);
+    tugas_date_min.setHours(0);
+    tugas_date_min.setMinutes(0);
+    tugas_date_min.setSeconds(0);
+    tugas_date_min.setMilliseconds(0);
+    input_deadline_tugas_mulai = $('#tugas_tanggal_mulai').datepicker({
+        format: 'dd-mm-yyyy',
+        onRender: function (date) {
+            return date < tugas_date_min || date >= tugas_date_max ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+        input_deadline_tugas_mulai.hide('fast');
+        $('#assign_input_tanggal_selesai').focus();
+    }).data('datepicker');
+    input_deadline_tugas_selesai = $('#tugas_tanggal_selesai').datepicker({
+        format: 'dd-mm-yyyy',
+        onRender: function (date) {
+            return date <= input_deadline_tugas_mulai.date || date >= tugas_date_max ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+        input_deadline_tugas_selesai.hide('fast');
+    }).data('datepicker');
+    if (input_deadline_tugas_mulai != null) {
+        if (tgl_mulai == undefined) {
+            console.log('init tugas mulai ke awal tahun');
+            input_deadline_tugas_mulai.setValue(tugas_date_min);
+        } else {
+            console.log('init tugas mulai ke inputan user');
+            input_deadline_tugas_mulai.setValue(tgl_mulai);
+        }
+    }
+    if (input_deadline_tugas_selesai != null) {
+        if (tgl_selesai == undefined) {
+            console.log('init tugas selesai ke akhir tahun');
+            input_deadline_tugas_selesai.setValue(tugas_date_max);
+        } else {
+            console.log('init tugas selesai ke inputan user');
+            input_deadline_tugas_selesai.setValue(tgl_selesai);
+        }
+    }
 }
 
 function change_deadline_tugas() {
@@ -91,30 +158,40 @@ function change_deadline_tugas() {
     var tanggal_bawah_arr = p['tanggal_mulai'].split('-');
     var tanggal_atas_arr = p['tanggal_selesai'].split('-');
     var tanggal_bawah = new Date(parseInt(tanggal_bawah_arr[0]), parseInt(tanggal_bawah_arr[1]) - 1, parseInt(tanggal_bawah_arr[2]));
+    tanggal_bawah.setHours(0);
+    tanggal_bawah.setMinutes(0);
+    tanggal_bawah.setSeconds(0);
+    tanggal_bawah.setMilliseconds(0);
     console.log('tanggal bawah = ' + tanggal_bawah);
     var tanggal_atas = new Date(parseInt(tanggal_atas_arr[0]), parseInt(tanggal_atas_arr[1]) - 1, parseInt(tanggal_atas_arr[2]));
+    tanggal_atas.setHours(0);
+    tanggal_atas.setMinutes(0);
+    tanggal_atas.setSeconds(0);
+    tanggal_atas.setMilliseconds(0);
     console.log('tanggal atas = ' + tanggal_atas);
-    $('#tugas_tanggal_mulai').val(tanggal_bawah_arr[2] + '-' + tanggal_bawah_arr[1] + '-' + tanggal_bawah_arr[0]);
-    $('#tugas_tanggal_selesai').val(tanggal_atas_arr[2] + '-' + tanggal_atas_arr[1] + '-' + tanggal_atas_arr[0]);
-    var tanggal_mulai = $('#tugas_tanggal_mulai').datepicker({
-        format: 'dd-mm-yyyy',
-        onRender: function (date) {
-            return  tanggal_bawah > date || date > tanggal_atas ? 'disabled' : '';
-        }
-    }).on('changeDate', function (ev) {
-        tanggal_selesai.setValue(new Date(ev.date));
-        tanggal_mulai.hide();
-        $('#tugas_tanggal_selesai').focus();
-    }).data('datepicker');
+//    $('#tugas_tanggal_mulai').val(tanggal_bawah_arr[2] + '-' + tanggal_bawah_arr[1] + '-' + tanggal_bawah_arr[0]);
+//    $('#tugas_tanggal_selesai').val(tanggal_atas_arr[2] + '-' + tanggal_atas_arr[1] + '-' + tanggal_atas_arr[0]);
+//    var tanggal_mulai = $('#tugas_tanggal_mulai').datepicker({
+//        format: 'dd-mm-yyyy',
+//        onRender: function (date) {
+//            return  tanggal_bawah > date || date > tanggal_atas ? 'disabled' : '';
+//        }
+//    }).on('changeDate', function (ev) {
+////        tanggal_selesai.setValue(new Date(ev.date));
+//        tanggal_mulai.hide();
+//        $('#tugas_tanggal_selesai').focus();
+//    }).data('datepicker');
+//
+//    var tanggal_selesai = $('#tugas_tanggal_selesai').datepicker({
+//        format: 'dd-mm-yyyy',
+//        onRender: function (date) {
+//            return tanggal_bawah > date || date > tanggal_atas || tanggal_mulai.date > date ? 'disabled' : '';
+//        }
+//    }).on('changeDate', function (ev) {
+//        tanggal_selesai.hide();
+//    }).data('datepicker');
 
-    var tanggal_selesai = $('#tugas_tanggal_selesai').datepicker({
-        format: 'dd-mm-yyyy',
-        onRender: function (date) {
-            return tanggal_bawah > date || date > tanggal_atas || tanggal_mulai.date > date ? 'disabled' : '';
-        }
-    }).on('changeDate', function (ev) {
-        tanggal_selesai.hide();
-    }).data('datepicker');
+
 }
 var list_detil_pekerjaan = [];
 function get_list_detil_pekerjaan() {
@@ -141,7 +218,7 @@ function get_list_detil_pekerjaan() {
 var list_pekerjaan = [];
 function init_list_pekerjaan_untuk_periode() {
     $("#button_tampilkan_staff_tugas").hide("fast");
-    $('#tabel_assign_staff_tugas').html('');
+//    $('#tabel_assign_staff_tugas').html('');
     var select_pekerjaan = $('#tugas_select_pekerjaan');
     select_pekerjaan.html('<option disabled value="0" selected>Pilih Pekerjaan</option>');
     $.ajax({
@@ -301,6 +378,7 @@ function pilih_staff_ok() {
     console.log('end of function pilih_staff_ok()');
 }
 function enroll_staff(id_user, nama_user, tab) {
+    console.log('enrool id = ' + id_user +', name = ' + nama_user + ', tab = ' + tab);
     var enrolled_staff = $('<input></input>').attr({id: 'staff_enroll_' + tab + '_' + id_user, name: 'staff_enroll[]', value: id_user, type: 'hidden'});
     $('#tabel_assign_staff_' + tab).append('<tr id="staff_' + tab + '_' + id_user + '">' +
             '<td id="nama_staff_' + tab + '_' + id_user + '">' + nama_user + '</td>' +

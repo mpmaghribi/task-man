@@ -260,7 +260,7 @@
                 var sekarang_arr = json['sekarang'].split('-');
                 var html = '';
                 var jumlah_notif = 0;
-                console.log(sekarang_arr);
+//                console.log(sekarang_arr);
                 var pekerjaan = json['pekerjaan_saya'];
                 for (var i = 0, i2 = pekerjaan.length; i < i2; i++) {
                     var p = pekerjaan[i];
