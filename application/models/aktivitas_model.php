@@ -21,7 +21,7 @@ class aktivitas_model extends dtpg {
                 to_char(ap.waktu_selesai, 'YYYY-MM-DD HH24:MI:SS') as waktu_selesai2
                 from aktivitas_pekerjaan ap
                 left join (
-                    select id_aktivitas, json_agg(nama_file) as nama_files, json_agg(id_file) as ids
+                    select id_aktivitas, array_agg(nama_file) as nama_files, array_agg(id_file) as ids
                     from file
                     where id_detil_pekerjaan = '$id_detil_pekerjaan'
                     group by id_aktivitas
@@ -55,7 +55,7 @@ class aktivitas_model extends dtpg {
                 to_char(dp.waktu_selesai,'YYYY-MM-DD HH24:MI:SS') as waktu_selesai2
                 from detil_progress dp
                 left join (
-                    select id_progress, json_agg(nama_file) as nama_files, json_agg(id_file) as ids
+                    select id_progress, array_agg(nama_file) as nama_files, array_agg(id_file) as ids
                     from file
                     where id_detil_pekerjaan = '$id_deti_pekerjaan'
                     group by id_progress

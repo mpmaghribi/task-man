@@ -1329,7 +1329,7 @@ class pekerjaan_staff extends ceklogin {
             $this->db->update('pekerjaan', $pekerjaan, array('id_pekerjaan' => $id_pekerjaan));
             $this->load->library(array('myuploadlib'));
             $uploader = new MyUploadLib();
-            $uploader->prosesUpload('berkas');
+            $uploader->prosesUpload('berkas', date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
             $uploadedFiles = $uploader->getUploadedFiles();
             foreach ($uploadedFiles as $file) {
                 $this->db->insert('file', array(

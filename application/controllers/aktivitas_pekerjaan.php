@@ -31,7 +31,7 @@ class aktivitas_pekerjaan extends ceklogin {
             $q = $this->db->query("select *, to_char(waktu_mulai,'YYYY-MM-DD') as waktu_mulai2, to_char(waktu_selesai,'YYYY-MM-DD') as waktu_selesai2,
 					berkas.id_file, berkas.nama_file
 					from aktivitas_pekerjaan 
-					left join (select json_agg(id_file) as id_file, json_agg(nama_file) as nama_file, id_tugas,id_aktivitas from file group by id_tugas,id_aktivitas) berkas 
+					left join (select array_agg(id_file) as id_file, array_agg(nama_file) as nama_file, id_tugas,id_aktivitas from file group by id_tugas,id_aktivitas) berkas 
 					on berkas.id_aktivitas=aktivitas_pekerjaan.id_aktivitas and berkas.id_tugas=aktivitas_pekerjaan.id_tugas
 					where aktivitas_pekerjaan.id_aktivitas='$id_aktivitas'")->result_array();
             if (count($q) > 0) {
@@ -773,7 +773,7 @@ class aktivitas_pekerjaan extends ceklogin {
         $q = $this->db->query("select *, to_char(waktu_mulai,'YYYY-MM-DD') as waktu_mulai2, to_char(waktu_selesai,'YYYY-MM-DD') as waktu_selesai2,
 					berkas.id_file, berkas.nama_file
 					from aktivitas_pekerjaan 
-					left join (select json_agg(id_file) as id_file, json_agg(nama_file) as nama_file, id_tugas,id_aktivitas from file group by id_tugas,id_aktivitas) berkas 
+					left join (select array_agg(id_file) as id_file, array_agg(nama_file) as nama_file, id_tugas,id_aktivitas from file group by id_tugas,id_aktivitas) berkas 
 					on berkas.id_aktivitas=aktivitas_pekerjaan.id_aktivitas and berkas.id_tugas=aktivitas_pekerjaan.id_tugas
 					where aktivitas_pekerjaan.id_aktivitas='$id_aktivitas'")->result_array();
         $result = null;

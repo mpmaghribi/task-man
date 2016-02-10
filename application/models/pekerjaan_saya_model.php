@@ -113,7 +113,7 @@ class pekerjaan_saya_model extends dtpg {
             inner join detil_pekerjaan dp
             on p.id_pekerjaan=dp.id_pekerjaan
             inner join (
-               select json_agg(dp2.id_akun) as id_akuns, dp2.id_pekerjaan 
+               select array_agg(dp2.id_akun) as id_akuns, dp2.id_pekerjaan 
                from detil_pekerjaan dp2 
                group by dp2.id_pekerjaan
             ) as dp2

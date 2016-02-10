@@ -240,7 +240,7 @@ class pekerjaan_saya extends ceklogin {
         $data['aktivitas'] = $this->db->query("select *, to_char(waktu_mulai,'YYYY-MM-DD') as waktu_mulai2, 
 				to_char(waktu_selesai,'YYYY-MM-DD') as waktu_selesai2, berkas.id_file, berkas.nama_file
 				from aktivitas_pekerjaan 
-				left join (select json_agg(id_file) as id_file, json_agg(nama_file) as nama_file, id_tugas,id_aktivitas from file group by id_tugas,id_aktivitas) berkas 
+				left join (select array_agg(id_file) as id_file, array_agg(nama_file) as nama_file, id_tugas,id_aktivitas from file group by id_tugas,id_aktivitas) berkas 
 				on berkas.id_aktivitas=aktivitas_pekerjaan.id_aktivitas and berkas.id_tugas=aktivitas_pekerjaan.id_tugas
 				where aktivitas_pekerjaan.id_tugas='$id_tugas'")->result_array();
         $data['aktivitas_saya'] = null;
@@ -458,11 +458,11 @@ class pekerjaan_saya extends ceklogin {
         $session = $this->session->userdata("logged_in");
         $my_id = $session["id_akun"];
         $q = $this->db->query(
-                        "select p.*, detils.id_akuns, to_char(p.tgl_mulai, 'YYYY-MM-DD') as tanggal_mulai,
+                "select p.*, detils.id_akuns, to_char(p.tgl_mulai, 'YYYY-MM-DD') as tanggal_mulai,
 		to_char(p.tgl_selesai, 'YYYY-MM-DD') as tanggal_selesai
 		from pekerjaan p
 		inner join (
-			select dp2.id_pekerjaan, json_agg(dp2.id_akun) as id_akuns
+			select dp2.id_pekerjaan, array_agg(dp2.id_akun) as id_akuns
 			from detil_pekerjaan dp2
 			group by dp2.id_pekerjaan
 		) as detils
