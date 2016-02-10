@@ -569,7 +569,7 @@ class pekerjaan_staff extends ceklogin {
         $id_assign = $this->db->insert_id();
         $this->load->library(array('myuploadlib'));
         $uploader = new MyUploadLib();
-        $uploader->prosesUpload('berkas', date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
+        $uploader->prosesUpload('berkas', date('Y') . '/' . date('m') . '/' . $id_pekerjaan . '/berkas_tugas/' . $id_assign);
         $uploadedFiles = $uploader->getUploadedFiles();
         foreach ($uploadedFiles as $file) {
             $this->db->insert('file', array(
@@ -915,12 +915,11 @@ class pekerjaan_staff extends ceklogin {
 //        foreach ($list_id_staff as $id_staff) {
 //        }
         $files = $this->db->query("select * from file where id_pekerjaan='$id_pekerjaan'")->result_array();
-
-        $this->db->query("delete from komentar where id_pekerjaan='$id_pekerjaan' ");
-        $this->db->query("delete from detil_progress where id_pekerjaan='$id_pekerjaan' ");
-        $this->db->query("delete from aktivitas_pekerjaan where id_pekerjaan='$id_pekerjaan' ");
+        $this->db->query("delete from komentar where id_pekerjaan='$id_pekerjaan'");
+        $this->db->query("delete from detil_progress where id_pekerjaan='$id_pekerjaan'");
+        $this->db->query("delete from aktivitas_pekerjaan where id_pekerjaan='$id_pekerjaan'");
+        $this->db->query("delete from assign_tugas where id_pekerjaan='$id_pekerjaan'");
         $this->db->query("delete from file where id_pekerjaan='$id_pekerjaan'");
-
         $this->db->query("delete from detil_pekerjaan where id_pekerjaan='$id_pekerjaan'");
         $this->db->query("delete from pekerjaan where id_pekerjaan='$id_pekerjaan'");
         foreach ($files as $f) {
@@ -1139,7 +1138,7 @@ class pekerjaan_staff extends ceklogin {
         );
         $this->load->library(array('myuploadlib'));
         $uploader = new MyUploadLib();
-        $uploader->prosesUpload('berkas');
+        $uploader->prosesUpload('berkas', date('Y') . '/' . date('m') . '/' . $id_pekerjaan . '/berkas_tugas/' . $id_tugas);
         $uploadedFiles = $uploader->getUploadedFiles();
         foreach ($uploadedFiles as $file) {
             $this->db->insert('file', array(

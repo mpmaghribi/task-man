@@ -55,9 +55,6 @@ if (count($detil_pekerjaan) > 0) {
                                         </div>
                                     </div>
                                     <div id="div_skp" class="tab-pane active">
-                                        <?php 
-                                        //print_r($pekerjaan); 
-                                        ?>
                                         <div class="form">
                                             <form class="cmxform form-horizontal " id="form_tambah_pekerjaan2" method="POST" action="<?php echo site_url() ?>/pekerjaan_staff/update" enctype="multipart/form-data">
                                                 <input type="hidden" name="jenis_usulan" value="usulan"/>
@@ -173,19 +170,22 @@ if (count($detil_pekerjaan) > 0) {
                                                     <label for="prioritas" class="control-label col-lg-3">File</label>
                                                     <div class="col-lg-6">
                                                         <div id="list_file_upload_assign">
+                                                            <div id="file_lama">
+                                                                <table  class="table table-hover general-table" id="berkas_lama"></table>
+                                                            </div>
                                                             <div id="file_baru">
-                                                                <table  class="table table-hover general-table" id="berkas_baru"></table>
+                                                                <table  class="table table-hover general-table" id="berkas_assign"></table>
                                                             </div>
                                                         </div>
                                                         <div style="display:none">
-                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign"/>
+                                                            <input type="file" multiple="" name="berkas[]" id="pilih_berkas_assign" onchange="pilih_berkas_assign_changed()"/>
                                                         </div>
-                                                        <button class="btn btn-primary" type="button" id="button_trigger_file">Pilih File</button>
+                                                        <button class="btn btn-info" type="button" onclick="click_pilih_berkas_assign()"><i class="fa fa-files-o"></i> Pilih File</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="col-lg-offset-3 col-lg-6">
-                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                                        <button class="btn btn-success" type="submit"><i class="fa fa-save"></i> Save</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -199,6 +199,22 @@ if (count($detil_pekerjaan) > 0) {
                 <!-- page end-->
             </section>
         </section>
+        <div class="modal fade" id="modal_any" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="modal_any_title">Modal Title</h4>
+                    </div>
+                    <div class="form modal-body" id="modal_any_body">
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_cancel">Cancel</button>
+                        <button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_ok">OK</button>
+                    </div>
+                </div>
+            </div>
+	</div>
         <!--main content end-->
         <!--right sidebar start-->
         <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
@@ -212,7 +228,8 @@ if (count($detil_pekerjaan) > 0) {
     <script type="text/javascript" src="<?= base_url() ?>assets/js2/pekerjaan_staff/js_edit.js"></script>
     <script >
         var list_staff = <?php echo json_encode($list_staff); ?>;
-        var pekerjaan =<?= json_encode($pekerjaan) ?>;
-        var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
-        var site_url='<?=site_url()?>';
+        var pekerjaan = <?= json_encode($pekerjaan) ?>;
+        var detil_pekerjaan = <?= json_encode($detil_pekerjaan) ?>;
+        var list_berkas_pekerjaan = <?= json_encode($list_file); ?>;
+        var site_url= '<?=site_url()?>';
     </script>

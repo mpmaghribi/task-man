@@ -1,5 +1,6 @@
 $(document).ready(function () {
     init_assigned_staff();
+    init_berkas_pekerjaan();
     ubah_view_input(pekerjaan['kategori']);
     if(input_deadline_mulai != null){
         var tanggal1 = pekerjaan['tanggal_mulai'].split('-');
@@ -30,4 +31,56 @@ function init_assigned_staff() {
             }
         }
     }
+}
+function init_berkas_pekerjaan(){
+    var tabel = $('#berkas_lama');
+    for(var i=0, i2=list_berkas_pekerjaan.length; i<i2; i++){
+        var berkas = list_berkas_pekerjaan[i];
+        tabel.append(
+                '<tr id="berkas_'+berkas['id_file']+'">'
+                +'<td>'+berkas['nama_file']+'</td>'
+                +'<td><a href="javascript:dialog_hapus_file('+berkas['id_file']+');" class="btn btn-danger btn-xs">Hapus</a></td>'
+                +'</tr>'
+                );
+    }
+}
+
+function dialog_hapus_file(id_file){
+    var tr = document.getElementById('berkas_'+id_file);
+    if(tr == null){
+        console.log('tr berkas is null');
+        return;
+    }
+    var tds = tr.children;
+    if(tds.length<1){
+        console.log('tr tidak punya children');
+        return;
+    }
+    var deskripsi = tds[0].innerHTML;
+    $('#modal_any').modal('show');
+    $('#modal_any_title').html('Konfirmasi Hapus Berkas Pekerjaan');
+    $('#modal_any_body').html('<h5>Anda akan menghapus berkas pekerjaan <strong>'+deskripsi+'</strong>. Lanjutkan?</h5>');
+    $('#modal_any_button_ok').attr({'onclick': 'hapus_file('+id_file+');', 'class':'btn btn-danger'}).html('Hapus');
+    $('#modal_any_button_cancel').attr({'onclick': '', 'class':'btn btn-info'}).html('Batal');
+}
+
+function hapus_file(id_file){
+    $.ajax({
+        type: "get",
+        url: site_url + "/pekerjaan_staff/hapus_file_json",
+        data: {
+            id_file: id_file
+        },
+        success: function (data) {
+            var json = JSON.parse(data);
+            if(json['status'] == 'ok'){
+                $('#berkas_'+id_file).remove();
+            }else{
+                alert(json['reason']);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+
+        }
+    });
 }
