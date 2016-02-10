@@ -436,7 +436,9 @@ class pekerjaan_saya extends ceklogin {
         $this->load->model(array('pekerjaan_saya_model'));
         $session = $this->session->userdata('logged_in');
         $periode = abs(intval($this->input->get('periode')));
-        echo json_encode($this->pekerjaan_saya_model->get_list_skp_saya($session['user_id'], $periode));
+		$skp = $this->pekerjaan_saya_model->get_list_skp_saya($session['user_id'], $periode);
+		//print_r($skp);
+        echo json_encode($skp);
     }
 
     function get_list_draft() {

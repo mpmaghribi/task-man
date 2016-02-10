@@ -69,7 +69,7 @@ function init_tabel_usulan() {
             for (var i = 0, i2 = json.length; i < i2; i++) {
                 var usulan = json[i];
                 var anggota = '';
-                var anggota1 = JSON.parse(usulan['id_akuns']);
+                var anggota1 = JSON.parse(usulan['id_akuns'].replace('{','[').replace('}',']'));
                 var sep = '';
                 for (var j = 0, j2 = anggota1.length; j < j2; j++) {
                     var id_anggota = anggota1[j];
@@ -194,7 +194,7 @@ function init_tabel_skp() {
             for (var j = 0, m = json.length; j < m; j++) {
                 console.log("iterasi ke " + j + " dari " + m);
                 var p = json[j];
-                var list_anggota = JSON.parse(p['id_akuns']);
+                var list_anggota = JSON.parse(p['id_akuns'].replace('{','[').replace('}',']'));
                 console.log(list_anggota);
                 var anggota = '';
                 var sep = '';
