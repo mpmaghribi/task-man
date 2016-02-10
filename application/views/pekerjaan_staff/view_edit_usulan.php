@@ -176,7 +176,7 @@ $this->load->view("taskman_header_page");
                     </div>
                     <div class="modal-footer">
                         <button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_cancel">Cancel</button>
-                        <button class="btn btn-default" type="button" id="modal_any_button_ok">OK</button>
+                        <button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_ok">OK</button>
                     </div>
                 </div>
             </div>
