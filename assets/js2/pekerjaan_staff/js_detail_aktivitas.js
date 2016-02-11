@@ -258,16 +258,16 @@ function init_tabel_aktivitas() {
             }
             html += '<li><a href="javascript:viewHapusAktivitas(' + id + ');"><i class="fa fa-times fa-fw"></i> Hapus</a></li>';
             html += '</ul></div>';
-            var list_id_berkas_json = JSON.parse(data[4]);
-            var list_berkas = JSON.parse(data[12]);
+//            var list_id_berkas_json = JSON.parse(data[4]);
+//            var list_berkas = JSON.parse(data[12]);
             var html_berkas = '';
-            if (list_id_berkas_json != null) {
-				var sep='';
-                for (var i = 0, n = list_id_berkas_json.length; i < n; i++) {
-                    html_berkas += sep+'<a href="' + site_url + '/download?id_file=' + list_id_berkas_json[i] + '" target="_blank" title="' + list_berkas[i] + '"><i class="fa fa-paperclip fa-fw"></i>'+list_berkas[i]+'</a> ';
-					sep='<br/>';
-                }
-            }
+//            if (list_id_berkas_json != null) {
+//				var sep='';
+//                for (var i = 0, n = list_id_berkas_json.length; i < n; i++) {
+//                    html_berkas += sep+'<a href="' + site_url + '/download?id_file=' + list_id_berkas_json[i] + '" target="_blank" title="' + list_berkas[i] + '"><i class="fa fa-paperclip fa-fw"></i>'+list_berkas[i]+'</a> ';
+//					sep='<br/>';
+//                }
+//            }
             $('td', row).eq(0).html(html);
             $('td', row).eq(1).html(index + 1);
 

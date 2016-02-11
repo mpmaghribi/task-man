@@ -66,9 +66,12 @@ class dtpg extends CI_Model {
             }
             $hasil[] = $baris;
         }
-        return array('data' => $hasil, 'recordsFiltered' => $jumlahData,
-            'recordsTotal' => $jumlahData, 'draw' => (int) $request['draw'],
-            'query' => $sql
+        return array(
+            //'query' => $sql,
+            'data' => $hasil, 
+            'recordsFiltered' => $jumlahData,
+            'recordsTotal' => $jumlahData, 
+            'draw' => (int) $request['draw']
         );
     }
  

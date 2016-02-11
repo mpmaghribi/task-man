@@ -685,8 +685,20 @@ class aktivitas_pekerjaan extends ceklogin {
     private function mark_finished($id_detil_pekerjaan = 0) {
         $this->db->query("update detil_pekerjaan set tglasli_selesai=now() where id_detil_pekerjaan='$id_detil_pekerjaan' and tglasli_selesai is null");
     }
+    
+    function get_list_aktivitas_pekerjaan(){
+        $id_detil_pekerjaan = intval($this->input->get('id_detil_pekerjaan'));
+        $sql = "select ap.*,
+                to_char(ap.waktu_mulai, 'YYYY-MM-DD HH24:MI') as waktu_mulai2, 
+                to_char(ap.waktu_selesai, 'YYYY-MM-DD HH24:MI') as waktu_selesai2
+                from aktivitas_pekerjaan ap
+                where ap.id_detil_pekerjaan='$id_detil_pekerjaan' 
+                ";
+        $q = $this->db->query($sql)->result_array();
+        echo json_encode($q);
+    }
 
-    function get_list_aktivitas_pekerjaan() {
+    function get_list_aktivitas_pekerjaan_datatable() {
         $id_pekerjaan = (int) $this->input->post('id_pekerjaan');
         $id_detil_pekerjaan = (int) $this->input->post('id_detil_pekerjaan');
         echo json_encode($this->aktivitas_model->get_list_aktivitas_pekerjaan_datatable($id_pekerjaan, $id_detil_pekerjaan, $_POST));
