@@ -16,19 +16,12 @@ require_once APPPATH . '/libraries/dtpg.php';
 class aktivitas_model extends dtpg {
 
     function get_list_aktivitas_pekerjaan_datatable($id_pekerjaan = 0, $id_detil_pekerjaan = 0, $request = array()) {
-        $sql = "select ap.* , berkas.nama_files, berkas.ids,
-                to_char(ap.waktu_mulai, 'YYYY-MM-DD HH24:MI:SS') as waktu_mulai2, 
-                to_char(ap.waktu_selesai, 'YYYY-MM-DD HH24:MI:SS') as waktu_selesai2
+        $sql = "select ap.*,
+                to_char(ap.waktu_mulai, 'YYYY-MM-DD HH24:MI') as waktu_mulai2, 
+                to_char(ap.waktu_selesai, 'YYYY-MM-DD HH24:MI') as waktu_selesai2
                 from aktivitas_pekerjaan ap
-                left join (
-                    select id_aktivitas, array_agg(nama_file) as nama_files, array_agg(id_file) as ids
-                    from file
-                    where id_detil_pekerjaan = '$id_detil_pekerjaan'
-                    group by id_aktivitas
-                ) as berkas
-                on berkas.id_aktivitas=ap.id_aktivitas
                 where ap.id_detil_pekerjaan='$id_detil_pekerjaan' 
-                and ap.id_pekerjaan='$id_pekerjaan'";
+                ";
         $columns = array(
             array('name' => 'id_pekerjaan'),
             array('name' => 'id_aktivitas'),

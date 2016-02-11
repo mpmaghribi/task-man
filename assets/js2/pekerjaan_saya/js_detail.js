@@ -42,9 +42,9 @@ $(document).ready(function () {
     }
     var jam_mulai = $('#jam_mulai_baru');
     var jam_selesai = $('#jam_selesai_baru');
-    for(var i=0;i<24;i++){
-        for(var j=0;j<60;j+=5){
-            var jam = '<option value="'+i+':'+j+'">'+i+':'+j+'</option>';
+    for (var i = 0; i < 24; i++) {
+        for (var j = 0; j < 60; j += 5) {
+            var jam = '<option value="' + i + ':' + j + '">' + i + ':' + j + '</option>';
             jam_mulai.append(jam);
             jam_selesai.append(jam);
         }
@@ -112,30 +112,30 @@ function init_tabel_file_progress() {
         }
     });
 }
-function dialog_hapus_file(id_file){
-    var berkas_nama = $($('#berkas_'+id_file).children()[1]).html();
+function dialog_hapus_file(id_file) {
+    var berkas_nama = $($('#berkas_' + id_file).children()[1]).html();
     $('#modal_any').modal('show');
     $('#modal_any_title').html('Konfirmasi Hapus Berkas');
-    $('#modal_any_body').html('<h5>Anda akan menghapus berkas <strong>'+berkas_nama+'</strong>. Lanjutkan?</h5>');
+    $('#modal_any_body').html('<h5>Anda akan menghapus berkas <strong>' + berkas_nama + '</strong>. Lanjutkan?</h5>');
     $('#modal_any_button_cancel').attr({class: 'btn btn-success'}).html('Batal');
-    $('#modal_any_button_ok').attr({class: 'btn btn-danger', 'onclick': 'hapus_file('+id_file+');'}).html('Hapus');
+    $('#modal_any_button_ok').attr({class: 'btn btn-danger', 'onclick': 'hapus_file(' + id_file + ');'}).html('Hapus');
 }
-function hapus_file(id_file){
-        $.ajax({
-            data: {id_file: id_file
-            }, // get the form data
-            type: "get", // GET or POST
-            url: site_url+"/pekerjaan_saya/hapus_file_json",
-            success: function (response) {
-                var json = JSON.parse(response);
-                if (json['status'] == "ok") {
-                    init_tabel_file_progress();
-                } else {
-                    alert("Gagal menghapus file, " + json['reason']);
-                }
+function hapus_file(id_file) {
+    $.ajax({
+        data: {id_file: id_file
+        }, // get the form data
+        type: "get", // GET or POST
+        url: site_url + "/pekerjaan_saya/hapus_file_json",
+        success: function (response) {
+            var json = JSON.parse(response);
+            if (json['status'] == "ok") {
+                init_tabel_file_progress();
+            } else {
+                alert("Gagal menghapus file, " + json['reason']);
             }
-        });
- 
+        }
+    });
+
 }
 function berkas_aktivitas_changed(elm) {
     var tabel = $('#tabel_berkas_aktivitas');
@@ -290,11 +290,13 @@ function init_tabel_progress() {
         }
     });
 }
+
 function init_tabel_aktivitas() {
     //inisialisasi tabel yag menampilkan daftar aktivitas user
     if (tabel_aktivitas != null) {
         tabel_aktivitas.fnDestroy();
     }
+//    var list_id_aktivitas = [];
     tabel_aktivitas = $('#tabel_aktivitas').dataTable({
         order: [[1, "asc"]],
         "columnDefs": [{"targets": [0], "orderable": false}],
@@ -314,12 +316,13 @@ function init_tabel_aktivitas() {
         },
         "createdRow": function (row, data, index) {
             var id = data[1];
-            var tgl_mulai = data[3];
-            var tgl_mulai_tmzn = tgl_mulai.split('+');
-            var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
-            var tgl_selesai = data[10];
-            var tgl_selesai_tmzn = tgl_selesai.split('+');
-            var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
+//            list_id_aktivitas.push(id);
+//            var tgl_mulai = data[3];
+//            var tgl_mulai_tmzn = tgl_mulai.split('+');
+//            var tgl_jam_mulai = tgl_mulai_tmzn[0].split(' ');
+//            var tgl_selesai = data[10];
+//            var tgl_selesai_tmzn = tgl_selesai.split('+');
+//            var tgl_jam_selesai = tgl_selesai_tmzn[0].split(' ');
             var status_validasi = parseInt(data[5]);
             var html = '<div class="btn-group">'
                     + '<button class="btn btn-default btn-xs dropdown-toggle btn-info" data-toggle="dropdown">Aksi <span class="caret"></span></button>'
@@ -329,16 +332,16 @@ function init_tabel_aktivitas() {
                 html += '<li><a href="javascript:viewHapusAktivitas(' + id + ');"><i class="fa fa-times fa-fw"></i> Hapus</a></li>';
             }
             html += '</ul></div>';
-            var list_id_berkas_json = JSON.parse(data[4]);
-            var list_berkas = JSON.parse(data[12]);
+//            var list_id_berkas_json = JSON.parse(data[4].replace('{','[').replace('}',']'));
+//            var list_berkas = JSON.parse(data[12].replace('{','[').replace('}',']'));
             var html_berkas = '';
-            if (list_id_berkas_json != null) {
-                for (var i = 0, n = list_id_berkas_json.length; i < n; i++) {
-                    html_berkas += '<a href="' + site_url + '/download?id_file=' + list_id_berkas_json[i] + '" target="_blank" title="' + list_berkas[i] + '"><i class="fa fa-paperclip fa-fw"></i></a> ';
-                }
-            }
+//            if (list_id_berkas_json != null) {
+//                for (var i = 0, n = list_id_berkas_json.length; i < n; i++) {
+//                    html_berkas += '<a href="' + site_url + '/download?id_file=' + list_id_berkas_json[i] + '" target="_blank" title="' + list_berkas[i] + '"><i class="fa fa-paperclip fa-fw"></i></a> ';
+//                }
+//            }
 //            $('td', row).eq(3).html(tgl_jam_mulai[0] + ' - ' + tgl_jam_selesai[0]);
-            $('td', row).eq(3).html(tgl_mulai_tmzn[0] + ' - ' + tgl_selesai_tmzn[0]);
+            $('td', row).eq(3).html(data[13] + ' - ' + data[14]);
             $('td', row).eq(1).html(index + 1);
             $('td', row).eq(0).html(html);
 //            $('td', row).eq(3).html(data[3] + ' ' + detil_pekerjaan['satuan_kuantitas']);
@@ -350,6 +353,16 @@ function init_tabel_aktivitas() {
 //            $('td', row).eq(5).html(data[5] + '%');
 //            $('td', row).eq(5).html('<a  href="' + base_url + 'pekerjaan_staff/detail?id_pekerjaan=' + data[0] + '" class="btn btn-success btn-xs"><i class="fa fa-eye">View</i></a>');
             $(row).attr('id', 'row_' + id)
+        },
+        "fnInitComplete": function (oSettings, json) {
+//            console.log(oSettings);
+            console.log(json['data']);
+            var list_id_aktivitas = [];
+            var myData = json['data'];
+            for(var i=0, i2=myData.length; i<i2; i++){
+                list_id_aktivitas.push(myData[i][1]);
+            }
+            console.log(list_id_aktivitas);
         }
     });
 }

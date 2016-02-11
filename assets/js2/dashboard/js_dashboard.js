@@ -137,7 +137,7 @@ function get_list_pekerjaan_saya() {
         tabel_pekerjaan_saya.fnDestroy();
     }
     $.ajax({// create an AJAX call...
-        type: "post", // GET or POST
+        type: "get",
         url: site_url + "/pekerjaan_saya/get_list_skp_saya", // the file to call
         data: {
             periode: $('#dashboard_select_periode').val()

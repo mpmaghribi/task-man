@@ -235,10 +235,9 @@
     <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
     <script src="<?php echo base_url() ?>assets/js2/dashboard/js_dashboard.js"></script>
     <script>
-                                        var tabel_pekerjaan_saya = null;
-                                        var site_url = "<?php echo site_url() ?>";
-                                        var list_user = <?= json_encode($users) ?>;
-
+        var tabel_pekerjaan_saya = null;
+        var site_url = "<?php echo site_url() ?>";
+        var list_user = <?= json_encode($users) ?>;
     </script>
     <style>
         table thead tr th{

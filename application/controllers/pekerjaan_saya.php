@@ -334,7 +334,7 @@ class pekerjaan_saya extends ceklogin {
         }
         if ($atasan_valid == false) {
             $data['judul_kesalahan'] = 'Tidak berhak';
-            $data['deskripsi_kesalahan'] = 'Anda belum memilih atasan untuk usulan pekerjaan';
+            $data['deskripsi_kesalahan'] = 'Atasan yang anda pilih tidak sesuai';
             $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
@@ -375,13 +375,14 @@ class pekerjaan_saya extends ceklogin {
         $this->db->update("pekerjaan", $update_pekerjaan, array("id_pekerjaan" => $id_pekerjaan));
         $update_detil_pekerjaan = array(
             "sasaran_angka_kredit" => abs(floatval($this->input->post("angka_kredit"))),
-            "sasaran_kuantitas_output" => max(intval($this->input->post("kuantitas_output"), 1)),
+            "sasaran_kuantitas_output" => max(intval($this->input->post("kuantitas_output")), 1),
             "sasaran_kualitas_mutu" => $kualitas,
-            'sasaran_waktu'=>max(1,$bulan),
+            'sasaran_waktu' => max(1,$bulan),
             "sasaran_biaya" => ($biaya == "-" ? 0 : max(floatval($biaya), 1)),
             "pakai_biaya" => ($biaya == "-" ? 0 : 1),
             "satuan_kuantitas" => $this->input->post("satuan_kuantitas")
         );
+        print_r($update_detil_pekerjaan);
         $this->db->update("detil_pekerjaan", $update_detil_pekerjaan, array("id_pekerjaan" => $id_pekerjaan, "id_akun" => $session["id_akun"]));
         $this->load->library(array("myuploadlib"));
         $uploader = new MyUploadLib();
@@ -587,6 +588,9 @@ class pekerjaan_saya extends ceklogin {
                 }
                 $this->db->query("delete from file where id_file='$id_file'");
                 $hasil["status"] = "ok";
+                return $hasil;
+            }else{
+                $hasil['reason'] = 'Anda tidak berhak menghapus berkas di usulan orang lain';
                 return $hasil;
             }
         }
