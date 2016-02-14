@@ -105,15 +105,13 @@
                         <div id="file_lama">
                             <table  class="table table-hover general-table">
                                 <?php
-                                if (isset($list_berkas)) {
-                                    foreach ($list_berkas as $berkas) {
-                                        ?>
-                                        <tr id="berkas_<?php echo $berkas->id_file; ?>">
-                                            <td id="nama_file_<?php echo $berkas->id_file; ?>"><?php echo basename($berkas->nama_file); ?></td>
-                                            <td id="aksi_<?php echo $berkas->id_file; ?>" style="width: 10px;text-align:right"><a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 12px" onclick="hapus_file_draft(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a></td>
-                                        </tr>
-                                        <?php
-                                    }
+                                foreach ($list_berkas as $berkas) {
+                                    ?>
+                                    <tr id="berkas_<?php echo $berkas['id_file']; ?>">
+                                        <td id="nama_file_<?php echo $berkas['id_file']; ?>"><?php echo $berkas['nama_file']; ?></td>
+                                        <td style="width: 10px;text-align:right"><button type='button' class="btn btn-danger btn-xs" style="font-size: 12px" onclick="dialog_hapus_file(<?= $berkas['id_file'] ?>)">Hapus</button></td>
+                                    </tr>
+                                    <?php
                                 }
                                 ?>
                             </table>
@@ -125,12 +123,12 @@
                     <div style="display:none">
                         <input type="file" multiple="" name="berkas[]" id="pilih_berkas_draft" onchange="draft_file_changed()"/>
                     </div>
-                    <button class="btn btn-success" type="button" id="button_trigger_file" onclick="trigger_pilih_file()"><i class="fa fa-file"></i> Pilih File</button>
+                    <button class="btn btn-success" type="button" id="button_trigger_file" onclick="trigger_pilih_file()"><i class="fa fa-files-o"></i> Pilih File</button>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-lg-offset-3 col-lg-6">
-                    <button class="btn btn-primary" type="submit">Save</button>
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button>
                 </div>
             </div>
         </form>

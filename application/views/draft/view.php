@@ -16,23 +16,12 @@
                             <header class="panel-heading  ">
                                 Draft Pekerjaan
                                 <div class="btn-group btn-group-lg btn-xs" style="float: right; margin-top: -5px;padding-top: 0px; font-size: 12px;" id="div_acc_edit_cancel_usulan_pekerjaan">
-                                    <a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>draft/assign?id_draft=<?php echo $draft['id_pekerjaan']; ?>" id="" style="font-size: 10px">Assign</a>
-                                    <a class="btn btn-danger btn-xs" href="<?php echo base_url(); ?>draft/edit?id_draft=<?php echo $draft['id_pekerjaan']; ?>" id="" style="font-size: 10px">Edit</a>
-                                    <a class="btn btn-success btn-xs" href="<?php echo base_url(); ?>draft/view?id_draft=<?php echo $draft['id_pekerjaan']; ?>" id="" style="font-size: 10px">View</a>
-                                    <a class="btn btn-warning btn-xs" href="javascript:void(0);" id="" onclick="confirm_batal(<?php echo $draft['id_pekerjaan'] ?>, '<?php echo $draft['nama_pekerjaan']; ?>');" style="font-size: 10px">Batalkan</a>
+                                    <a class="btn btn-info btn-xs" href="<?php echo site_url(); ?>draft/assign?id_draft=<?php echo $draft['id_pekerjaan']; ?>" style="font-size: 10px">Assign</a>
+                                    <a class="btn btn-warning btn-xs" href="<?php echo site_url(); ?>draft/edit?id_draft=<?php echo $draft['id_pekerjaan']; ?>" style="font-size: 10px">Edit</a>
+                                    <a class="btn btn-success btn-xs" href="<?php echo site_url(); ?>draft/view?id_draft=<?php echo $draft['id_pekerjaan']; ?>"  style="font-size: 10px">View</a>
+                                    <button type="button" class="btn btn-danger btn-xs" onclick="dialog_batalkan_draft();" style="font-size: 10px">Batalkan</button>
                                 </div>
-                                <script>
-                                    var url_hapus = '<?php echo base_url(); ?>draft/batalkan?id_draft=';
-                                    function confirm_batal(id_draft, judul) {
-                                        var myurl = url_hapus + id_draft;
-                                        var c = confirm('apakah anda yakin menghapus draft "' + judul + '"?');
-                                        if (c === true) {
-                                            window.location = myurl;
-                                        }
-                                    }
-                                </script>
                             </header>
-
                             <div class="panel-body">
                                 <div class="tab-content">
                                     <?php $this->load->view('draft/detail_view'); ?>
@@ -44,6 +33,22 @@
                 <!-- page end-->
             </section>
         </section>
+        <div class="modal fade" id="modal_any" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="modal_any_title">Modal Title</h4>
+                    </div>
+                    <div class="form modal-body" id="modal_any_body">
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_cancel">Cancel</button>
+                        <button data-dismiss="modal" class="btn btn-default" type="button" id="modal_any_button_ok">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!--main content end-->
         <!--right sidebar start-->
         <script src="<?php echo base_url() ?>assets/js/table-editable-progress.js"></script>
@@ -53,11 +58,28 @@
     </section>
     <?php $this->load->view("taskman_footer_page") ?>
     <script type="text/javascript">
-                                    document.title = "Draft Pekerjaan - Task Management";
-                                    $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
-                                    jQuery(document).ready(function() {
-                                        $('#table_deskripsi_file').dataTable();
-                                        console.log('datatable');
-                                        //$('#table_deskripsi_draft').dataTable();
-                                    });
+        var site_url = '<?= site_url() ?>';
+        var pekerjaan = <?= json_encode($draft); ?>;
+        jQuery(document).ready(function () {
+            $('#table_deskripsi_file').dataTable();
+            document.title = "Draft Pekerjaan - Task Management";
+            $('#submenu_pekerjaan').attr('class', 'dcjq-parent active');
+        });
+        function dialog_batalkan_draft() {
+            $('#modal_any').modal('show');
+            $('#modal_any_title').html('Konfirmasi Pembatalan Draft Pekerjaan');
+            $('#modal_any_body').html('<h5>Anda akan membatalkan draft pekerjaan <strong>' + pekerjaan['nama_pekerjaan'] + '</strong>. Lanjutkan?</h5>');
+            $('#modal_any_button_cancel').attr({'class': 'btn btn-warning'}).html('Tutup');
+            $('#modal_any_button_ok').attr({'class': 'btn btn-danger', 'onclick': 'batalkan_draft()'}).html('Batalkan');
+        }
+        function batalkan_draft() {
+            var form = $('<form></form>').attr({
+                'method': 'get',
+                'action': site_url + '/draft/batalkan'
+            });
+            var id_draft = $('<input></input>').attr({'name': 'id_draft', 'value': pekerjaan['id_pekerjaan']});
+            form.append(id_draft);
+            $('body').append(form);
+            form.submit();
+        }
     </script>

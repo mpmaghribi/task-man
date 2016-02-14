@@ -10,8 +10,9 @@
                     <div class="col-lg-2">
                         <select class="form-control" id="draft_select_periode" onchange="draft_ubah_periode()">
                             <?php
-                            for($tahun=$tahun_max;$tahun>=$tahun_min;$tahun--){
-                                echo '<option value="'.$tahun.'">'.$tahun.'</option>';
+                            $periode_sekarang = date('Y');
+                            foreach ($list_periode as $periode){
+                                echo '<option ' . ($periode['periode'] == $periode_sekarang ? 'selected=""' : '') . ' value="'.$periode['periode'].'">'.$periode['periode'].'</option>';
                             }
                             ?>
                         </select>
@@ -37,22 +38,4 @@
             </div>
         </div>
     </section>
-</div>
-<div class="modal fade" id="modal_draft_hapus" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="modal_draft_hapus_judul">Hapus Draft</h4>
-            </div>
-            <div class="modal-body" id="modal_draft_hapus_body" style="">
-                
-            </div>
-			<input type="hidden" id="id_draft_hapus" value="0"/>
-            <div class="modal-footer">
-                <button data-dismiss="modal" class="btn btn-info" id="tombol_close" type="button">Batal</button>
-                <button class="btn btn-danger" id="" type="button" style="visibility: visible" onclick="hapus_draft()">Hapus</button>
-            </div>
-        </div>
-    </div>
 </div>

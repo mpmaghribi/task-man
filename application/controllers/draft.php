@@ -43,14 +43,17 @@ class draft extends ceklogin {
             $hasil["reason"] = "Anda tidak berhak menghapus draft orang lain";
             return $hasil;
         }
-        $q = $this->db->where(array("id_pekerjaan" => $id_draft))->get("file")->result_array();
-        foreach ($q as $berkas) {
+        $list_berkas = $this->db->where(array("id_pekerjaan" => $id_draft))->get("file")->result_array();
+        $this->db->trans_begin();
+        
+        $this->db->delete("file", array("id_pekerjaan" => $id_draft));
+        $this->db->delete("pekerjaan", array("id_pekerjaan" => $id_draft));
+        foreach ($list_berkas as $berkas) {
             if (file_exists($berkas["nama_file"])) {
                 unlink($berkas["nama_file"]);
             }
         }
-        $this->db->delete("file", array("id_pekerjaan" => $id_draft));
-        $this->db->delete("pekerjaan", array("id_pekerjaan" => $id_draft));
+        $this->db->trans_complete();
         $hasil["status"] = "ok";
         return $hasil;
     }
@@ -82,8 +85,8 @@ class draft extends ceklogin {
             return $hasil;
         }
 
-        if (file_exists($berkas["nama_file"])) {
-            unlink($berkas["nama_file"]);
+        if (file_exists($berkas["path"])) {
+            unlink($berkas["path"]);
         }
         $this->db->delete("file", array("id_file" => $id_file));
         $hasil["status"] = "ok";
@@ -105,36 +108,19 @@ class draft extends ceklogin {
             $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
-        $this->load->model(array('pekerjaan_model', 'akun'));
-        $my_staff = $this->akun->my_staff($session['user_id']);
-        if (isset($my_staff->error))
-            $my_staff = array();
-        $staff_ = array();
-        foreach ($my_staff as $s) {
-            $staff_[] = $s->id_akun;
-        }
-        //$list_draft = $this->pekerjaan_model->get_list_draft($session['user_id']);
-        //$draft_create_submit=base_url().'pekerjaan/usulan_pekerjaan2';
-
-        $tahun_max = date('Y');
-        $q = $this->db->query("select max(coalesce(date_part('year',tgl_selesai),periode,date_part('year',now()))) as tahun_max from pekerjaan")->result_array();
-        if (count($q) > 0) {
-            $tahun = (int) $q[0]['tahun_max'];
-            if ($tahun_max < $tahun) {
-                $tahun_max = $tahun;
-            }
-        }
-        $tahun_min = $tahun_max - 10;
-        $q = $this->db->query("select min(coalesce(date_part('year',tgl_mulai),periode,date_part('year',now()))) as tahun_min from pekerjaan")->result_array();
-        if (count($q) > 0) {
-            $tahun_min = (int) $q[0]['tahun_min'];
+        $my_id = $session['id_akun'];
+        $list_tahun = $this->db->query("select distinct periode 
+                from pekerjaan 
+                where id_penanggung_jawab = '$my_id'
+                and status_pekerjaan = '9'
+                order by periode desc")->result_array();
+        if(count($list_tahun) < 1){
+            $list_tahun[] = array('periode'=>date('Y'));
         }
         $this->load->view('draft/draft_body', array(
             'draft_create_submit' => site_url() . 'draft/create',
             'data_akun' => $session,
-            'tahun_max' => $tahun_max,
-            'tahun_min' => $tahun_min
-                //'list_draft' => $list_draft
+            'list_periode' => $list_tahun
         ));
     }
 
@@ -153,12 +139,12 @@ class draft extends ceklogin {
         $biaya = $this->input->post('biaya');
         $insert['deskripsi_pekerjaan'] = json_encode(array(
             'deskripsi' => pg_escape_string($this->input->post('deskripsi_pkj')),
-            'angka_kredit' => max(0,floatval($this->input->post('angka_kredit'))),
+            'angka_kredit' => max(0, floatval($this->input->post('angka_kredit'))),
             'kuantitas_output' => max(intval($this->input->post('kuantitas_output')), 1),
             'satuan_kuantitas' => pg_escape_string($this->input->post('satuan_kuantitas')),
-            'kualitas_mutu' => max(1,min(100,$mutu)),
+            'kualitas_mutu' => max(1, min(100, $mutu)),
             'pakai_biaya' => ($biaya == '-' ? false : true),
-            'biaya' => ($biaya == '-' ? 0 : max(1,floatval($biaya)))
+            'biaya' => ($biaya == '-' ? 0 : max(1, floatval($biaya)))
         ));
         $insert['periode'] = intval($this->input->post('draft_periode'));
         $insert['tgl_mulai'] = pg_escape_string($this->input->post('tgl_mulai_pkj'));
@@ -175,17 +161,10 @@ class draft extends ceklogin {
         if (!in_array($insert['kategori'], array('rutin', 'project', 'tambahan', 'kreativitas'))) {
             $insert['kategori'] = 'rutin';
         }
-        $lempar = 'draft';
-        $this->load->model("akun");
-        $this->load->model("pekerjaan_model");
-//        $my_staff = $this->akun->my_staff($session['user_id']);
-
         $this->db->trans_begin();
         $this->db->query("set datestyle to 'European'");
-//                $id_pekerjaan = $this->pekerjaan_model->create_draft($insert);
-        $this->db->insert('pekerjaan', $insert);
+        $res = $this->db->insert('pekerjaan', $insert);
         $id_pekerjaan = $this->db->insert_id();
-        //echo "path = $path<br/>";
         $this->load->library(array('myuploadlib'));
         $uploader = new MyUploadLib();
         $uploader->prosesUpload('berkas', date('Y') . '/' . date('m') . '/' . $id_pekerjaan);
@@ -197,33 +176,26 @@ class draft extends ceklogin {
                 'path' => $file['filePath']
             ));
         }
-        $result = $this->taskman_repository->sp_insert_activity($session['id_akun'], 0, "Aktivitas Pekerjaan", $session['user_nama'] . " baru saja membuat draft pekerjaan.");
-        //$this->pekerjaan_model->isi_pemberi_pekerjaan($temp['user_id'], $id_pekerjaan);
+        $this->taskman_repository->sp_insert_activity($session['id_akun'], 0, "Aktivitas Pekerjaan", $session['user_nama'] . " baru saja membuat draft pekerjaan.");
         $this->db->trans_complete();
-        redirect(site_url() . '/draft');
+        if ($res == 1) {
+            redirect(site_url() . '/draft/view?id_draft=' . $id_pekerjaan);
+        }
+
+//        redirect(site_url() . '/draft');
     }
 
     public function edit() {
         $session = $this->session->userdata('logged_in');
-        $this->load->model(array('pekerjaan_model', 'akun', 'berkas_model'));
-        $data['id_draft'] = $id_draft = pg_escape_string($this->input->get('id_draft'));
+        $this->load->model(array('akun'));
+        $data['id_draft'] = $id_draft = intval($this->input->get('id_draft'));
         $data['data_akun'] = $session;
-        $status = 0;
-        $judul = '';
-        $keterangan = '';
         if (!in_array(3, $session['idmodul'])) {
             $data['judul_kesalahan'] = 'Tidak Berhak';
             $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengakses modul ini';
             $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
-        if ($status == 0 && strlen($data['id_draft']) == 0) {
-            $data['judul_kesalahan'] = 'Kesalahan';
-            $data['deskripsi_kesalahan'] = 'ID draft yang diminta tidak valid';
-            $this->load->view('pekerjaan/kesalahan', $data);
-            return;
-        }
-
         $data['draft_edit_submit'] = base_url() . 'draft/do_edit';
         $q = $this->db->query("select pekerjaan.*, sifat_pekerjaan.nama_sifat_pekerjaan,
                 to_char(tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, 
@@ -233,7 +205,7 @@ class draft extends ceklogin {
                     on sifat_pekerjaan.id_sifat_pekerjaan=pekerjaan.id_sifat_pekerjaan
                 where status_pekerjaan=9 and id_pekerjaan='$id_draft'
                 ")->result_array();
-        if (count($q) <= 0) {
+        if (count($q) < 1) {
             $data['judul_kesalahan'] = 'Kesalahan';
             $data['deskripsi_kesalahan'] = 'Draft tidak dapat ditemukan';
             $this->load->view('pekerjaan/kesalahan', $data);
@@ -246,7 +218,7 @@ class draft extends ceklogin {
             $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
-        $data['list_berkas'] = $this->berkas_model->get_berkas_of_pekerjaan($id_draft);
+        $data['list_berkas'] = $this->db->where(array('id_pekerjaan'=>$id_draft))->get('file')->result_array();
         $this->load->view('draft/draft_edit_body', $data);
     }
 
@@ -254,13 +226,11 @@ class draft extends ceklogin {
         $session = $this->session->userdata('logged_in');
         $data['data_akun'] = $session;
         if (!in_array(3, $session['idmodul'])) {
-
             $data['judul_kesalahan'] = 'Tidak Berhak';
             $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengakses fungsionalitas draft';
             $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
-        $this->load->model(array('akun', 'berkas_model'));
         $id_draft = intval($this->input->get('id_draft'));
         $q = $this->db->query("select pekerjaan.*, sifat_pekerjaan.nama_sifat_pekerjaan,
                 to_char(tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, 
@@ -284,21 +254,21 @@ class draft extends ceklogin {
             return;
         }
         $data['id_draft'] = $id_draft;
-        $data['list_berkas'] = $this->berkas_model->get_berkas_of_pekerjaan($id_draft);
+        $data['list_berkas'] = $this->db->where(array('id_pekerjaan'=>$id_draft))->get('file')->result_array();
         $this->load->view('draft/view', $data);
     }
 
     public function assign() {
         $session = $this->session->userdata('logged_in');
-        $this->load->model(array('akun', 'berkas_model'));
-        $id_draft = intval($this->input->get('id_draft'));
-        $data['data_akun'] = $session;
         if (in_array(3, $session['idmodul']) == false) {
             $data['judul_kesalahan'] = 'Tidak Berhak';
-            $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengakses modul ini';
+            $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengakses fungsionalitas draft';
             $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
+        $this->load->model(array('akun'));
+        $id_draft = intval($this->input->get('id_draft'));
+        $data['data_akun'] = $session;
         $q = $this->db->query("select pekerjaan.*, sifat_pekerjaan.nama_sifat_pekerjaan,
                 to_char(tgl_mulai,'YYYY-MM-DD') as tanggal_mulai, 
                 to_char(tgl_selesai,'YYYY-MM-DD') as tanggal_selesai 
@@ -314,7 +284,6 @@ class draft extends ceklogin {
             return;
         }
         $draft = $q[0];
-//        $detail_draft = $this->pekerjaan_model->get_draft(array($id_draft));
         $data['draft'] = $draft;
         if ($draft['id_penanggung_jawab'] != $session['id_akun']) {
             $data['judul_kesalahan'] = 'Tidak Berhak';
@@ -323,14 +292,14 @@ class draft extends ceklogin {
             return;
         }
         $data['id_draft'] = $id_draft;
-        $data['list_berkas'] = $this->berkas_model->get_berkas_of_pekerjaan($data['id_draft']);
+        $data['list_berkas'] = $this->db->where(array('id_pekerjaan'=>$id_draft))->get('file')->result_array();
         $data['my_staff'] = $this->akun->my_staff($session['user_id']);
         $this->load->view('draft/assign', $data);
     }
 
     public function do_assign() {
         $session = $this->session->userdata('logged_in');
-        $data['data-akun'] = $session;
+        $data['data_akun'] = $session;
         if (in_array(3, $session['idmodul']) == false) {
             $data['judul_kesalahan'] = 'Tidak Berhak';
             $data['deskripsi_kesalahan'] = 'Anda tidak berhak meng-assign draft';
@@ -339,17 +308,19 @@ class draft extends ceklogin {
         }
         $this->load->model(array('akun'));
         $id_draft = intval($this->input->post('id_draft'));
-        //$set_id_staff = $this->input->post('staff');
-        //$data['data_akun'] = $session;
         $list_staff = $this->input->post('id_akun');
+        if(is_array($list_staff) == false){
+            $list_staff = array();
+        }
         foreach ($list_staff as $key => $val) {
-            if (strlen($val) == 0) {
+            $val = intval($val);
+            if ($val == 0) {
                 unset($list_staff[$key]);
             }
         }
         if (count($list_staff) <= 0) {
             $data['judul_kesalahan'] = 'kesalahan';
-            $data['deskripsi_kesalahan'] = 'anda tidak menambahkan staff untuk draft pekerjaan';
+            $data['deskripsi_kesalahan'] = 'Anda belum memilih staff untuk mengerjakaan draft anda';
             $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
@@ -410,7 +381,7 @@ class draft extends ceklogin {
                 "satuan_waktu" => "bulan"
             );
             foreach ($list_staff as $key => $val) {
-                if (strlen($val) > 0 && in_array($val, $mystaff)) {
+                if (in_array($val, $mystaff)) {
                     $detail_pekerjaan["id_akun"] = $val;
                     $this->db->insert("detil_pekerjaan", $detail_pekerjaan);
                     //$res = $this->pekerjaan_model->tambah_detil_pekerjaan($val, $id_draft);
@@ -424,14 +395,13 @@ class draft extends ceklogin {
 
     public function do_edit() {
         $session = $this->session->userdata('logged_in');
-        $data['data-akun'] = $session;
+        $data['data_akun'] = $session;
         if (in_array(3, $session['idmodul']) == false) {
             $data['judul_kesalahan'] = 'Tidak Berhak';
             $data['deskripsi_kesalahan'] = 'Anda tidak berhak meng-edit draft';
             $this->load->view('pekerjaan/kesalahan', $data);
             return;
         }
-        $this->load->model(array('akun'));
         $id_draft = intval($this->input->post('id_draft'));
         $update["id_sifat_pekerjaan"] = intval($this->input->post("sifat_pkj"));
         $update["nama_pekerjaan"] = pg_escape_string($this->input->post("nama_pkj"));
@@ -491,52 +461,40 @@ class draft extends ceklogin {
         redirect(base_url() . 'index.php/draft/view?id_draft=' . $id_draft);
     }
 
-    private function upload_file($files, $path, $id_pekerjaan) {
-        $temp = $this->session->userdata('logged_in');
-        $this->load->model("berkas_model");
-        $jumlah_file = count($files["name"]);
-        for ($i = 0; $i < $jumlah_file; $i++) {
-            if ($files["tmp_name"][$i] != "") {
-                $filename = $files["name"][$i];
-                $new_file_path = $path . $filename;
-                $e = explode('.', $filename);
-                $ext = '.' . end($e);
-                $filename = str_replace($ext, '', $filename);
-                $c = 1;
-                while (file_exists($new_file_path)) {
-                    $new_file_path = $path . $filename . $c . $ext;
-                    $c++;
-                }
-                if (move_uploaded_file($files["tmp_name"][$i], $new_file_path)) {
-                    $this->berkas_model->upload_file(
-                            $temp['user_id'], $new_file_path, $id_pekerjaan);
-                }
-            }
-        }
-    }
-
     public function batalkan() {
-        $id_draft = pg_escape_string($this->input->get('id_draft'));
         $session = $this->session->userdata('logged_in');
-        if (strlen($id_draft) == 0) {
-            
-        } else {
-            $this->load->model(array('pekerjaan_model', 'berkas_model'));
-            $detail_draft = $this->pekerjaan_model->get_draft(array($id_draft));
-            $berhak = in_array(3, $session['idmodul']);
-            if ($detail_draft[0]->id_penanggung_jawab == $session['user_id'] && $berhak) {
-                $list_berkas = $this->berkas_model->get_berkas_of_pekerjaan($id_draft);
-                foreach ($list_berkas as $berkas) {
-                    $this->berkas_model->hapus_file($berkas->id_file);
-                    if (file_exists($berkas->nama_file))
-                        unlink($berkas->nama_file);
-                }
-                //$update['flag_usulan'] = '6';
-                //$this->pekerjaan_model->update_pekerjaan($update, $id_draft);
-                $this->pekerjaan_model->batalkan_task($id_draft);
+        if (in_array(3, $session['idmodul']) == false) {
+            $data['judul_kesalahan'] = 'Tidak Berhak';
+            $data['deskripsi_kesalahan'] = 'Anda tidak berhak mengakses fungsionalitas draft';
+            $this->load->view('pekerjaan/kesalahan', $data);
+            return;
+        }
+        $id_draft = intval($this->input->get('id_draft'));
+        $q = $this->db->where(array('id_pekerjaan' => $id_draft, 'status_pekerjaan' => 9))->get('pekerjaan')->result_array();
+        if (count($q) < 1) {
+            $data['judul_kesalahan'] = 'Kesalahan';
+            $data['deskripsi_kesalahan'] = 'Draft Pekerjaan tidak dapat ditemukan';
+            $this->load->view('pekerjaan/kesalahan', $data);
+            return;
+        }
+        $pekerjaan = $q[0];
+        if($pekerjaan['id_penanggung_jawab'] != $session['id_akun']){
+            $data['judul_kesalahan'] = 'Tidak Berhak';
+            $data['deskripsi_kesalahan'] = 'Anda tidak berhak membatalkan draft pekerjaan milik orang lain';
+            $this->load->view('pekerjaan/kesalahan', $data);
+            return;
+        }
+        $this->db->trans_begin();
+        $list_berkas = $this->db->where(array('id_pekerjaan'=>$id_draft))->get('file')->result_array();
+        $this->db->delete('file',array('id_pekerjaan'=>$id_draft));
+        $this->db->delete('pekerjaan',array('id_pekerjaan'=>$id_draft));
+        foreach($list_berkas as $berkas){
+            if(file_exists($berkas['path'])){
+                unlink($berkas['path']);
             }
         }
-        redirect(base_url() . 'draft');
+        $this->db->trans_complete();
+        redirect(site_url() . '/draft');
     }
 
 }

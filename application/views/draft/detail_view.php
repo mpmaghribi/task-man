@@ -52,22 +52,22 @@ $detail_draft = json_decode($draft['deskripsi_pekerjaan']);
                     </thead>
                     <tbody>
                         <?php
-                        if (isset($list_berkas)) {
-                            $i = 1;
-                            foreach ($list_berkas as $berkas) {
-                                ?>
-                                <tr id="berkas_<?php echo $berkas->id_file; ?>">
-                                    <td><?php echo $i; ?></td>
-                                    <td><?php echo basename($berkas->nama_file); ?></td>
-                                    <td style="text-align: right">
-                                        <a class="btn btn-info btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="window.open('<?php echo base_url() //. $berkas->nama_file ?>download?id_file=<?php echo $berkas->id_file; ?>');">Download</a>
-                                        <a class="btn btn-danger btn-xs" href="javascript:void(0);" id="" style="font-size: 10px" onclick="hapus_file_draft(<?php echo $berkas->id_file ?>, '<?php echo basename($berkas->nama_file); ?>');">Hapus</a>
-                                    </td>
-                                </tr>
-                                <?php
-                                $i++;
-                            }
+                        
+                        $i = 0;
+                        foreach ($list_berkas as $berkas) {
+                            $i++;
+                            ?>
+                            <tr id="berkas_<?php echo $berkas['id_file']; ?>">
+                                <td><?php echo $i; ?></td>
+                                <td><?php echo $berkas['nama_file']; ?></td>
+                                <td style="text-align: right">
+                                    <a class="btn btn-info btn-xs" href="<?= site_url() ?>/download?id_file=<?= $berkas['id_file'] ?>" target="_blank" style="font-size: 10px">Download</a>
+                                    <button class="btn btn-danger btn-xs" onclick="dialog_hapus_file(<?= $berkas['id_file'] ?>);" style="font-size: 10px">Hapus</button>
+                                </td>
+                            </tr>
+                            <?php
                         }
+                        
                         ?>
                     </tbody>
                 </table>
@@ -77,27 +77,36 @@ $detail_draft = json_decode($draft['deskripsi_pekerjaan']);
 </div>
 <script>
     var view_draft = <?= json_encode($draft); ?>;
-    function hapus_file_draft(id, nama) {
-        var c = confirm('Anda yakin ingin menghapus berkas "' + nama + '"?');
-        if (c === true) {
-            $.ajax({// create an AJAX call...
-                data: {
-                    id_file: id,
-                    id_draft: view_draft['id_pekerjaan']
-                }, // get the form data
-                type: "get", // GET or POST
-                url: "<?php echo site_url(); ?>/draft/hapus_file_json", // the file to call
-                success: function(response) { // on success..
-                    var json = jQuery.parseJSON(response);
-                    //alert(response);
-                    if (json.status === "ok") {
-                        $('#berkas_' + id).remove();
-                        //$('#tombol_validasi_usulan').remove();
-                    } else {
-                        alert("Gagal menghapus file, " + json.reason);
-                    }
-                }
-            });
+    function dialog_hapus_file(id){
+        var tr = $('#berkas_'+id);
+        console.log(tr);
+        var tds = tr.children();
+        console.log(tds);
+        if(tds.length == 0){
+            return;
         }
+        var deskripsi = tds[1].innerHTML;
+        $('#modal_any').modal('show');
+        $('#modal_any_title').html('Konfirmasi Hapus Berkas Draft');
+        $('#modal_any_body').html('<h5>Anda akan menghapus berkas <strong>'+deskripsi+'</strong>. Lanjutkan?</h5>');
+        $('#modal_any_button_cancel').attr({'class':'btn btn-success'}).html('Batal');
+        $('#modal_any_button_ok').attr({'class':'btn btn-danger', 'onclick':'hapus_file('+id+')'}).html('Hapus Berkas');
+    }
+    function hapus_file(id) {
+        $.ajax({
+            data: {
+                id_file: id
+            },
+            type: "get", 
+            url: site_url + "/draft/hapus_file_json",
+            success: function (response) { 
+                var json = jQuery.parseJSON(response);
+                if (json.status === "ok") {
+                    $('#berkas_' + id).remove();
+                } else {
+                    alert("Gagal menghapus file, " + json.reason);
+                }
+            }
+        });
     }
 </script>

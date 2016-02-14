@@ -102,7 +102,7 @@ $this->load->view("taskman_header_page");
                                                 <div class="form-group " id="div_manfaat">
                                                     <label for="prioritas" class="control-label col-lg-3">Tingkat Kemanfaatan</label>
                                                     <div class="col-lg-6">
-                                                        <select name="select_kemanfaatan" class="form-control">
+                                                        <select name="select_kemanfaatan" class="form-control" id="select_manfaat">
                                                             <option value="1">Bermanfaat bagi unit kerja</option>
                                                             <option value="2">Bermanfaat bagi oragnisasi</option>
                                                             <option value="3">Bermanfaat bagi negara</option>
@@ -112,7 +112,7 @@ $this->load->view("taskman_header_page");
                                                 <div class="form-group ">
                                                     <label for="prioritas" class="control-label col-lg-3">Prioritas</label>
                                                     <div class="col-lg-6">
-                                                        <select name="prioritas" class="form-control m-bot15">
+                                                        <select name="prioritas" class="form-control m-bot15" id="select_prioritas">
                                                             <option value="1">Urgent</option>
                                                             <option value="2">Tinggi</option>
                                                             <option value="3">Sedang</option>
@@ -208,6 +208,8 @@ $this->load->view("taskman_header_page");
             $("#biaya").val(dp["pakai_biaya"] == "1" ? dp["sasaran_biaya"] : "-");
             $("#satuan_kuantitas").val(dp["satuan_kuantitas"]);
             $("#usulan_periode").val(pekerjaan["periode"]);
+            $('#select_prioritas').val(pekerjaan['level_prioritas']);
+            $('#select_manfaat').val(pekerjaan['level_manfaat']);
             periode_changed();
             var tanggal = new Date();
             tanggal.setHours(0, 0, 0, 0);

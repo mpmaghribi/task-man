@@ -37,13 +37,13 @@
             <div class="form-group " id="div_angka_kredit">
                 <label for="prioritas" class="control-label col-lg-3">Angka Kredit</label>
                 <div class="col-lg-6">
-                    <input type="text" class="form-control" id="angka_kredit" name="angka_kredit"/>
+                    <input type="text" class="form-control" id="angka_kredit" name="angka_kredit" value="0"/>
                 </div>
             </div>
             <div class="form-group " id="div_kuantitas">
                 <label for="prioritas" class="control-label col-lg-3">Kuantitas Output</label>
                 <div class="col-lg-4">
-                    <input type="text" class="form-control" id="kuantitas_output" name="kuantitas_output"/>
+                    <input type="text" class="form-control" id="kuantitas_output" name="kuantitas_output" value="1"/>
                 </div>
                 <div class="col-lg-2">
                     <input type="text" class="form-control" id="satuan_kuantitas" name="satuan_kuantitas" value="item" placeholder="satuan kuanttias"/>
@@ -52,7 +52,7 @@
             <div class="form-group" id="div_kualitas">
                 <label for="prioritas" class="control-label col-lg-3">Kualitas Mutu</label>
                 <div class="col-lg-6">
-                    <input type="text" class="form-control" id="kualitas_mutu" name="kualitas_mutu"/>
+                    <input type="text" class="form-control" id="kualitas_mutu" name="kualitas_mutu" value="100"/>
                 </div>
             </div>
             <div class="form-group ">
@@ -74,7 +74,7 @@
             <div class="form-group " id="div_biaya">
                 <label for="prioritas" class="control-label col-lg-3">Biaya</label>
                 <div class="col-lg-6">
-                    <input type="text" class="form-control" id="biaya" name="biaya"/>
+                    <input type="text" class="form-control" id="biaya" name="biaya" value="-"/>
                 </div>
             </div>
             <div class="form-group " id="div_manfaat">
@@ -107,12 +107,12 @@
                     <div style="display:none">
                         <input type="file" multiple="" name="berkas[]" id="pilih_berkas_draft" onchange="draft_file_changed()"/>
                     </div>
-                    <button class="btn btn-success" type="button" id="button_trigger_file" onclick="trigger_pilih_file()"><i class="fa fa-file"></i> Pilih File</button>
+                    <button class="btn btn-success" type="button" id="button_trigger_file" onclick="trigger_pilih_file()"><i class="fa fa-files-o"></i> Pilih File</button>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-lg-offset-3 col-lg-6">
-                    <button class="btn btn-primary" type="submit">Save</button>
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button>
                 </div>
             </div>
         </form>

@@ -10,12 +10,12 @@ function change_input_deadline(periode) {
     waktu_mulai_baru.setValue(draft_date_min);
     waktu_selesai_baru.setValue(draft_date_max);
 }
-function draft_file_changed(){
-	var input_file = document.getElementById("pilih_berkas_draft");
-	var files = input_file.files;
-	console.log(input_file);
-	console.log(files);
-	populate_file("berkas_baru", files);
+function draft_file_changed() {
+    var input_file = document.getElementById("pilih_berkas_draft");
+    var files = input_file.files;
+    console.log(input_file);
+    console.log(files);
+    populate_file("berkas_baru", files);
 }
 function format_ukuran_file(s) {
     var KB = 1024;
@@ -31,27 +31,37 @@ function format_ukuran_file(s) {
     }
     return '   [' + Math.round(s) + spasi + satuan + ']';
 }
-function hapus_file_draft(id, nama) {
-	var c = confirm('Anda yakin ingin menghapus berkas "' + nama + '"?');
-	if (c === true) {
-		$.ajax({// create an AJAX call...
-			data: {
-				id_file: id
-			}, // get the form data
-			type: "get", // GET or POST
-			url: site_url+"/draft/hapus_file_json",
-			success: function(response) { // on success..
-				var json = jQuery.parseJSON(response);
-				//alert(response);
-				if (json.status === "ok") {
-					$('#berkas_' + id).remove();
-					//$('#tombol_validasi_usulan').remove();
-				} else {
-					alert("Gagal menghapus file, " + json.reason);
-				}
-			}
-		});
-	}
+function dialog_hapus_file(id){
+    var tr = $('#berkas_'+id);
+    console.log(tr);
+    var tds = tr.children();
+    console.log(tds);
+    if(tds.length == 0){
+        return;
+    }
+    var deskripsi = tds[1].innerHTML;
+    $('#modal_any').modal('show');
+    $('#modal_any_title').html('Konfirmasi Hapus Berkas Draft');
+    $('#modal_any_body').html('<h5>Anda akan menghapus berkas <strong>'+deskripsi+'</strong>. Lanjutkan?</h5>');
+    $('#modal_any_button_cancel').attr({'class':'btn btn-success'}).html('Batal');
+    $('#modal_any_button_ok').attr({'class':'btn btn-danger', 'onclick':'hapus_file('+id+')'}).html('Hapus Berkas');
+}
+function hapus_file(id) {
+    $.ajax({
+        data: {
+            id_file: id
+        },
+        type: "get", 
+        url: site_url + "/draft/hapus_file_json",
+        success: function (response) { 
+            var json = jQuery.parseJSON(response);
+            if (json.status === "ok") {
+                $('#berkas_' + id).remove();
+            } else {
+                alert("Gagal menghapus file, " + json.reason);
+            }
+        }
+    });
 }
 var draft_date_min = new Date();
 var draft_date_max = new Date();
@@ -83,28 +93,34 @@ function init_input_deadline() {
     waktu_mulai_baru.setValue(draft_date_min);
     waktu_selesai_baru.setValue(draft_date_max);
 }
-function kategori_changed(){
+function kategori_changed() {
     var kategori = $('#select_kategori').val();
-    if(kategori=='rutin' || kategori=='project'){
+    if (kategori == 'rutin' || kategori == 'project') {
         $('#div_angka_kredit').show('fast');
         $('#div_kuantitas').show('fast');
         $('#div_kualitas').show('fast');
         $('#div_biaya').show('fast');
         $('#div_manfaat').hide('fast');
-    }else{
+    } else {
         $('#div_angka_kredit').hide('fast');
         $('#div_kuantitas').hide('fast');
         $('#div_kualitas').hide('fast');
         $('#div_biaya').hide('fast');
-        if(kategori=='tambahan'){
+        if (kategori == 'tambahan') {
             $('#div_manfaat').hide('fast');
-        }else if(kategori=='kreativitas'){
+        } else if (kategori == 'kreativitas') {
             $('#div_manfaat').show('fast');
         }
     }
 }
 function periode_changed() {
-    var periode = $('#select_periode').val();
+    var periode = parseInt($('#select_periode').val());
+    if (isNaN(periode)) {
+        var t = new Date();
+        periode = t.getFullYear();
+    }
+    periode = Math.max(1945, Math.abs(periode));
+    $('#select_periode').val(periode);
     change_input_deadline(periode);
 }
 function populate_file(id_tabel, files) {
@@ -118,6 +134,6 @@ function populate_file(id_tabel, files) {
     }
 }
 
-function trigger_pilih_file(){
-	$("#pilih_berkas_draft").trigger("click");
+function trigger_pilih_file() {
+    $("#pilih_berkas_draft").trigger("click");
 }
