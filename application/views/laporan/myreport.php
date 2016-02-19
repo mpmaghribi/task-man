@@ -105,7 +105,7 @@
                                             <label class="control-label col-lg-3">Periode</label>
                                             <div class="col-lg-8">
                                                 <select name="periode" class="form-control m-bot15">
-<!--                                                    <option value="januari">Januari</option>
+                                                    <option value="januari">Januari</option>
                                                     <option value="februari">Februari</option>
                                                     <option value="maret">Maret</option>
                                                     <option value="april">April</option>
@@ -116,7 +116,7 @@
                                                     <option value="september">September</option>
                                                     <option value="oktober">Oktober</option>
                                                     <option value="november">November</option>
-                                                    <option value="desember">Desember</option>-->
+                                                    <option value="desember">Desember</option>
                                                     <option value="tri_1">Triwulan I</option>
                                                     <option value="tri_2">Triwulan II</option>
                                                     <option value="tri_3">Triwulan III</option>

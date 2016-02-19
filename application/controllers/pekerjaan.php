@@ -16,7 +16,7 @@ class pekerjaan extends ceklogin {
     }
 
     function pengaduan() {
-        $url = str_replace('taskmanagement', 'integrarsud/helpdesk', str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
+        $url = str_replace('taskmanagement', 'helpdesk', str_replace('://', '://hello:world@', base_url())) . "index.php/pengaduan/getDelegate";
         $data["pengaduan"] = json_decode(file_get_contents($url));
         $url2 = str_replace('taskmanagement', 'integrarsud', str_replace('://', '://hello:world@', base_url())) . "index.php/api/integration/users/format/json";
         $data["pegawai"] = json_decode(file_get_contents($url2));
