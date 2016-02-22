@@ -1,5 +1,5 @@
-<?php $this->load->view("taskman_header_page") ?> 
 <?php
+$this->load->view("taskman_header_page");
 $user = array();
 foreach ($users as $u) {
     $user[$u->id_akun] = $u;
@@ -17,7 +17,6 @@ $list_tingkat_manfaat = array(
 );
 ?>
 <body>
-
     <section id="container" >
         <!--header start-->
         <?php $this->load->view("taskman_header2_page") ?>
@@ -436,8 +435,8 @@ $list_tingkat_manfaat = array(
         var base_url = '<?= base_url() ?>';
         var site_url = '<?= site_url() ?>';
         var id_staff = '<?= $detil_pekerjaan['id_akun'] ?>';
-        var list_akun =<?= json_encode($users) ?>;
-        var detil_pekerjaan =<?= json_encode($detil_pekerjaan) ?>;
+        var list_akun = <?= json_encode($users) ?>;
+        var detil_pekerjaan = <?= json_encode($detil_pekerjaan) ?>;
         var pekerjaan = <?= json_encode($pekerjaan) ?>;
         var file_pekerjaan = <?= json_encode($list_file_pendukung) ?>;
         $(document).ready(function () {
