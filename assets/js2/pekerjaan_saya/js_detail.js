@@ -352,7 +352,7 @@ function edit_aktivitas(id_aktivitas) {
     var tds = $('#aktivitas_' + id_aktivitas).children();
     console.log(tds);
     tampilkan_form_tambah_aktivitas();
-    $('#button_simpan_aktivitas').html('Update Aktivitas');
+    $('#button_simpan_aktivitas').html('<i class="fa fa-save"></i> Update Aktivitas');
     $('#keterangan_baru').val($(tds[2]).html());
     var tanggals = $(tds[3]).html().split(' - ');
     console.log(tanggals);
@@ -370,8 +370,11 @@ function edit_aktivitas(id_aktivitas) {
     console.log(jam_selesai);
     var tanggal_mulai_date = new Date(parseInt(tanggal_mulai[0]), parseInt(tanggal_mulai[1]) - 1, parseInt(tanggal_mulai[2]), 0, 0, 0, 0);
     waktu_mulai_aktivitas.setValue(tanggal_mulai_date);
-    var tanggal_selesai_date = new Date(parseInt(tanggal_selesai[0]), parseInt(tanggal_selesai[1])-1, parseInt(tanggal_selesai[2]), 0, 0, 0, 0);
+    var tanggal_selesai_date = new Date(parseInt(tanggal_selesai[0]), parseInt(tanggal_selesai[1]) - 1, parseInt(tanggal_selesai[2]), 0, 0, 0, 0);
     waktu_selesai_aktivitas.setValue(tanggal_selesai_date);
+    $('#jam_mulai_baru').val(parseInt(jam_mulai[0])+':'+parseInt(jam_mulai[1]));
+    $('#jam_selesai_baru').val(parseInt(jam_selesai[0])+':'+parseInt(jam_selesai[1]));
+    $('#form_tambah_aktivitas').attr({'action': site_url + '/aktivitas_pekerjaan/update_v2'});
 }
 var status_form_tambah_aktivitas = false;
 function tampilkan_form_tambah_aktivitas() {
@@ -391,6 +394,8 @@ function tampilkan_form_tambah_aktivitas() {
         $('#waktu_mulai_baru').val('');
         $('#waktu_selesai_baru').val('');
         $('#tabel_berkas_aktivitas').html('');
+        $('#button_simpan_aktivitas').html('<i class="fa fa-save"></i> Simpan Aktivitas');
+        $('#form_tambah_aktivitas').attr({'action': site_url + '/aktivitas_pekerjaan/add_v2'});
         var pf = $('#file_berkas_aktivitas').parent();
         pf.html('<input type="file" id="file_berkas_aktivitas" name="berkas_aktivitas[]" multiple="" onchange="berkas_aktivitas_changed(this);">');
     }
